@@ -253,6 +253,9 @@ const D = [
  {c:418,s:"I'm a teapot",n:'Teapotamus',m:'Steep',
   uk:['Жартівливий код з RFC 2324: чайник відмовляється варити каву.','Великодні яйця в API. На співбесіді — гарний бонус.'],
   en:['A joke code from RFC 2324: a teapot refuses to brew coffee.','Easter eggs in APIs. A nice bonus in an interview.']},
+ {c:422,s:'Unprocessable Content',n:'Nitpecker',m:'Validation Peck',
+  uk:['Запит прочитано, але дані не проходять валідацію.','Рядок замість числа, від’ємний вік, «email: banana».'],
+  en:['The request was read, but the data fails validation.','A string instead of a number, a negative age, “email: banana”.']},
  {c:429,s:'Too Many Requests',n:'Spamster',m:'Wheel Spin',
   uk:['Забагато запитів за короткий час, спрацював rate limit.','Скрипт без пауз, заголовок Retry-After у відповіді.'],
   en:['Too many requests in a short time; a rate limit kicked in.','A script without pauses, a Retry-After header in the response.']},
@@ -284,7 +287,13 @@ const PAIRS = [
  {codes:[400,404], uk:['Garblin чи Nowherret?','400: не можу прочитати запит. 404: прочитав, але такого немає.'], en:['Garblin or Nowherret?','400: can’t read the request. 404: read it, but nothing is there.'],
   s:[[400,'У JSON пропущена фігурна дужка.','The JSON is missing a closing brace.'],[404,'GET /users/99999, а такого користувача немає.','GET /users/99999, and that user doesn’t exist.']]},
  {codes:[404,405], uk:['Nowherret чи Verbadger?','404: за цією адресою нікого немає. 405: адреса є, але цей метод тут не приймають.'], en:['Nowherret or Verbadger?','404: nobody lives at this address. 405: the address exists, but this method isn’t accepted here.'],
-  s:[[405,'DELETE /products, хоча список товарів можна лише читати.','DELETE /products, though the product list is read-only.'],[404,'GET /prodcts з опечаткою в адресі.','GET /prodcts with a typo in the address.'],[405,'PUT на /login, який приймає тільки POST.','PUT to /login, which only accepts POST.'],[404,'GET /orders/777 для замовлення, яке видалили.','GET /orders/777 for an order that was deleted.']]}
+  s:[[405,'DELETE /products, хоча список товарів можна лише читати.','DELETE /products, though the product list is read-only.'],[404,'GET /prodcts з опечаткою в адресі.','GET /prodcts with a typo in the address.'],[405,'PUT на /login, який приймає тільки POST.','PUT to /login, which only accepts POST.'],[404,'GET /orders/777 для замовлення, яке видалили.','GET /orders/777 for an order that was deleted.']]},
+ {codes:[409,422], uk:['Clashgoat чи Nitpecker?','409: дані нормальні, але конфліктують з тим, що вже є. 422: самі дані не мають сенсу.'], en:['Clashgoat or Nitpecker?','409: the data is fine but clashes with what already exists. 422: the data itself makes no sense.'],
+  s:[[409,'Реєстрація з email, який уже зайнятий.','Signing up with an email that’s already taken.'],[422,'Реєстрація з email «banana».','Signing up with the email “banana”.'],[409,'Двоє редагують один запис, і друга зміна спирається на застарілу версію.','Two people edit the same record, and the second change is based on a stale version.'],[422,'У полі віку −5.','The age field says −5.']]},
+ {codes:[400,422], uk:['Garblin чи Nitpecker?','400: запит не вдається навіть прочитати. 422: прочитали, але значення не мають сенсу.'], en:['Garblin or Nitpecker?','400: the request can’t even be read. 422: it was read, but the values make no sense.'],
+  s:[[400,'У JSON не закрита лапка, парсер падає.','The JSON has an unclosed quote and the parser fails.'],[422,'JSON валідний, але дата народження в майбутньому.','The JSON is valid, but the birth date is in the future.'],[400,'Тіло запиту обірвалося посередині.','The request body is cut off halfway.'],[422,'Замовлення на −3 товари.','An order for −3 items.']]},
+ {codes:[400,415], uk:['Garblin чи Pickoala?','400: формат той, але запит зламаний. 415: такий формат сервер не приймає взагалі.'], en:['Garblin or Pickoala?','400: the right format, but a broken request. 415: the server doesn’t accept this format at all.'],
+  s:[[415,'Content-Type: application/xml на ендпоінт, який приймає лише JSON.','Content-Type: application/xml to an endpoint that only accepts JSON.'],[400,'Content-Type: application/json, але в тілі зламаний JSON.','Content-Type: application/json, but the body is broken JSON.'],[415,'Аватарка завантажується як .exe замість .png.','An avatar is uploaded as .exe instead of .png.'],[400,'У JSON зайва кома після останнього поля.','The JSON has a trailing comma after the last field.']]}
 ];
 const CONF = {};
 PAIRS.forEach(p=>p.codes.forEach(c=>{CONF[c]=(CONF[c]||[]).concat(p.codes.filter(x=>x!==c))}));
