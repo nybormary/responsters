@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://responsters.netlify.app/sitemap.xml
