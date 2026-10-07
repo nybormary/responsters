@@ -58,7 +58,8 @@ section.view{padding-top:24px}
 .card{position:relative; border:0; padding:0; background:none; cursor:pointer; border-radius:16px; transition:transform .15s}
 .card img{width:100%; aspect-ratio:1536/2752; display:block; border-radius:16px; box-shadow:0 2px 10px rgb(40 20 40 / .14)}
 .card:hover{transform:translateY(-3px)}
-.card .badge{position:absolute; top:8px; right:8px; background:var(--good); color:#fff; font:700 11px var(--body); padding:2px 7px; border-radius:999px}
+/* "Known" mark: a small check on the card corner, clear of the title painted into the art. The word lives in the button's aria-label. */
+.card .badge{position:absolute; top:-7px; right:-7px; width:28px; height:28px; display:grid; place-items:center; background:#1E7A50; color:#fff; font:800 15px/1 var(--body); border:3px solid var(--bg); border-radius:50%; pointer-events:none}
 /* practice */
 .pbar{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; justify-content:space-between}
 .seg{display:inline-flex; background:var(--soft); border-radius:10px; padding:3px}
@@ -318,7 +319,7 @@ function renderCollection(){
   $('groups').innerHTML = [1,2,3,4,5].filter(n=>!filter||filter===n).map(n=>`
     <div class="group"><h2><code style="background:${CLS[n].c}">${n}xx</code>${CLS[n][lang][0]}</h2>
     <p class="lede">${CLS[n][lang][1]}</p>
-    <div class="grid">${D.filter(d=>cls(d.c)===n).map(d=>`<button class="card" data-open="${d.c}" aria-label="${d.c} ${d.s}: ${d.n}"><img src="${img(d.c)}" alt="" loading="lazy">${isKnown(d.c)?`<span class="badge">✓ ${t().known}</span>`:''}</button>`).join('')}</div></div>`).join('');
+    <div class="grid">${D.filter(d=>cls(d.c)===n).map(d=>`<button class="card" data-open="${d.c}" aria-label="${d.c} ${d.s}: ${d.n}${isKnown(d.c)?`, ${t().known}`:''}"><img src="${img(d.c)}" alt="" loading="lazy">${isKnown(d.c)?`<span class="badge" aria-hidden="true">✓</span>`:''}</button>`).join('')}</div></div>`).join('');
 }
 function openCard(c){
   const d = BY[c], L = d[lang];
