@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Node / tooling (coming with RSP-36)
+node_modules/
+.netlify/
+
+# Playwright output
+test-results/
+playwright-report/
+
+# Secrets: API tokens will live here, never commit them
+.env
+EOF
