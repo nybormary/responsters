@@ -54,7 +54,9 @@ section.view{padding-top:24px}
 .group h2{font:800 22px var(--display); margin:0 0 2px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
 .group h2 code{font:800 15px var(--mono); padding:2px 8px; border-radius:6px; color:#2B1A28}
 .group p.lede{margin:0 0 12px; color:var(--muted); font-size:14px}
-.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px}
+/* Collection grid: 2 columns on phones; from 600px the same 3 columns in every class, cards capped at 240px (640px art stays sharp on retina), rows left-aligned with the class headings. */
+.grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+@media (min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,240px)); gap:18px}}
 .card{position:relative; border:0; padding:0; background:none; cursor:pointer; border-radius:16px; transition:transform .15s}
 .card img{width:100%; aspect-ratio:1536/2752; display:block; border-radius:16px; box-shadow:0 2px 10px rgb(40 20 40 / .14)}
 .card:hover{transform:translateY(-3px)}
