@@ -71,7 +71,7 @@ section.view{padding-top:24px}
 .prompt{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px; display:flex; flex-direction:column; gap:12px; align-items:center; text-align:center}
 .prompt .q{font:700 15px var(--body); color:var(--muted)}
 .prompt img.art{width:100%; max-width:440px; border-radius:14px; aspect-ratio:640/573; object-fit:cover}
-.bigcode{font:800 clamp(56px,12vw,96px)/1 var(--mono); letter-spacing:-.03em}
+.bigcode{font:800 clamp(56px,12vw,96px)/1 var(--mono); letter-spacing:-.03em; color:var(--ink)}
 .bigstatus{font:700 20px var(--display)}
 .opts{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .opt{border:2px solid var(--line); background:var(--surface); color:var(--ink); border-radius:14px; padding:12px; cursor:pointer; text-align:left; font:700 15px var(--body); display:flex; flex-direction:column; gap:2px; min-width:0}
@@ -388,7 +388,7 @@ function renderPractice(){
   const d = cur;
   $('prompt').innerHTML = mode==='art'
     ? `<div class="q">${t().qArt}</div><img class="art" src="${art(d.c)}" alt="">`
-    : `<div class="q">${t().qCode}</div><div class="bigcode" style="color:${CLS[cls(d.c)].c}">${d.c}</div><div class="bigstatus">${d.s}</div>`;
+    : `<div class="q">${t().qCode}</div><div class="bigcode">${d.c}</div><div class="bigstatus">${d.s}</div>`;
   $('opts').innerHTML = d.opts.map(o=>{
     const st = d.done ? (o.c===d.c?'right':(o.c===d.pick?'wrong':'')) : '';
     return mode==='art'
