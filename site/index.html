@@ -235,6 +235,9 @@ const D = [
  {c:404,s:'Not Found',n:'Nowherret',m:'Vanish',
   uk:['За цією адресою нічого немає.','Опечатка в URL, видалений товар.'],
   en:['Nothing exists at this address.','A typo in the URL, a deleted product.']},
+ {c:405,s:'Method Not Allowed',n:'Verbadger',m:'Wrong Verb',
+  uk:['Сервер знає цю адресу, але не приймає цей метод.','DELETE на ендпоінт, який приймає лише GET.'],
+  en:['The server knows this address but doesn’t accept this method.','A DELETE sent to an endpoint that only accepts GET.']},
  {c:408,s:'Request Timeout',n:'Slowth',m:'Five More Minutes',
   uk:['Клієнт надсилав запит надто довго, і сервер перестав чекати.','Повільне з’єднання, завислий upload.'],
   en:['The client took too long to send the request, so the server stopped waiting.','A slow connection, a stalled upload.']},
@@ -270,7 +273,9 @@ const PAIRS = [
  {codes:[429,503], uk:['Spamster чи Hibearnate?','429: забагато запитів саме від тебе. 503: сервер недоступний для всіх.'], en:['Spamster or Hibearnate?','429: too many requests from you. 503: the server is down for everyone.'],
   s:[[429,'Твій скрипт шле тисячу запитів за секунду.','Your script sends a thousand requests per second.'],[503,'Сервер перевантажений і не відповідає нікому.','The server is overloaded and answers nobody.']]},
  {codes:[400,404], uk:['Garblin чи Nowherret?','400: не можу прочитати запит. 404: прочитав, але такого немає.'], en:['Garblin or Nowherret?','400: can’t read the request. 404: read it, but nothing is there.'],
-  s:[[400,'У JSON пропущена фігурна дужка.','The JSON is missing a closing brace.'],[404,'GET /users/99999, а такого користувача немає.','GET /users/99999, and that user doesn’t exist.']]}
+  s:[[400,'У JSON пропущена фігурна дужка.','The JSON is missing a closing brace.'],[404,'GET /users/99999, а такого користувача немає.','GET /users/99999, and that user doesn’t exist.']]},
+ {codes:[404,405], uk:['Nowherret чи Verbadger?','404: за цією адресою нікого немає. 405: адреса є, але цей метод тут не приймають.'], en:['Nowherret or Verbadger?','404: nobody lives at this address. 405: the address exists, but this method isn’t accepted here.'],
+  s:[[405,'DELETE /products, хоча список товарів можна лише читати.','DELETE /products, though the product list is read-only.'],[404,'GET /prodcts з опечаткою в адресі.','GET /prodcts with a typo in the address.'],[405,'PUT на /login, який приймає тільки POST.','PUT to /login, which only accepts POST.'],[404,'GET /orders/777 для замовлення, яке видалили.','GET /orders/777 for an order that was deleted.']]}
 ];
 const CONF = {};
 PAIRS.forEach(p=>p.codes.forEach(c=>{CONF[c]=(CONF[c]||[]).concat(p.codes.filter(x=>x!==c))}));
