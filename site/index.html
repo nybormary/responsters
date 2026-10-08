@@ -38,6 +38,14 @@ header{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space
 .lang{display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:var(--surface)}
 .lang button{border:0; background:none; color:var(--muted); font:700 13px var(--body); padding:7px 12px; cursor:pointer}
 .lang button[aria-pressed="true"]{background:var(--accent); color:var(--bg)}
+/* "How to use": a link-style button in the header and a dismissable panel above the views (RSP-98). */
+.tools{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.linkbtn{border:0; background:none; padding:7px 2px; color:var(--accent); font:700 14px var(--body); text-decoration:underline; text-underline-offset:3px; cursor:pointer}
+.howto{margin-top:20px; background:var(--surface); border:1.5px solid var(--line); border-radius:16px; padding:16px 20px; display:grid; gap:10px}
+.howto h2{font:800 20px var(--display); margin:0}
+.howto ol{margin:0; padding-left:1.4em; display:grid; gap:6px}
+.howto .note{margin:0; color:var(--muted); font-size:14px}
+.howto-done{justify-self:start; border:1.5px solid var(--line); background:var(--soft); color:var(--ink); border-radius:999px; padding:6px 16px; font:700 14px var(--body); cursor:pointer}
 nav.tabs{display:flex; gap:6px; margin-top:24px; border-bottom:2px solid var(--line); overflow-x:auto}
 nav.tabs button{border:0; background:none; font:700 17px var(--display); color:var(--muted); padding:8px 14px 6px; cursor:pointer; border-bottom:3px solid transparent; margin-bottom:-2px; white-space:nowrap}
 nav.tabs button[aria-selected="true"]{color:var(--ink); border-color:var(--accent)}
@@ -137,8 +145,11 @@ footer{margin-top:40px; color:var(--muted); font-size:13px}
       <p id="tagline"></p>
       <div class="dots" aria-hidden="true"><i style="background:var(--c1)"></i><i style="background:var(--c2)"></i><i style="background:var(--c3)"></i><i style="background:var(--c4)"></i><i style="background:var(--c5)"></i></div>
     </div>
-    <div class="lang" role="group" aria-label="Language">
-      <button id="lang-uk" data-lang="uk">UA</button><button id="lang-en" data-lang="en">EN</button>
+    <div class="tools">
+      <button class="linkbtn" id="howto-open" aria-controls="howto"></button>
+      <div class="lang" role="group" aria-label="Language">
+        <button id="lang-uk" data-lang="uk">UA</button><button id="lang-en" data-lang="en">EN</button>
+      </div>
     </div>
   </header>
 
@@ -147,6 +158,13 @@ footer{margin-top:40px; color:var(--muted); font-size:13px}
     <button role="tab" id="tab-practice" data-view="practice"></button>
     <button role="tab" id="tab-traps" data-view="traps"></button>
   </nav>
+
+  <section class="howto" id="howto" aria-labelledby="howto-title" hidden>
+    <h2 id="howto-title"></h2>
+    <ol id="howto-steps"></ol>
+    <p class="note" id="howto-note"></p>
+    <button class="howto-done" id="howto-close"></button>
+  </section>
 
   <section class="view" id="view-collection">
     <div class="progress"><span id="mastered"></span><div class="bar"><span id="masterbar"></span></div></div>
@@ -313,14 +331,24 @@ const T = {
    score:(r,t,s)=>`${r}/${t} · серія ${s}`, ok:'Так!', no:'Не цей.', next:'Далі',
    move:'Рух', mean:'Що означає', when:'Коли зустрічається', conf:'Часто плутають з', qa:'Що тестуємо',
    traps:'Пари кодів, які найчастіше плутають. Прочитай правило, потім розклади ситуації.',
-   foot:'Responsters · персонажі й тексти власні; назви статусів за RFC 9110.', close:'Закрити', back:'До колекції'},
+   foot:'Responsters · персонажі й тексти власні; назви статусів за RFC 9110.', close:'Закрити', back:'До колекції',
+   howto:'Як користуватися',
+   howtoSteps:['<b>Колекція.</b> Натисни на картку, щоб познайомитися з істотою: що означає код, де зустрічається і що тестувати.',
+     '<b>Тренування.</b> «Картинка → код» або «Код → істота». Після двох правильних відповідей поспіль код отримує ✓.',
+     '<b>Пастки.</b> Пари кодів, які часто плутають: правило і ситуації, щоб їх розкласти.'],
+   howtoNote:'Прогрес зберігається лише в цьому браузері.', howtoClose:'Зрозуміло'},
  en:{tag:'Original creatures for memorizing HTTP status codes. Every code has its own Responster, and every move explains what the code means.',
    tabs:['Collection','Practice','Traps'], all:'All', mastered:(a,b)=>`${a} of ${b} learned`, known:'known',
    modeArt:'Picture → code', modeCode:'Code → creature', qArt:'Which code is this?', qCode:'Which one is it?',
    score:(r,t,s)=>`${r}/${t} · streak ${s}`, ok:'Yes!', no:'Not this one.', next:'Next',
    move:'Move', mean:'What it means', when:'Where you meet it', conf:'Often confused with', qa:'What to test',
    traps:'Pairs of codes people mix up most. Read the rule, then sort the situations.',
-   foot:'Responsters · original characters and copy; status names per RFC 9110.', close:'Close', back:'Back to collection'}
+   foot:'Responsters · original characters and copy; status names per RFC 9110.', close:'Close', back:'Back to collection',
+   howto:'How to use',
+   howtoSteps:['<b>Collection.</b> Tap a card to meet the creature: what the code means, where you meet it and what to test.',
+     '<b>Practice.</b> “Picture → code” or “Code → creature”. Two correct answers in a row give a code its ✓.',
+     '<b>Traps.</b> Pairs of codes people mix up: a rule and situations to sort.'],
+   howtoNote:'Progress is saved in this browser only.', howtoClose:'Got it'}
 };
 const cls = c => Math.floor(c/100);
 const img = c => `img/${c}.jpg`, art = c => `img/${c}-art.jpg`;
@@ -328,6 +356,7 @@ const store = {get(k,d){try{const v=localStorage.getItem('httpon.'+k);return v==
 let lang = store.get('lang','uk'), view = 'collection', filter = 0, mode = 'art';
 let weight = store.get('weight',{}), streakBy = store.get('streak',{});
 let stats = {r:0,t:0,s:0}, cur = null, last = null;
+let howtoOpen = !store.get('howtoSeen', false);   // shown on the first visit until dismissed
 const t = () => T[lang];
 const $ = id => document.getElementById(id);
 const isKnown = c => (streakBy[c]||0) >= 2;
@@ -340,6 +369,10 @@ function renderChrome(){
   ['collection','practice','traps'].forEach(v=>$('view-'+v).hidden = v!==view);
   $('mode-art').textContent=t().modeArt; $('mode-code').textContent=t().modeCode;
   $('mode-art').setAttribute('aria-pressed',mode==='art'); $('mode-code').setAttribute('aria-pressed',mode==='code');
+  $('howto-open').textContent=t().howto; $('howto-open').setAttribute('aria-expanded', howtoOpen);
+  $('howto').hidden=!howtoOpen; $('howto-title').textContent=t().howto;
+  $('howto-steps').innerHTML=t().howtoSteps.map(s=>`<li>${s}</li>`).join('');
+  $('howto-note').textContent=t().howtoNote; $('howto-close').textContent=t().howtoClose;
   $('traps-lede').textContent=t().traps; $('foot').textContent=t().foot; $('m-close').setAttribute('aria-label',t().close);
 }
 function renderCollection(){
@@ -435,6 +468,8 @@ document.addEventListener('click', e=>{
   else if(b.dataset.sc){ scAnswer(b.dataset.sc, +b.dataset.v); }
   else if(b.dataset.open){ openCard(+b.dataset.open); }
   else if(b.id==='m-close' || b.id==='m-back'){ closeModal(); }
+  else if(b.id==='howto-open'){ howtoOpen=!howtoOpen; renderChrome(); if(howtoOpen) $('howto-close').focus(); }
+  else if(b.id==='howto-close'){ howtoOpen=false; store.set('howtoSeen',true); renderChrome(); $('howto-open').focus(); }
 });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('modal').hidden) closeModal(); });
 const h = location.hash.slice(1); if(['collection','practice','traps'].includes(h)) view = h;
