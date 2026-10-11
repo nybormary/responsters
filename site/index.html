@@ -76,8 +76,28 @@ section.view{padding-top:24px}
 .seg button{border:0; background:none; color:var(--muted); font:700 14px var(--body); padding:7px 12px; border-radius:8px; cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--surface); color:var(--ink); box-shadow:0 1px 3px rgb(0 0 0 / .1)}
 .score{font:600 14px var(--mono); color:var(--muted); font-variant-numeric:tabular-nums}
-.stage{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:24px; margin-top:20px; align-items:start}
-@media (max-width:760px){.stage{grid-template-columns:minmax(0,1fr)}}
+.stage{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); grid-template-rows:auto 1fr; gap:24px; margin-top:20px; align-items:start;
+  grid-template-areas:"prompt opts" "result opts"}
+/* RSP-104: "Code → creature" has a short prompt, so the reveal goes under it (left column).
+   "Picture → code" has a tall image prompt, so the reveal stays under the options (right column). */
+.stage[data-mode="art"]{grid-template-areas:"prompt opts" "prompt result"}
+/* Two columns. Code mode: the prompt and the reveal are two equal blocks whose bottom lines up with the options.
+   The reveal image is taken out of the flow so the options, not the image, set the height. */
+@media (min-width:761px){
+  .stage[data-mode="code"]{grid-template-rows:1fr 1fr}
+  .stage[data-mode="code"] > .prompt, .stage[data-mode="code"] > #result{align-self:stretch}
+  .stage[data-mode="code"] > .prompt{justify-content:center}
+  .stage[data-mode="code"] > #result{display:flex; flex-direction:column}
+  .stage[data-mode="code"] .reveal{flex:1}
+  .stage[data-mode="code"] .reveal .rimg{position:relative; align-self:stretch}
+  .stage[data-mode="code"] .reveal .rimg img{position:absolute; inset:0; height:100%; object-fit:contain; object-position:top left}
+  /* Picture mode: the reveal under the options stretches so its bottom lines up with the picture prompt */
+  .stage[data-mode="art"] > .prompt{align-self:stretch; justify-content:center}
+  .stage[data-mode="art"] > #result{align-self:stretch; display:flex; flex-direction:column}
+  .stage[data-mode="art"] .reveal{flex:1}
+}
+.stage > .prompt{grid-area:prompt} #opts{grid-area:opts} #result{grid-area:result}
+@media (max-width:760px){.stage, .stage[data-mode]{grid-template-columns:minmax(0,1fr); grid-template-rows:none; grid-template-areas:"prompt" "opts" "result"}}
 .prompt{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px; display:flex; flex-direction:column; gap:12px; align-items:center; text-align:center}
 .prompt .q{font:700 15px var(--body); color:var(--muted)}
 .prompt img.art{width:100%; max-width:440px; border-radius:14px; aspect-ratio:640/573; object-fit:cover}
@@ -94,8 +114,9 @@ section.view{padding-top:24px}
 .opt.right{border-color:var(--good); background:color-mix(in srgb,var(--good) 12%,var(--surface))}
 .opt.wrong{border-color:var(--bad); background:color-mix(in srgb,var(--bad) 12%,var(--surface))}
 .opt:disabled{cursor:default}
-.reveal{display:flex; gap:16px; align-items:flex-start; margin-top:16px; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:14px}
-.reveal img{width:130px; flex:none; border-radius:12px}
+.reveal{display:flex; gap:16px; align-items:flex-start; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:14px}
+.reveal .rimg{width:130px; flex:none}
+.reveal .rimg img{display:block; width:100%; border-radius:12px}
 .reveal .txt{min-width:0}
 .verdict{font:800 20px var(--display); margin:0}
 .verdict.ok{color:var(--good)} .verdict.no{color:var(--bad)}
@@ -182,12 +203,10 @@ footer{margin-top:40px; color:var(--muted); font-size:13px}
       </div>
       <div class="score" id="score"></div>
     </div>
-    <div class="stage">
+    <div class="stage" id="stage">
       <div class="prompt" id="prompt"></div>
-      <div>
-        <div class="opts" id="opts"></div>
-        <div id="result"></div>
-      </div>
+      <div class="opts" id="opts"></div>
+      <div id="result"></div>
     </div>
   </section>
 
@@ -445,6 +464,7 @@ function renderPractice(){
   if(!cur) return newRound();
   $('score').textContent = t().score(stats.r, stats.t, stats.s);
   const d = cur;
+  $('stage').dataset.mode = mode;
   $('prompt').innerHTML = mode==='art'
     ? `<div class="q">${t().qArt}</div><img class="art" src="${art(d.c)}" alt="">`
     : `<div class="q">${t().qCode}</div><div class="bigcode">${d.c}</div><div class="bigstatus">${d.s}</div>`;
@@ -454,7 +474,7 @@ function renderPractice(){
       ? `<button class="opt ${st}" data-ans="${o.c}" ${d.done?'disabled':''}><b>${o.c}</b><span>${o.s}</span></button>`
       : `<button class="opt imgopt ${st}" data-ans="${o.c}" ${d.done?'disabled':''} aria-label="${o.n}"><img src="${art(o.c)}" alt=""><span class="nm">${o.n}</span></button>`;
   }).join('');
-  $('result').innerHTML = d.done ? `<div class="reveal"><img src="${img(d.c)}" alt="${d.c} ${d.n}"><div class="txt">
+  $('result').innerHTML = d.done ? `<div class="reveal"><div class="rimg"><img src="${img(d.c)}" alt="${d.c} ${d.n}"></div><div class="txt">
      <p class="verdict ${d.pick===d.c?'ok':'no'}">${d.pick===d.c?t().ok:t().no}</p>
      <p><b>${d.c} ${d.s}</b> · ${d.n}</p><p>${d[lang][0]}</p>
      <button class="next" id="next">${t().next} →</button></div></div>` : '';
