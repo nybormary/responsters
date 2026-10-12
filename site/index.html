@@ -98,6 +98,8 @@ import { D, BY } from './data/cards.js';
 import { QA } from './data/qa.js';
 import { PAIRS } from './data/traps.js';
 import { TOOLS, REF, MORE } from './data/links.js';
+import { uk } from './i18n/uk.js';
+import { en } from './i18n/en.js';
 function cardLinks(c){
   const r = REF[c], d = BY[c], out = [];
   if(r) out.push({uk:`RFC ${r[0]} §${r[1]}`, en:`RFC ${r[0]} §${r[1]}`, u:`https://www.rfc-editor.org/rfc/rfc${r[0]}#section-${r[1]}`});
@@ -106,32 +108,7 @@ function cardLinks(c){
 }
 const CONF = {};
 PAIRS.forEach(p=>p.codes.forEach(c=>{CONF[c]=(CONF[c]||[]).concat(p.codes.filter(x=>x!==c))}));
-const T = {
- uk:{tag:'Оригінальні істоти для запам’ятовування HTTP-статусів. У кожного коду свій Responster, а кожен рух пояснює, що код означає.',
-   tabs:['Колекція','Тренування','Пастки'], all:'Усі', mastered:(a,b)=>`Засвоєно ${a} з ${b}`, known:'знаю',
-   modeArt:'Картинка → код', modeCode:'Код → істота', qArt:'Який це код?', qCode:'Хто з них?',
-   score:(r,t,s)=>`${r}/${t} · серія ${s}`, ok:'Так!', no:'Не цей.', next:'Далі',
-   move:'Рух', mean:'Що означає', when:'Коли зустрічається', conf:'Часто плутають з', qa:'Що тестуємо', links:'Інструменти й довідка',
-   traps:'Пари кодів, які найчастіше плутають. Прочитай правило, потім розклади ситуації.',
-   foot:'Responsters · персонажі й тексти власні; назви статусів за RFC 9110.', close:'Закрити', back:'До колекції',
-   howto:'Як користуватися',
-   howtoSteps:['<b>Колекція.</b> Натисни на картку, щоб познайомитися з істотою: що означає код, де зустрічається і що тестувати.',
-     '<b>Тренування.</b> «Картинка → код» або «Код → істота». Після двох правильних відповідей поспіль код отримує ✓.',
-     '<b>Пастки.</b> Пари кодів, які часто плутають: правило і ситуації, щоб їх розкласти.'],
-   howtoNote:'Прогрес зберігається лише в цьому браузері.', howtoClose:'Зрозуміло'},
- en:{tag:'Original creatures for memorizing HTTP status codes. Every code has its own Responster, and every move explains what the code means.',
-   tabs:['Collection','Practice','Traps'], all:'All', mastered:(a,b)=>`${a} of ${b} learned`, known:'known',
-   modeArt:'Picture → code', modeCode:'Code → creature', qArt:'Which code is this?', qCode:'Which one is it?',
-   score:(r,t,s)=>`${r}/${t} · streak ${s}`, ok:'Yes!', no:'Not this one.', next:'Next',
-   move:'Move', mean:'What it means', when:'Where you meet it', conf:'Often confused with', qa:'What to test', links:'Tools and Read more',
-   traps:'Pairs of codes people mix up most. Read the rule, then sort the situations.',
-   foot:'Responsters · original characters and copy; status names per RFC 9110.', close:'Close', back:'Back to collection',
-   howto:'How to use',
-   howtoSteps:['<b>Collection.</b> Tap a card to meet the creature: what the code means, where you meet it and what to test.',
-     '<b>Practice.</b> “Picture → code” or “Code → creature”. Two correct answers in a row give a code its ✓.',
-     '<b>Traps.</b> Pairs of codes people mix up: a rule and situations to sort.'],
-   howtoNote:'Progress is saved in this browser only.', howtoClose:'Got it'}
-};
+const T = { uk, en };
 const cls = c => Math.floor(c/100);
 const img = c => `img/${c}.jpg`, art = c => `img/${c}-art.jpg`;
 const store = {get(k,d){try{const v=localStorage.getItem('httpon.'+k);return v==null?d:JSON.parse(v)}catch(e){return d}}, set(k,v){try{localStorage.setItem('httpon.'+k,JSON.stringify(v))}catch(e){}}};
