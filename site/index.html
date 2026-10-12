@@ -96,40 +96,28 @@
 import { CLS } from './data/classes.js';
 import { D, BY } from './data/cards.js';
 import { QA } from './data/qa.js';
-import { PAIRS } from './data/traps.js';
+import { PAIRS, CONF } from './data/traps.js';
 import { TOOLS, REF, MORE } from './data/links.js';
-import { uk } from './i18n/uk.js';
-import { en } from './i18n/en.js';
+import { store } from './js/store.js';
+import { $, cls, img, art } from './js/util.js';
+import { state, t, isKnown } from './js/state.js';
 function cardLinks(c){
   const r = REF[c], d = BY[c], out = [];
   if(r) out.push({uk:`RFC ${r[0]} §${r[1]}`, en:`RFC ${r[0]} §${r[1]}`, u:`https://www.rfc-editor.org/rfc/rfc${r[0]}#section-${r[1]}`});
   out.push({uk:`MDN: ${c} ${d.s}`, en:`MDN: ${c} ${d.s}`, u:`https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/${c}`});
   return out.concat(MORE[c]||[], TOOLS);
 }
-const CONF = {};
-PAIRS.forEach(p=>p.codes.forEach(c=>{CONF[c]=(CONF[c]||[]).concat(p.codes.filter(x=>x!==c))}));
-const T = { uk, en };
-const cls = c => Math.floor(c/100);
-const img = c => `img/${c}.jpg`, art = c => `img/${c}-art.jpg`;
-const store = {get(k,d){try{const v=localStorage.getItem('httpon.'+k);return v==null?d:JSON.parse(v)}catch(e){return d}}, set(k,v){try{localStorage.setItem('httpon.'+k,JSON.stringify(v))}catch(e){}}};
-let lang = store.get('lang','uk'), view = 'collection', filter = 0, mode = 'art';
-let weight = store.get('weight',{}), streakBy = store.get('streak',{});
-let stats = {r:0,t:0,s:0}, cur = null, last = null;
-let howtoOpen = !store.get('howtoSeen', false);   // shown on the first visit until dismissed
-const t = () => T[lang];
-const $ = id => document.getElementById(id);
-const isKnown = c => (streakBy[c]||0) >= 2;
 
 function renderChrome(){
-  document.documentElement.lang = lang;
+  document.documentElement.lang = state.lang;
   $('tagline').textContent = t().tag;
-  ['uk','en'].forEach(l=>$('lang-'+l).setAttribute('aria-pressed', l===lang));
-  ['collection','practice','traps'].forEach((v,i)=>{const b=$('tab-'+v); b.textContent=t().tabs[i]; b.setAttribute('aria-selected', v===view)});
-  ['collection','practice','traps'].forEach(v=>$('view-'+v).hidden = v!==view);
+  ['uk','en'].forEach(l=>$('lang-'+l).setAttribute('aria-pressed', l===state.lang));
+  ['collection','practice','traps'].forEach((v,i)=>{const b=$('tab-'+v); b.textContent=t().tabs[i]; b.setAttribute('aria-selected', v===state.view)});
+  ['collection','practice','traps'].forEach(v=>$('view-'+v).hidden = v!==state.view);
   $('mode-art').textContent=t().modeArt; $('mode-code').textContent=t().modeCode;
-  $('mode-art').setAttribute('aria-pressed',mode==='art'); $('mode-code').setAttribute('aria-pressed',mode==='code');
-  $('howto-open').textContent=t().howto; $('howto-open').setAttribute('aria-expanded', howtoOpen);
-  $('howto').hidden=!howtoOpen; $('howto-title').textContent=t().howto;
+  $('mode-art').setAttribute('aria-pressed',state.mode==='art'); $('mode-code').setAttribute('aria-pressed',state.mode==='code');
+  $('howto-open').textContent=t().howto; $('howto-open').setAttribute('aria-expanded', state.howtoOpen);
+  $('howto').hidden=!state.howtoOpen; $('howto-title').textContent=t().howto;
   $('howto-steps').innerHTML=t().howtoSteps.map(s=>`<li>${s}</li>`).join('');
   $('howto-note').textContent=t().howtoNote; $('howto-close').textContent=t().howtoClose;
   $('traps-lede').textContent=t().traps; $('foot').textContent=t().foot; $('m-close').setAttribute('aria-label',t().close);
@@ -138,15 +126,15 @@ function renderCollection(){
   const k = D.filter(d=>isKnown(d.c)).length;
   $('mastered').textContent = t().mastered(k, D.length);
   $('masterbar').style.width = (k/D.length*100)+'%';
-  const chips = [[0,t().all,null]].concat([1,2,3,4,5].map(n=>[n,`${n}xx ${CLS[n][lang][0]}`,CLS[n].c]));
-  $('chips').innerHTML = chips.map(([n,l,c])=>`<button class="chip" data-f="${n}" aria-pressed="${filter===n}">${c?`<i style="background:${c}"></i>`:''}${l}</button>`).join('');
-  $('groups').innerHTML = [1,2,3,4,5].filter(n=>!filter||filter===n).map(n=>`
-    <div class="group"><h2><code style="background:${CLS[n].c}">${n}xx</code>${CLS[n][lang][0]}</h2>
-    <p class="lede">${CLS[n][lang][1]}</p>
+  const chips = [[0,t().all,null]].concat([1,2,3,4,5].map(n=>[n,`${n}xx ${CLS[n][state.lang][0]}`,CLS[n].c]));
+  $('chips').innerHTML = chips.map(([n,l,c])=>`<button class="chip" data-f="${n}" aria-pressed="${state.filter===n}">${c?`<i style="background:${c}"></i>`:''}${l}</button>`).join('');
+  $('groups').innerHTML = [1,2,3,4,5].filter(n=>!state.filter||state.filter===n).map(n=>`
+    <div class="group"><h2><code style="background:${CLS[n].c}">${n}xx</code>${CLS[n][state.lang][0]}</h2>
+    <p class="lede">${CLS[n][state.lang][1]}</p>
     <div class="grid">${D.filter(d=>cls(d.c)===n).map(d=>`<button class="card" data-open="${d.c}" aria-label="${d.c} ${d.s}: ${d.n}${isKnown(d.c)?`, ${t().known}`:''}"><img src="${img(d.c)}" alt="" loading="lazy">${isKnown(d.c)?`<span class="badge" aria-hidden="true">✓</span>`:''}</button>`).join('')}</div></div>`).join('');
 }
 function openCard(c){
-  const d = BY[c], L = d[lang];
+  const d = BY[c], L = d[state.lang];
   document.querySelector('.sheet').style.setProperty('--cls', CLS[cls(c)].c);
   $('m-back').textContent = '← ' + t().back;
   $('m-status').textContent = `${c} ${d.s}`; $('m-status').style.color = 'var(--ink)';
@@ -154,9 +142,9 @@ function openCard(c){
   $('m-h-move').textContent = t().move; $('m-move').textContent = d.m;
   $('m-h-mean').textContent = t().mean; $('m-mean').textContent = L[0];
   $('m-h-when').textContent = t().when; $('m-when').textContent = L[1];
-  $('m-h-qa').textContent = t().qa; $('m-qa').innerHTML = (QA[c]?QA[c][lang]:[]).map(x=>`<li>${x.replace(/</g,'&lt;')}</li>`).join('');
+  $('m-h-qa').textContent = t().qa; $('m-qa').innerHTML = (QA[c]?QA[c][state.lang]:[]).map(x=>`<li>${x.replace(/</g,'&lt;')}</li>`).join('');
   $('m-h-links').textContent = t().links;
-  $('m-links').innerHTML = cardLinks(c).map(x=>`<li><a href="${x.u}" target="_blank" rel="noopener">${x[lang]} ↗</a></li>`).join('');
+  $('m-links').innerHTML = cardLinks(c).map(x=>`<li><a href="${x.u}" target="_blank" rel="noopener">${x[state.lang]} ↗</a></li>`).join('');
   const cf = CONF[c]||[]; $('m-conf-wrap').hidden = !cf.length; $('m-h-conf').textContent = t().conf;
   $('m-conf').innerHTML = cf.map(x=>`<button data-open="${x}">${x} ${BY[x].n}</button>`).join('');
   $('modal').hidden = false; $('m-close').focus();
@@ -164,8 +152,8 @@ function openCard(c){
 function closeModal(){ $('modal').hidden = true; }
 
 function pick(){
-  const pool = D.filter(d=>d.c!==last);
-  const ws = pool.map(d=>weight[d.c]||1), sum = ws.reduce((a,b)=>a+b,0);
+  const pool = D.filter(d=>d.c!==state.last);
+  const ws = pool.map(d=>state.weight[d.c]||1), sum = ws.reduce((a,b)=>a+b,0);
   let r = Math.random()*sum;
   for(let i=0;i<pool.length;i++){ r-=ws[i]; if(r<=0) return pool[i]; }
   return pool[pool.length-1];
@@ -177,64 +165,64 @@ function distractors(d){
   const sh = a => a.sort(()=>Math.random()-.5);
   return sh([...sh(conf), ...sh(same), ...sh(other)].slice(0,3).concat(d));
 }
-function newRound(){ cur = pick(); last = cur.c; cur.opts = distractors(cur); cur.done = false; renderPractice(); }
+function newRound(){ state.cur = pick(); state.last = state.cur.c; state.cur.opts = distractors(state.cur); state.cur.done = false; renderPractice(); }
 function renderPractice(){
-  if(!cur) return newRound();
-  $('score').textContent = t().score(stats.r, stats.t, stats.s);
-  const d = cur;
-  $('stage').dataset.mode = mode;
-  $('prompt').innerHTML = mode==='art'
+  if(!state.cur) return newRound();
+  $('score').textContent = t().score(state.stats.r, state.stats.t, state.stats.s);
+  const d = state.cur;
+  $('stage').dataset.mode = state.mode;
+  $('prompt').innerHTML = state.mode==='art'
     ? `<div class="q">${t().qArt}</div><img class="art" src="${art(d.c)}" alt="">`
     : `<div class="q">${t().qCode}</div><div class="bigcode">${d.c}</div><div class="bigstatus">${d.s}</div>`;
   $('opts').innerHTML = d.opts.map(o=>{
     const st = d.done ? (o.c===d.c?'right':(o.c===d.pick?'wrong':'')) : '';
-    return mode==='art'
+    return state.mode==='art'
       ? `<button class="opt ${st}" data-ans="${o.c}" ${d.done?'disabled':''}><b>${o.c}</b><span>${o.s}</span></button>`
       : `<button class="opt imgopt ${st}" data-ans="${o.c}" ${d.done?'disabled':''} aria-label="${o.n}"><img src="${art(o.c)}" alt=""><span class="nm">${o.n}</span></button>`;
   }).join('');
   $('result').innerHTML = d.done ? `<div class="reveal"><div class="rimg"><img src="${img(d.c)}" alt="${d.c} ${d.n}"></div><div class="txt">
      <p class="verdict ${d.pick===d.c?'ok':'no'}">${d.pick===d.c?t().ok:t().no}</p>
-     <p><b>${d.c} ${d.s}</b> · ${d.n}</p><p>${d[lang][0]}</p>
+     <p><b>${d.c} ${d.s}</b> · ${d.n}</p><p>${d[state.lang][0]}</p>
      <button class="next" id="next">${t().next} →</button></div></div>` : '';
 }
 function answer(c){
-  if(cur.done) return;
-  cur.done = true; cur.pick = c; stats.t++;
-  if(c===cur.c){ stats.r++; stats.s++; weight[cur.c]=Math.max(1,(weight[cur.c]||1)-1); streakBy[cur.c]=(streakBy[cur.c]||0)+1; }
-  else { stats.s=0; weight[cur.c]=(weight[cur.c]||1)+2; streakBy[cur.c]=0; }
-  store.set('weight',weight); store.set('streak',streakBy);
+  if(state.cur.done) return;
+  state.cur.done = true; state.cur.pick = c; state.stats.t++;
+  if(c===state.cur.c){ state.stats.r++; state.stats.s++; state.weight[state.cur.c]=Math.max(1,(state.weight[state.cur.c]||1)-1); state.streakBy[state.cur.c]=(state.streakBy[state.cur.c]||0)+1; }
+  else { state.stats.s=0; state.weight[state.cur.c]=(state.weight[state.cur.c]||1)+2; state.streakBy[state.cur.c]=0; }
+  store.set('weight',state.weight); store.set('streak',state.streakBy);
   renderPractice(); const n=$('next'); if(n) n.focus();
 }
 function renderTraps(){
-  $('pairs').innerHTML = PAIRS.map((p,pi)=>`<div class="pair"><h3>${p[lang][0]}</h3><p class="rule">${p[lang][1]}</p>
+  $('pairs').innerHTML = PAIRS.map((p,pi)=>`<div class="pair"><h3>${p[state.lang][0]}</h3><p class="rule">${p[state.lang][1]}</p>
     <div class="duo">${p.codes.map(c=>`<button data-open="${c}" aria-label="${c} ${BY[c].n}"><img src="${img(c)}" alt="" loading="lazy"></button>`).join('')}</div>
-    <div class="scen">${p.s.map((s,si)=>`<div class="sc" id="sc-${pi}-${si}"><p>${lang==='uk'?s[1]:s[2]}</p><div class="btns">${p.codes.map(c=>`<button data-sc="${pi}-${si}" data-v="${c}">${c}</button>`).join('')}</div></div>`).join('')}</div></div>`).join('');
+    <div class="scen">${p.s.map((s,si)=>`<div class="sc" id="sc-${pi}-${si}"><p>${state.lang==='uk'?s[1]:s[2]}</p><div class="btns">${p.codes.map(c=>`<button data-sc="${pi}-${si}" data-v="${c}">${c}</button>`).join('')}</div></div>`).join('')}</div></div>`).join('');
 }
 function scAnswer(key, v){
   const [pi,si] = key.split('-').map(Number), s = PAIRS[pi].s[si], box = $('sc-'+key);
   box.querySelectorAll('button').forEach(b=>{ const c=+b.dataset.v; b.disabled=true; if(c===s[0]) b.classList.add('right'); else if(c===v) b.classList.add('wrong'); });
   const why = document.createElement('div'); why.className='why';
-  why.textContent = `${v===s[0]?'✓':'✗'} ${s[0]} ${BY[s[0]].n}: ${BY[s[0]][lang][0]}`;
+  why.textContent = `${v===s[0]?'✓':'✗'} ${s[0]} ${BY[s[0]].n}: ${BY[s[0]][state.lang][0]}`;
   box.appendChild(why);
 }
-function render(){ renderChrome(); if(view==='collection') renderCollection(); if(view==='practice') renderPractice(); if(view==='traps') renderTraps(); }
+function render(){ renderChrome(); if(state.view==='collection') renderCollection(); if(state.view==='practice') renderPractice(); if(state.view==='traps') renderTraps(); }
 
 document.addEventListener('click', e=>{
   const b = e.target.closest('button'); if(!b){ if(e.target.id==='modal') closeModal(); return; }
-  if(b.dataset.lang){ lang=b.dataset.lang; store.set('lang',lang); render(); }
-  else if(b.dataset.view){ view=b.dataset.view; render(); }
-  else if(b.dataset.f!=null){ filter=+b.dataset.f; renderCollection(); }
-  else if(b.dataset.mode){ mode=b.dataset.mode; renderChrome(); newRound(); }
+  if(b.dataset.lang){ state.lang=b.dataset.lang; store.set('lang',state.lang); render(); }
+  else if(b.dataset.view){ state.view=b.dataset.view; render(); }
+  else if(b.dataset.f!=null){ state.filter=+b.dataset.f; renderCollection(); }
+  else if(b.dataset.mode){ state.mode=b.dataset.mode; renderChrome(); newRound(); }
   else if(b.dataset.ans){ answer(+b.dataset.ans); }
   else if(b.id==='next'){ newRound(); }
   else if(b.dataset.sc){ scAnswer(b.dataset.sc, +b.dataset.v); }
   else if(b.dataset.open){ openCard(+b.dataset.open); }
   else if(b.id==='m-close' || b.id==='m-back'){ closeModal(); }
-  else if(b.id==='howto-open'){ howtoOpen=!howtoOpen; renderChrome(); if(howtoOpen) $('howto-close').focus(); }
-  else if(b.id==='howto-close'){ howtoOpen=false; store.set('howtoSeen',true); renderChrome(); $('howto-open').focus(); }
+  else if(b.id==='howto-open'){ state.howtoOpen=!state.howtoOpen; renderChrome(); if(state.howtoOpen) $('howto-close').focus(); }
+  else if(b.id==='howto-close'){ state.howtoOpen=false; store.set('howtoSeen',true); renderChrome(); $('howto-open').focus(); }
 });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('modal').hidden) closeModal(); });
-const h = location.hash.slice(1); if(['collection','practice','traps'].includes(h)) view = h;
+const h = location.hash.slice(1); if(['collection','practice','traps'].includes(h)) state.view = h;
 render();
 </script>
 

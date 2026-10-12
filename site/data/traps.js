@@ -27,3 +27,7 @@ export const PAIRS = [
  {codes:[408,504], uk:['Slowth чи Waitgator?','408: повільний клієнт, сервер не дочекався запиту. 504: повільний сервер за шлюзом, шлюз не дочекався відповіді.'], en:['Slowth or Waitgator?','408: a slow client; the server stopped waiting for the request. 504: a slow server behind the gateway; the gateway stopped waiting for the answer.'],
   s:[[408,'Телефон на слабкому мобільному інтернеті почав надсилати форму, і запит застряг на півдорозі.','A phone on weak mobile data starts sending a form, and the request stalls halfway.'],[504,'CDN не дочекався відповіді від твого сервера.','The CDN didn’t get an answer from your server in time.'],[408,'Клієнт відкрив з’єднання й нічого не надсилає.','The client opened a connection and sends nothing.'],[504,'Проксі чекав на мікросервіс оплати, а той мовчить.','The proxy waited for the payment microservice, which stays silent.']]}
 ];
+
+// "Often confused with": for each code, the other codes in its trap pairs. CONF[401] → [403].
+export const CONF = {};
+PAIRS.forEach(p=>p.codes.forEach(c=>{CONF[c]=(CONF[c]||[]).concat(p.codes.filter(x=>x!==c))}));
