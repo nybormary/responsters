@@ -16,7 +16,7 @@ Every status code has its own creature, a pun name and a "move" that explains wh
   - 400/404, 400/415, 400/422, 404/405, 409/422.
 - The UI is in Ukrainian and English.
 
-The site is a single static page (`site/index.html`) with no build step.
+The site is static, with no build step: plain HTML, CSS and JavaScript modules that Netlify serves as they are.
 
 ## How to use it
 
@@ -58,12 +58,23 @@ The site runs on Netlify's free plan (300 credits a month). When the credits run
 ## Repository layout
 
 ```
-site/            static site, published by Netlify
-  index.html     the whole app: markup, styles, script, data
-  img/           card images
-  _headers       cache rules (images and icons: one week)
-netlify.toml     publish folder and the rule that skips builds without site changes
+site/              static site, published by Netlify
+  index.html       markup only; loads css/ and js/app.js
+  css/             styles: base, collection, practice, traps, detail (card modal)
+  data/            content: cards, classes, what to test, traps, links
+  i18n/            interface texts: uk.js, en.js (same keys in both)
+  js/              logic, one file per part of the page
+    app.js         entry point: clicks, keys, first render
+    state.js       shared state (language, view, progress) + t() and isKnown()
+    store.js       progress in localStorage (prefix "httpon.")
+    util.js        small helpers
+    chrome.js · collection.js · detail.js · practice.js · traps.js
+  img/             card images
+  _headers         cache rules (images and icons: one week)
+netlify.toml       publish folder and the rule that skips builds without site changes
 ```
+
+**Run locally:** `npx serve site`, then open http://localhost:3000. JavaScript modules don't load from `file://`, so opening `index.html` by double-click shows an empty page.
 
 ## Credits
 

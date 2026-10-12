@@ -92,36 +92,7 @@
   </div>
 </div>
 
-<script type="module">
-import { store } from './js/store.js';
-import { $ } from './js/util.js';
-import { state } from './js/state.js';
-import { renderChrome } from './js/chrome.js';
-import { renderCollection } from './js/collection.js';
-import { openCard, closeModal } from './js/detail.js';
-import { newRound, renderPractice, answer } from './js/practice.js';
-import { renderTraps, scAnswer } from './js/traps.js';
-
-function render(){ renderChrome(); if(state.view==='collection') renderCollection(); if(state.view==='practice') renderPractice(); if(state.view==='traps') renderTraps(); }
-
-document.addEventListener('click', e=>{
-  const b = e.target.closest('button'); if(!b){ if(e.target.id==='modal') closeModal(); return; }
-  if(b.dataset.lang){ state.lang=b.dataset.lang; store.set('lang',state.lang); render(); }
-  else if(b.dataset.view){ state.view=b.dataset.view; render(); }
-  else if(b.dataset.f!=null){ state.filter=+b.dataset.f; renderCollection(); }
-  else if(b.dataset.mode){ state.mode=b.dataset.mode; renderChrome(); newRound(); }
-  else if(b.dataset.ans){ answer(+b.dataset.ans); }
-  else if(b.id==='next'){ newRound(); }
-  else if(b.dataset.sc){ scAnswer(b.dataset.sc, +b.dataset.v); }
-  else if(b.dataset.open){ openCard(+b.dataset.open); }
-  else if(b.id==='m-close' || b.id==='m-back'){ closeModal(); }
-  else if(b.id==='howto-open'){ state.howtoOpen=!state.howtoOpen; renderChrome(); if(state.howtoOpen) $('howto-close').focus(); }
-  else if(b.id==='howto-close'){ state.howtoOpen=false; store.set('howtoSeen',true); renderChrome(); $('howto-open').focus(); }
-});
-document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('modal').hidden) closeModal(); });
-const h = location.hash.slice(1); if(['collection','practice','traps'].includes(h)) state.view = h;
-render();
-</script>
+<script type="module" src="js/app.js"></script>
 
 </body>
 </html>
