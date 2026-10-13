@@ -31,11 +31,11 @@
 /* Two columns. Code mode: the prompt and the reveal are two equal blocks whose bottom lines up with the options.
    The reveal is text only (the creature is already on screen: the big picture or the four options). */
 @media (min-width:761px){
-  .stage:is([data-mode="code"],[data-mode="nerd"]){grid-template-rows:1fr 1fr}
-  .stage:is([data-mode="code"],[data-mode="nerd"]) > .prompt, .stage:is([data-mode="code"],[data-mode="nerd"]) > #result{align-self:stretch}
-  .stage:is([data-mode="code"],[data-mode="nerd"]) > .prompt{justify-content:center}
-  .stage:is([data-mode="code"],[data-mode="nerd"]) > #result{display:flex; flex-direction:column}
-  .stage:is([data-mode="code"],[data-mode="nerd"]) .reveal{flex:1}
+  .stage:is([data-mode="code"],[data-mode="nerd"],[data-mode="hard"]){grid-template-rows:1fr 1fr}
+  .stage:is([data-mode="code"],[data-mode="nerd"],[data-mode="hard"]) > .prompt, .stage:is([data-mode="code"],[data-mode="nerd"],[data-mode="hard"]) > #result{align-self:stretch}
+  .stage:is([data-mode="code"],[data-mode="nerd"],[data-mode="hard"]) > .prompt{justify-content:center}
+  .stage:is([data-mode="code"],[data-mode="nerd"],[data-mode="hard"]) > #result{display:flex; flex-direction:column}
+  .stage:is([data-mode="code"],[data-mode="nerd"],[data-mode="hard"]) .reveal{flex:1}
   /* Picture mode: the reveal under the options stretches so its bottom lines up with the picture prompt */
   .stage[data-mode="art"] > .prompt{align-self:stretch; justify-content:center}
   .stage[data-mode="art"] > #result{align-self:stretch; display:flex; flex-direction:column}
@@ -52,6 +52,14 @@
 /* Nerd mode (RSP-100): the meaning is the question, set as a readable paragraph; the example sits under the reveal. */
 .nerdq{margin:0; max-width:40ch; font:600 clamp(18px,2.4vw,22px)/1.45 var(--body); color:var(--ink); text-wrap:pretty}
 .reveal p.ex{color:var(--muted)}
+/* Hardcore (RSP-101): status-name options and the hint button under the code. */
+.opt.hardopt{justify-content:center; min-height:64px}
+.opt.hardopt b{font:800 18px/1.2 var(--display); overflow-wrap:break-word}
+.hintbtn{min-height:44px; border:1.5px dashed var(--muted); background:none; color:var(--ink); border-radius:999px; padding:8px 18px; font:700 15px var(--body); cursor:pointer}
+.hintbtn:hover{border-color:var(--accent)}
+.hintbtn[aria-expanded="true"]{border-style:solid; color:var(--muted)}
+.hint-out{margin:0; font:800 18px var(--display); color:var(--accent); min-height:1.2em}
+.hint-out:empty{display:none}
 .opts{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .opt{border:2px solid var(--line); background:var(--surface); color:var(--ink); border-radius:14px; padding:12px; cursor:pointer; text-align:left; font:700 15px var(--body); display:flex; flex-direction:column; gap:2px; min-width:0}
 .opt b{font:800 22px var(--mono)}

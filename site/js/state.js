@@ -30,7 +30,7 @@ export const state = {
   lang: pickLang(),                // 'uk' | 'en'
   view: 'collection',              // 'collection' | 'practice' | 'traps'
   filter: 0,                       // Collection class filter: 0 = all, 1–5 = 1xx–5xx
-  mode: 'art',                     // Practice: 'art' (picture → code) | 'code' (code → creature) | 'nerd' (meaning → code, text only)
+  mode: 'art',                     // Practice: 'art' (picture → code) | 'code' (code → creature) | 'nerd' (meaning → code, text only) | 'hard' (code → status name)
   weight: store.get('weight',{}),  // Practice: how often each code comes back (missed codes weigh more)
   streakBy: store.get('streak',{}),// correct answers in a row per code
   stats: {r:0,t:0,s:0},            // this session: right, total, current streak
