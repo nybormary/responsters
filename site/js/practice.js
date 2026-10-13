@@ -2,7 +2,7 @@
 import { D, BY } from '../data/cards.js';
 import { CONF } from '../data/traps.js';
 import { store } from './store.js';
-import { state, t } from './state.js';
+import { state, t, tx } from './state.js';
 import { $, cls, art } from './util.js';
 
 // Weighted random pick; never the same code twice in a row.
@@ -41,16 +41,16 @@ export function renderPractice(){
   const d = state.cur;
   $('stage').dataset.mode = state.mode;
   const p = $('prompt');
-  const L = d[state.lang], nerd = state.mode==='nerd', hard = state.mode==='hard';
+  const L = tx().cards[d.c], nerd = state.mode==='nerd', hard = state.mode==='hard';
   // Nerd mode (RSP-100): plain HTTP, no pictures and no creature names. The question is the meaning, the answer is code + status.
   p.innerHTML = state.mode==='art' ? `<div class="q">${t().qArt}</div><img class="art" src="${art(d.c)}" alt="">`
-    : nerd ? `<div class="q">${t().qArt}</div><p class="nerdq">${L[0]}</p>`
+    : nerd ? `<div class="q">${t().qArt}</div><p class="nerdq">${L.mean}</p>`
     // Hardcore (RSP-101): the bare code; the creature name only on request, and not after the answer (the reveal has it).
     : hard ? `<div class="q">${t().qHard}</div><div class="bigcode">${d.c}</div>${d.done ? '' : `<button class="hintbtn" id="hint" aria-expanded="${!!d.hinted}" aria-controls="hint-out">${t().hint}</button>`}<p class="hint-out" id="hint-out" aria-live="polite">${d.hinted && !d.done ? t().hintIs(d.n) : ''}</p>`
     : `<div class="q">${t().qCode}</div><div class="bigcode">${d.c}</div><div class="bigstatus">${d.s}</div>`;
   // Focus target for "Next": a group named after the question, so screen readers read it when focused.
   p.tabIndex = -1; p.setAttribute('role','group');
-  p.setAttribute('aria-label', state.mode==='art' ? t().qArt : nerd ? `${t().qArt} ${L[0]}` : hard ? `${t().qHard} ${d.c}` : `${t().qCode} ${d.c} ${d.s}`);
+  p.setAttribute('aria-label', state.mode==='art' ? t().qArt : nerd ? `${t().qArt} ${L.mean}` : hard ? `${t().qHard} ${d.c}` : `${t().qCode} ${d.c} ${d.s}`);
   $('opts').innerHTML = d.opts.map(o=>{
     const st = d.done ? (o.c===d.c?'right':(o.c===d.pick?'wrong':'')) : '';
     if(hard) return `<button class="opt hardopt ${st}" data-ans="${o.c}" ${d.done?'disabled':''}><b>${o.s}</b></button>`;   // status names only, always in English
@@ -60,7 +60,7 @@ export function renderPractice(){
   }).join('');
   $('result').innerHTML = d.done ? `<div class="reveal"><div class="txt">
      <p class="verdict ${d.pick===d.c?'ok':'no'}">${d.pick===d.c?t().ok:t().no}</p>
-     ${nerd ? `<p><b>${d.c} ${d.s}</b></p><p>${L[0]}</p><p class="ex">${L[1]}</p>` : `<p><b>${d.c} ${d.s}</b> · ${d.n}</p><p>${L[0]}</p>`}
+     ${nerd ? `<p><b>${d.c} ${d.s}</b></p><p>${L.mean}</p><p class="ex">${L.when}</p>` : `<p><b>${d.c} ${d.s}</b> · ${d.n}</p><p>${L.mean}</p>`}
      ${hard && d.hinted && d.pick===d.c ? `<p class="ex">${t().hintUsed}</p>` : ''}
      <button class="next" id="next">${t().next} →</button></div></div>` : '';
 }
