@@ -3,7 +3,7 @@
 import { store } from './store.js';
 import { $ } from './util.js';
 import { state } from './state.js';
-import { renderChrome } from './chrome.js';
+import { renderChrome, langOpen, langClose, langKeys } from './chrome.js';
 import { renderCollection } from './collection.js';
 import { openCard, closeModal } from './detail.js';
 import { newRound, nextRound, renderPractice, answer } from './practice.js';
@@ -14,8 +14,11 @@ function render(){ renderChrome(); if(state.view==='collection') renderCollectio
 
 // One click handler for the whole page: each button says what it does through a data- attribute or its id.
 document.addEventListener('click', e=>{
-  const b = e.target.closest('button'); if(!b){ if(e.target.id==='modal') closeModal(); return; }
-  if(b.dataset.lang){ state.lang=b.dataset.lang; store.set('lang',state.lang); render(); }
+  const b = e.target.closest('button');
+  if(!e.target.closest('#langmenu')) langClose();                     // a click anywhere else closes the language menu
+  if(!b){ if(e.target.id==='modal') closeModal(); return; }
+  if(b.id==='lang-btn'){ $('lang-list').hidden ? langOpen(e.detail===0) : langClose(); }   // keyboard (detail 0) moves focus into the menu
+  else if(b.dataset.lang){ state.lang=b.dataset.lang; store.set('lang',state.lang); langClose(); render(); $('lang-btn').focus(); }
   else if(b.dataset.view){ state.view=b.dataset.view; render(); }
   else if(b.dataset.f!=null){ state.filter=+b.dataset.f; renderCollection(); }
   else if(b.dataset.mode){ state.mode=b.dataset.mode; renderChrome(); newRound(); }
@@ -27,7 +30,9 @@ document.addEventListener('click', e=>{
   else if(b.id==='howto-open'){ state.howtoOpen=!state.howtoOpen; renderChrome(); if(state.howtoOpen) $('howto-close').focus(); }
   else if(b.id==='howto-close'){ state.howtoOpen=false; store.set('howtoSeen',true); renderChrome(); $('howto-open').focus(); }
 });
-document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('modal').hidden) closeModal(); });
+document.addEventListener('keydown', e=>{ langKeys(e); if(e.key==='Escape' && !$('modal').hidden) closeModal(); });
+// Focus leaving the language menu (e.g. Shift+Tab) closes it.
+$('langmenu').addEventListener('focusout', e=>{ if(!$('langmenu').contains(e.relatedTarget) && e.relatedTarget) langClose(); });
 // Start: open the view from the URL hash (#practice, #traps), if any.
 const h = location.hash.slice(1); if(['collection','practice','traps'].includes(h)) state.view = h;
 render();

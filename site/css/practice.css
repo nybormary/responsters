@@ -1,8 +1,27 @@
-/* Practice: mode switch, score, prompt / options / reveal layout for both modes. */
-.pbar{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; justify-content:space-between}
-.seg{display:inline-flex; background:var(--soft); border-radius:10px; padding:3px}
-.seg button{border:0; background:none; color:var(--muted); font:700 14px var(--body); padding:7px 12px; border-radius:8px; cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--surface); color:var(--ink); box-shadow:0 1px 3px rgb(0 0 0 / .1)}
+/* Practice: mode cards, score, prompt / options / reveal layout for both modes. */
+/* Practice bar (RSP-109): title + score on one row, the mode cards full width under them.
+   Phones: two cards per row; 600px and wider: up to four in a row (Nerd and Hardcore join later). */
+.pbar{display:grid; grid-template-columns:1fr auto; gap:10px 16px; align-items:baseline}
+.pbar-title{font:800 20px var(--display); margin:0}
+.modes{grid-column:1 / -1; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+@media (min-width:600px){.modes{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.mode{position:relative; display:flex; flex-direction:column; align-items:flex-start; gap:4px; min-height:44px; padding:12px 14px;
+  border:1.5px solid var(--line); border-radius:16px; background:var(--surface); color:var(--ink); text-align:left; cursor:pointer}
+.mode:hover{border-color:var(--muted)}
+.mode-icon{width:26px; height:26px; color:var(--accent)}
+.mode-name{font:800 17px/1.15 var(--display); padding-right:22px; max-width:100%; overflow-wrap:break-word; hyphens:auto}
+.mode-hint{font-size:13px; line-height:1.35; color:var(--muted)}
+.mode-check{display:none; position:absolute; top:10px; right:10px; width:22px; height:22px; border-radius:50%; background:var(--accent); color:var(--surface);
+  align-items:center; justify-content:center}
+.mode-check svg{width:14px; height:14px}
+.mode[aria-pressed="true"]{border:2.5px solid var(--accent); padding:11px 13px}
+.mode[aria-pressed="true"] .mode-check{display:inline-flex}
+/* Hardcore (RSP-101): dark card with orange; selected = orange border, a ring and an orange check. */
+.mode.hard{background:#33202F; border-color:#33202F; color:#F7EEF4}
+.mode.hard .mode-icon{color:#F2A15A}
+.mode.hard .mode-hint{color:#D9C6D3}
+.mode.hard[aria-pressed="true"]{border-color:#F2A15A; box-shadow:0 0 0 3px var(--bg),0 0 0 5.5px var(--accent)}
+.mode.hard .mode-check{background:#F2A15A; color:#33202F}
 .score{font:600 14px var(--mono); color:var(--muted); font-variant-numeric:tabular-nums}
 .stage{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); grid-template-rows:auto 1fr; gap:24px; margin-top:20px; align-items:start;
   grid-template-areas:"prompt opts" "result opts"}

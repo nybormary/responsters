@@ -1,4 +1,4 @@
-/* Base: colour tokens (light + dark), reset, page shell, header, language switch, "How to use" panel, tabs, footer. */
+/* Base: colour tokens (light + dark), reset, page shell, header, language menu, "How to use" panel, tabs, footer. */
 /* Layout: a field guide. Header with tabs → collection grouped by status class, practice deck, and confusable pairs. Card art is the hero; the UI stays quiet around it. */
 :root{
   --bg:#F3F1F7; --surface:#FFFFFF; --ink:#33202F; --muted:#6E6176; --line:#E1DCE8; --soft:#E9E5F0;
@@ -23,9 +23,29 @@ header{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space
 .brand p{margin:6px 0 0; color:var(--muted); max-width:46ch}
 .brand .dots{display:flex; gap:6px; margin-top:12px}
 .brand .dots i{width:28px; height:8px; border-radius:4px; display:block}
-.lang{display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:var(--surface)}
-.lang button{border:0; background:none; color:var(--muted); font:700 13px var(--body); padding:7px 12px; cursor:pointer}
-.lang button[aria-pressed="true"]{background:var(--accent); color:var(--bg)}
+/* Language menu (RSP-109): a pill with the current language opens a list of all languages, each in its own language.
+   Phones show the short code (UA), wider screens the full name. Every target is at least 44px tall. */
+.langmenu{position:relative}
+.langbtn{display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:6px 12px; border:1.5px solid var(--line); border-radius:999px;
+  background:var(--surface); color:var(--ink); font:700 14px var(--body); cursor:pointer}
+.langbtn:hover{border-color:var(--accent)}
+.langbtn svg{width:18px; height:18px; flex:none}
+.langbtn .lang-icon{color:var(--accent)}
+.langbtn .lang-chev{width:14px; height:14px; color:var(--muted); transition:transform .15s}
+.langbtn[aria-expanded="true"] .lang-chev{transform:rotate(180deg)}
+.langbtn .lang-name{display:none}
+@media (min-width:600px){.langbtn .lang-code{display:none} .langbtn .lang-name{display:inline}}
+/* On phones the button goes to the top-right corner, next to the logo, where people look for it; the logo leaves room for it. */
+@media (max-width:599px){header{position:relative} .langmenu{position:absolute; top:0; right:0} .brand h1{padding-right:96px}}
+.langlist{position:absolute; right:0; top:calc(100% + 6px); z-index:20; min-width:200px; margin:0; padding:6px; list-style:none;
+  background:var(--surface); border:1.5px solid var(--line); border-radius:14px; box-shadow:0 8px 24px rgb(0 0 0 / .14)}
+.langlist button{display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:44px; padding:8px 12px;
+  border:0; border-radius:10px; background:none; color:var(--ink); font:600 15px var(--body); text-align:left; cursor:pointer}
+.langlist button:hover{background:var(--soft)}
+.langlist button:focus-visible{outline-offset:-3px}
+.langlist button[aria-checked="true"]{font-weight:800; color:var(--accent)}
+.langlist .lang-check{display:inline-flex; width:18px; height:18px; flex:none}
+.langlist .lang-check svg{width:18px; height:18px}
 /* "How to use": a link-style button in the header and a dismissable panel above the views (RSP-98). */
 .tools{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
 .linkbtn{border:0; background:none; padding:7px 2px; color:var(--accent); font:700 14px var(--body); text-decoration:underline; text-underline-offset:3px; cursor:pointer}

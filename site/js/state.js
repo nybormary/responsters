@@ -5,6 +5,9 @@ import { uk } from '../i18n/uk.js';
 import { en } from '../i18n/en.js';
 
 const T = { uk, en };                                           // supported languages = the keys here
+export const LANGS = Object.keys(T);                            // what the language menu lists (only languages with texts)
+// Each language in its own language, and the short code shown on phones (RSP-109). Add a line per new locale.
+export const LANG_NAMES = { uk:['Українська','UA'], en:['English','EN'], pl:['Polski','PL'], da:['Dansk','DA'], lt:['Lietuvių','LT'] };
 
 // Which language to show (RSP-97):
 // 1. the language saved with the switcher (httpon.lang);

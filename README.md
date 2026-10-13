@@ -27,7 +27,7 @@ The site is static, with no build step: plain HTML, CSS and JavaScript modules t
 
    Codes you get wrong come back more often. After two correct answers in a row, a code gets a ✓ in the Collection.
 3. **Check the traps.** Open **Traps** once the basics feel easy. Each trap is a pair of codes that people mix up, with a short rule and real-life scenarios to sort.
-4. **Switch the language** with UA / EN at the top.
+4. **Switch the language** with the language button at the top (🌐).
 
 Your progress is saved in your browser only. There's no account and nothing is sent anywhere, so a different browser or device starts fresh.
 
@@ -69,6 +69,7 @@ site/              static site, published by Netlify
     store.js       progress in localStorage (prefix "httpon.")
     util.js        small helpers
     card.js        the card frame: art, code badge, status, name, move, card line
+    modes.js       the Practice modes shown as cards (add a line per new mode)
     chrome.js · collection.js · detail.js · practice.js · traps.js
   img/             creature art ({code}-art.jpg) and the old full card images ({code}.jpg)
   _headers         cache rules (images and icons: one week)
