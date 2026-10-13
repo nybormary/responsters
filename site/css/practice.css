@@ -1,0 +1,52 @@
+/* Practice: mode switch, score, prompt / options / reveal layout for both modes. */
+.pbar{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; justify-content:space-between}
+.seg{display:inline-flex; background:var(--soft); border-radius:10px; padding:3px}
+.seg button{border:0; background:none; color:var(--muted); font:700 14px var(--body); padding:7px 12px; border-radius:8px; cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface); color:var(--ink); box-shadow:0 1px 3px rgb(0 0 0 / .1)}
+.score{font:600 14px var(--mono); color:var(--muted); font-variant-numeric:tabular-nums}
+.stage{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); grid-template-rows:auto 1fr; gap:24px; margin-top:20px; align-items:start;
+  grid-template-areas:"prompt opts" "result opts"}
+/* RSP-104: "Code → creature" has a short prompt, so the reveal goes under it (left column).
+   "Picture → code" has a tall image prompt, so the reveal stays under the options (right column). */
+.stage[data-mode="art"]{grid-template-areas:"prompt opts" "prompt result"}
+/* Two columns. Code mode: the prompt and the reveal are two equal blocks whose bottom lines up with the options.
+   The reveal image is taken out of the flow so the options, not the image, set the height. */
+@media (min-width:761px){
+  .stage[data-mode="code"]{grid-template-rows:1fr 1fr}
+  .stage[data-mode="code"] > .prompt, .stage[data-mode="code"] > #result{align-self:stretch}
+  .stage[data-mode="code"] > .prompt{justify-content:center}
+  .stage[data-mode="code"] > #result{display:flex; flex-direction:column}
+  .stage[data-mode="code"] .reveal{flex:1}
+  .stage[data-mode="code"] .reveal .rimg{position:relative; align-self:stretch}
+  .stage[data-mode="code"] .reveal .rimg img{position:absolute; inset:0; height:100%; object-fit:contain; object-position:top left}
+  /* Picture mode: the reveal under the options stretches so its bottom lines up with the picture prompt */
+  .stage[data-mode="art"] > .prompt{align-self:stretch; justify-content:center}
+  .stage[data-mode="art"] > #result{align-self:stretch; display:flex; flex-direction:column}
+  .stage[data-mode="art"] .reveal{flex:1}
+}
+.stage > .prompt{grid-area:prompt} #opts{grid-area:opts} #result{grid-area:result}
+@media (max-width:760px){.stage, .stage[data-mode]{grid-template-columns:minmax(0,1fr); grid-template-rows:none; grid-template-areas:"prompt" "opts" "result"}}
+.prompt{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px; display:flex; flex-direction:column; gap:12px; align-items:center; text-align:center}
+.prompt .q{font:700 15px var(--body); color:var(--muted)}
+.prompt img.art{width:100%; max-width:440px; border-radius:14px; aspect-ratio:640/573; object-fit:cover}
+.bigcode{font:800 clamp(56px,12vw,96px)/1 var(--mono); letter-spacing:-.03em; color:var(--ink)}
+.bigstatus{font:700 20px var(--display)}
+.opts{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.opt{border:2px solid var(--line); background:var(--surface); color:var(--ink); border-radius:14px; padding:12px; cursor:pointer; text-align:left; font:700 15px var(--body); display:flex; flex-direction:column; gap:2px; min-width:0}
+.opt b{font:800 22px var(--mono)}
+.opt span{color:var(--muted); font-weight:400; font-size:13px}
+.opt img{width:100%; border-radius:10px; aspect-ratio:640/573; object-fit:cover}
+.opt.imgopt{padding:6px; gap:6px}
+.opt .nm{font:800 16px var(--display); color:var(--ink); text-align:center; padding-bottom:2px}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.right{border-color:var(--good); background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.opt.wrong{border-color:var(--bad); background:color-mix(in srgb,var(--bad) 12%,var(--surface))}
+.opt:disabled{cursor:default}
+.reveal{display:flex; gap:16px; align-items:flex-start; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:14px}
+.reveal .rimg{width:130px; flex:none}
+.reveal .rimg img{display:block; width:100%; border-radius:12px}
+.reveal .txt{min-width:0}
+.verdict{font:800 20px var(--display); margin:0}
+.verdict.ok{color:var(--good)} .verdict.no{color:var(--bad)}
+.reveal p{margin:4px 0 0; font-size:15px}
+.next{margin-top:12px; border:0; background:var(--accent); color:var(--bg); font:700 16px var(--body); padding:10px 18px; border-radius:12px; cursor:pointer}
