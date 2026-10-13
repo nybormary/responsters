@@ -6,6 +6,7 @@ import { CONF } from '../data/traps.js';
 import { TOOLS, REF, MORE } from '../data/links.js';
 import { state, t } from './state.js';
 import { $, cls } from './util.js';
+import { cardBody } from './card.js';
 
 // Links for one code, in order: RFC section → MDN page → extra links → general tools.
 function cardLinks(c){
@@ -18,9 +19,8 @@ export function openCard(c){
   const d = BY[c], L = d[state.lang];
   document.querySelector('.sheet').style.setProperty('--cls', CLS[cls(c)].c);
   $('m-back').textContent = '← ' + t().back;
-  $('m-status').textContent = `${c} ${d.s}`; $('m-status').style.color = 'var(--ink)';
-  $('m-name').textContent = d.n;
-  $('m-h-move').textContent = t().move; $('m-move').textContent = d.m;
+  $('m-name').textContent = `${c} ${d.s}: ${d.n}`;           // dialog title for screen readers
+  $('m-card').innerHTML = cardBody(d);                      // the card itself: art, code, status, name, move, card line
   $('m-h-mean').textContent = t().mean; $('m-mean').textContent = L[0];
   $('m-h-when').textContent = t().when; $('m-when').textContent = L[1];
   $('m-h-qa').textContent = t().qa; $('m-qa').innerHTML = (QA[c]?QA[c][state.lang]:[]).map(x=>`<li>${x.replace(/</g,'&lt;')}</li>`).join('');

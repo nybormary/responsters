@@ -3,7 +3,8 @@ import { D, BY } from '../data/cards.js';
 import { CONF } from '../data/traps.js';
 import { store } from './store.js';
 import { state, t } from './state.js';
-import { $, cls, img, art } from './util.js';
+import { $, cls, art } from './util.js';
+import { cardBody } from './card.js';
 
 // Weighted random pick; never the same code twice in a row.
 function pick(){
@@ -36,7 +37,7 @@ export function renderPractice(){
       ? `<button class="opt ${st}" data-ans="${o.c}" ${d.done?'disabled':''}><b>${o.c}</b><span>${o.s}</span></button>`
       : `<button class="opt imgopt ${st}" data-ans="${o.c}" ${d.done?'disabled':''} aria-label="${o.n}"><img src="${art(o.c)}" alt=""><span class="nm">${o.n}</span></button>`;
   }).join('');
-  $('result').innerHTML = d.done ? `<div class="reveal"><div class="rimg"><img src="${img(d.c)}" alt="${d.c} ${d.n}"></div><div class="txt">
+  $('result').innerHTML = d.done ? `<div class="reveal"><div class="rimg cf-box"><div class="card cf-static">${cardBody(d)}</div></div><div class="txt">
      <p class="verdict ${d.pick===d.c?'ok':'no'}">${d.pick===d.c?t().ok:t().no}</p>
      <p><b>${d.c} ${d.s}</b> · ${d.n}</p><p>${d[state.lang][0]}</p>
      <button class="next" id="next">${t().next} →</button></div></div>` : '';

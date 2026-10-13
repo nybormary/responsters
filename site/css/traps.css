@@ -2,9 +2,8 @@
 .pair{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px; margin-bottom:18px}
 .pair h3{font:800 20px var(--display); margin:0 0 4px}
 .pair .rule{margin:0 0 12px; color:var(--muted)}
-.duo{display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,160px)); gap:12px}
-.duo button{border:0; padding:0; background:none; cursor:pointer}
-.duo img{width:100%; border-radius:12px; box-shadow:0 2px 8px rgb(40 20 40 / .12)}
+.duo{display:grid; grid-template-columns:repeat(2,minmax(0,165px)); gap:12px}   /* two cards side by side; each card scales with its column (card.css .cf-box) */
+@media (min-width:600px){.duo{grid-template-columns:repeat(2,minmax(0,220px)); gap:18px}}
 .scen{margin-top:14px; display:flex; flex-direction:column; gap:10px}
 .sc{display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; padding:10px 12px; border-radius:12px; background:var(--soft)}
 .sc p{margin:0; flex:1 1 220px; min-width:0}

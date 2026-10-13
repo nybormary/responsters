@@ -10,15 +10,14 @@
    "Picture → code" has a tall image prompt, so the reveal stays under the options (right column). */
 .stage[data-mode="art"]{grid-template-areas:"prompt opts" "prompt result"}
 /* Two columns. Code mode: the prompt and the reveal are two equal blocks whose bottom lines up with the options.
-   The reveal image is taken out of the flow so the options, not the image, set the height. */
+   The reveal card takes its width from the block's height, so the options, not the card, set the height. */
 @media (min-width:761px){
   .stage[data-mode="code"]{grid-template-rows:1fr 1fr}
   .stage[data-mode="code"] > .prompt, .stage[data-mode="code"] > #result{align-self:stretch}
   .stage[data-mode="code"] > .prompt{justify-content:center}
   .stage[data-mode="code"] > #result{display:flex; flex-direction:column}
   .stage[data-mode="code"] .reveal{flex:1}
-  .stage[data-mode="code"] .reveal .rimg{position:relative; align-self:stretch}
-  .stage[data-mode="code"] .reveal .rimg img{position:absolute; inset:0; height:100%; object-fit:contain; object-position:top left}
+  .stage[data-mode="code"] .reveal .rimg{align-self:stretch; width:auto; aspect-ratio:var(--card-ratio)}   /* the card scales to the block's height */
   /* Picture mode: the reveal under the options stretches so its bottom lines up with the picture prompt */
   .stage[data-mode="art"] > .prompt{align-self:stretch; justify-content:center}
   .stage[data-mode="art"] > #result{align-self:stretch; display:flex; flex-direction:column}
@@ -43,8 +42,7 @@
 .opt.wrong{border-color:var(--bad); background:color-mix(in srgb,var(--bad) 12%,var(--surface))}
 .opt:disabled{cursor:default}
 .reveal{display:flex; gap:16px; align-items:flex-start; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:14px}
-.reveal .rimg{width:130px; flex:none}
-.reveal .rimg img{display:block; width:100%; border-radius:12px}
+.reveal .rimg{width:150px; flex:none; --card-ratio:0.54}   /* the card frame, phone proportions (card.css) */
 .reveal .txt{min-width:0}
 .verdict{font:800 20px var(--display); margin:0}
 .verdict.ok{color:var(--good)} .verdict.no{color:var(--bad)}
