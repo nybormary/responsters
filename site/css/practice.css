@@ -42,7 +42,7 @@
 .opt.wrong{border-color:var(--bad); background:color-mix(in srgb,var(--bad) 12%,var(--surface))}
 .opt:disabled{cursor:default}
 .reveal{display:flex; gap:16px; align-items:flex-start; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:14px}
-.reveal .rimg{width:150px; flex:none; --card-ratio:0.54}   /* the card frame, phone proportions (card.css) */
+.reveal .rimg{width:150px; flex:none; --card-ratio:0.51}   /* the card frame, phone proportions (card.css) */
 .reveal .txt{min-width:0}
 .verdict{font:800 20px var(--display); margin:0}
 .verdict.ok{color:var(--good)} .verdict.no{color:var(--bad)}
