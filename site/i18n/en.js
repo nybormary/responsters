@@ -18,7 +18,6 @@ export const en = {
   ok: "Yes!",
   no: "Not this one.",
   next: "Next",
-  move: "Move",
   mean: "What it means",
   when: "Where you meet it",
   conf: "Often confused with",

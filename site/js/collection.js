@@ -2,7 +2,8 @@
 import { CLS } from '../data/classes.js';
 import { D } from '../data/cards.js';
 import { state, t, isKnown } from './state.js';
-import { $, cls, img } from './util.js';
+import { $, cls } from './util.js';
+import { renderCard } from './card.js';
 
 export function renderCollection(){
   const k = D.filter(d=>isKnown(d.c)).length;
@@ -13,5 +14,5 @@ export function renderCollection(){
   $('groups').innerHTML = [1,2,3,4,5].filter(n=>!state.filter||state.filter===n).map(n=>`
     <div class="group"><h2><code style="background:${CLS[n].c}">${n}xx</code>${CLS[n][state.lang][0]}</h2>
     <p class="lede">${CLS[n][state.lang][1]}</p>
-    <div class="grid">${D.filter(d=>cls(d.c)===n).map(d=>`<button class="card" data-open="${d.c}" aria-label="${d.c} ${d.s}: ${d.n}${isKnown(d.c)?`, ${t().known}`:''}"><img src="${img(d.c)}" alt="" loading="lazy">${isKnown(d.c)?`<span class="badge" aria-hidden="true">✓</span>`:''}</button>`).join('')}</div></div>`).join('');
+    <div class="grid">${D.filter(d=>cls(d.c)===n).map(renderCard).join('')}</div></div>`).join('');
 }

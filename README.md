@@ -60,7 +60,7 @@ The site runs on Netlify's free plan (300 credits a month). When the credits run
 ```
 site/              static site, published by Netlify
   index.html       markup only; loads css/ and js/app.js
-  css/             styles: base, collection, practice, traps, detail (card modal)
+  css/             styles: base, card (the card frame), collection, practice, traps, detail (card modal)
   data/            content: cards, classes, what to test, traps, links
   i18n/            interface texts: uk.js, en.js (same keys in both)
   js/              logic, one file per part of the page
@@ -68,8 +68,9 @@ site/              static site, published by Netlify
     state.js       shared state (language, view, progress) + t() and isKnown()
     store.js       progress in localStorage (prefix "httpon.")
     util.js        small helpers
+    card.js        the card frame: art, code badge, status, name, move, card line
     chrome.js · collection.js · detail.js · practice.js · traps.js
-  img/             card images
+  img/             creature art ({code}-art.jpg) and the old full card images ({code}.jpg)
   _headers         cache rules (images and icons: one week)
 netlify.toml       publish folder and the rule that skips builds without site changes
 ```

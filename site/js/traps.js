@@ -2,11 +2,12 @@
 import { BY } from '../data/cards.js';
 import { PAIRS } from '../data/traps.js';
 import { state } from './state.js';
-import { $, img } from './util.js';
+import { $ } from './util.js';
+import { renderCard } from './card.js';
 
 export function renderTraps(){
   $('pairs').innerHTML = PAIRS.map((p,pi)=>`<div class="pair"><h3>${p[state.lang][0]}</h3><p class="rule">${p[state.lang][1]}</p>
-    <div class="duo">${p.codes.map(c=>`<button data-open="${c}" aria-label="${c} ${BY[c].n}"><img src="${img(c)}" alt="" loading="lazy"></button>`).join('')}</div>
+    <div class="duo">${p.codes.map(c=>`<div class="cf-box">${renderCard(BY[c])}</div>`).join('')}</div>
     <div class="scen">${p.s.map((s,si)=>`<div class="sc" id="sc-${pi}-${si}"><p>${state.lang==='uk'?s[1]:s[2]}</p><div class="btns">${p.codes.map(c=>`<button data-sc="${pi}-${si}" data-v="${c}">${c}</button>`).join('')}</div></div>`).join('')}</div></div>`).join('');
 }
 export function scAnswer(key, v){
