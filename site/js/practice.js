@@ -40,21 +40,23 @@ export function renderPractice(){
   const d = state.cur;
   $('stage').dataset.mode = state.mode;
   const p = $('prompt');
-  p.innerHTML = state.mode==='art'
-    ? `<div class="q">${t().qArt}</div><img class="art" src="${art(d.c)}" alt="">`
+  const L = d[state.lang], nerd = state.mode==='nerd';
+  // Nerd mode (RSP-100): plain HTTP, no pictures and no creature names. The question is the meaning, the answer is code + status.
+  p.innerHTML = state.mode==='art' ? `<div class="q">${t().qArt}</div><img class="art" src="${art(d.c)}" alt="">`
+    : nerd ? `<div class="q">${t().qArt}</div><p class="nerdq">${L[0]}</p>`
     : `<div class="q">${t().qCode}</div><div class="bigcode">${d.c}</div><div class="bigstatus">${d.s}</div>`;
   // Focus target for "Next": a group named after the question, so screen readers read it when focused.
   p.tabIndex = -1; p.setAttribute('role','group');
-  p.setAttribute('aria-label', state.mode==='art' ? t().qArt : `${t().qCode} ${d.c} ${d.s}`);
+  p.setAttribute('aria-label', state.mode==='art' ? t().qArt : nerd ? `${t().qArt} ${L[0]}` : `${t().qCode} ${d.c} ${d.s}`);
   $('opts').innerHTML = d.opts.map(o=>{
     const st = d.done ? (o.c===d.c?'right':(o.c===d.pick?'wrong':'')) : '';
-    return state.mode==='art'
+    return state.mode!=='code'
       ? `<button class="opt ${st}" data-ans="${o.c}" ${d.done?'disabled':''}><b>${o.c}</b><span>${o.s}</span></button>`
       : `<button class="opt imgopt ${st}" data-ans="${o.c}" ${d.done?'disabled':''} aria-label="${o.n}"><img src="${art(o.c)}" alt=""><span class="nm">${o.n}</span></button>`;
   }).join('');
   $('result').innerHTML = d.done ? `<div class="reveal"><div class="txt">
      <p class="verdict ${d.pick===d.c?'ok':'no'}">${d.pick===d.c?t().ok:t().no}</p>
-     <p><b>${d.c} ${d.s}</b> · ${d.n}</p><p>${d[state.lang][0]}</p>
+     ${nerd ? `<p><b>${d.c} ${d.s}</b></p><p>${L[0]}</p><p class="ex">${L[1]}</p>` : `<p><b>${d.c} ${d.s}</b> · ${d.n}</p><p>${L[0]}</p>`}
      <button class="next" id="next">${t().next} →</button></div></div>` : '';
 }
 export function answer(c){

@@ -24,6 +24,7 @@ The site is static, with no build step: plain HTML, CSS and JavaScript modules t
 2. **Practise.** Open **Practice**:
    - **Picture → code:** see a creature, pick its code.
    - **Code → creature:** see a code, pick its creature.
+   - **Nerd mode:** text only, no pictures. Read what a code means, pick the code.
 
    Codes you get wrong come back more often. After two correct answers in a row, a code gets a ✓ in the Collection.
 3. **Check the traps.** Open **Traps** once the basics feel easy. Each trap is a pair of codes that people mix up, with a short rule and real-life scenarios to sort.

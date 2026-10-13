@@ -14,6 +14,8 @@ export const en = {
   modeCode: "Code → creature",
   modeArtHint: "See the creature, pick the code",
   modeCodeHint: "See the code, find the creature",
+  modeNerd: "Nerd mode",
+  modeNerdHint: "Text only: read what it means, pick the code",
   modes: "Practice mode",
   qArt: "Which code is this?",
   qCode: "Which one is it?",
@@ -34,7 +36,7 @@ export const en = {
   howto: "How to use",
   howtoSteps: [
     "<b>Collection.</b> Tap a card to meet the creature: what the code means, where you meet it and what to test.",
-    "<b>Practice.</b> “Picture → code” or “Code → creature”. Two correct answers in a row give a code its ✓.",
+    "<b>Practice.</b> “Picture → code”, “Code → creature” or “Nerd mode” (text only, no pictures). Two correct answers in a row give a code its ✓.",
     "<b>Traps.</b> Pairs of codes people mix up: a rule and situations to sort."
   ],
   howtoNote: "Progress is saved in this browser only.",
