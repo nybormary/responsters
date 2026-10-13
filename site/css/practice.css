@@ -10,14 +10,13 @@
    "Picture → code" has a tall image prompt, so the reveal stays under the options (right column). */
 .stage[data-mode="art"]{grid-template-areas:"prompt opts" "prompt result"}
 /* Two columns. Code mode: the prompt and the reveal are two equal blocks whose bottom lines up with the options.
-   The reveal card takes its width from the block's height, so the options, not the card, set the height. */
+   The reveal is text only (the creature is already on screen: the big picture or the four options). */
 @media (min-width:761px){
   .stage[data-mode="code"]{grid-template-rows:1fr 1fr}
   .stage[data-mode="code"] > .prompt, .stage[data-mode="code"] > #result{align-self:stretch}
   .stage[data-mode="code"] > .prompt{justify-content:center}
   .stage[data-mode="code"] > #result{display:flex; flex-direction:column}
   .stage[data-mode="code"] .reveal{flex:1}
-  .stage[data-mode="code"] .reveal .rimg{align-self:stretch; width:auto; aspect-ratio:var(--card-ratio)}   /* the card scales to the block's height */
   /* Picture mode: the reveal under the options stretches so its bottom lines up with the picture prompt */
   .stage[data-mode="art"] > .prompt{align-self:stretch; justify-content:center}
   .stage[data-mode="art"] > #result{align-self:stretch; display:flex; flex-direction:column}
@@ -26,6 +25,7 @@
 .stage > .prompt{grid-area:prompt} #opts{grid-area:opts} #result{grid-area:result}
 @media (max-width:760px){.stage, .stage[data-mode]{grid-template-columns:minmax(0,1fr); grid-template-rows:none; grid-template-areas:"prompt" "opts" "result"}}
 .prompt{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px; display:flex; flex-direction:column; gap:12px; align-items:center; text-align:center}
+.prompt{scroll-margin-top:12px} .prompt:focus{outline:none} .prompt:focus-visible{outline:3px solid var(--accent); outline-offset:2px}   /* RSP-108: "Next" scrolls here and focuses it */
 .prompt .q{font:700 15px var(--body); color:var(--muted)}
 .prompt img.art{width:100%; max-width:440px; border-radius:14px; aspect-ratio:640/573; object-fit:cover}
 .bigcode{font:800 clamp(56px,12vw,96px)/1 var(--mono); letter-spacing:-.03em; color:var(--ink)}
@@ -42,9 +42,8 @@
 .opt.wrong{border-color:var(--bad); background:color-mix(in srgb,var(--bad) 12%,var(--surface))}
 .opt:disabled{cursor:default}
 .reveal{display:flex; gap:16px; align-items:flex-start; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:14px}
-.reveal .rimg{width:150px; flex:none; --card-ratio:0.51}   /* the card frame, phone proportions (card.css) */
 .reveal .txt{min-width:0}
-.verdict{font:800 20px var(--display); margin:0}
-.verdict.ok{color:var(--good)} .verdict.no{color:var(--bad)}
+.reveal .verdict{font:800 22px/1.2 var(--display); margin:0}   /* .reveal p (15px) used to win over .verdict; now 22px bold = large text, AA needs 3:1 (RSP-17) */
+.reveal .verdict.ok{color:var(--good)} .reveal .verdict.no{color:var(--bad)}
 .reveal p{margin:4px 0 0; font-size:15px}
 .next{margin-top:12px; border:0; background:var(--accent); color:var(--bg); font:700 16px var(--body); padding:10px 18px; border-radius:12px; cursor:pointer}

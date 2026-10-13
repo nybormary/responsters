@@ -6,7 +6,7 @@ import { state } from './state.js';
 import { renderChrome } from './chrome.js';
 import { renderCollection } from './collection.js';
 import { openCard, closeModal } from './detail.js';
-import { newRound, renderPractice, answer } from './practice.js';
+import { newRound, nextRound, renderPractice, answer } from './practice.js';
 import { renderTraps, scAnswer } from './traps.js';
 
 // Redraw the chrome and the current view.
@@ -20,7 +20,7 @@ document.addEventListener('click', e=>{
   else if(b.dataset.f!=null){ state.filter=+b.dataset.f; renderCollection(); }
   else if(b.dataset.mode){ state.mode=b.dataset.mode; renderChrome(); newRound(); }
   else if(b.dataset.ans){ answer(+b.dataset.ans); }
-  else if(b.id==='next'){ newRound(); }
+  else if(b.id==='next'){ nextRound(); }
   else if(b.dataset.sc){ scAnswer(b.dataset.sc, +b.dataset.v); }
   else if(b.dataset.open){ openCard(+b.dataset.open); }
   else if(b.id==='m-close' || b.id==='m-back'){ closeModal(); }
