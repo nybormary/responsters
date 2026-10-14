@@ -94,11 +94,11 @@ export default {
       when: "Zepsuty JSON, brak wymaganego pola, błędne parametry zapytania, treść żądania ucięta w połowie.",
       line: "Co za bzdury! Nic nie rozumiem." },
     401: {
-      mean: "Wymagane uwierzytelnienie: brak danych logowania lub są nieprawidłowe.",
+      mean: "Wymagana autentykacja: brak danych logowania lub są nieprawidłowe.",
       when: "Brak nagłówka Authorization, wygasły token.",
       line: "Kim jesteś? Znamy się?" },
     403: {
-      mean: "Wiadomo, kim jesteś, ale nie masz uprawnień.",
+      mean: "Wiadomo, kim jesteś, ale brakuje ci autoryzacji.",
       when: "Zwykły użytkownik otwiera panel admina.",
       line: "A, to ty? Nie wpuszczę!" },
     404: {
@@ -285,7 +285,7 @@ export default {
       rule: "301: przeniósł się na stałe. 302: tymczasowo gdzie indziej, stary adres wciąż jest właściwy.",
       s: [
         "Strona przeniosła się na stałe na nową domenę.",
-        "Po zalogowaniu wracasz na stronę, z której przyszedłeś.",
+        "Po zalogowaniu wracasz na poprzednią stronę.",
         "Wszystkie adresy http na stałe prowadzą na https.",
         "Na czas wyprzedaży strona główna przekierowuje na stronę promocji.",
       ] },
