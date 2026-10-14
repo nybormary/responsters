@@ -7,7 +7,7 @@ import { renderCard } from './card.js';
 
 export function renderTraps(){
   $('pairs').innerHTML = PAIRS.map((p,pi)=>{ const T = tx().traps[p.codes.join('-')]; return `<div class="pair"><h3>${T.title}</h3><p class="rule">${T.rule}</p>
-    <div class="duo">${p.codes.map(c=>`<div class="cf-box">${renderCard(BY[c])}</div>`).join('')}</div>
+    <div class="duo" style="--n:${p.codes.length}">${p.codes.map(c=>`<div class="cf-box">${renderCard(BY[c])}</div>`).join('')}</div>
     <div class="scen">${p.s.map((s,si)=>`<div class="sc" id="sc-${pi}-${si}"><p>${T.s[si]}</p><div class="btns">${p.codes.map(c=>`<button data-sc="${pi}-${si}" data-v="${c}">${c}</button>`).join('')}</div></div>`).join('')}</div></div>`; }).join('');
 }
 export function scAnswer(key, v){
