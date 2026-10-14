@@ -35,8 +35,8 @@ header{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space
 .langbtn[aria-expanded="true"] .lang-chev{transform:rotate(180deg)}
 .langbtn .lang-name{display:none}
 @media (min-width:600px){.langbtn .lang-code{display:none} .langbtn .lang-name{display:inline}}
-/* On phones the button goes to the top-right corner, next to the logo, where people look for it; the logo leaves room for it. */
-@media (max-width:599px){header{position:relative} .langmenu{position:absolute; top:0; right:0} .brand h1{padding-right:96px}}
+/* On phones the button sits at the right end of the "How to use" row: next to the logo it covered the title with larger system text. */
+@media (max-width:599px){.tools{width:100%; justify-content:space-between}}
 .langlist{position:absolute; right:0; top:calc(100% + 6px); z-index:20; min-width:200px; margin:0; padding:6px; list-style:none;
   background:var(--surface); border:1.5px solid var(--line); border-radius:14px; box-shadow:0 8px 24px rgb(0 0 0 / .14)}
 .langlist button{display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:44px; padding:8px 12px;
