@@ -1,10 +1,11 @@
 // The app's shared state. Every module reads and changes it through this one object,
 // e.g. state.lang = 'en'. Saved parts (lang, weight, streak, howtoSeen) come from localStorage.
 import { store } from './store.js';
-import { uk } from '../i18n/uk.js';
-import { en } from '../i18n/en.js';
+import { LOCALES, LANG_NAMES } from '../i18n/index.js';
+import en from '../i18n/en.js';
 
-const T = { uk, en };                                           // supported languages = the keys here
+export { LANG_NAMES };
+export const LANGS = Object.keys(LOCALES);                      // what the language menu lists (only complete locales)
 
 // Which language to show (RSP-97):
 // 1. the language saved with the switcher (httpon.lang);
@@ -14,20 +15,20 @@ const T = { uk, en };                                           // supported lan
 // Nothing is saved here: only the switcher saves a choice.
 function pickLang(){
   const saved = store.get('lang', null);
-  if (Object.hasOwn(T, saved)) return saved;
+  if (Object.hasOwn(LOCALES, saved)) return saved;
   const list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
   for (const l of list){
     const code = String(l||'').toLowerCase().split('-')[0];
-    if (Object.hasOwn(T, code)) return code;
+    if (Object.hasOwn(LOCALES, code)) return code;
   }
   return 'en';
 }
 
 export const state = {
-  lang: pickLang(),                // 'uk' | 'en'
+  lang: pickLang(),                // a key of LOCALES: 'uk' | 'en' | …
   view: 'collection',              // 'collection' | 'practice' | 'traps'
   filter: 0,                       // Collection class filter: 0 = all, 1–5 = 1xx–5xx
-  mode: 'art',                     // Practice: 'art' (picture → code) | 'code' (code → creature)
+  mode: 'art',                     // Practice: 'art' (picture → code) | 'code' (code → creature) | 'nerd' (meaning → code, text only) | 'hard' (code → status name)
   weight: store.get('weight',{}),  // Practice: how often each code comes back (missed codes weigh more)
   streakBy: store.get('streak',{}),// correct answers in a row per code
   stats: {r:0,t:0,s:0},            // this session: right, total, current streak
@@ -36,5 +37,22 @@ export const state = {
   howtoOpen: !store.get('howtoSeen', false)   // "How to use" is shown on the first visit until dismissed
 };
 
-export const t = () => T[state.lang];                          // UI texts in the current language
+// Texts (RSP-85). Each locale is loaded once and filled up from English: a missing key shows the English
+// text and logs a warning, so a half-done translation never breaks the page.
+const TX = { en };
+function fill(loc, base, path, lang){
+  if(loc === undefined){ console.warn(`[i18n] ${lang}: missing ${path}, using English`); return base; }
+  if(base && typeof base === 'object' && !Array.isArray(base)){
+    const out = {};
+    for(const k of Object.keys(base)) out[k] = fill(loc[k], base[k], path ? `${path}.${k}` : k, lang);
+    return out;
+  }
+  return loc;
+}
+export async function loadLang(lang){
+  if(!TX[lang]) TX[lang] = fill((await LOCALES[lang]()).default, en, '', lang);
+}
+await loadLang(state.lang);
+export const tx = () => TX[state.lang];                        // all texts in the current language: ui, classes, cards, qa, traps, tools
+export const t = () => tx().ui;                                // UI texts in the current language
 export const isKnown = c => (state.streakBy[c]||0) >= 2;       // "known" = 2 correct answers in a row

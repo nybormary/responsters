@@ -28,8 +28,9 @@
     </div>
     <div class="tools">
       <button class="linkbtn" id="howto-open" aria-controls="howto"></button>
-      <div class="lang" role="group" aria-label="Language">
-        <button id="lang-uk" data-lang="uk">UA</button><button id="lang-en" data-lang="en">EN</button>
+      <div class="langmenu" id="langmenu">
+        <button class="langbtn" id="lang-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-list"></button>
+        <ul class="langlist" id="lang-list" role="menu" hidden></ul>
       </div>
     </div>
   </header>
@@ -55,11 +56,9 @@
 
   <section class="view" id="view-practice" hidden>
     <div class="pbar">
-      <div class="seg" role="group">
-        <button id="mode-art" data-mode="art"></button>
-        <button id="mode-code" data-mode="code"></button>
-      </div>
+      <h2 class="pbar-title" id="modes-title"></h2>
       <div class="score" id="score"></div>
+      <div class="modes" id="modes" role="group" aria-labelledby="modes-title"></div>
     </div>
     <div class="stage" id="stage">
       <div class="prompt" id="prompt"></div>

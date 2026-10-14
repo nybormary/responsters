@@ -1,0 +1,6 @@
+{
+  "name": "responsters",
+  "private": true,
+  "type": "module",
+  "description": "Repo tools (scripts/, later Playwright). The site itself has no build step: Netlify publishes site/ as is."
+}

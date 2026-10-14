@@ -8,6 +8,7 @@
 .chip[aria-pressed="true"]{border-color:var(--accent); background:var(--soft)}
 .group{margin-top:28px}
 .group h2{font:800 22px var(--display); margin:0 0 2px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
+.group h2 .official{font:600 16px var(--body); color:var(--muted)}   /* RSP-110: official RFC 9110 class name */
 .group h2 code{font:800 15px var(--mono); padding:2px 8px; border-radius:6px; color:#2B1A28}
 .group p.lede{margin:0 0 12px; color:var(--muted); font-size:14px}
 /* Collection grid: 2 columns on phones; from 600px the same 3 columns in every class, cards capped at 240px, rows left-aligned with the class headings. */

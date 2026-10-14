@@ -3,7 +3,8 @@
 .pair h3{font:800 20px var(--display); margin:0 0 4px}
 .pair .rule{margin:0 0 12px; color:var(--muted)}
 .duo{display:grid; grid-template-columns:repeat(2,minmax(0,165px)); gap:12px}   /* two cards side by side; each card scales with its column (card.css .cf-box) */
-@media (min-width:600px){.duo{grid-template-columns:repeat(2,minmax(0,220px)); gap:18px}}
+/* From 600px all cards of a trap sit in one row (2 or 3: --n is set in traps.js); phones keep 2 per row. */
+@media (min-width:600px){.duo{grid-template-columns:repeat(var(--n,2),minmax(0,220px)); gap:18px}}
 .scen{margin-top:14px; display:flex; flex-direction:column; gap:10px}
 .sc{display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; padding:10px 12px; border-radius:12px; background:var(--soft)}
 .sc p{margin:0; flex:1 1 220px; min-width:0}

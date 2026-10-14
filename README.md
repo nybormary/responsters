@@ -24,10 +24,12 @@ The site is static, with no build step: plain HTML, CSS and JavaScript modules t
 2. **Practise.** Open **Practice**:
    - **Picture → code:** see a creature, pick its code.
    - **Code → creature:** see a code, pick its creature.
+   - **Nerd mode:** text only, no pictures. Read what a code means, pick the code.
+   - **Hardcore:** only the code. Pick its status name; a hint shows the creature.
 
    Codes you get wrong come back more often. After two correct answers in a row, a code gets a ✓ in the Collection.
 3. **Check the traps.** Open **Traps** once the basics feel easy. Each trap is a pair of codes that people mix up, with a short rule and real-life scenarios to sort.
-4. **Switch the language** with UA / EN at the top.
+4. **Switch the language** with the language button at the top (🌐).
 
 Your progress is saved in your browser only. There's no account and nothing is sent anywhere, so a different browser or device starts fresh.
 
@@ -61,21 +63,26 @@ The site runs on Netlify's free plan (300 credits a month). When the credits run
 site/              static site, published by Netlify
   index.html       markup only; loads css/ and js/app.js
   css/             styles: base, card (the card frame), collection, practice, traps, detail (card modal)
-  data/            content: cards, classes, what to test, traps, links
-  i18n/            interface texts: uk.js, en.js (same keys in both)
+  data/            shared data, the same in every language: codes, status and creature names, colours, trap answers, links
+  i18n/            all texts, one file per language: uk.js, en.js; index.js lists the languages the site offers
   js/              logic, one file per part of the page
     app.js         entry point: clicks, keys, first render
-    state.js       shared state (language, view, progress) + t() and isKnown()
+    state.js       shared state (language, view, progress), loads the language file + t(), tx() and isKnown()
     store.js       progress in localStorage (prefix "httpon.")
     util.js        small helpers
     card.js        the card frame: art, code badge, status, name, move, card line
+    modes.js       the Practice modes shown as cards (add a line per new mode)
     chrome.js · collection.js · detail.js · practice.js · traps.js
   img/             creature art ({code}-art.jpg) and the old full card images ({code}.jpg)
   _headers         cache rules (images and icons: one week)
+scripts/
+  check-locales.mjs  checks that every language file has the same keys as en.js
 netlify.toml       publish folder and the rule that skips builds without site changes
 ```
 
 **Run locally:** `npx serve site`, then open http://localhost:3000. JavaScript modules don't load from `file://`, so opening `index.html` by double-click shows an empty page.
+
+**Adding a language:** copy `site/i18n/en.js` to `site/i18n/<code>.js` and translate the texts (keep the keys, `{…}` functions and `<b>` tags). Run `node scripts/check-locales.mjs` until it passes, then add the language to `LOCALES` in `site/i18n/index.js`. A text that is still missing shows in English, with a warning in the browser console.
 
 ## Credits
 

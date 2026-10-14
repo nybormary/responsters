@@ -1,8 +1,9 @@
-// Status classes 1xx–5xx: colour token and the class name + one-line rule per language.
+// Status classes 1xx–5xx: colour token and the official RFC 9110 class name (English in every language, RSP-110).
+// The playful class names and rules are in i18n/<lang>.js under classes.
 export const CLS = {
-  1:{c:'var(--c1)', uk:['Яйця','Ще вилуплюються: сервер отримав запит і працює.'], en:['Eggs','Still hatching: the server got the request and is working on it.']},
-  2:{c:'var(--c2)', uk:['Друзі','Усе вдалося.'], en:['Friends','It worked.']},
-  3:{c:'var(--c3)', uk:['Мандрівники','Те, що ти шукаєш, деінде.'], en:['Wanderers','What you want is somewhere else.']},
-  4:{c:'var(--c4)', uk:['Вартові','Помилка з боку клієнта: виправ запит.'], en:['Gatekeepers','Client error: fix the request.']},
-  5:{c:'var(--c5)', uk:['Серверні звірі','Помилка на сервері: ти не винна.'], en:['Server beasts','Server error: not your fault.']}
+  1:{c:'var(--c1)', o:'Informational'},
+  2:{c:'var(--c2)', o:'Successful'},
+  3:{c:'var(--c3)', o:'Redirection'},
+  4:{c:'var(--c4)', o:'Client Error'},
+  5:{c:'var(--c5)', o:'Server Error'}
 };
