@@ -6,6 +6,8 @@ export const LOCALES = {
   en: () => import('./en.js'),
   pl: () => import('./pl.js'),
   da: () => import('./da.js'),
+  lt: () => import('./lt.js'),
+  et: () => import('./et.js'),
 };
 // Each language in its own language, and the short code shown on phones (RSP-109).
 export const LANG_NAMES = { uk:['Українська','UA'], en:['English','EN'], pl:['Polski','PL'], da:['Dansk','DA'], lt:['Lietuvių','LT'], et:['Eesti','ET'] };
