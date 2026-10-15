@@ -27,34 +27,34 @@
       <div class="dots" aria-hidden="true"><i style="background:var(--c1)"></i><i style="background:var(--c2)"></i><i style="background:var(--c3)"></i><i style="background:var(--c4)"></i><i style="background:var(--c5)"></i></div>
     </div>
     <div class="tools">
-      <button class="linkbtn" id="howto-open" aria-controls="howto"></button>
+      <button class="linkbtn" id="howto-open" data-testid="howto-open" aria-controls="howto"></button>
       <div class="langmenu" id="langmenu">
-        <button class="langbtn" id="lang-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-list"></button>
-        <ul class="langlist" id="lang-list" role="menu" hidden></ul>
+        <button class="langbtn" id="lang-btn" data-testid="lang-button" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-list"></button>
+        <ul class="langlist" id="lang-list" data-testid="lang-menu" role="menu" hidden></ul>
       </div>
     </div>
   </header>
 
   <nav class="tabs" role="tablist">
-    <button role="tab" id="tab-collection" data-view="collection"></button>
-    <button role="tab" id="tab-practice" data-view="practice"></button>
-    <button role="tab" id="tab-traps" data-view="traps"></button>
+    <button role="tab" id="tab-collection" data-testid="tab-collection" data-view="collection"></button>
+    <button role="tab" id="tab-practice" data-testid="tab-practice" data-view="practice"></button>
+    <button role="tab" id="tab-traps" data-testid="tab-traps" data-view="traps"></button>
   </nav>
 
-  <section class="howto" id="howto" aria-labelledby="howto-title" hidden>
+  <section class="howto" id="howto" data-testid="howto" aria-labelledby="howto-title" hidden>
     <h2 id="howto-title"></h2>
     <ol id="howto-steps"></ol>
     <p class="note" id="howto-note"></p>
-    <button class="howto-done" id="howto-close"></button>
+    <button class="howto-done" id="howto-close" data-testid="howto-close" ></button>
   </section>
 
-  <section class="view" id="view-collection">
+  <section class="view" id="view-collection" data-testid="view-collection">
     <div class="progress"><span id="mastered"></span><div class="bar"><span id="masterbar"></span></div></div>
     <div class="chips" id="chips"></div>
     <div id="groups"></div>
   </section>
 
-  <section class="view" id="view-practice" hidden>
+  <section class="view" id="view-practice" data-testid="view-practice" hidden>
     <div class="pbar">
       <h2 class="pbar-title" id="modes-title"></h2>
       <div class="score" id="score"></div>
@@ -67,7 +67,7 @@
     </div>
   </section>
 
-  <section class="view" id="view-traps" hidden>
+  <section class="view" id="view-traps" data-testid="view-traps" hidden>
     <p id="traps-lede" style="margin:0 0 18px; color:var(--muted); max-width:65ch"></p>
     <div id="pairs"></div>
   </section>

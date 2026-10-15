@@ -8,7 +8,7 @@ export const TID = {
   // Header
   langButton: 'lang-button',
   langMenu: 'lang-menu',
-  langOption: (lang: string) => `lang-option-${lang}`,
+  langOption: (lang: string) => `lang-${lang}`,
   howtoOpen: 'howto-open',
 
   // "How to use" hint
