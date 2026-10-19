@@ -6,6 +6,7 @@
   "scripts": {
     "test": "playwright test",
     "test:smoke": "playwright test --grep @smoke",
+    "test:shuffle": "playwright test --shuffle --repeat-each=3",
     "test:ui": "playwright test --ui",
     "typecheck": "tsc -p .",
     "check-locales": "node scripts/check-locales.mjs"

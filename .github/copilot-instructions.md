@@ -30,7 +30,8 @@ Source of truth for test cases: testomat.io (project `responsters`). Automate on
 8. **No secrets.** API keys (testomat.io) only through environment variables or `.env` (git-ignored).
 
 ### Running
-- `npm test` — all tests on both projects (starts `npx serve site` itself).
+- `npm test` — all tests on every project (1280, 600, 599, 375; starts `npx serve site` itself).
 - `npm test -- --grep @language` — one group. `npm run test:smoke` — the smoke set.
 - `BASE_URL=https://<deploy-preview> npm test` — against a deployed site.
 - `npm run typecheck` — TypeScript check without running tests.
+- `npm run test:shuffle` — every test 3× in random order. **Run it before committing a new or changed spec**: a test that fails only here depends on another test or on order. To replay a failing order: `npx playwright test --shuffle <seed>` with the seed from that run.

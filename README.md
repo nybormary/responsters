@@ -88,7 +88,7 @@ netlify.toml       publish folder and the rule that skips builds without site ch
 
 **Run locally:** `npx serve site`, then open http://localhost:3000. JavaScript modules don't load from `file://`, so opening `index.html` by double-click shows an empty page.
 
-**Run the tests:** `npm install` once, then `npx playwright install` once (downloads the browsers). After that `npm test` runs all UI tests; it starts the site by itself. One group: `npm test -- --grep @language`. The rules for writing tests are in `.github/copilot-instructions.md`.
+**Run the tests:** `npm install` once, then `npx playwright install` once (downloads the browsers). After that `npm test` runs all UI tests; it starts the site by itself. One group: `npm test -- --grep @language`. Before committing a new spec: `npm run test:shuffle` (every test 3× in random order, checks that tests don't depend on each other). The rules for writing tests are in `.github/copilot-instructions.md`.
 
 **Adding a language:** copy `site/i18n/en.js` to `site/i18n/<code>.js` and translate the texts (keep the keys, `{…}` functions and `<b>` tags). Run `node scripts/check-locales.mjs` until it passes, then add the language to `LOCALES` in `site/i18n/index.js`. A text that is still missing shows in English, with a warning in the browser console.
 
