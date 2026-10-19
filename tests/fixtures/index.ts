@@ -110,6 +110,6 @@ export { expect };
 export { TAG } from './tags';
 export { TID, type View } from './locators';
 export { SCREENS, SCREEN_NAMES, type ScreenName } from './screens';
-export type { App } from './pages/app';
+export { VIEWS, type App } from './pages/app';
 export type { LanguageMenu } from './pages/language-menu';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';
