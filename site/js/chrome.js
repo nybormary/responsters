@@ -16,7 +16,7 @@ function renderLangMenu(){
   b.innerHTML = `${GLOBE}<span class="lang-code" aria-hidden="true">${code}</span><span class="lang-name" lang="${state.lang}">${name}</span>${CHEVRON}`;
   b.setAttribute('aria-label', `${t().lang}: ${name}`);
   $('lang-list').setAttribute('aria-label', t().lang);
-  $('lang-list').innerHTML = LANGS.map(l => `<li role="none"><button role="menuitemradio" tabindex="-1" data-lang="${l}" lang="${l}" aria-checked="${l===state.lang}"><span>${LANG_NAMES[l][0]}</span><span class="lang-check">${l===state.lang?CHECK:''}</span></button></li>`).join('');
+  $('lang-list').innerHTML = LANGS.map(l => `<li role="none"><button role="menuitemradio" tabindex="-1" data-lang="${l}" data-testid="lang-${l}" aria-checked="${l===state.lang}"><span>${LANG_NAMES[l][0]}</span><span class="lang-check">${l===state.lang?CHECK:''}</span></button></li>`).join('');
 }
 
 // Practice mode cards (RSP-109): icon, name, one-line hint; the chosen one is pressed and carries a check.
