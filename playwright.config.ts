@@ -12,7 +12,12 @@ export default defineConfig<Options>({
   testDir: './tests/ui',
   fullyParallel: true,                    // tests never depend on each other or on order
   forbidOnly: !!process.env.CI,           // a forgotten test.only fails CI
-  retries: process.env.CI ? 1 : 0,
+  // A deployed site (BASE_URL) is reached over the network: fewer parallel browsers so we don't
+  // flood it, more time for files that load on demand (locale files), one retry for network blips.
+  // A retry that passes is reported as "flaky", so a real problem still shows up.
+  retries: process.env.CI || !isLocal ? 1 : 0,
+  workers: isLocal ? undefined : 2,
+  expect: { timeout: isLocal ? 5_000 : 10_000 },
   reporter: [['list'], ['html', { open: 'never' }]],
 
   use: {

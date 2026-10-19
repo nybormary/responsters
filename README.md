@@ -88,9 +88,44 @@ netlify.toml       publish folder and the rule that skips builds without site ch
 
 **Run locally:** `npx serve site`, then open http://localhost:3000. JavaScript modules don't load from `file://`, so opening `index.html` by double-click shows an empty page.
 
-**Run the tests:** `npm install` once, then `npx playwright install` once (downloads the browsers). After that `npm test` runs all UI tests; it starts the site by itself. One group: `npm test -- --grep @language`. Each test runs in a random language on a random screen size; `npm run test:all-screens` runs every test on all four sizes. Before committing a new spec: `npm run test:shuffle` (every test 3× in random order, checks that tests don't depend on each other). The rules for writing tests are in `.github/copilot-instructions.md`.
-
 **Adding a language:** copy `site/i18n/en.js` to `site/i18n/<code>.js` and translate the texts (keep the keys, `{…}` functions and `<b>` tags). Run `node scripts/check-locales.mjs` until it passes, then add the language to `LOCALES` in `site/i18n/index.js`. A text that is still missing shows in English, with a warning in the browser console.
+
+## Tests
+
+UI tests with Playwright + TypeScript in `tests/`. Test cases live in testomat.io; every test carries its case id (`@T…`). The rules for writing tests are in `.github/copilot-instructions.md`.
+
+**Setup (once):** `npm install`, then `npx playwright install chromium` (downloads the browser).
+
+Every test runs in a **random site language** and on a **random screen size** (1280 / 600 / 599 / 375). The report shows both for each test (`lang`, `screen`), so a failure can be repeated with the same values.
+
+| What | Command | When |
+|---|---|---|
+| All tests | `npm test` | Before every commit that touches `site/` or `tests/` |
+| Smoke | `npm run test:smoke` | After a production deploy (with `BASE_URL`, see below) |
+| Shuffle | `npm run test:shuffle` | Before committing a new or changed spec: every test 3× in random order, catches tests that depend on each other |
+| All screens | `npm run test:all-screens` | After CSS changes and before a release: every test on all four sizes |
+| One group | `npm test -- --grep @navigation` | Groups: `@collection`, `@practice`, `@traps`, `@language`, `@progress`, `@navigation` |
+| One file | `npx playwright test language` | While working on one spec |
+| Type check | `npm run typecheck` | Before committing test code |
+| Watch it run | `npm run test:ui` | Playwright UI mode: step through tests in a browser |
+| Report | `npx playwright show-report` | After a run: steps, screenshots of failures, `lang` / `screen` |
+
+**Where the tests run.** Locally the tests start `npx serve site` themselves and use http://localhost:3000. For a deployed site, set `BASE_URL`:
+
+```
+BASE_URL=https://deploy-preview-<PR number>--responsters.netlify.app npm test   # deploy preview
+BASE_URL=https://responsters.netlify.app npm run test:smoke                     # production
+```
+
+**Repeat a failure.** Pin what the report shows, alone or together:
+
+```
+TEST_LANG=et npm test                                  # one language for all tests
+TEST_SCREEN=phone-375 npm test                         # one screen size for all tests
+npx playwright test --shuffle <seed>                   # the same random order as a shuffle run
+```
+
+Languages: `uk`, `en`, `pl`, `da`, `lt`, `et`. Screens: `desktop-1280`, `tablet-600`, `edge-599`, `phone-375`.
 
 ## Credits
 
