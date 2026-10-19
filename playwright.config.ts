@@ -2,11 +2,13 @@
 // Local run: Playwright starts `npx serve site` itself and tests http://localhost:3000.
 // Another target (deploy preview, production): BASE_URL=https://… npx playwright test
 import { defineConfig, devices } from '@playwright/test';
+import { SCREEN_NAMES } from './tests/fixtures/screens';
+import type { Options } from './tests/fixtures';
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 const isLocal = !process.env.BASE_URL;
 
-export default defineConfig({
+export default defineConfig<Options>({
   testDir: './tests/ui',
   fullyParallel: true,                    // tests never depend on each other or on order
   forbidOnly: !!process.env.CI,           // a forgotten test.only fails CI
@@ -20,14 +22,12 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
 
-  // Viewports are projects, not tags. More browsers come later as more projects.
-  // 599/600 sit on both sides of the site's main breakpoint (css: max-width:599px / min-width:600px).
-  projects: [
-    { name: 'desktop-1280', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } } },
-    { name: 'tablet-600',   use: { ...devices['Desktop Chrome'], viewport: { width: 600, height: 900 }, hasTouch: true } },
-    { name: 'edge-599',     use: { ...devices['Desktop Chrome'], viewport: { width: 599, height: 900 }, hasTouch: true } },
-    { name: 'phone-375',    use: { ...devices['Pixel 7'], viewport: { width: 375, height: 740 } } },
-  ],
+  // One browser. Each test gets a random screen size (tests/fixtures/screens.ts, annotation "screen").
+  // ALL_SCREENS=1 (npm run test:all-screens) instead runs every test once per screen, one project each.
+  // More browsers come later as more projects.
+  projects: process.env.ALL_SCREENS
+    ? SCREEN_NAMES.map(name => ({ name, use: { ...devices['Desktop Chrome'], screenPreset: name } }))
+    : [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 
   // Only for local runs: serve the site folder the same way we do by hand.
   webServer: isLocal ? {

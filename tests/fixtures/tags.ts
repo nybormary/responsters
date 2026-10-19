@@ -8,5 +8,6 @@ export const TAG = {
   traps: '@traps',
   language: '@language',
   progress: '@progress',
+  navigation: '@navigation',   // tabs and the URL (RSP-114)
   smoke: '@smoke',          // the short production check in the release flow
 } as const;

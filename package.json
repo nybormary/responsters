@@ -7,6 +7,7 @@
     "test": "playwright test",
     "test:smoke": "playwright test --grep @smoke",
     "test:shuffle": "playwright test --shuffle --repeat-each=3",
+    "test:all-screens": "ALL_SCREENS=1 playwright test",
     "test:ui": "playwright test --ui",
     "typecheck": "tsc -p .",
     "check-locales": "node scripts/check-locales.mjs"

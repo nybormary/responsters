@@ -2,6 +2,9 @@
 // testomat.io folder "Language", suite "Language menu and locales". Tickets: RSP-97, RSP-109.
 import { test, expect, TAG, LANGS, textsFor, langName, type Lang, type App } from '../fixtures';
 
+// These tests check how the language is chosen, so no random language is saved before they start.
+test.use({ randomLang: false });
+
 /** The page is shown in `lang`: <html lang> and the tab names come from that language's file. */
 async function expectLanguage(app: App, lang: Lang) {
   const tabs = (await textsFor(lang)).ui.tabs;
@@ -19,7 +22,7 @@ const BROWSER_CASES: { locale: string; expected: Lang }[] = [
   { locale: 'et-EE', expected: 'et' },
   { locale: 'lt-LT', expected: 'lt' },
   { locale: 'uk-UA', expected: 'uk' },
-  { locale: 'ru-RU', expected: 'en' },   // unsupported → English
+  { locale: 'ru-RU', expected: 'en' },   // unsupported → English, never Ukrainian
 ];
 
 for (const { locale, expected } of BROWSER_CASES) {
