@@ -19,7 +19,7 @@ document.addEventListener('click', e=>{
   if(!b){ if(e.target.id==='modal') closeModal(); return; }
   if(b.id==='lang-btn'){ $('lang-list').hidden ? langOpen(e.detail===0) : langClose(); }   // keyboard (detail 0) moves focus into the menu
   else if(b.dataset.lang){ const l=b.dataset.lang; langClose(); loadLang(l).then(()=>{ state.lang=l; store.set('lang',l); render(); $('lang-btn').focus(); }); }   // the locale file loads on first use
-  else if(b.dataset.view){ state.view=b.dataset.view; render(); }
+  else if(b.dataset.view){ location.hash = b.dataset.view; }   // the hashchange listener below switches the view (RSP-114)
   else if(b.dataset.f!=null){ state.filter=+b.dataset.f; renderCollection(); }
   else if(b.dataset.mode){ state.mode=b.dataset.mode; renderChrome(); newRound(); }
   else if(b.dataset.ans){ answer(+b.dataset.ans); }
@@ -34,6 +34,11 @@ document.addEventListener('click', e=>{
 document.addEventListener('keydown', e=>{ langKeys(e); if(e.key==='Escape' && !$('modal').hidden) closeModal(); });
 // Focus leaving the language menu (e.g. Shift+Tab) closes it.
 $('langmenu').addEventListener('focusout', e=>{ if(!$('langmenu').contains(e.relatedTarget) && e.relatedTarget) langClose(); });
-// Start: open the view from the URL hash (#practice, #traps), if any.
-const h = location.hash.slice(1); if(['collection','practice','traps'].includes(h)) state.view = h;
+// Tabs live in the URL hash (RSP-114): #collection, #practice, #traps. A tab click writes the hash, so reload,
+// Back/Forward and shared links open the same tab. An empty or unknown hash opens the Collection.
+const VIEWS = ['collection','practice','traps'];
+const viewFromHash = () => { const h = location.hash.slice(1); return VIEWS.includes(h) ? h : 'collection'; };
+window.addEventListener('hashchange', ()=>{ const v = viewFromHash(); if(v !== state.view){ state.view = v; render(); } });
+// Start: open the view from the URL hash, if any.
+state.view = viewFromHash();
 render();
