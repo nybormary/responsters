@@ -1,5 +1,5 @@
 // The page as a whole: opening it and what is true for every view.
-import type { Page, Locator } from '@playwright/test';
+import { expect, type Page, type Locator } from '@playwright/test';
 import { TID, type View } from '../locators';
 
 export const VIEWS: View[] = ['collection', 'practice', 'traps'];
@@ -17,6 +17,17 @@ export class App {
   /** Open the site, optionally on a view (#practice, #traps) or any raw hash ('nonsense'). */
   async open(view?: View | string) {
     await this.page.goto(view ? `/#${view}` : '/');
+    await this.ready();
+  }
+
+  /**
+   * Wait until the app has drawn itself. The site loads the language file before it wires the click
+   * handlers (top-level await in state.js), and the `load` event doesn't wait for that, so a click right
+   * after goto() can be lost (any language but English, which is bundled). Tab labels are filled in only
+   * by the first render, which runs after the handlers are wired.
+   */
+  async ready() {
+    await expect(this.tab('collection')).not.toHaveText('');
   }
 
   /** The hash part of the current URL without '#': 'practice', or '' when there is none. */
@@ -24,7 +35,7 @@ export class App {
 
   async back() { await this.page.goBack(); }
   async forward() { await this.page.goForward(); }
-  async reload() { await this.page.reload(); }
+  async reload() { await this.page.reload(); await this.ready(); }
 
   /** The <html> element; its lang attribute is the language the page is shown in. */
   get html(): Locator { return this.page.locator('html'); }
