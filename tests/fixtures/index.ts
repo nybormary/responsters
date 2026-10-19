@@ -5,9 +5,12 @@
 //
 //   test.use({ seed: { lang: 'pl', howtoSeen: true } });     // for a whole file or describe block
 //
-// Page objects (one per part of the page, built from TID in locators.ts) are added here as specs need them.
+// Page objects (one per part of the page, built from TID in locators.ts) live in pages/ and are
+// handed to tests as fixtures: async ({ app, langMenu }) => { … }.
 import { test as base, expect } from '@playwright/test';
 import { textsFor, type Lang, type Texts } from './texts';
+import { App } from './pages/app';
+import { LanguageMenu } from './pages/language-menu';
 
 // What the site keeps in localStorage (site/js/store.js adds the prefix "httpon." to every key).
 export type Seed = {
@@ -20,6 +23,8 @@ export type Seed = {
 type Fixtures = {
   seed: Seed;
   texts: Texts;
+  app: App;
+  langMenu: LanguageMenu;
 };
 
 export const test = base.extend<Fixtures>({
@@ -43,8 +48,14 @@ export const test = base.extend<Fixtures>({
   texts: async ({ seed }, use) => {
     await use(await textsFor(seed.lang ?? 'en'));
   },
+
+  app: async ({ page }, use) => { await use(new App(page)); },
+  langMenu: async ({ page }, use) => { await use(new LanguageMenu(page)); },
 });
 
 export { expect };
 export { TAG } from './tags';
 export { TID, type View } from './locators';
+export type { App } from './pages/app';
+export type { LanguageMenu } from './pages/language-menu';
+export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';

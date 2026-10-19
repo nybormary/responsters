@@ -82,7 +82,7 @@ tests/             Playwright UI tests (TypeScript); never deployed
   ui/              specs, one file per area
 .github/
   copilot-instructions.md  rules for AI assistants, incl. how tests are written
-playwright.config.ts  test targets and projects (desktop 1280, phone 375)
+playwright.config.ts  test targets and projects (desktop 1280, tablet 600, edge 599, phone 375)
 netlify.toml       publish folder and the rule that skips builds without site changes
 ```
 

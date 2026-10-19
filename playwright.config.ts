@@ -21,8 +21,11 @@ export default defineConfig({
   },
 
   // Viewports are projects, not tags. More browsers come later as more projects.
+  // 599/600 sit on both sides of the site's main breakpoint (css: max-width:599px / min-width:600px).
   projects: [
     { name: 'desktop-1280', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } } },
+    { name: 'tablet-600',   use: { ...devices['Desktop Chrome'], viewport: { width: 600, height: 900 }, hasTouch: true } },
+    { name: 'edge-599',     use: { ...devices['Desktop Chrome'], viewport: { width: 599, height: 900 }, hasTouch: true } },
     { name: 'phone-375',    use: { ...devices['Pixel 7'], viewport: { width: 375, height: 740 } } },
   ],
 
