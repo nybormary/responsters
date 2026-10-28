@@ -23,7 +23,14 @@
    Only the badge reaches up into the art, so the name never covers it. */
 .cf-status{display:flex !important; flex-direction:column; align-items:flex-start; gap:3px; padding:0 2px; position:relative}
 /* The badge grows with the digits when the text is bigger, so the code never touches the circle. */
-.cf-code{flex:none; align-self:flex-start; margin-top:calc(var(--cf-badge) * -.45); width:max(var(--cf-badge), 2.9em); height:max(var(--cf-badge), 2.9em); border-radius:50%; border:2.5px solid var(--cf-ink); display:grid; place-items:center; font:800 var(--cf-code)/1 var(--mono); color:var(--cf-ink)}
+/* Class symbol (RSP-124): a white circle in the bottom-right corner, just under the art (never on it, so it hides no
+   part of any picture), so classes differ by shape as well as colour. It stays clear of the digits and of the status name.
+   Sized from the badge (same font size, same max()), so it grows with the badge at larger text sizes. */
+.cf-badgerow{display:flex; align-self:flex-start; margin-top:calc(var(--cf-badge) * -.45)}
+.cf-sym{position:absolute; top:3px; right:2px; font-size:var(--cf-code); --cf-b:max(var(--cf-badge), 2.9em); width:calc(var(--cf-b) * .5); height:calc(var(--cf-b) * .5);
+  border-radius:50%; background:#FFFFFF; border:2px solid var(--cf-ink); color:var(--cf-ink); display:grid !important; place-items:center}
+.cf-sym .cls-sym{width:62%; height:62%; display:block}
+.cf-code{flex:none; width:max(var(--cf-badge), 2.9em); height:max(var(--cf-badge), 2.9em); border-radius:50%; border:2.5px solid var(--cf-ink); display:grid; place-items:center; font:800 var(--cf-code)/1 var(--mono); color:var(--cf-ink)}
 .cf-name{width:100%; min-height:calc(var(--cf-st) * 1.1 * 2); display:flex; align-items:center; justify-content:center; text-align:center; font:800 var(--cf-st)/1.1 var(--display); text-transform:uppercase; letter-spacing:.02em; overflow-wrap:break-word; hyphens:none}
 /* Open panel under a dashed divider: creature name, move pill, card line (at least 3 lines, centred vertically). */
 .cf-panel{flex:1; display:flex !important; flex-direction:column; align-items:center; gap:5px; margin-top:8px; padding:8px 2px 2px; border-top:2px dashed var(--cf-ink); text-align:center}

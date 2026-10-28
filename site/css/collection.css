@@ -4,12 +4,15 @@
 .bar span{display:block; height:100%; background:var(--good); width:0; transition:width .4s}
 .chips{display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 8px}
 .chip{border:1.5px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px; padding:5px 12px; font:700 14px var(--body); cursor:pointer; display:inline-flex; align-items:center; gap:6px}
-.chip i{width:10px; height:10px; border-radius:50%; display:inline-block}
+/* Class dot with the class symbol (RSP-124): colour and shape, so the filter works without colour vision too. */
+.chip i{flex:none; width:20px; height:20px; border-radius:50%; border:1.5px solid #33202F; color:#33202F; display:grid; place-items:center}
+.chip i .cls-sym{width:13px; height:13px; display:block}
 .chip[aria-pressed="true"]{border-color:var(--accent); background:var(--soft)}
 .group{margin-top:28px}
 .group h2{font:800 22px var(--display); margin:0 0 2px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
 .group h2 .official{font:600 16px var(--body); color:var(--muted)}   /* RSP-110: official RFC 9110 class name */
-.group h2 code{font:800 15px var(--mono); padding:2px 8px; border-radius:6px; color:#2B1A28}
+.group h2 code{font:800 15px var(--mono); padding:2px 8px; border-radius:6px; color:#2B1A28; display:inline-flex; align-items:center; gap:5px}
+.group h2 code .cls-sym{width:.95em; height:.95em; display:block}
 .group p.lede{margin:0 0 12px; color:var(--muted); font-size:14px}
 /* Collection grid: 2 columns on phones; from 600px the same 3 columns in every class, cards capped at 240px, rows left-aligned with the class headings. */
 .grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}

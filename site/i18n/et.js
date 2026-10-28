@@ -142,7 +142,7 @@ export default {
       when: "Käsitlemata erand backendi koodis.",
       line: "Asi pole sinus, asi on minus." },
     502: {
-      mean: "Lüüs või proksi sai enda taga olevalt serverilt vigase vastuse.",
+      mean: "Lüüs või proksi saatis päringu edasi, kuid sai serverilt vigase vastuse.",
       when: "Nginx kokku jooksnud backendi ees.",
       line: "Tuli katkisena. Mina ainult annan edasi!" },
     503: {
@@ -150,7 +150,7 @@ export default {
       when: "Plaaniline hooldus, ülekoormatud server.",
       line: "Remondi tõttu suletud. Tule hiljem." },
     504: {
-      mean: "Lüüs või proksi loobus enda taga oleva serveri ootamisest.",
+      mean: "Lüüs või proksi saatis päringu edasi, kuid ei saanud serverilt vastust.",
       when: "Aeglane backend nginxi või CDN-i taga.",
       line: "Ootasin ja ootasin. Serverist pole vastust." },
   },
@@ -306,7 +306,7 @@ export default {
       ] },
     "500-502": {
       title: "Panicorn või Parroxy?",
-      rule: "500: server ise läks katki. 502: proksi sai enda taga olevalt serverilt prügi.",
+      rule: "500: server ise läks katki. 502: proksi saatis päringu edasi ja sai serverilt prügi.",
       s: [
         "Käsitlemata erand backendi koodis.",
         "Nginx ei saanud backendilt korrektset vastust.",
@@ -363,7 +363,7 @@ export default {
       ] },
     "502-504": {
       title: "Parroxy või Waitgator?",
-      rule: "502: proksi taga olev server vastas prügiga. 504: ta ei vastanud üldse.",
+      rule: "502: proksi saatis päringu edasi ja sai serverilt prügi. 504: ta ei saanudki serverilt vastust.",
       s: [
         "Nginx sai backendilt vigase vastuse.",
         "Backend koostab aruannet 2 minutit, aga proksi ootab ainult 60 sekundit.",

@@ -142,7 +142,7 @@ export default {
       when: "Nieobsłużony wyjątek w kodzie backendu.",
       line: "To nie ty, to ja." },
     502: {
-      mean: "Bramka lub proxy dostały nieprawidłową odpowiedź od serwera za nimi.",
+      mean: "Bramka lub proxy przekazały żądanie dalej, ale dostały od serwera nieprawidłową odpowiedź.",
       when: "Nginx przed backendem, który padł.",
       line: "Przyszło zepsute. Ja tylko przekazuję!" },
     503: {
@@ -150,7 +150,7 @@ export default {
       when: "Planowane prace serwisowe, przeciążony serwer.",
       line: "Zamknięte z powodu remontu. Wróć później." },
     504: {
-      mean: "Bramka lub proxy nie doczekały się odpowiedzi od serwera za nimi.",
+      mean: "Bramka lub proxy przekazały żądanie dalej, ale nie doczekały się odpowiedzi od serwera.",
       when: "Wolny backend za nginx lub CDN.",
       line: "Czekałem i czekałem. Serwer milczy." },
   },
@@ -306,7 +306,7 @@ export default {
       ] },
     "500-502": {
       title: "Panicorn czy Parroxy?",
-      rule: "500: zepsuł się sam serwer. 502: proxy dostało śmieci od serwera za nim.",
+      rule: "500: zepsuł się sam serwer. 502: proxy przekazało żądanie dalej i dostało od serwera śmieci.",
       s: [
         "Nieobsłużony wyjątek w kodzie backendu.",
         "Nginx nie dostał poprawnej odpowiedzi od backendu.",
@@ -363,7 +363,7 @@ export default {
       ] },
     "502-504": {
       title: "Parroxy czy Waitgator?",
-      rule: "502: serwer za proxy odpowiedział śmieciami. 504: nie odpowiedział wcale.",
+      rule: "502: proxy przekazało żądanie dalej i dostało od serwera śmieci. 504: nie doczekało się odpowiedzi od serwera.",
       s: [
         "Nginx dostał nieprawidłową odpowiedź od backendu.",
         "Backend buduje raport 2 minuty, a proxy czeka tylko 60 sekund.",

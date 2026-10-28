@@ -142,7 +142,7 @@ export default {
       when: "An unhandled exception in backend code.",
       line: "It's not you, it's me." },
     502: {
-      mean: "A gateway or proxy got an invalid response from the server behind it.",
+      mean: "A gateway or proxy passed the request on, but got an invalid response from the server.",
       when: "Nginx in front of a backend that crashed.",
       line: "It came broken. I just pass it on!" },
     503: {
@@ -150,7 +150,7 @@ export default {
       when: "Planned maintenance, an overloaded server.",
       line: "Closed for repairs. Come back later." },
     504: {
-      mean: "A gateway or proxy gave up waiting for the server behind it.",
+      mean: "A gateway or proxy passed the request on, but never got a response from the server.",
       when: "A slow backend behind nginx or a CDN.",
       line: "I waited and waited. No reply from the server." },
   },
@@ -306,7 +306,7 @@ export default {
       ] },
     "500-502": {
       title: "Panicorn or Parroxy?",
-      rule: "500: the server itself broke. 502: the proxy got garbage from the server behind it.",
+      rule: "500: the server itself broke. 502: the proxy passed the request on and got garbage back from the server.",
       s: [
         "An unhandled exception in the backend code.",
         "Nginx got no valid response from the backend.",
@@ -363,7 +363,7 @@ export default {
       ] },
     "502-504": {
       title: "Parroxy or Waitgator?",
-      rule: "502: the server behind the proxy answered with garbage. 504: it didn’t answer at all.",
+      rule: "502: the proxy passed the request on and got garbage back from the server. 504: it never got an answer from the server.",
       s: [
         "Nginx got an invalid response from the backend.",
         "The backend takes 2 minutes to build a report, but the proxy waits only 60 seconds.",

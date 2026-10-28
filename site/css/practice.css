@@ -47,6 +47,12 @@
 .prompt{scroll-margin-top:12px} .prompt:focus{outline:none} .prompt:focus-visible{outline:3px solid var(--accent); outline-offset:2px}   /* RSP-108: "Next" scrolls here and focuses it */
 .prompt .q{font:700 15px var(--body); color:var(--muted)}
 .prompt img.art{width:100%; max-width:440px; border-radius:14px; aspect-ratio:640/573; object-fit:cover}
+/* RSP-124: the class symbol on the art's top-left corner in the picture modes (same white circle as on the cards). */
+.artwrap{position:relative; display:block; width:100%; max-width:440px}
+.pr-sym{position:absolute; top:8px; left:8px; width:36px; height:36px; border-radius:50%; background:#FFFFFF; border:2px solid #33202F; color:#33202F; display:grid; place-items:center; pointer-events:none}
+.pr-sym .cls-sym{width:62%; height:62%; display:block}
+.opt.imgopt{position:relative}
+.opt.imgopt .pr-sym{top:12px; left:12px; width:28px; height:28px}
 .bigcode{font:800 clamp(56px,12vw,96px)/1 var(--mono); letter-spacing:-.03em; color:var(--ink)}
 .bigstatus{font:700 20px var(--display)}
 /* Nerd mode (RSP-100): the meaning is the question, set as a readable paragraph; the example sits under the reveal. */

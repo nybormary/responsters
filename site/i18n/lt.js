@@ -142,7 +142,7 @@ export default {
       when: "Neapdorota išimtis backend kode.",
       line: "Čia ne tu, čia aš." },
     502: {
-      mean: "Šliuzas ar proxy gavo netinkamą atsakymą iš už jo esančio serverio.",
+      mean: "Šliuzas ar proxy perdavė užklausą toliau, bet gavo iš serverio netinkamą atsakymą.",
       when: "Nginx prieš nulūžusį backend.",
       line: "Atėjo sugedęs. Aš tik perduodu!" },
     503: {
@@ -150,7 +150,7 @@ export default {
       when: "Planuoti priežiūros darbai, perkrautas serveris.",
       line: "Uždaryta remontui. Grįžk vėliau." },
     504: {
-      mean: "Šliuzas ar proxy nebelaukė už jo esančio serverio.",
+      mean: "Šliuzas ar proxy perdavė užklausą toliau, bet taip ir nesulaukė serverio atsakymo.",
       when: "Lėtas backend už nginx arba CDN.",
       line: "Laukiau ir laukiau. Serveris neatsako." },
   },
@@ -306,7 +306,7 @@ export default {
       ] },
     "500-502": {
       title: "Panicorn ar Parroxy?",
-      rule: "500: sugedo pats serveris. 502: proxy gavo šiukšlių iš už jo esančio serverio.",
+      rule: "500: sugedo pats serveris. 502: proxy perdavė užklausą toliau ir gavo iš serverio šiukšlių.",
       s: [
         "Neapdorota išimtis backend kode.",
         "Nginx negavo tinkamo atsakymo iš backend.",
@@ -363,7 +363,7 @@ export default {
       ] },
     "502-504": {
       title: "Parroxy ar Waitgator?",
-      rule: "502: serveris už proxy atsakė šiukšlėmis. 504: jis visai neatsakė.",
+      rule: "502: proxy perdavė užklausą toliau ir gavo iš serverio šiukšlių. 504: taip ir nesulaukė serverio atsakymo.",
       s: [
         "Nginx gavo netinkamą atsakymą iš backend.",
         "Backend ruošia ataskaitą 2 minutes, o proxy laukia tik 60 sekundžių.",
