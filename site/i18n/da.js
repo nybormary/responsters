@@ -142,7 +142,7 @@ export default {
       when: "En ubehandlet exception i backend-koden.",
       line: "Det er ikke dig, det er mig." },
     502: {
-      mean: "En gateway eller proxy fik et ugyldigt svar fra serveren bag den.",
+      mean: "En gateway eller proxy sendte forespørgslen videre, men fik et ugyldigt svar fra serveren.",
       when: "Nginx foran en backend, der er gået ned.",
       line: "Det kom i stykker. Jeg sender det bare videre!" },
     503: {
@@ -150,7 +150,7 @@ export default {
       when: "Planlagt vedligeholdelse, en overbelastet server.",
       line: "Lukket for reparation. Kom tilbage senere." },
     504: {
-      mean: "En gateway eller proxy opgav at vente på serveren bag den.",
+      mean: "En gateway eller proxy sendte forespørgslen videre, men fik aldrig svar fra serveren.",
       when: "En langsom backend bag nginx eller et CDN.",
       line: "Jeg ventede og ventede. Intet svar fra serveren." },
   },
@@ -306,7 +306,7 @@ export default {
       ] },
     "500-502": {
       title: "Panicorn eller Parroxy?",
-      rule: "500: serveren selv gik i stykker. 502: proxyen fik skrald fra serveren bag den.",
+      rule: "500: serveren selv gik i stykker. 502: proxyen sendte forespørgslen videre og fik skrald tilbage fra serveren.",
       s: [
         "En ubehandlet exception i backend-koden.",
         "Nginx fik intet gyldigt svar fra backenden.",
@@ -363,7 +363,7 @@ export default {
       ] },
     "502-504": {
       title: "Parroxy eller Waitgator?",
-      rule: "502: serveren bag proxyen svarede med skrald. 504: den svarede slet ikke.",
+      rule: "502: proxyen sendte forespørgslen videre og fik skrald tilbage fra serveren. 504: den fik aldrig svar fra serveren.",
       s: [
         "Nginx fik et ugyldigt svar fra backenden.",
         "Backenden bruger 2 minutter på at lave en rapport, men proxyen venter kun 60 sekunder.",
