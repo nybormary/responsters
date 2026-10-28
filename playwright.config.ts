@@ -1,12 +1,16 @@
 // Playwright config for the UI tests (RSP-113).
-// Local run: Playwright starts `npx serve site` itself and tests http://localhost:3000.
-// Another target (deploy preview, production): BASE_URL=https://… npx playwright test
+// Where the tests run comes from tests/targets.ts (RSP-127): local by default (Playwright starts
+// `npx serve site` itself), or TARGET=preview PR=<n> / TARGET=production (see the npm scripts).
 import { defineConfig, devices } from '@playwright/test';
 import { SCREEN_NAMES } from './tests/fixtures/screens';
+import { resolveTarget } from './tests/targets';
 import type { Options } from './tests/fixtures';
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
-const isLocal = !process.env.BASE_URL;
+const target = resolveTarget(process.env, process.argv.includes('@smoke'));
+const BASE_URL = target.baseURL;
+const isLocal = target.name === 'local';
+// testomat.io run environment: from the target, unless set by hand.
+process.env.TESTOMATIO_ENV ||= target.testomatioEnv;
 
 export default defineConfig<Options>({
   testDir: './tests/ui',
@@ -20,12 +24,16 @@ export default defineConfig<Options>({
   expect: { timeout: isLocal ? 5_000 : 10_000 },
   // testomat.io (RSP-80): only when the TESTOMATIO env variable (project API key) is set, so a normal run
   // behaves as before and the key never has to live in the repo. Title and environment of the run come from
-  // TESTOMATIO_TITLE and TESTOMATIO_ENV. Results land on the cases whose @T… id is in the test title.
+  // TESTOMATIO_TITLE and TESTOMATIO_ENV (both default to the target, tests/targets.ts).
+  // Results land on the cases whose @T… id is in the test title.
   reporter: [
     ['list'],
     ['html', { open: 'never' }],
     ...(process.env.TESTOMATIO
-      ? [['@testomatio/reporter/playwright', { apiKey: process.env.TESTOMATIO }] as const]
+      ? [['@testomatio/reporter/playwright', {
+          apiKey: process.env.TESTOMATIO,
+          title: process.env.TESTOMATIO_TITLE || target.title,   // own title wins; otherwise the target's
+        }] as const]
       : []),
   ],
 

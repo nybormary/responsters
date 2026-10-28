@@ -6,6 +6,9 @@
   "scripts": {
     "test": "playwright test",
     "test:smoke": "playwright test --grep @smoke",
+    "test:preview": "TARGET=preview playwright test",
+    "test:prod": "TARGET=production playwright test",
+    "test:prod:smoke": "TARGET=production playwright test --grep @smoke",
     "test:shuffle": "playwright test --shuffle --repeat-each=3",
     "test:all-screens": "ALL_SCREENS=1 playwright test",
     "test:ui": "playwright test --ui",

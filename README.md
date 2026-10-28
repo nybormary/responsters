@@ -101,7 +101,10 @@ Every test runs in a **random site language** and on a **random screen size** (1
 | What | Command | When |
 |---|---|---|
 | All tests | `npm test` | Before every commit that touches `site/` or `tests/` |
-| Smoke | `npm run test:smoke` | After a production deploy (with `BASE_URL`, see below) |
+| Deploy preview | `PR=<number> npm run test:preview` | A PR is open and its Netlify check is green |
+| Production | `npm run test:prod` | After a production deploy |
+| Production smoke | `npm run test:prod:smoke` | Quick production check (only `@smoke` tests) |
+| Smoke, local | `npm run test:smoke` | Only the `@smoke` tests on your local copy |
 | Shuffle | `npm run test:shuffle` | Before committing a new or changed spec: every test 3× in random order, catches tests that depend on each other |
 | All screens | `npm run test:all-screens` | After CSS changes and before a release: every test on all four sizes |
 | One group | `npm test -- --grep @navigation` | Groups: `@collection`, `@practice`, `@traps`, `@language`, `@progress`, `@navigation` |
@@ -110,22 +113,27 @@ Every test runs in a **random site language** and on a **random screen size** (1
 | Watch it run | `npm run test:ui` | Playwright UI mode: step through tests in a browser |
 | Report | `npx playwright show-report` | After a run: steps, screenshots of failures, `lang` / `screen` |
 
-**Where the tests run.** Locally the tests start `npx serve site` themselves and use http://localhost:3000. For a deployed site, set `BASE_URL`:
+**Where the tests run.** The targets live in `tests/targets.ts`: the site addresses and how a run is named in testomat.io. Commands only name the target:
 
 ```
-BASE_URL=https://deploy-preview-<PR number>--responsters.netlify.app npm test   # deploy preview
-BASE_URL=https://responsters.netlify.app npm run test:smoke                     # production
+npm test                         # local copy: the tests start `npx serve site` themselves (http://localhost:3000)
+PR=12 npm run test:preview       # deploy preview of PR #12 (previews are public)
+npm run test:prod                # production
+npm run test:prod:smoke          # production, only @smoke
+BASE_URL=https://… npm test      # any other address, for a one-off check
 ```
+
+When the site moves to another host, only `tests/targets.ts` changes.
 
 **Report a run to testomat.io.** Results land on the cases whose `@T…` id is in the test title; a run without the key reports nothing. The key is the project's API key from testomat.io (project settings). It never goes into the repo, a file or a commit; `read -s` keeps it out of the terminal history too:
 
 ```
 read -s TESTOMATIO && export TESTOMATIO        # paste the key, press Enter (nothing is shown)
-export TESTOMATIO_TITLE="🦭 Production check: <what was released>"
-export TESTOMATIO_ENV="Target:production,Browser:Chrome"   # one string, like the manual runs
-BASE_URL=https://responsters.netlify.app npm test
+npm run test:prod                              # or PR=12 npm run test:preview, …
 unset TESTOMATIO                               # stop reporting in this terminal
 ```
+
+The run's environment and title come from the target (`Target:production,Browser:Chrome`, "🦭 Production check"; for a preview "🦭 PR #12 on deploy preview"). To give the run your own title, e.g. with the version and tickets, set it before the run: `export TESTOMATIO_TITLE="🦭 Production check: <version> (<RSP-…>)"`.
 
 Don't keep `TESTOMATIO` set for `--list`, `test:ui` or quick local runs: every run with the key creates a run in testomat.io.
 
