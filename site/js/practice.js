@@ -4,6 +4,7 @@ import { CONF } from '../data/traps.js';
 import { store } from './store.js';
 import { state, t, tx } from './state.js';
 import { $, cls, art } from './util.js';
+import { clsSym } from '../data/classes.js';
 
 // Weighted random pick; never the same code twice in a row.
 function pick(){
@@ -43,7 +44,9 @@ export function renderPractice(){
   const p = $('prompt');
   const L = tx().cards[d.c], nerd = state.mode==='nerd', hard = state.mode==='hard';
   // Nerd mode (RSP-100): plain HTTP, no pictures and no creature names. The question is the meaning, the answer is code + status.
-  p.innerHTML = state.mode==='art' ? `<div class="q">${t().qArt}</div><img class="art" src="${art(d.c)}" alt="">`
+  // RSP-124: picture modes show the class symbol on the art, because the art's background colour hints the class
+  // to people who see colour; the symbol gives the same hint without colour.
+  p.innerHTML = state.mode==='art' ? `<div class="q">${t().qArt}</div><span class="artwrap"><img class="art" src="${art(d.c)}" alt=""><i class="pr-sym">${clsSym(cls(d.c))}</i></span>`
     : nerd ? `<div class="q">${t().qArt}</div><p class="nerdq">${L.mean}</p>`
     // Hardcore (RSP-101): the bare code; the creature name only on request, and not after the answer (the reveal has it).
     : hard ? `<div class="q">${t().qHard}</div><div class="bigcode">${d.c}</div>${d.done ? '' : `<button class="hintbtn" id="hint" aria-expanded="${!!d.hinted}" aria-controls="hint-out">${t().hint}</button>`}<p class="hint-out" id="hint-out" aria-live="polite">${d.hinted && !d.done ? t().hintIs(d.n) : ''}</p>`
@@ -56,7 +59,7 @@ export function renderPractice(){
     if(hard) return `<button class="opt hardopt ${st}" data-ans="${o.c}" ${d.done?'disabled':''}><b>${o.s}</b></button>`;   // status names only, always in English
     return state.mode!=='code'
       ? `<button class="opt ${st}" data-ans="${o.c}" ${d.done?'disabled':''}><b>${o.c}</b><span>${o.s}</span></button>`
-      : `<button class="opt imgopt ${st}" data-ans="${o.c}" ${d.done?'disabled':''} aria-label="${o.n}"><img src="${art(o.c)}" alt=""><span class="nm">${o.n}</span></button>`;
+      : `<button class="opt imgopt ${st}" data-ans="${o.c}" ${d.done?'disabled':''} aria-label="${o.n}"><img src="${art(o.c)}" alt=""><i class="pr-sym">${clsSym(cls(o.c))}</i><span class="nm">${o.n}</span></button>`;
   }).join('');
   $('result').innerHTML = d.done ? `<div class="reveal"><div class="txt">
      <p class="verdict ${d.pick===d.c?'ok':'no'}">${d.pick===d.c?t().ok:t().no}</p>
