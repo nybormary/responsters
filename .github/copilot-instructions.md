@@ -35,6 +35,6 @@ Source of truth for test cases: testomat.io (project `responsters`). Automate on
 - `TEST_LANG=pl npm test`, `TEST_SCREEN=phone-375 npm test` — pin the language / screen for the whole run.
 - `npm run test:all-screens` — every test on all four screens (before a release, or after CSS changes).
 - `npm test -- --grep @language` — one group. `npm run test:smoke` — the smoke set.
-- `BASE_URL=https://<deploy-preview> npm test` — against a deployed site.
+- `PR=<n> npm run test:preview`, `npm run test:prod`, `npm run test:prod:smoke` — against a deployed site. Addresses live only in `tests/targets.ts`; never write a site URL in a spec or a command.
 - `npm run typecheck` — TypeScript check without running tests.
 - `npm run test:shuffle` — every test 3× in random order. **Run it before committing a new or changed spec**: a test that fails only here depends on another test or on order. To replay a failing order: `npx playwright test --shuffle <seed>` with the seed from that run.
