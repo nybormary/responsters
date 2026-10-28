@@ -80,6 +80,8 @@ scripts/
 tests/             Playwright UI tests (TypeScript); never deployed
   fixtures/        test ids (locators.ts), group tags, site texts, starting state for each test
   ui/              specs, one file per area
+docs/
+  testing.md       how to run and report UI tests; the Confluence page mirrors it
 .github/
   copilot-instructions.md  rules for AI assistants, incl. how tests are written
 playwright.config.ts  test targets; screen sizes are in tests/fixtures/screens.ts
@@ -96,56 +98,17 @@ UI tests with Playwright + TypeScript in `tests/`. Test cases live in testomat.i
 
 **Setup (once):** `npm install`, then `npx playwright install chromium` (downloads the browser).
 
-Every test runs in a **random site language** and on a **random screen size** (1280 / 600 / 599 / 375). The report shows both for each test (`lang`, `screen`), so a failure can be repeated with the same values.
-
-| What | Command | When |
-|---|---|---|
-| All tests | `npm test` | Before every commit that touches `site/` or `tests/` |
-| Deploy preview | `PR=<number> npm run test:preview` | A PR is open and its Netlify check is green |
-| Production | `npm run test:prod` | After a production deploy |
-| Production smoke | `npm run test:prod:smoke` | Quick production check (only `@smoke` tests) |
-| Smoke, local | `npm run test:smoke` | Only the `@smoke` tests on your local copy |
-| Shuffle | `npm run test:shuffle` | Before committing a new or changed spec: every test 3× in random order, catches tests that depend on each other |
-| All screens | `npm run test:all-screens` | After CSS changes and before a release: every test on all four sizes |
-| One group | `npm test -- --grep @navigation` | Groups: `@collection`, `@practice`, `@traps`, `@language`, `@progress`, `@navigation` |
-| One file | `npx playwright test language` | While working on one spec |
-| Type check | `npm run typecheck` | Before committing test code |
-| Watch it run | `npm run test:ui` | Playwright UI mode: step through tests in a browser |
-| Report | `npx playwright show-report` | After a run: steps, screenshots of failures, `lang` / `screen` |
-
-**Where the tests run.** The targets live in `tests/targets.ts`: the site addresses and how a run is named in testomat.io. Commands only name the target:
+Every test runs in a **random site language** and on a **random screen size**; the report shows both for each test, so a failure can be repeated with the same values.
 
 ```
-npm test                         # local copy: the tests start `npx serve site` themselves (http://localhost:3000)
-PR=12 npm run test:preview       # deploy preview of PR #12 (previews are public)
+npm test                         # local copy, before every commit that touches site/ or tests/
+PR=12 npm run test:preview       # deploy preview of PR #12
 npm run test:prod                # production
-npm run test:prod:smoke          # production, only @smoke
-BASE_URL=https://… npm test      # any other address, for a one-off check
 ```
 
-When the site moves to another host, only `tests/targets.ts` changes.
+The site addresses live in `tests/targets.ts`; when the site moves to another host, only that file changes.
 
-**Report a run to testomat.io.** Results land on the cases whose `@T…` id is in the test title; a run without the key reports nothing. The key is the project's API key from testomat.io (project settings). It never goes into the repo, a file or a commit; `read -s` keeps it out of the terminal history too:
-
-```
-read -s TESTOMATIO && export TESTOMATIO        # paste the key, press Enter (nothing is shown)
-npm run test:prod                              # or PR=12 npm run test:preview, …
-unset TESTOMATIO                               # stop reporting in this terminal
-```
-
-The run's environment and title come from the target (`Target:production,Browser:Chrome`, "🦭 Production check"; for a preview "🦭 PR #12 on deploy preview"). To give the run your own title, e.g. with the version and tickets, set it before the run: `export TESTOMATIO_TITLE="🦭 Production check: <version> (<RSP-…>)"`.
-
-Don't keep `TESTOMATIO` set for `--list`, `test:ui` or quick local runs: every run with the key creates a run in testomat.io.
-
-**Repeat a failure.** Pin what the report shows, alone or together:
-
-```
-TEST_LANG=et npm test                                  # one language for all tests
-TEST_SCREEN=phone-375 npm test                         # one screen size for all tests
-npx playwright test --shuffle <seed>                   # the same random order as a shuffle run
-```
-
-Languages: `uk`, `en`, `pl`, `da`, `lt`, `et`. Screens: `desktop-1280`, `tablet-600`, `edge-599`, `phone-375`.
+**All variants** (one language or screen, repeat a failure, report a run to testomat.io, late checks), pitfalls and rules: **[docs/testing.md](docs/testing.md)**.
 
 ## Credits
 
