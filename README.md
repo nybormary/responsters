@@ -117,6 +117,18 @@ BASE_URL=https://deploy-preview-<PR number>--responsters.netlify.app npm test   
 BASE_URL=https://responsters.netlify.app npm run test:smoke                     # production
 ```
 
+**Report a run to testomat.io.** Results land on the cases whose `@T…` id is in the test title; a run without the key reports nothing. The key is the project's API key from testomat.io (project settings). It never goes into the repo, a file or a commit; `read -s` keeps it out of the terminal history too:
+
+```
+read -s TESTOMATIO && export TESTOMATIO        # paste the key, press Enter (nothing is shown)
+export TESTOMATIO_TITLE="🦭 Production check: <what was released>"
+export TESTOMATIO_ENV="Target:production,Browser:Chrome"   # one string, like the manual runs
+BASE_URL=https://responsters.netlify.app npm test
+unset TESTOMATIO                               # stop reporting in this terminal
+```
+
+Don't keep `TESTOMATIO` set for `--list`, `test:ui` or quick local runs: every run with the key creates a run in testomat.io.
+
 **Repeat a failure.** Pin what the report shows, alone or together:
 
 ```
