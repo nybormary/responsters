@@ -18,7 +18,16 @@ export default defineConfig<Options>({
   retries: process.env.CI || !isLocal ? 1 : 0,
   workers: isLocal ? undefined : 2,
   expect: { timeout: isLocal ? 5_000 : 10_000 },
-  reporter: [['list'], ['html', { open: 'never' }]],
+  // testomat.io (RSP-80): only when the TESTOMATIO env variable (project API key) is set, so a normal run
+  // behaves as before and the key never has to live in the repo. Title and environment of the run come from
+  // TESTOMATIO_TITLE and TESTOMATIO_ENV. Results land on the cases whose @T… id is in the test title.
+  reporter: [
+    ['list'],
+    ['html', { open: 'never' }],
+    ...(process.env.TESTOMATIO
+      ? [['@testomatio/reporter/playwright', { apiKey: process.env.TESTOMATIO }] as const]
+      : []),
+  ],
 
   use: {
     baseURL: BASE_URL,
