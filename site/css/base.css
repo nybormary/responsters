@@ -20,6 +20,9 @@ body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:
 .wrap{max-width:1120px; margin:0 auto; padding-inline:16px; padding-block:24px 56px}
 header{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px}
 .brand h1{font-family:var(--display); font-weight:800; font-size:clamp(40px,8vw,64px); line-height:.95; margin:0; letter-spacing:-.01em; color:var(--accent)}
+/* RSP-125: the title is the logo link to the Collection; it looks like the title, not like a link. */
+.brand h1 a{color:inherit; text-decoration:none; border-radius:8px}
+.brand h1 a:focus-visible{outline:3px solid var(--accent); outline-offset:4px}
 .brand p{margin:6px 0 0; color:var(--muted); max-width:46ch}
 .brand .dots{display:flex; gap:6px; margin-top:12px}
 .brand .dots i{width:28px; height:8px; border-radius:4px; display:block}

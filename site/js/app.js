@@ -16,6 +16,8 @@ function render(){ renderChrome(); if(state.view==='collection') renderCollectio
 document.addEventListener('click', e=>{
   const b = e.target.closest('button');
   if(!e.target.closest('#langmenu')) langClose();                     // a click anywhere else closes the language menu
+  // RSP-125: the title link sets #collection itself; on the Collection already the hash doesn't change, so scroll to the top.
+  if(e.target.closest('.home-link') && state.view==='collection'){ e.preventDefault(); window.scrollTo({top:0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); return; }
   if(!b){ if(e.target.id==='modal') closeModal(); return; }
   if(b.id==='lang-btn'){ $('lang-list').hidden ? langOpen(e.detail===0) : langClose(); }   // keyboard (detail 0) moves focus into the menu
   else if(b.dataset.lang){ const l=b.dataset.lang; langClose(); loadLang(l).then(()=>{ state.lang=l; store.set('lang',l); render(); $('lang-btn').focus(); }); }   // the locale file loads on first use
