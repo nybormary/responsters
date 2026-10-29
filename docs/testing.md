@@ -21,19 +21,19 @@ The site address and the testomat.io environment come from the target in `tests/
 
 ## Pick your run
 
-| # | When | Goes to testomat.io |
-|---|------|---------------------|
-| [1](#1-before-a-commit) | Before a commit that touches `site/` or `tests/` | No |
-| [2](#2-one-group-while-working-on-an-area) | Quick look while working on one area | No |
-| [3](#3-new-or-changed-spec) | Before committing a new or changed spec | No |
-| [4](#4-all-screens) | After CSS changes, before a release | No |
-| [5](#5-one-screen-size) | Check one screen size | No |
-| [6](#6-one-language) | Check one language | No |
-| [7](#7-repeat-a-failure-exactly) | Repeat a failure exactly | No |
-| [8](#8-deploy-preview-of-a-pr) | A PR is open and its Netlify check is green | Yes |
-| [9](#9-production-after-a-release) | After a merge, the production deploy is live | Yes |
-| [10](#10-production-smoke) | Quick production check, no release | Yes |
-| [11](#11-late-production-check) | A release went out without a recorded check | Yes |
+| # | Variant | When | Goes to testomat.io |
+|---|---------|------|---------------------|
+| 1 | [Before a commit](#1-before-a-commit) | Before a commit that touches `site/` or `tests/` | No |
+| 2 | [One group while working on an area](#2-one-group-while-working-on-an-area) | Quick look while you work on one part of the site | No |
+| 3 | [New or changed spec](#3-new-or-changed-spec) | Before committing a new or changed spec | No |
+| 4 | [All screens](#4-all-screens) | After CSS changes, before a release | No |
+| 5 | [One screen size](#5-one-screen-size) | Check one screen size, e.g. after a phone layout change | No |
+| 6 | [One language](#6-one-language) | Check one language, e.g. after changing a locale file | No |
+| 7 | [Repeat a failure exactly](#7-repeat-a-failure-exactly) | A test failed and you want the same conditions again | No |
+| 8 | [Deploy preview of a PR](#8-deploy-preview-of-a-pr) | A PR is open and its Netlify check is green | Yes |
+| 9 | [Production after a release](#9-production-after-a-release) | After a merge, the production deploy is live | Yes |
+| 10 | [Production smoke](#10-production-smoke) | Quick production check without a release, e.g. after a config change | Yes |
+| 11 | [Late production check](#11-late-production-check) | A release went out without a recorded check | Yes |
 
 Replace only the parts in `<angle brackets>`. Variants 8–11 report to testomat.io; the lines they share are explained in [Reporting lines](#reporting-lines).
 
