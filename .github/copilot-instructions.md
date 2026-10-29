@@ -16,7 +16,7 @@ Adapted from Robert C. Martin's [ub-mode](https://github.com/unclebob/ub-mode) (
 - **Subtract before you add.** Before adding something, check what can be removed or reused. One decision lives in one place (e.g. site addresses only in `tests/targets.ts`, class symbols only in `site/data/classes.js`).
 - **Fix the root cause.** Reproduce the problem first. A guard, retry or test change that only hides a failure is not a fix: if a test fails on a deployed site, find out what differs before touching the test.
 - **Check data where it enters, trust it inside.** Validate environment variables, URL hashes and stored values once, at the entry point, with a clear error; the rest of the code works with valid values.
-- **Use the project's terms.** Card, creature, move, trap, class, "known": the same word for the same thing in code, tests, tickets and all six languages.
+- **Use the project's terms.** Card, creature, move, trap, class, "known": the same word for the same thing in code, tests, tickets and all six languages. The words, their names in code and the words not to use are in [`docs/glossary.md`](../docs/glossary.md); add a row there when you introduce a new term.
 - **Small verifiable steps.** Finish one unit, check it, then start the next.
 
 ## Documentation: repo first, Confluence mirrors
