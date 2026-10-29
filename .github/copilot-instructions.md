@@ -5,9 +5,25 @@ Responsters is a static site (`site/`, no build step) for learning HTTP status c
 ## Repo basics
 - Languages: code, comments, commit messages and docs in English.
 - Commits and branches carry the Jira key: `RSP-113: …`, branch `RSP-113-…`.
+- Every commit says why, what changed and how it was checked: subject `RSP-113: <what>`, body `Why: …` and `Checked: …` (e.g. `npm test`, `npm run test:prod:smoke`, a manual check on the deploy preview). One commit = one verifiable step.
 - Changes in `site/` or `netlify/` trigger a paid production deploy on merge; everything else doesn't. Don't touch `site/` in a test-only change.
 - All site texts live in `site/i18n/<lang>.js`; data that is the same in every language lives in `site/data/`.
 - Progress and settings are in localStorage under the prefix `httpon.` (see `site/js/store.js`).
+
+## How we change code
+Adapted from Robert C. Martin's [ub-mode](https://github.com/unclebob/ub-mode) (Uncle Bob, the author of *Clean Code*), reduced to what fits this repo.
+
+- **Subtract before you add.** Before adding something, check what can be removed or reused. One decision lives in one place (e.g. site addresses only in `tests/targets.ts`, class symbols only in `site/data/classes.js`).
+- **Fix the root cause.** Reproduce the problem first. A guard, retry or test change that only hides a failure is not a fix: if a test fails on a deployed site, find out what differs before touching the test.
+- **Check data where it enters, trust it inside.** Validate environment variables, URL hashes and stored values once, at the entry point, with a clear error; the rest of the code works with valid values.
+- **Use the project's terms.** Card, creature, move, trap, class, "known": the same word for the same thing in code, tests, tickets and all six languages.
+- **Small verifiable steps.** Finish one unit, check it, then start the next.
+
+## Documentation: repo first, Confluence mirrors
+- Docs that AI agents follow and people read (README, `docs/*.md`, e.g. the glossary or how to run the tests) live **in the repo**. That file is the source of truth: agents only see the repo.
+- A Confluence page about the same topic has two parts: a **mirrored part**, copied from the repo file after each merge and marked "mirrored from `<file>` at `<commit>`, edit it in the repo", and a **part for people** (background, diagrams, examples) that lives only in Confluence.
+- Never edit the mirrored part in Confluence: the next sync overwrites it. Change the repo file in a PR instead.
+- Write repo docs so they can become an AI skill: purpose, when to use, inputs, exact steps, checks, don'ts.
 
 ## UI tests (Playwright + TypeScript)
 Source of truth for test cases: testomat.io (project `responsters`). Automate only cases that exist there.
@@ -28,7 +44,8 @@ Source of truth for test cases: testomat.io (project `responsters`). Automate on
 6. **Waiting.** Use web-first assertions (`await expect(locator).toBeVisible()`). No `waitForTimeout`, no fixed sleeps.
 7. **One behaviour per test.** Steps follow the testomat.io case; use `test.step('…')` for its steps.
 8. **Random language and screen.** Every test runs in a random site language and on a random screen size from `tests/fixtures/screens.ts` (1280, 600, 599, 375); both are shown as annotations (`lang`, `screen`) in the report. Never assume English or a size: take expected texts from the `texts` fixture. Reproduce a failure with `TEST_LANG=<code>` and/or `TEST_SCREEN=<name>`. Tests about choosing the language use `test.use({ randomLang: false })`; a test that only makes sense on one size uses `test.use({ screenPreset: 'phone-375' })`.
-9. **No secrets.** API keys (testomat.io) only through environment variables or `.env` (git-ignored).
+9. **A test must be able to fail.** If a test would still pass with the feature removed, or with every function returning nothing, it tests nothing: rewrite it so it checks what a user would see.
+10. **No secrets.** API keys (testomat.io) only through environment variables or `.env` (git-ignored).
 
 ### Running
 - `npm test` — all tests, each in a random language on a random screen (starts `npx serve site` itself).
