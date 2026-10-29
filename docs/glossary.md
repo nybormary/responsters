@@ -11,52 +11,54 @@ Pick the right word before you write a ticket, a test title, an i18n key, a CSS 
 - **#** is the number on the screenshots in the Confluence page.
 - **Name in code**: data field, i18n key (`ui.*` in `site/i18n/<lang>.js`), CSS class or id, function. "—" means the word has no code name yet.
 - **Don't use**: words people reach for that mean something else here, or nothing.
+- **Test id**: the `data-testid` attributes in the markup, as listed in `TID` (`tests/fixtures/locators.ts`); "—" means no test can reach the element yet. Fill the column in the same PR that adds the attribute.
+- **Naming a new test id**: the term from this glossary in kebab-case, plus the code or key for one instance: `card`, `card-401`, `known-badge`, `answer-401`, `trap-401-403`, `situation`.
 - The words on the site in each language are in [Translations](#translations); they must match `site/i18n/*.js`.
 
 ## Shared (every rubric)
 
-| # | Term | Definition | Name in code | Don't use |
-|---|------|------------|--------------|-----------|
-| 1 | rubric | A topic with its own card set: HTTP status codes now, git commands later. | — (planned in RSP-117) | section, module, topic |
-| 2 | collection | The first tab: all cards of a rubric, grouped. | view `collection`, `#view-collection`, `site/js/collection.js` | gallery, bestiary, library |
-| 3 | practice | The second tab: answer questions to make cards known. | view `practice`, `site/js/practice.js` | quiz, exercise |
-| 4 | practice mode | One way of practising: picture → code, code → creature, Nerd mode, Hardcore. | `MODES` in `site/js/modes.js` (ids `art`, `code`, `nerd`, `hard`); `ui.modes` | level, game |
-| 5 | traps | The third tab: pairs (or a trio) of cards people mix up, with a rule and situations to sort. | view `traps`, `PAIRS` in `site/data/traps.js`, texts `traps["401-403"]` | quiz, tricky pairs |
-| 6 | trap | One pair from Traps: title, rule, situations. | `.pair`, `.rule`, `.scen`; `traps[key].title`, `.rule`, `.s` | puzzle |
-| 7 | card | One tile in the collection: picture plus the front texts. The frame is shared by all rubrics. | `.card`, frame parts `.cf-*` in `site/css/card.css`, `renderCard()` / `cardBody()` in `site/js/card.js` | tile, item |
-| 8 | card page | What opens when you tap a card: the card and its sections. | `.modal`, `site/js/detail.js`, sections `#m-*` | popup, details, modal (in texts) |
-| 9 | group | Cards of one kind inside a rubric: an HTTP class or a git group. | `.group` | category |
-| 10 | group colour | The colour of a group. Never the only cue: the group symbol says the same. | `CLS[n].c`, CSS `--c1`…`--c5` | — |
-| 11 | group symbol | A shape that tells groups apart without colour (colour-blind cue, RSP-124). | `CLS[n].sym`, `clsSym(n)`, `.cf-sym`, `.pr-sym` | icon (icons belong to practice modes) |
-| 12 | known | A card answered right twice in a row in Practice, without a hint; shown as ✓ on the card (a heart after RSP-132: "learn by heart"). One wrong answer resets it. | `isKnown(c)`, `state.streakBy`, `.badge`, `ui.known` | learned, mastered |
-| 13 | progress | How many cards of the rubric are known: counter and bar above the collection. | `#mastered`, `#masterbar`, `ui.mastered` | score (score is Practice) |
-| 14 | score | Right answers / questions and the current streak in Practice. | `ui.score` | progress |
-| 15 | streak | Right answers in a row. | `state.streakBy` (per card), `ui.score` | combo |
-| 16 | hint | Help in Practice that names the creature; an answer after a hint counts in the score but not toward known. | `ui.hint`, `.hintbtn`, `.hint-out` | clue, tip (tip is git) |
-| 17 | often confused with | Card page section: the cards this one shares a trap with. | `CONF` in `site/data/traps.js`, `#m-conf`, `ui.conf` | related, see also |
-| 18 | how to use | The short guide opened from the header. | `#howto`, `ui.howto`, `ui.howtoSteps` | help, onboarding, tutorial |
-| 19 | language menu | The menu in the header that switches the site language. | `#lang-btn`, `#lang-list`, `site/js/chrome.js` | locale switcher (in texts) |
+| # | Term | Definition | Name in code | Test id | Don't use |
+|---|------|------------|--------------|---------|-----------|
+| 1 | rubric | A topic with its own card set: HTTP status codes now, git commands later. | — (planned in RSP-117) | — | section, module, topic |
+| 2 | collection | The first tab: all cards of a rubric, grouped. | view `collection`, `#view-collection`, `site/js/collection.js` | `tab-collection`, `view-collection` | gallery, bestiary, library |
+| 3 | practice | The second tab: answer questions to make cards known. | view `practice`, `site/js/practice.js` | `tab-practice`, `view-practice` | quiz, exercise |
+| 4 | practice mode | One way of practising: picture → code, code → creature, Nerd mode, Hardcore. | `MODES` in `site/js/modes.js` (ids `art`, `code`, `nerd`, `hard`); `ui.modes` | — | level, game |
+| 5 | traps | The third tab: pairs (or a trio) of cards people mix up, with a rule and situations to sort. | view `traps`, `PAIRS` in `site/data/traps.js`, texts `traps["401-403"]` | `tab-traps`, `view-traps` | quiz, tricky pairs |
+| 6 | trap | One pair from Traps: title, rule, situations. | `.pair`, `.rule`, `.scen`; `traps[key].title`, `.rule`, `.s` | — | puzzle |
+| 7 | card | One tile in the collection: picture plus the front texts. The frame is shared by all rubrics. | `.card`, frame parts `.cf-*` in `site/css/card.css`, `renderCard()` / `cardBody()` in `site/js/card.js` | — | tile, item |
+| 8 | card page | What opens when you tap a card: the card and its sections. | `.modal`, `site/js/detail.js`, sections `#m-*` | — | popup, details, modal (in texts) |
+| 9 | group | Cards of one kind inside a rubric: an HTTP class or a git group. | `.group` | — | category |
+| 10 | group colour | The colour of a group. Never the only cue: the group symbol says the same. | `CLS[n].c`, CSS `--c1`…`--c5` | — | — |
+| 11 | group symbol | A shape that tells groups apart without colour (colour-blind cue, RSP-124). | `CLS[n].sym`, `clsSym(n)`, `.cf-sym`, `.pr-sym` | — | icon (icons belong to practice modes) |
+| 12 | known | A card answered right twice in a row in Practice, without a hint; shown as ✓ on the card (a heart after RSP-132: "learn by heart"). One wrong answer resets it. | `isKnown(c)`, `state.streakBy`, `.badge`, `ui.known` | — | learned, mastered |
+| 13 | progress | How many cards of the rubric are known: counter and bar above the collection. | `#mastered`, `#masterbar`, `ui.mastered` | — | score (score is Practice) |
+| 14 | score | Right answers / questions and the current streak in Practice. | `ui.score` | — | progress |
+| 15 | streak | Right answers in a row. | `state.streakBy` (per card), `ui.score` | — | combo |
+| 16 | hint | Help in Practice that names the creature; an answer after a hint counts in the score but not toward known. | `ui.hint`, `.hintbtn`, `.hint-out` | — | clue, tip (tip is git) |
+| 17 | often confused with | Card page section: the cards this one shares a trap with. | `CONF` in `site/data/traps.js`, `#m-conf`, `ui.conf` | — | related, see also |
+| 18 | how to use | The short guide opened from the header. | `#howto`, `ui.howto`, `ui.howtoSteps` | `howto-open`, `howto`, `howto-close` | help, onboarding, tutorial |
+| 19 | language menu | The menu in the header that switches the site language. | `#lang-btn`, `#lang-list`, `site/js/chrome.js` | `lang-button`, `lang-menu`, `lang-<code>` | locale switcher (in texts) |
 
 ## HTTP only
 
-| # | Term | Definition | Name in code | Don't use |
-|---|------|------------|--------------|-----------|
-| 20 | Responster | A creature of the HTTP rubric; every status code has one. | — (the name of the whole set) | monster, pokémon, mascot |
-| 21 | creature name | The name of one Responster, e.g. Whoowl. The same in every language. | `D[].n`, `.cf-creature` | character name, nickname |
-| 22 | status code | The three digits, e.g. 401. | `D[].c`, `.cf-code` | error code (2xx and 3xx aren't errors) |
-| 23 | status name | The reason phrase from RFC 9110, e.g. Unauthorized. English in every language. | `D[].s`, `.cf-name` | status text, message |
-| 24 | code badge | The coloured code with its class symbol on the card. | `.cf-badgerow` (`.cf-code` + `.cf-sym`) | badge (alone: `.badge` is the known ✓) |
-| 25 | class | The HTTP group: 1xx, 2xx, 3xx, 4xx, 5xx. | `CLS`, `cls(c)` | category, family |
-| 26 | class name | Our name of a class, e.g. Gatekeepers. Translated. | `classes[n].name` | — |
-| 27 | official class name | The RFC name, e.g. Client Error. English in every language. | `CLS[n].o`, `.official` | — |
-| 28 | class rule | One line under the class heading, e.g. "Client error: fix the request." | `classes[n].rule`, `.lede` | description |
-| 29 | class filter | The chips above the collection: All or one class. HTTP only; no sticky header (RSP-131). | `.chip`, `state.filter`, `ui.all` | tabs (tabs are Collection / Practice / Traps) |
-| 30 | move | The Responster's signature move, e.g. Who Goes There. English in every language. | `D[].m`, `.cf-move` | attack, ability, skill |
-| 31 | card line | What the creature says on the card, max ~55 characters. | `cards[c].line`, `.cf-line` | quote, tagline (`ui.tag` is the site's tagline) |
-| 32 | what it means | Card page section: the meaning of the code. | `cards[c].mean`, `#m-mean`, `ui.mean` | definition |
-| 33 | where you meet it | Card page section: real situations with this code. | `cards[c].when`, `#m-when`, `ui.when` | examples, use cases |
-| 34 | what to test | Card page section: short test cases, steps → expected result (RSP-11). | `qa[c]`, `#m-qa`, `ui.qa` | test ideas, checklist |
-| 35 | tools and read more | Card page section: RFC, MDN, extra links and general tools. | `cardLinks(c)`, `REF`, `MORE`, `TOOLS`, `#m-links`, `ui.links` | references, links |
+| # | Term | Definition | Name in code | Test id | Don't use |
+|---|------|------------|--------------|---------|-----------|
+| 20 | Responster | A creature of the HTTP rubric; every status code has one. | — (the name of the whole set) | — | monster, pokémon, mascot |
+| 21 | creature name | The name of one Responster, e.g. Whoowl. The same in every language. | `D[].n`, `.cf-creature` | — | character name, nickname |
+| 22 | status code | The three digits, e.g. 401. | `D[].c`, `.cf-code` | — | error code (2xx and 3xx aren't errors) |
+| 23 | status name | The reason phrase from RFC 9110, e.g. Unauthorized. English in every language. | `D[].s`, `.cf-name` | — | status text, message |
+| 24 | code badge | The coloured code with its class symbol on the card. | `.cf-badgerow` (`.cf-code` + `.cf-sym`) | — | badge (alone: `.badge` is the known ✓) |
+| 25 | class | The HTTP group: 1xx, 2xx, 3xx, 4xx, 5xx. | `CLS`, `cls(c)` | — | category, family |
+| 26 | class name | Our name of a class, e.g. Gatekeepers. Translated. | `classes[n].name` | — | — |
+| 27 | official class name | The RFC name, e.g. Client Error. English in every language. | `CLS[n].o`, `.official` | — | — |
+| 28 | class rule | One line under the class heading, e.g. "Client error: fix the request." | `classes[n].rule`, `.lede` | — | description |
+| 29 | class filter | The chips above the collection: All or one class. HTTP only; no sticky header (RSP-131). | `.chip`, `state.filter`, `ui.all` | — | tabs (tabs are Collection / Practice / Traps) |
+| 30 | move | The Responster's signature move, e.g. Who Goes There. English in every language. | `D[].m`, `.cf-move` | — | attack, ability, skill |
+| 31 | card line | What the creature says on the card, max ~55 characters. | `cards[c].line`, `.cf-line` | — | quote, tagline (`ui.tag` is the site's tagline) |
+| 32 | what it means | Card page section: the meaning of the code. | `cards[c].mean`, `#m-mean`, `ui.mean` | — | definition |
+| 33 | where you meet it | Card page section: real situations with this code. | `cards[c].when`, `#m-when`, `ui.when` | — | examples, use cases |
+| 34 | what to test | Card page section: short test cases, steps → expected result (RSP-11). | `qa[c]`, `#m-qa`, `ui.qa` | — | test ideas, checklist |
+| 35 | tools and read more | Card page section: RFC, MDN, extra links and general tools. | `cardLinks(c)`, `REF`, `MORE`, `TOOLS`, `#m-links`, `ui.links` | — | references, links |
 
 ## Git only (planned, RSP-115)
 
@@ -80,12 +82,12 @@ The git rubric is not on the site yet; terms follow `claude/git-cards-concept.md
 
 Added after the first screenshots; the numbers continue so the screenshots stay valid.
 
-| # | Term | Definition | Name in code | Don't use |
-|---|------|------------|--------------|-----------|
-| 47 | situation | One line in a trap to sort into one of its codes, e.g. "The token has expired." | `traps[key].s[i]`, `.sc`, `.scen` | scenario, case, example |
-| 48 | answer | One option to pick: a button in Practice or a code button in a trap. | Practice `.opt` (`.imgopt`, `.hardopt`), `data-ans`; Traps `.btns button`, `data-v`; states `.right`, `.wrong` | choice, variant |
-| 49 | feedback | What appears after an answer: the verdict and the right code with its meaning. | Practice `.reveal`, `.verdict` (`ui.ok`, `ui.no`); Traps `.why` | result, explanation |
-| 50 | question | The prompt in Practice; one per practice mode. | `.q`, `.nerdq`; `ui.qArt`, `ui.qCode`, `ui.qHard` | task, exercise |
+| # | Term | Definition | Name in code | Test id | Don't use |
+|---|------|------------|--------------|---------|-----------|
+| 47 | situation | One line in a trap to sort into one of its codes, e.g. "The token has expired." | `traps[key].s[i]`, `.sc`, `.scen` | — | scenario, case, example |
+| 48 | answer | One option to pick: a button in Practice or a code button in a trap. | Practice `.opt` (`.imgopt`, `.hardopt`), `data-ans`; Traps `.btns button`, `data-v`; states `.right`, `.wrong` | — | choice, variant |
+| 49 | feedback | What appears after an answer: the verdict and the right code with its meaning. | Practice `.reveal`, `.verdict` (`ui.ok`, `ui.no`); Traps `.why` | — | result, explanation |
+| 50 | question | The prompt in Practice; one per practice mode. | `.q`, `.nerdq`; `ui.qArt`, `ui.qCode`, `ui.qHard` | — | task, exercise |
 
 ## Translations
 
