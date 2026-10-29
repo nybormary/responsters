@@ -21,7 +21,9 @@ Adapted from Robert C. Martin's [ub-mode](https://github.com/unclebob/ub-mode) (
 
 ## Documentation: repo first, Confluence mirrors
 - Docs that AI agents follow and people read (README, `docs/*.md`, e.g. the glossary or how to run the tests) live **in the repo**. That file is the source of truth: agents only see the repo.
-- A Confluence page about the same topic has two parts: a **mirrored part**, copied from the repo file after each merge and marked "mirrored from `<file>` at `<commit>`, edit it in the repo", and a **part for people** (background, diagrams, examples) that lives only in Confluence.
+- A Confluence page about the same topic has two parts: a **mirrored part**, copied from the repo file after each merge, and a **part for people** (background, diagrams, examples) that lives only in Confluence, below a horizontal line and the heading "For people".
+- The page starts with an info panel, word for word (link the file on `master`; short commit hash and the date of the sync):
+  > **Mirrored part.** Everything above the line "For people" is a copy of `<file>` (master `<commit>`, `<date>`). Don't edit it here: change the file in the repo, merge, then refresh this mirror. Explanations for people live in the part below the line and are edited here.
 - Never edit the mirrored part in Confluence: the next sync overwrites it. Change the repo file in a PR instead.
 - Write repo docs so they can become an AI skill: purpose, when to use, inputs, exact steps, checks, don'ts.
 
