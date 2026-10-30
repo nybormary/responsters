@@ -1,3 +1,12 @@
 [build]
   publish = "site"
   ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- site/ netlify/"
+
+# Own domain since 2026-10-30 (RSP-136): the old Netlify address sends everyone to https://mnemozoo.com,
+# keeping the path. Only this exact host matches, so deploy previews (deploy-preview-N--responsters.netlify.app)
+# are not redirected. Netlify doesn't do this by itself here.
+[[redirects]]
+  from = "https://responsters.netlify.app/*"
+  to = "https://mnemozoo.com/:splat"
+  status = 301
+  force = true
