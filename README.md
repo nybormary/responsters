@@ -2,7 +2,7 @@
 
 Learn HTTP status codes with original creatures. Also a portfolio project: built and tested with an AI pair, from Jira ticket to production.
 
-**Live:** https://responsters.netlify.app
+**Live:** https://mnemozoo.com
 
 Every status code has its own creature, a pun name and a "move" that explains what the code means: Nowherret vanishes (404), Spamster spins its wheel too fast (429), Cachameleon holds up a photo of itself (304).
 
