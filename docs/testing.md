@@ -253,6 +253,7 @@ npx playwright show-report     # last report: steps, screenshots of failures, la
 | `TEST_SCREEN=…: not one of …` or `TEST_LANG=…: not one of …` | A typo in the screen or language name | Use exactly one of the names in variants 5 and 6 |
 | `TARGET=preview needs the PR number` | `npm run test:preview` without `PR=<number>` | Put the PR number before the command: `PR=14 npm run test:preview` |
 | Tests pass locally but time out on a preview | Preview not built yet, or a network blip | Wait for the green Netlify check; the config already retries once and waits longer for remote targets |
+| CI: `No ready deploy preview after 10 minutes` | Netlify's build is slow or failed, or Netlify names its status differently | The step lists the statuses it saw on the commit; check the build in Netlify, then **Re-run jobs** |
 
 ## Rules
 
@@ -261,6 +262,19 @@ npx playwright show-report     # last report: steps, screenshots of failures, la
 - Never set results by hand for a check that didn't happen. A late check gets a run dated the day of the check, and the title says it is late.
 - Don't report local runs (variants 1–7): they test your working copy, not a deployed site.
 
-## CI (coming with RSP-127)
+## CI
 
-GitHub Actions will run variant 8 automatically for every PR that changes `site/` and report with the key from a GitHub secret. This section gets the details when the workflow exists.
+Workflow: `.github/workflows/ui-tests.yml` (RSP-127). It runs by itself on every pull request to `master`; a new push to the PR stops the run that is still going.
+
+| The PR changes | What CI does | Goes to testomat.io |
+|---|---|---|
+| `site/` or `netlify/` | Waits until Netlify reports the deploy preview of the PR's last commit as ready (up to 10 minutes), then runs [variant 8](#8-deploy-preview-of-a-pr) | Yes: title `🦭 CI · PR #<n> (<branch>) on deploy preview`, environment `Target:deploy-preview,Browser:Chrome` |
+| Anything else | No deploy preview exists (Netlify's `ignore` rule), so it runs [variant 1](#1-before-a-commit) on the PR's own files | No |
+
+Every run also does `npm run typecheck` and `npm run check-locales`.
+
+- **Result:** the PR's checks → **UI tests**. A failing test, type error or locale problem makes the check red.
+- **Report:** the run's page → **Artifacts** → `playwright-report-pr-<n>`. Download, unzip, then `npx playwright show-report <folder>`. Kept for 14 days.
+- **testomat.io key:** only the GitHub secret `TESTOMATIO` (repo Settings → Secrets and variables → Actions). Never in the repo, never in the logs. Without the secret the tests still run; nothing is reported.
+- **Check the run:** as in [Check a reported run](#check-a-reported-run), then link it in the ticket comment.
+- **Not yet:** the check doesn't block a merge (RSP-99), and there is no automatic production smoke after a deploy (follow-up).

@@ -1,0 +1,112 @@
+# UI tests on every pull request (RSP-127). How it works and how to read the result: docs/testing.md, "CI".
+#
+# PR changes site/ or netlify/ → Netlify builds a deploy preview → wait until Netlify reports it ready for
+#   this exact commit → run the suite against the preview (variant 8) and report the run to testomat.io.
+# PR changes nothing there → Netlify skips the preview (the `ignore` rule in netlify.toml) → run the suite
+#   on the PR's own files inside CI (variant 1). Not reported to testomat.io: it isn't a deployed site.
+# Either way: type check, locale check, and the HTML report kept as an artifact for 14 days.
+
+name: UI tests
+
+on:
+  pull_request:
+    branches: [master]
+
+# A new push to the same PR stops the run that is still going.
+concurrency:
+  group: ui-tests-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  statuses: read   # Netlify's deploy preview status on the commit
+  checks: read
+
+jobs:
+  ui-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history, to compare the PR with master
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Locale check
+        run: npm run check-locales
+
+      - name: Does this PR change the site?
+        id: changes
+        # Same folders as the `ignore` rule in netlify.toml: only these get a deploy preview.
+        run: |
+          if git diff --quiet "$BASE_SHA...$HEAD_SHA" -- site/ netlify/; then
+            echo "site=false" >> "$GITHUB_OUTPUT"
+            echo "No change in site/ or netlify/: no deploy preview, tests run on the PR's own files."
+          else
+            echo "site=true" >> "$GITHUB_OUTPUT"
+            echo "site/ or netlify/ changed: tests run on the deploy preview of PR #$PR_NUMBER."
+          fi
+
+      - name: Install the browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Wait for the Netlify deploy preview of this commit
+        if: steps.changes.outputs.site == 'true'
+        # An older preview of the same PR also answers 200, so a plain URL check could test the wrong build.
+        # Netlify reports each commit's preview as a commit status (context contains "deploy-preview"):
+        # wait for "success" on this commit. Up to 10 minutes.
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          for i in $(seq 1 40); do
+            state=$(gh api "repos/$REPO/commits/$HEAD_SHA/status" \
+              --jq '[.statuses[] | select(.context | test("deploy-preview"))][0].state // "none"')
+            echo "Check $i: Netlify deploy preview status = $state"
+            case "$state" in
+              success) exit 0 ;;
+              failure|error) echo "::error::Netlify could not build the deploy preview of this commit."; exit 1 ;;
+            esac
+            sleep 15
+          done
+          echo "::error::No ready deploy preview after 10 minutes. Statuses seen on this commit:"
+          gh api "repos/$REPO/commits/$HEAD_SHA/status" --jq '.statuses[] | "\(.context): \(.state)"'
+          exit 1
+
+      - name: UI tests on the deploy preview (variant 8, reported to testomat.io)
+        if: steps.changes.outputs.site == 'true'
+        env:
+          TARGET: preview
+          PR: ${{ github.event.pull_request.number }}
+          TESTOMATIO: ${{ secrets.TESTOMATIO }}
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          export TESTOMATIO_TITLE="🦭 CI · PR #$PR ($BRANCH) on deploy preview"
+          npx playwright test
+
+      - name: UI tests on the PR's own files (variant 1, not reported)
+        if: steps.changes.outputs.site == 'false'
+        run: npx playwright test
+
+      - name: Keep the HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-pr-${{ github.event.pull_request.number }}
+          path: playwright-report/
+          retention-days: 14
+          if-no-files-found: ignore
