@@ -19,7 +19,7 @@ export type Target = {
 };
 
 const LOCAL_URL = 'http://localhost:3000';
-const PRODUCTION_URL = 'https://responsters.netlify.app';
+const PRODUCTION_URL = 'https://mnemozoo.com';            // own domain since 2026-10-30 (RSP-136)
 const previewURL = (pr: string) => `https://deploy-preview-${pr}--responsters.netlify.app`;
 const BROWSER = 'Browser:Chrome';            // one browser for now; more come as Playwright projects
 
