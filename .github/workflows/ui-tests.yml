@@ -67,19 +67,25 @@ jobs:
       - name: Wait for the Netlify deploy preview of this commit
         if: steps.changes.outputs.site == 'true'
         # An older preview of the same PR also answers 200, so a plain URL check could test the wrong build.
-        # Netlify reports each commit's preview as a commit status (context contains "deploy-preview"):
-        # wait for "success" on this commit. Up to 10 minutes.
+        # Netlify reports each commit's preview as a commit status `netlify/responsters/deploy-preview`.
+        # Wait for "success" with "ready" in its text on this commit. A skipped build is ALSO "success",
+        # but its text is "Deploy Preview canceled." (seen on the RSP-127 PR): that must not count. Up to 10 minutes.
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
         run: |
           for i in $(seq 1 40); do
-            state=$(gh api "repos/$REPO/commits/$HEAD_SHA/status" \
-              --jq '[.statuses[] | select(.context | test("deploy-preview"))][0].state // "none"')
-            echo "Check $i: Netlify deploy preview status = $state"
+            status=$(gh api "repos/$REPO/commits/$HEAD_SHA/status" \
+              --jq '[.statuses[] | select(.context | test("deploy-preview"))][0] // {} | "\(.state // "none")|\(.description // "")"')
+            state="${status%%|*}"; text="${status#*|}"
+            echo "Check $i: Netlify deploy preview = $state ($text)"
             case "$state" in
-              success) exit 0 ;;
-              failure|error) echo "::error::Netlify could not build the deploy preview of this commit."; exit 1 ;;
+              success)
+                case "$text" in
+                  *[Rr]eady*) exit 0 ;;
+                  *) echo "::error::Netlify did not build a deploy preview for this commit ($text), although site/ or netlify/ changed."; exit 1 ;;
+                esac ;;
+              failure|error) echo "::error::Netlify could not build the deploy preview of this commit ($text)."; exit 1 ;;
             esac
             sleep 15
           done
