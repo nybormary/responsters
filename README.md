@@ -1,20 +1,32 @@
 # Responsters
 
-Learn HTTP status codes with original creatures. Also a portfolio project: built and tested with an AI pair, from Jira ticket to production.
+Learn HTTP status codes with original creatures. Also a portfolio project: a small product run with a full QA process, from Jira ticket to production.
 
-**Live:** https://mnemozoo.com
+**Live:** https://mnemozoo.com. Mnemozoo is the site's new name; this repository keeps the working name Responsters for now.
 
 Every status code has its own creature, a pun name and a "move" that explains what the code means: Nowherret vanishes (404), Spamster spins its wheel too fast (429), Cachameleon holds up a photo of itself (304).
+
+## What to look at
+
+The backlog in Jira is private, so here is where the process shows in public:
+
+- **Pull requests:** each one carries its ticket key, and its checks show the Playwright run against the Netlify deploy preview.
+- **Commit messages:** ticket key, then *Why* and *Checked* (`RSP-N: … / Why: … / Checked: …`).
+- **[docs/testing.md](docs/testing.md):** how tests are run and reported, from a local check to a production run after a release.
+- **[docs/glossary.md](docs/glossary.md):** one name per concept across code, tests, texts and test ids.
+- **[.github/copilot-instructions.md](.github/copilot-instructions.md):** the rules the AI follows when it writes code and tests here.
+
+**Who does what:** AI writes code under my review; I own test design, acceptance and release decisions.
 
 ## The site
 
 - **Collection:** 23 creatures grouped by status class (1xx–5xx). Each card says what the code means, where you meet it, what to test, and which codes it's often confused with.
-- **Practice:** picture → code and code → creature. Codes you miss come back more often; two correct answers in a row mark a code as known.
+- **Practice:** four modes: picture → code, code → creature, Nerd (text only) and Hardcore (code only). Codes you miss come back more often; two correct answers in a row mark a code as known.
 - **Traps:** drills for the pairs people mix up most:
   - 401/403, 301/302, 200/201/204;
   - 408/503, 408/504, 500/502, 502/504, 429/503;
   - 400/404, 400/415, 400/422, 404/405, 409/422.
-- The UI is in Ukrainian and English.
+- **Six languages:** Ukrainian, English, Polish, Danish, Lithuanian and Estonian. The first language comes from the browser.
 
 The site is static, with no build step: plain HTML, CSS and JavaScript modules that Netlify serves as they are.
 
@@ -35,16 +47,21 @@ Your progress is saved in your browser only. There's no account and nothing is s
 
 ## Roadmap
 
-- **Card frame in HTML/CSS:** the card text becomes real text instead of part of the image. This is the base for new languages and the hand-drawn art.
-- **More languages:** Danish, Polish and Lithuanian, with the default language taken from the browser.
-- **A page per creature and per trap:** so a single creature or an "X vs Y" trap can be found in search and shared.
+- **Home page and About:** what the site is and who made it; after that the site takes the name Mnemozoo everywhere.
+- **A URL per language, a page per creature and per trap:** so a single creature or an "X vs Y" trap can be found in search and shared.
+- **Accessibility pass:** WCAG 2.2 AA checks for the whole site.
+- **Static checks:** linting and type checks in CI next to the UI tests.
+- **Visitor feedback:** ideas and bug reports through GitHub Issues.
+- **Git rubric:** a second collection, for Git commands.
 - **API + tests:** a small Responsters API on Netlify Functions where each endpoint returns real status codes. It's covered by Playwright API tests tagged by code (`npx playwright test --grep @404`).
 - **Hand-drawn edition:** all creatures redrawn by a human illustrator.
 
 ## How it's built
 
 - **Backlog:** Jira project RSP. Branches, commits and pull requests carry the ticket key, so every change links back to its ticket.
-- **Flow:** one branch per ticket → pull request → Netlify deploy preview → manual check → merge.
+- **Flow:** one branch per ticket → pull request → CI runs the Playwright tests on the Netlify deploy preview and reports them to testomat.io → manual check on the preview → merge.
+- **Release:** tickets that go to production together share a Jira version. Before the merge a JQL query checks the version is complete; release notes go to Confluence; after the deploy a production test run decides whether the tickets move to Done.
+- **Docs:** the repository is the source of truth (README, `docs/`); Confluence pages mirror them for people.
 - **Daily updates:** a Slack channel gets an evening summary and a morning list of open questions, written by an AI helper.
 
 ### Deploys and Netlify credits
@@ -64,7 +81,7 @@ site/              static site, published by Netlify
   index.html       markup only; loads css/ and js/app.js
   css/             styles: base, card (the card frame), collection, practice, traps, detail (card modal)
   data/            shared data, the same in every language: codes, status and creature names, colours, trap answers, links
-  i18n/            all texts, one file per language: uk.js, en.js; index.js lists the languages the site offers
+  i18n/            all texts, one file per language: uk, en, pl, da, lt, et; index.js lists the languages the site offers
   js/              logic, one file per part of the page
     app.js         entry point: clicks, keys, first render
     state.js       shared state (language, view, progress), loads the language file + t(), tx() and isKnown()
@@ -78,11 +95,14 @@ site/              static site, published by Netlify
 scripts/
   check-locales.mjs  checks that every language file has the same keys as en.js
 tests/             Playwright UI tests (TypeScript); never deployed
-  fixtures/        test ids (locators.ts), group tags, site texts, starting state for each test
+  targets.ts       site addresses: local, deploy preview, production
+  fixtures/        test ids (locators.ts), group tags, site texts, screen sizes, starting state for each test
   ui/              specs, one file per area
 docs/
   testing.md       how to run and report UI tests; the Confluence page mirrors it
+  glossary.md      one name per concept: code, test id, texts in each language
 .github/
+  workflows/ui-tests.yml   CI: Playwright tests on every pull request
   copilot-instructions.md  rules for AI assistants, incl. how tests are written
 playwright.config.ts  test targets; screen sizes are in tests/fixtures/screens.ts
 netlify.toml       publish folder and the rule that skips builds without site changes
