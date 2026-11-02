@@ -19,7 +19,7 @@ concurrency:
 
 permissions:
   contents: read
-  statuses: read   # Netlify's deploy preview status on the commit
+  statuses: read # Netlify's deploy preview status on the commit
   checks: read
 
 jobs:
@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # full history, to compare the PR with master
+          fetch-depth: 0 # full history, to compare the PR with master
 
       - uses: actions/setup-node@v4
         with:

@@ -19,9 +19,9 @@ export type Target = {
 };
 
 const LOCAL_URL = 'http://localhost:3000';
-const PRODUCTION_URL = 'https://mnemozoo.com';            // own domain since 2026-10-30 (RSP-136)
+const PRODUCTION_URL = 'https://mnemozoo.com'; // own domain since 2026-10-30 (RSP-136)
 const previewURL = (pr: string) => `https://deploy-preview-${pr}--responsters.netlify.app`;
-const BROWSER = 'Browser:Chrome';            // one browser for now; more come as Playwright projects
+const BROWSER = 'Browser:Chrome'; // one browser for now; more come as Playwright projects
 
 /** Reads TARGET (and PR for previews) from the environment. `smoke` only changes the default title. */
 export function resolveTarget(env: NodeJS.ProcessEnv = process.env, smoke = false): Target {
@@ -36,10 +36,20 @@ export function resolveTarget(env: NodeJS.ProcessEnv = process.env, smoke = fals
       if (!pr || !/^\d+$/.test(pr)) {
         throw new Error('TARGET=preview needs the PR number, e.g. PR=12 npm run test:preview');
       }
-      return { name, baseURL: previewURL(pr), testomatioEnv: `Target:deploy-preview,${BROWSER}`, title: `🦭 PR #${pr} on deploy preview` };
+      return {
+        name,
+        baseURL: previewURL(pr),
+        testomatioEnv: `Target:deploy-preview,${BROWSER}`,
+        title: `🦭 PR #${pr} on deploy preview`,
+      };
     }
     case 'production':
-      return { name, baseURL: PRODUCTION_URL, testomatioEnv: `Target:production,${BROWSER}`, title: `🦭 Production ${check}` };
+      return {
+        name,
+        baseURL: PRODUCTION_URL,
+        testomatioEnv: `Target:production,${BROWSER}`,
+        title: `🦭 Production ${check}`,
+      };
     case 'custom':
       if (!env.BASE_URL) throw new Error('TARGET=custom needs BASE_URL');
       return { name, baseURL: env.BASE_URL, testomatioEnv: BROWSER, title: `🦭 Check on ${env.BASE_URL}` };

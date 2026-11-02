@@ -13,8 +13,10 @@ async function expectView(app: App, view: View) {
 
 // ── ff1239ee ────────────────────────────────────────────────────────────────────────────────────
 
-test('Tab click writes the hash; reload keeps the tab @Tff1239ee',
-  { tag: [TAG.navigation, TAG.smoke] }, async ({ app, page }) => {
+test(
+  'Tab click writes the hash; reload keeps the tab @Tff1239ee',
+  { tag: [TAG.navigation, TAG.smoke] },
+  async ({ app, page }) => {
     await app.open();
     await expectView(app, 'collection');
 
@@ -30,60 +32,64 @@ test('Tab click writes the hash; reload keeps the tab @Tff1239ee',
         await expectView(app, view);
       });
     }
-  });
+  },
+);
 
 // ── 78f936fc ────────────────────────────────────────────────────────────────────────────────────
 
-test('Back and Forward move between tabs @T78f936fc',
-  { tag: [TAG.navigation] }, async ({ app, page }) => {
-    await app.open();
-    await app.tab('practice').click();
-    await expectView(app, 'practice');
-    await app.tab('traps').click();
-    await expectView(app, 'traps');
+test('Back and Forward move between tabs @T78f936fc', { tag: [TAG.navigation] }, async ({ app, page }) => {
+  await app.open();
+  await app.tab('practice').click();
+  await expectView(app, 'practice');
+  await app.tab('traps').click();
+  await expectView(app, 'traps');
 
-    await test.step('Back → Practice', async () => {
-      await app.back();
-      await expect(page).toHaveURL(/#practice$/);
-      await expectView(app, 'practice');
-    });
-    await test.step('Back → Collection', async () => {
-      await app.back();
-      expect(app.hash()).toBe('');
-      await expectView(app, 'collection');
-    });
-    await test.step('Forward → Practice', async () => {
-      await app.forward();
-      await expect(page).toHaveURL(/#practice$/);
-      await expectView(app, 'practice');
-    });
+  await test.step('Back → Practice', async () => {
+    await app.back();
+    await expect(page).toHaveURL(/#practice$/);
+    await expectView(app, 'practice');
   });
+  await test.step('Back → Collection', async () => {
+    await app.back();
+    expect(app.hash()).toBe('');
+    await expectView(app, 'collection');
+  });
+  await test.step('Forward → Practice', async () => {
+    await app.forward();
+    await expect(page).toHaveURL(/#practice$/);
+    await expectView(app, 'practice');
+  });
+});
 
 // ── e4db6705 ────────────────────────────────────────────────────────────────────────────────────
 
 for (const view of VIEWS) {
-  test(`Direct link opens its tab: #${view} @Te4db6705`,
-    { tag: [TAG.navigation] }, async ({ app }) => {
-      await app.open(view);
-      await expectView(app, view);
-      expect(app.errors).toEqual([]);
-    });
+  test(`Direct link opens its tab: #${view} @Te4db6705`, { tag: [TAG.navigation] }, async ({ app }) => {
+    await app.open(view);
+    await expectView(app, view);
+    expect(app.errors).toEqual([]);
+  });
 }
 
 for (const hash of ['nonsense', '']) {
-  test(`Direct link: ${hash ? 'unknown hash #' + hash : 'no hash'} opens Collection @Te4db6705`,
-    { tag: [TAG.navigation] }, async ({ app }) => {
+  test(
+    `Direct link: ${hash ? 'unknown hash #' + hash : 'no hash'} opens Collection @Te4db6705`,
+    { tag: [TAG.navigation] },
+    async ({ app }) => {
       await app.open(hash);
       await expectView(app, 'collection');
       expect(app.errors).toEqual([]);
-    });
+    },
+  );
 }
 
 // ── 19bfa018 ────────────────────────────────────────────────────────────────────────────────────
 
-test('Switching language keeps the tab and the hash @T19bfa018',
-  { tag: [TAG.navigation] }, async ({ app, langMenu, lang, page }) => {
-    const other = LANGS.find(l => l !== lang)!;               // any language but the one the test runs in
+test(
+  'Switching language keeps the tab and the hash @T19bfa018',
+  { tag: [TAG.navigation] },
+  async ({ app, langMenu, lang, page }) => {
+    const other = LANGS.find((l) => l !== lang)!; // any language but the one the test runs in
 
     await app.open();
     await app.tab('practice').click();
@@ -98,6 +104,7 @@ test('Switching language keeps the tab and the hash @T19bfa018',
       await app.back();
       expect(app.hash()).toBe('');
       await expectView(app, 'collection');
-      await expect(app.html).toHaveAttribute('lang', other);   // the language stays picked
+      await expect(app.html).toHaveAttribute('lang', other); // the language stays picked
     });
-  });
+  },
+);

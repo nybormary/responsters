@@ -5,7 +5,7 @@ import en from '../../site/i18n/en.js';
 
 export type Lang = keyof typeof LOCALES;
 export type Texts = typeof en;
-export const LANGS = Object.keys(LOCALES) as Lang[];                 // in menu order
+export const LANGS = Object.keys(LOCALES) as Lang[]; // in menu order
 
 /** Each language's name in its own language, as the menu shows it: 'Polski', 'Dansk', … */
 export const langName = (lang: Lang): string => LANG_NAMES[lang][0];

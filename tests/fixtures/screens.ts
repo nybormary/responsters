@@ -4,15 +4,15 @@
 
 export type Screen = {
   viewport: { width: number; height: number };
-  isMobile: boolean;      // mobile meta viewport + touch events, like a phone browser
+  isMobile: boolean; // mobile meta viewport + touch events, like a phone browser
   hasTouch: boolean;
 };
 
 export const SCREENS = {
   'desktop-1280': { viewport: { width: 1280, height: 800 }, isMobile: false, hasTouch: false },
-  'tablet-600':   { viewport: { width: 600,  height: 900 }, isMobile: false, hasTouch: true },
-  'edge-599':     { viewport: { width: 599,  height: 900 }, isMobile: false, hasTouch: true },
-  'phone-375':    { viewport: { width: 375,  height: 740 }, isMobile: true,  hasTouch: true },
+  'tablet-600': { viewport: { width: 600, height: 900 }, isMobile: false, hasTouch: true },
+  'edge-599': { viewport: { width: 599, height: 900 }, isMobile: false, hasTouch: true },
+  'phone-375': { viewport: { width: 375, height: 740 }, isMobile: true, hasTouch: true },
 } satisfies Record<string, Screen>;
 
 export type ScreenName = keyof typeof SCREENS;
