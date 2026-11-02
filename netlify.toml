@@ -10,3 +10,11 @@
   to = "https://mnemozoo.com/:splat"
   status = 301
   force = true
+
+# security.txt (RSP-137, RFC 9116): the file lives at /.well-known/security.txt;
+# scanners also ask for /security.txt at the root, so send them there too.
+[[redirects]]
+  from = "/security.txt"
+  to = "/.well-known/security.txt"
+  status = 301
+  force = true

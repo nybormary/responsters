@@ -1,0 +1,6 @@
+# Security contact for mnemozoo.com (RFC 9116).
+# Found a problem? Write to the address below. Reports in English, Ukrainian or Danish are welcome.
+Contact: mailto:security@mnemozoo.com
+Expires: 2027-10-31T23:00:00.000Z
+Preferred-Languages: en, uk, da
+Canonical: https://mnemozoo.com/.well-known/security.txt
