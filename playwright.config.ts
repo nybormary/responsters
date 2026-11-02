@@ -14,8 +14,8 @@ process.env.TESTOMATIO_ENV ||= target.testomatioEnv;
 
 export default defineConfig<Options>({
   testDir: './tests/ui',
-  fullyParallel: true,                    // tests never depend on each other or on order
-  forbidOnly: !!process.env.CI,           // a forgotten test.only fails CI
+  fullyParallel: true, // tests never depend on each other or on order
+  forbidOnly: !!process.env.CI, // a forgotten test.only fails CI
   // A deployed site (BASE_URL) is reached over the network: fewer parallel browsers so we don't
   // flood it, more time for files that load on demand (locale files), one retry for network blips.
   // A retry that passes is reported as "flaky", so a real problem still shows up.
@@ -30,16 +30,21 @@ export default defineConfig<Options>({
     ['list'],
     ['html', { open: 'never' }],
     ...(process.env.TESTOMATIO
-      ? [['@testomatio/reporter/playwright', {
-          apiKey: process.env.TESTOMATIO,
-          title: process.env.TESTOMATIO_TITLE || target.title,   // own title wins; otherwise the target's
-        }] as const]
+      ? [
+          [
+            '@testomatio/reporter/playwright',
+            {
+              apiKey: process.env.TESTOMATIO,
+              title: process.env.TESTOMATIO_TITLE || target.title, // own title wins; otherwise the target's
+            },
+          ] as const,
+        ]
       : []),
   ],
 
   use: {
     baseURL: BASE_URL,
-    locale: 'en-US',                      // the site picks its language from the browser (RSP-97): pin it
+    locale: 'en-US', // the site picks its language from the browser (RSP-97): pin it
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -48,13 +53,15 @@ export default defineConfig<Options>({
   // ALL_SCREENS=1 (npm run test:all-screens) instead runs every test once per screen, one project each.
   // More browsers come later as more projects.
   projects: process.env.ALL_SCREENS
-    ? SCREEN_NAMES.map(name => ({ name, use: { ...devices['Desktop Chrome'], screenPreset: name } }))
+    ? SCREEN_NAMES.map((name) => ({ name, use: { ...devices['Desktop Chrome'], screenPreset: name } }))
     : [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 
   // Only for local runs: serve the site folder the same way we do by hand.
-  webServer: isLocal ? {
-    command: 'npx serve site -l 3000',
-    url: 'http://localhost:3000',
-    reuseExistingServer: true,            // an already running `npx serve site` is reused
-  } : undefined,
+  webServer: isLocal
+    ? {
+        command: 'npx serve site -l 3000',
+        url: 'http://localhost:3000',
+        reuseExistingServer: true, // an already running `npx serve site` is reused
+      }
+    : undefined,
 });

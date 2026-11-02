@@ -10,37 +10,95 @@ import { newRound, nextRound, renderPractice, answer, showHint } from './practic
 import { renderTraps, scAnswer } from './traps.js';
 
 // Redraw the chrome and the current view.
-function render(){ renderChrome(); if(state.view==='collection') renderCollection(); if(state.view==='practice') renderPractice(); if(state.view==='traps') renderTraps(); }
+function render() {
+  renderChrome();
+  if (state.view === 'collection') renderCollection();
+  if (state.view === 'practice') renderPractice();
+  if (state.view === 'traps') renderTraps();
+}
 
 // One click handler for the whole page: each button says what it does through a data- attribute or its id.
-document.addEventListener('click', e=>{
+document.addEventListener('click', (e) => {
   const b = e.target.closest('button');
-  if(!e.target.closest('#langmenu')) langClose();                     // a click anywhere else closes the language menu
+  if (!e.target.closest('#langmenu')) langClose(); // a click anywhere else closes the language menu
   // RSP-125: the title link sets #collection itself; on the Collection already the hash doesn't change, so scroll to the top.
-  if(e.target.closest('.home-link') && state.view==='collection'){ e.preventDefault(); window.scrollTo({top:0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); return; }
-  if(!b){ if(e.target.id==='modal') closeModal(); return; }
-  if(b.id==='lang-btn'){ $('lang-list').hidden ? langOpen(e.detail===0) : langClose(); }   // keyboard (detail 0) moves focus into the menu
-  else if(b.dataset.lang){ const l=b.dataset.lang; langClose(); loadLang(l).then(()=>{ state.lang=l; store.set('lang',l); render(); $('lang-btn').focus(); }); }   // the locale file loads on first use
-  else if(b.dataset.view){ location.hash = b.dataset.view; }   // the hashchange listener below switches the view (RSP-114)
-  else if(b.dataset.f!=null){ state.filter=+b.dataset.f; renderCollection(); }
-  else if(b.dataset.mode){ state.mode=b.dataset.mode; renderChrome(); newRound(); }
-  else if(b.dataset.ans){ answer(+b.dataset.ans); }
-  else if(b.id==='next'){ nextRound(); }
-  else if(b.id==='hint'){ showHint(); }
-  else if(b.dataset.sc){ scAnswer(b.dataset.sc, +b.dataset.v); }
-  else if(b.dataset.open){ openCard(+b.dataset.open); }
-  else if(b.id==='m-close' || b.id==='m-back'){ closeModal(); }
-  else if(b.id==='howto-open'){ state.howtoOpen=!state.howtoOpen; renderChrome(); if(state.howtoOpen) $('howto-close').focus(); }
-  else if(b.id==='howto-close'){ state.howtoOpen=false; store.set('howtoSeen',true); renderChrome(); $('howto-open').focus(); }
+  if (e.target.closest('.home-link') && state.view === 'collection') {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    return;
+  }
+  if (!b) {
+    if (e.target.id === 'modal') closeModal();
+    return;
+  }
+  if (b.id === 'lang-btn') {
+    // keyboard (detail 0) moves focus into the menu
+    $('lang-list').hidden ? langOpen(e.detail === 0) : langClose();
+  } else if (b.dataset.lang) {
+    // the locale file loads on first use
+    const l = b.dataset.lang;
+    langClose();
+    loadLang(l).then(() => {
+      state.lang = l;
+      store.set('lang', l);
+      render();
+      $('lang-btn').focus();
+    });
+  } else if (b.dataset.view) {
+    // the hashchange listener below switches the view (RSP-114)
+    location.hash = b.dataset.view;
+  } else if (b.dataset.f != null) {
+    state.filter = +b.dataset.f;
+    renderCollection();
+  } else if (b.dataset.mode) {
+    state.mode = b.dataset.mode;
+    renderChrome();
+    newRound();
+  } else if (b.dataset.ans) {
+    answer(+b.dataset.ans);
+  } else if (b.id === 'next') {
+    nextRound();
+  } else if (b.id === 'hint') {
+    showHint();
+  } else if (b.dataset.sc) {
+    scAnswer(b.dataset.sc, +b.dataset.v);
+  } else if (b.dataset.open) {
+    openCard(+b.dataset.open);
+  } else if (b.id === 'm-close' || b.id === 'm-back') {
+    closeModal();
+  } else if (b.id === 'howto-open') {
+    state.howtoOpen = !state.howtoOpen;
+    renderChrome();
+    if (state.howtoOpen) $('howto-close').focus();
+  } else if (b.id === 'howto-close') {
+    state.howtoOpen = false;
+    store.set('howtoSeen', true);
+    renderChrome();
+    $('howto-open').focus();
+  }
 });
-document.addEventListener('keydown', e=>{ langKeys(e); if(e.key==='Escape' && !$('modal').hidden) closeModal(); });
+document.addEventListener('keydown', (e) => {
+  langKeys(e);
+  if (e.key === 'Escape' && !$('modal').hidden) closeModal();
+});
 // Focus leaving the language menu (e.g. Shift+Tab) closes it.
-$('langmenu').addEventListener('focusout', e=>{ if(!$('langmenu').contains(e.relatedTarget) && e.relatedTarget) langClose(); });
+$('langmenu').addEventListener('focusout', (e) => {
+  if (!$('langmenu').contains(e.relatedTarget) && e.relatedTarget) langClose();
+});
 // Tabs live in the URL hash (RSP-114): #collection, #practice, #traps. A tab click writes the hash, so reload,
 // Back/Forward and shared links open the same tab. An empty or unknown hash opens the Collection.
-const VIEWS = ['collection','practice','traps'];
-const viewFromHash = () => { const h = location.hash.slice(1); return VIEWS.includes(h) ? h : 'collection'; };
-window.addEventListener('hashchange', ()=>{ const v = viewFromHash(); if(v !== state.view){ state.view = v; render(); } });
+const VIEWS = ['collection', 'practice', 'traps'];
+const viewFromHash = () => {
+  const h = location.hash.slice(1);
+  return VIEWS.includes(h) ? h : 'collection';
+};
+window.addEventListener('hashchange', () => {
+  const v = viewFromHash();
+  if (v !== state.view) {
+    state.view = v;
+    render();
+  }
+});
 // Start: open the view from the URL hash, if any.
 state.view = viewFromHash();
 render();

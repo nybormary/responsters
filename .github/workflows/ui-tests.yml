@@ -4,7 +4,7 @@
 #   this exact commit → run the suite against the preview (variant 8) and report the run to testomat.io.
 # PR changes nothing there → Netlify skips the preview (the `ignore` rule in netlify.toml) → run the suite
 #   on the PR's own files inside CI (variant 1). Not reported to testomat.io: it isn't a deployed site.
-# Either way: type check, locale check, and the HTML report kept as an artifact for 14 days.
+# Either way: type check, locale check, lint, format check, and the HTML report kept as an artifact for 14 days.
 
 name: UI tests
 
@@ -19,7 +19,7 @@ concurrency:
 
 permissions:
   contents: read
-  statuses: read   # Netlify's deploy preview status on the commit
+  statuses: read # Netlify's deploy preview status on the commit
   checks: read
 
 jobs:
@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # full history, to compare the PR with master
+          fetch-depth: 0 # full history, to compare the PR with master
 
       - uses: actions/setup-node@v4
         with:
@@ -48,6 +48,12 @@ jobs:
 
       - name: Locale check
         run: npm run check-locales
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
 
       - name: Does this PR change the site?
         id: changes

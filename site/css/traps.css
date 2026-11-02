@@ -1,15 +1,75 @@
 /* Traps: confusable pairs, their rule and the situation drills. */
-.pair{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px; margin-bottom:18px}
-.pair h3{font:800 20px var(--display); margin:0 0 4px}
-.pair .rule{margin:0 0 12px; color:var(--muted)}
-.duo{display:grid; grid-template-columns:repeat(2,minmax(0,165px)); gap:12px}   /* two cards side by side; each card scales with its column (card.css .cf-box) */
+.pair {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+.pair h3 {
+  font: 800 20px var(--display);
+  margin: 0 0 4px;
+}
+.pair .rule {
+  margin: 0 0 12px;
+  color: var(--muted);
+}
+.duo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 165px));
+  gap: 12px;
+} /* two cards side by side; each card scales with its column (card.css .cf-box) */
 /* From 600px all cards of a trap sit in one row (2 or 3: --n is set in traps.js); phones keep 2 per row. */
-@media (min-width:600px){.duo{grid-template-columns:repeat(var(--n,2),minmax(0,220px)); gap:18px}}
-.scen{margin-top:14px; display:flex; flex-direction:column; gap:10px}
-.sc{display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; padding:10px 12px; border-radius:12px; background:var(--soft)}
-.sc p{margin:0; flex:1 1 220px; min-width:0}
-.sc .btns{display:flex; gap:6px; flex-wrap:wrap}
-.sc button{border:2px solid var(--line); background:var(--surface); color:var(--ink); font:800 14px var(--mono); border-radius:9px; padding:5px 10px; cursor:pointer}
-.sc button.right{border-color:var(--good); color:var(--good)}
-.sc button.wrong{border-color:var(--bad); color:var(--bad)}
-.sc .why{flex-basis:100%; font-size:14px; color:var(--muted)}
+@media (min-width: 600px) {
+  .duo {
+    grid-template-columns: repeat(var(--n, 2), minmax(0, 220px));
+    gap: 18px;
+  }
+}
+.scen {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sc {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--soft);
+}
+.sc p {
+  margin: 0;
+  flex: 1 1 220px;
+  min-width: 0;
+}
+.sc .btns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.sc button {
+  border: 2px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font: 800 14px var(--mono);
+  border-radius: 9px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.sc button.right {
+  border-color: var(--good);
+  color: var(--good);
+}
+.sc button.wrong {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+.sc .why {
+  flex-basis: 100%;
+  font-size: 14px;
+  color: var(--muted);
+}

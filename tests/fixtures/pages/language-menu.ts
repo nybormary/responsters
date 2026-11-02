@@ -14,15 +14,23 @@ export class LanguageMenu {
     this.list = page.getByTestId(TID.langMenu);
   }
 
-  option(lang: Lang): Locator { return this.page.getByTestId(TID.langOption(lang)); }
+  option(lang: Lang): Locator {
+    return this.page.getByTestId(TID.langOption(lang));
+  }
 
   /** All options, in menu order. */
-  get options(): Locator { return this.list.getByRole('menuitemradio'); }
+  get options(): Locator {
+    return this.list.getByRole('menuitemradio');
+  }
 
   /** The option marked as the current language. */
-  get checked(): Locator { return this.list.locator('[aria-checked="true"]'); }
+  get checked(): Locator {
+    return this.list.locator('[aria-checked="true"]');
+  }
 
-  async open() { await this.button.click(); }
+  async open() {
+    await this.button.click();
+  }
 
   /** Open the menu and pick a language with the mouse. */
   async pick(lang: Lang) {

@@ -26,16 +26,16 @@ import { LanguageMenu } from './pages/language-menu';
 
 // What the site keeps in localStorage (site/js/store.js adds the prefix "httpon." to every key).
 export type Seed = {
-  lang?: Lang;                          // language saved with the switcher
-  howtoSeen?: boolean;                  // "How to use" hint dismissed
-  streak?: Record<string, number>;      // correct answers in a row per code; 2+ = known
-  weight?: Record<string, number>;      // how often each code comes back in Practice
+  lang?: Lang; // language saved with the switcher
+  howtoSeen?: boolean; // "How to use" hint dismissed
+  streak?: Record<string, number>; // correct answers in a row per code; 2+ = known
+  weight?: Record<string, number>; // how often each code comes back in Practice
 };
 
 export type Options = {
   seed: Seed;
   randomLang: boolean;
-  screenPreset: ScreenName | 'random';   // not `screen`: that name is Playwright's own option
+  screenPreset: ScreenName | 'random'; // not `screen`: that name is Playwright's own option
 };
 
 type Fixtures = {
@@ -58,16 +58,23 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
     if (screenPreset !== 'random') name = screenPreset;
     else {
       const pinned = process.env.TEST_SCREEN as ScreenName | undefined;
-      if (pinned && !SCREEN_NAMES.includes(pinned)) throw new Error(`TEST_SCREEN=${pinned}: not one of ${SCREEN_NAMES.join(', ')}`);
+      if (pinned && !SCREEN_NAMES.includes(pinned))
+        throw new Error(`TEST_SCREEN=${pinned}: not one of ${SCREEN_NAMES.join(', ')}`);
       name = pinned ?? SCREEN_NAMES[Math.floor(Math.random() * SCREEN_NAMES.length)];
     }
     testInfo.annotations.push({ type: 'screen', description: name });
     await use(name);
   },
   // Playwright's own context options, taken from the chosen screen.
-  viewport: async ({ screenName }, use) => { await use(SCREENS[screenName].viewport); },
-  isMobile: async ({ screenName }, use) => { await use(SCREENS[screenName].isMobile); },
-  hasTouch: async ({ screenName }, use) => { await use(SCREENS[screenName].hasTouch); },
+  viewport: async ({ screenName }, use) => {
+    await use(SCREENS[screenName].viewport);
+  },
+  isMobile: async ({ screenName }, use) => {
+    await use(SCREENS[screenName].isMobile);
+  },
+  hasTouch: async ({ screenName }, use) => {
+    await use(SCREENS[screenName].hasTouch);
+  },
 
   // The site language of this test: seeded > TEST_LANG > random; with randomLang off, English (config pins en-US).
   lang: async ({ seed, randomLang }, use, testInfo) => {
@@ -86,13 +93,15 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   // Writes the seed into localStorage before any site script runs, once per tab:
   // a reload inside the test keeps what the site saved (e.g. a language picked in the test).
   page: async ({ page, seed, randomLang, lang }, use) => {
-    const stored: Seed = randomLang ? { ...seed, lang } : seed;   // the random language is saved like a menu choice
+    const stored: Seed = randomLang ? { ...seed, lang } : seed; // the random language is saved like a menu choice
     await page.addInitScript((s: Record<string, unknown>) => {
       try {
         if (sessionStorage.getItem('pw.seeded')) return;
         for (const [k, v] of Object.entries(s)) localStorage.setItem('httpon.' + k, JSON.stringify(v));
         sessionStorage.setItem('pw.seeded', '1');
-      } catch { /* about:blank and other pages without storage */ }
+      } catch {
+        /* about:blank and other pages without storage */
+      }
     }, stored);
     await use(page);
   },
@@ -102,8 +111,12 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
     await use(await textsFor(lang));
   },
 
-  app: async ({ page }, use) => { await use(new App(page)); },
-  langMenu: async ({ page }, use) => { await use(new LanguageMenu(page)); },
+  app: async ({ page }, use) => {
+    await use(new App(page));
+  },
+  langMenu: async ({ page }, use) => {
+    await use(new LanguageMenu(page));
+  },
 });
 
 export { expect };

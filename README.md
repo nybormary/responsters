@@ -126,6 +126,8 @@ PR=12 npm run test:preview       # deploy preview of PR #12
 npm run test:prod                # production
 ```
 
+**Code style:** `npm run format` (Prettier) and `npm run lint` (ESLint) before each commit; CI checks both on every PR.
+
 The site addresses live in `tests/targets.ts`; when the site moves to another host, only that file changes.
 
 **CI:** every pull request runs the tests by itself (GitHub Actions): against its deploy preview when it changes `site/`, reported to testomat.io; otherwise on its own files. The result is a check on the PR, the HTML report an artifact of the run. Details: [docs/testing.md, CI](docs/testing.md#ci).

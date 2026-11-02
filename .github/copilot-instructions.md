@@ -56,4 +56,5 @@ Source of truth for test cases: testomat.io (project `responsters`). Automate on
 - `npm test -- --grep @language` — one group. `npm run test:smoke` — the smoke set.
 - `PR=<n> npm run test:preview`, `npm run test:prod`, `npm run test:prod:smoke` — against a deployed site. Addresses live only in `tests/targets.ts`; never write a site URL in a spec or a command.
 - `npm run typecheck` — TypeScript check without running tests.
+- `npm run lint` — ESLint for `site/` and `scripts/`. `npm run format` — Prettier formats the files; `npm run format:check` only checks. CI runs both checks on every PR: run them before committing.
 - `npm run test:shuffle` — every test 3× in random order. **Run it before committing a new or changed spec**: a test that fails only here depends on another test or on order. To replay a failing order: `npx playwright test --shuffle <seed>` with the seed from that run.
