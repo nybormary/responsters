@@ -1,0 +1,9 @@
+# Prettier formats everything else (RSP-140). Not these:
+# - Markdown docs: Confluence mirrors point at exact commits; reformatting would break the link between them.
+# - The lock file and generated output.
+*.md
+package-lock.json
+test-results/
+playwright-report/
+blob-report/
+site/img/
