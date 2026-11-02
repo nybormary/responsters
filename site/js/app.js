@@ -32,9 +32,10 @@ document.addEventListener('click', (e) => {
     return;
   }
   if (b.id === 'lang-btn') {
+    // keyboard (detail 0) moves focus into the menu
     $('lang-list').hidden ? langOpen(e.detail === 0) : langClose();
-  } // keyboard (detail 0) moves focus into the menu
-  else if (b.dataset.lang) {
+  } else if (b.dataset.lang) {
+    // the locale file loads on first use
     const l = b.dataset.lang;
     langClose();
     loadLang(l).then(() => {
@@ -43,11 +44,10 @@ document.addEventListener('click', (e) => {
       render();
       $('lang-btn').focus();
     });
-  } // the locale file loads on first use
-  else if (b.dataset.view) {
+  } else if (b.dataset.view) {
+    // the hashchange listener below switches the view (RSP-114)
     location.hash = b.dataset.view;
-  } // the hashchange listener below switches the view (RSP-114)
-  else if (b.dataset.f != null) {
+  } else if (b.dataset.f != null) {
     state.filter = +b.dataset.f;
     renderCollection();
   } else if (b.dataset.mode) {
