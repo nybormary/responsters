@@ -27,6 +27,7 @@
   box-shadow: 0 2px 0 rgb(51 32 47 / 0.12);
   font-family: var(--body);
   cursor: pointer;
+  text-decoration: none; /* the card is a link (RSP-90) */
   transition: transform 0.15s;
 }
 @media (min-width: 600px) {
@@ -163,7 +164,7 @@
   overflow-wrap: break-word;
 }
 
-/* The same card on top of the card detail: not a button, always the 240px desktop sizes. */
+/* The same card on top of the card page: not a link, always the 240px desktop sizes. */
 .card.cf-static {
   --cf-pad: 12px;
   --cf-badge: 60px;
@@ -178,11 +179,6 @@
   cursor: default;
   transform: none;
 }
-@media (max-width: 480px) {
-  .card.cf-static {
-    margin-top: 34px;
-  }
-} /* room for the close button on phones */
 
 /* A card that scales with its box (Traps pairs): phone proportions, every size relative to a 165px card. The box sets the width. */
 .cf-box {

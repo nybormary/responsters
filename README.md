@@ -87,12 +87,14 @@ site/              static site, published by Netlify
     state.js       shared state (language, view, progress), loads the language file + t(), tx() and isKnown()
     store.js       progress in localStorage (prefix "httpon.")
     util.js        small helpers
-    card.js        the card frame: art, code badge, status, name, move, card line
+    card.js        the card in the collection: a link to its card page
+    render.js      card markup and card links, shared with the page build
     modes.js       the Practice modes shown as cards (add a line per new mode)
-    chrome.js · collection.js · detail.js · practice.js · traps.js
+    chrome.js · collection.js · practice.js · traps.js
   img/             creature art ({code}-art.jpg) and the old full card images ({code}.jpg)
   _headers         cache rules (images and icons: one week)
 scripts/
+  build-pages.mjs    the build: copies site/ to dist/ and writes a card page per creature and language
   check-locales.mjs  checks that every language file has the same keys as en.js
 tests/             Playwright UI tests (TypeScript); never deployed
   targets.ts       site addresses: local, deploy preview, production

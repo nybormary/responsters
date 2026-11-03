@@ -50,7 +50,6 @@ export function renderChrome() {
   $('howto-close').textContent = t().howtoClose;
   $('traps-lede').textContent = t().traps;
   $('foot').textContent = t().foot;
-  $('m-close').setAttribute('aria-label', t().close);
 }
 
 // Opening and closing the language menu. Keyboard: Enter/Space/↓ open and focus the current language,

@@ -5,7 +5,7 @@
 //
 // Run locally: npm run build, then npx serve dist (npm test does both by itself).
 // dist/ is generated: never edit it, never commit it.
-import { cp, rm, mkdir, writeFile } from 'node:fs/promises';
+import { cp, rm, mkdir, writeFile, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { D, BY } from '../site/data/cards.js';
@@ -23,6 +23,10 @@ const SITE = path.join(ROOT, 'site');
 const DIST = path.join(ROOT, 'dist');
 const ORIGIN = 'https://mnemozoo.com'; // canonical and hreflang links always name production
 const LANGS = Object.keys(LOCALES);
+// The web fonts link is taken from site/index.html, so the app and the pages always load the same fonts.
+const FONTS = (await readFile(path.join(SITE, 'index.html'), 'utf8')).match(
+  /href="(https:\/\/fonts\.googleapis\.com\/css2\?[^"]+)"/,
+)[1];
 
 /** Path of a creature page, e.g. creatureUrl('uk', 401) → '/uk/http/401/'. */
 const creatureUrl = (lang, c) => `/${lang}/http/${c}/`;
@@ -65,10 +69,7 @@ function creaturePage(lang, tx, d) {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@600;800&display=swap"
-    />
+    <link rel="stylesheet" href="${FONTS}" />
     <link rel="stylesheet" href="/css/base.css" />
     <link rel="stylesheet" href="/css/card.css" />
     <link rel="stylesheet" href="/css/detail.css" />
@@ -79,7 +80,7 @@ function creaturePage(lang, tx, d) {
         <div class="brand"><div class="brand-name"><a class="home-link" href="/">Responsters</a></div></div>
         <div class="tools">${langMenu}</div>
       </header>
-      <main class="page" data-testid="creature-page">
+      <main class="page" data-testid="card-page">
         <article class="sheet" style="--cls: ${CLS[cls(c)].c}">
           <div class="in page-grid">
             <h1 class="sr">${esc(title)}</h1>
