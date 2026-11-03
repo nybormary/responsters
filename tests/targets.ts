@@ -2,7 +2,7 @@
 // so commands only say WHICH target, never a URL or an environment string by hand.
 // No secrets here: the testomat.io key is never in a file (see README, "Report a run to testomat.io").
 //
-//   npm test                         → local copy (Playwright starts `npx serve site`)
+//   npm test                         → local copy (Playwright runs npm run build and serves dist/)
 //   PR=12 npm run test:preview       → deploy preview of PR #12
 //   npm run test:prod                → production
 //   BASE_URL=https://… npm test      → any other address (kept for one-off checks)

@@ -108,7 +108,7 @@ playwright.config.ts  test targets; screen sizes are in tests/fixtures/screens.t
 netlify.toml       publish folder and the rule that skips builds without site changes
 ```
 
-**Run locally:** `npx serve site`, then open http://localhost:3000. JavaScript modules don't load from `file://`, so opening `index.html` by double-click shows an empty page.
+**Run locally:** `npm run build`, then `npx serve dist` and open http://localhost:3000. The build copies `site/` to `dist/` and adds a page per creature and language, e.g. `/en/http/404/`. JavaScript modules don't load from `file://`, so opening `index.html` by double-click shows an empty page.
 
 **Adding a language:** copy `site/i18n/en.js` to `site/i18n/<code>.js` and translate the texts (keep the keys, `{…}` functions and `<b>` tags). Run `node scripts/check-locales.mjs` until it passes, then add the language to `LOCALES` in `site/i18n/index.js`. A text that is still missing shows in English, with a warning in the browser console.
 

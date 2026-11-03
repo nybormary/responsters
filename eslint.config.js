@@ -14,6 +14,7 @@ const rules = {
 };
 
 export default [
+  { ignores: ['dist/', 'test-results/', 'playwright-report/', 'blob-report/'] }, // generated output
   {
     files: ['site/**/*.js'],
     languageOptions: { ecmaVersion: 'latest', sourceType: 'module', globals: globals.browser },

@@ -57,14 +57,14 @@ jobs:
 
       - name: Does this PR change the site?
         id: changes
-        # Same folders as the `ignore` rule in netlify.toml: only these get a deploy preview.
+        # Same paths as the `ignore` rule in netlify.toml: only these get a deploy preview.
         run: |
-          if git diff --quiet "$BASE_SHA...$HEAD_SHA" -- site/ netlify/; then
+          if git diff --quiet "$BASE_SHA...$HEAD_SHA" -- site/ netlify/ scripts/build-pages.mjs netlify.toml; then
             echo "site=false" >> "$GITHUB_OUTPUT"
-            echo "No change in site/ or netlify/: no deploy preview, tests run on the PR's own files."
+            echo "No change to the site or its build: no deploy preview, tests run on the PR's own files."
           else
             echo "site=true" >> "$GITHUB_OUTPUT"
-            echo "site/ or netlify/ changed: tests run on the deploy preview of PR #$PR_NUMBER."
+            echo "The site or its build changed: tests run on the deploy preview of PR #$PR_NUMBER."
           fi
 
       - name: Install the browser

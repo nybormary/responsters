@@ -41,7 +41,8 @@
   font: 800 28px var(--display);
   margin: 0;
 }
-.sheet h4 {
+.sheet h4,
+.sheet h2 {
   font: 700 13px var(--body);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -94,7 +95,8 @@
   flex-wrap: wrap;
   margin-top: 6px;
 }
-.mini button {
+.mini button,
+.mini a {
   border: 1.5px solid var(--line);
   background: var(--bg);
   color: var(--ink);
@@ -102,4 +104,19 @@
   padding: 4px 10px;
   font: 700 13px var(--body);
   cursor: pointer;
+}
+
+/* The same sheet as a page of its own (RSP-90, /<lang>/http/<code>/): in the flow, not a modal. */
+.page .sheet {
+  margin: 24px auto 0;
+}
+.page .card.cf-static {
+  margin-top: 4px;
+}
+a.back {
+  display: inline-block;
+  text-decoration: none;
+}
+.mini a {
+  text-decoration: none;
 }
