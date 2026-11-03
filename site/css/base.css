@@ -15,8 +15,11 @@
   --c3: #78b6e2;
   --c4: #f2a15a;
   --c5: #ee776b;
-  --display: 'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
-  --body: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Fonts (decided 2026-10-30): Bitter for titles, a slab serif like a sign at a zoo enclosure; Atkinson Hyperlegible
+     Next for text, made for low vision, and unlike the first Atkinson it covers the extended Latin of pl, lt, et, da.
+     Both are loaded in index.html (the page build reuses that link). */
+  --display: 'Bitter', Georgia, serif;
+  --body: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {

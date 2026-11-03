@@ -120,7 +120,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  font: 800 var(--cf-st)/1.1 var(--display);
+  font: 700 var(--cf-st)/1.1 var(--display); /* a slab serif at 800 gets dark at small sizes */
   text-transform: uppercase;
   letter-spacing: 0.02em;
   overflow-wrap: break-word;
@@ -140,7 +140,7 @@
 }
 .cf-creature {
   max-width: 100%;
-  font: 800 var(--cf-name)/1.1 var(--display);
+  font: 700 var(--cf-name)/1.1 var(--display);
   overflow-wrap: break-word;
 }
 .cf-move {
