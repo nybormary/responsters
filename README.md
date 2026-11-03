@@ -87,12 +87,14 @@ site/              static site, published by Netlify
     state.js       shared state (language, view, progress), loads the language file + t(), tx() and isKnown()
     store.js       progress in localStorage (prefix "httpon.")
     util.js        small helpers
-    card.js        the card frame: art, code badge, status, name, move, card line
+    card.js        the card in the collection: a link to its card page
+    render.js      card markup and card links, shared with the page build
     modes.js       the Practice modes shown as cards (add a line per new mode)
-    chrome.js · collection.js · detail.js · practice.js · traps.js
+    chrome.js · collection.js · practice.js · traps.js
   img/             creature art ({code}-art.jpg) and the old full card images ({code}.jpg)
   _headers         cache rules (images and icons: one week)
 scripts/
+  build-pages.mjs    the build: copies site/ to dist/ and writes a card page per creature and language
   check-locales.mjs  checks that every language file has the same keys as en.js
 tests/             Playwright UI tests (TypeScript); never deployed
   targets.ts       site addresses: local, deploy preview, production
@@ -108,7 +110,7 @@ playwright.config.ts  test targets; screen sizes are in tests/fixtures/screens.t
 netlify.toml       publish folder and the rule that skips builds without site changes
 ```
 
-**Run locally:** `npx serve site`, then open http://localhost:3000. JavaScript modules don't load from `file://`, so opening `index.html` by double-click shows an empty page.
+**Run locally:** `npm run build`, then `npx serve dist` and open http://localhost:3000. The build copies `site/` to `dist/` and adds a page per creature and language, e.g. `/en/http/404/`. JavaScript modules don't load from `file://`, so opening `index.html` by double-click shows an empty page.
 
 **Adding a language:** copy `site/i18n/en.js` to `site/i18n/<code>.js` and translate the texts (keep the keys, `{…}` functions and `<b>` tags). Run `node scripts/check-locales.mjs` until it passes, then add the language to `LOCALES` in `site/i18n/index.js`. A text that is still missing shows in English, with a warning in the browser console.
 

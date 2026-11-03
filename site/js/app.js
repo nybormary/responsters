@@ -5,7 +5,6 @@ import { $ } from './util.js';
 import { state, loadLang } from './state.js';
 import { renderChrome, langOpen, langClose, langKeys } from './chrome.js';
 import { renderCollection } from './collection.js';
-import { openCard, closeModal } from './detail.js';
 import { newRound, nextRound, renderPractice, answer, showHint } from './practice.js';
 import { renderTraps, scAnswer } from './traps.js';
 
@@ -27,10 +26,7 @@ document.addEventListener('click', (e) => {
     window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     return;
   }
-  if (!b) {
-    if (e.target.id === 'modal') closeModal();
-    return;
-  }
+  if (!b) return;
   if (b.id === 'lang-btn') {
     // keyboard (detail 0) moves focus into the menu
     $('lang-list').hidden ? langOpen(e.detail === 0) : langClose();
@@ -62,10 +58,11 @@ document.addEventListener('click', (e) => {
     showHint();
   } else if (b.dataset.sc) {
     scAnswer(b.dataset.sc, +b.dataset.v);
-  } else if (b.dataset.open) {
-    openCard(+b.dataset.open);
-  } else if (b.id === 'm-close' || b.id === 'm-back') {
-    closeModal();
+  } else if (b.id === 'to-top') {
+    // RSP-154: a button, not a link: href="#top" would change the hash and with it the tab (RSP-114).
+    // Focus goes to the logo link, so the next Tab continues from the top of the page.
+    document.querySelector('.home-link').focus({ preventScroll: true }); // focus first: it would stop a smooth scroll
+    window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   } else if (b.id === 'howto-open') {
     state.howtoOpen = !state.howtoOpen;
     renderChrome();
@@ -79,7 +76,6 @@ document.addEventListener('click', (e) => {
 });
 document.addEventListener('keydown', (e) => {
   langKeys(e);
-  if (e.key === 'Escape' && !$('modal').hidden) closeModal();
 });
 // Focus leaving the language menu (e.g. Shift+Tab) closes it.
 $('langmenu').addEventListener('focusout', (e) => {

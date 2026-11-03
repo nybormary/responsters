@@ -1,6 +1,6 @@
 // Playwright config for the UI tests (RSP-113).
-// Where the tests run comes from tests/targets.ts (RSP-127): local by default (Playwright starts
-// `npx serve site` itself), or TARGET=preview PR=<n> / TARGET=production (see the npm scripts).
+// Where the tests run comes from tests/targets.ts (RSP-127): local by default (Playwright builds and
+// serves dist/ itself), or TARGET=preview PR=<n> / TARGET=production (see the npm scripts).
 import { defineConfig, devices } from '@playwright/test';
 import { SCREEN_NAMES } from './tests/fixtures/screens';
 import { resolveTarget } from './tests/targets';
@@ -56,12 +56,12 @@ export default defineConfig<Options>({
     ? SCREEN_NAMES.map((name) => ({ name, use: { ...devices['Desktop Chrome'], screenPreset: name } }))
     : [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 
-  // Only for local runs: serve the site folder the same way we do by hand.
+  // Only for local runs: build the pages and serve dist/ the same way we do by hand (RSP-90).
   webServer: isLocal
     ? {
-        command: 'npx serve site -l 3000',
+        command: 'npm run build && npx serve dist -l 3000',
         url: 'http://localhost:3000',
-        reuseExistingServer: true, // an already running `npx serve site` is reused
+        reuseExistingServer: true, // an already running `npx serve dist` is reused: run npm run build first
       }
     : undefined,
 });

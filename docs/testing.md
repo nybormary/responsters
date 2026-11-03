@@ -40,7 +40,7 @@ Replace only the parts in `<angle brackets>`. Variants 8–11 report to testomat
 ### 1. Before a commit
 
 - **When:** before a commit that touches `site/` or `tests/`.
-- **Runs against:** your local copy (Playwright starts `npx serve site` itself).
+- **Runs against:** your local copy (Playwright runs `npm run build` and serves `dist/` itself).
 - **Tests / language / screen:** all; random.
 - **Needs:** `npm install` done; `git status` shows what you plan to commit.
 

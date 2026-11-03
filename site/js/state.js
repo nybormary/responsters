@@ -3,6 +3,7 @@
 import { store } from './store.js';
 import { LOCALES, LANG_NAMES } from '../i18n/index.js';
 import en from '../i18n/en.js';
+import { fill } from '../i18n/fill.js';
 
 export { LANG_NAMES };
 export const LANGS = Object.keys(LOCALES); // what the language menu lists (only complete locales)
@@ -39,21 +40,8 @@ export const state = {
   howtoOpen: !store.get('howtoSeen', false), // "How to use" is shown on the first visit until dismissed
 };
 
-// Texts (RSP-85). Each locale is loaded once and filled up from English: a missing key shows the English
-// text and logs a warning, so a half-done translation never breaks the page.
+// Texts (RSP-85). Each locale is loaded once and filled up from English (i18n/fill.js).
 const TX = { en };
-function fill(loc, base, path, lang) {
-  if (loc === undefined) {
-    console.warn(`[i18n] ${lang}: missing ${path}, using English`);
-    return base;
-  }
-  if (base && typeof base === 'object' && !Array.isArray(base)) {
-    const out = {};
-    for (const k of Object.keys(base)) out[k] = fill(loc[k], base[k], path ? `${path}.${k}` : k, lang);
-    return out;
-  }
-  return loc;
-}
 export async function loadLang(lang) {
   if (!TX[lang]) TX[lang] = fill((await LOCALES[lang]()).default, en, '', lang);
 }

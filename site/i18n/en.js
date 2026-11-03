@@ -38,6 +38,7 @@ export default {
     lang: 'Language',
     close: 'Close',
     back: 'Back to collection',
+    top: 'Back to top',
     howto: 'How to use',
     howtoSteps: [
       '<b>Collection.</b> Tap a card to meet the creature: what the code means, where you meet it and what to test.',

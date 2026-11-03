@@ -3,13 +3,7 @@
 import { state, t, LANGS, LANG_NAMES } from './state.js';
 import { $ } from './util.js';
 import { MODES } from './modes.js';
-
-const GLOBE =
-  '<svg class="lang-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>';
-const CHEVRON =
-  '<svg class="lang-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
-const CHECK =
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>';
+import { GLOBE, CHEVRON, CHECK } from './icons.js';
 
 // Language menu (RSP-109): a button with the current language; the list holds every language that has texts,
 // each written in its own language and marked with its own lang, so screen readers pronounce it right.
@@ -55,8 +49,8 @@ export function renderChrome() {
   $('howto-note').textContent = t().howtoNote;
   $('howto-close').textContent = t().howtoClose;
   $('traps-lede').textContent = t().traps;
+  $('to-top').textContent = '↑ ' + t().top;
   $('foot').textContent = t().foot;
-  $('m-close').setAttribute('aria-label', t().close);
 }
 
 // Opening and closing the language menu. Keyboard: Enter/Space/↓ open and focus the current language,

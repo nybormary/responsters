@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@600;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700;800&family=Atkinson+Hyperlegible+Next:wght@400;700&family=JetBrains+Mono:wght@600;800&display=swap"
     />
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/card.css" />
@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="css/detail.css" />
   </head>
   <body>
-    <div class="wrap">
+    <div class="wrap" id="top">
       <header>
         <div class="brand">
           <h1><a class="home-link" href="#collection">Responsters</a></h1>
@@ -91,30 +91,8 @@
         <div id="pairs"></div>
       </section>
 
+      <button class="linkbtn to-top" id="to-top" data-testid="to-top" type="button"></button>
       <footer id="foot"></footer>
-    </div>
-
-    <div class="modal" id="modal" hidden>
-      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="m-name">
-        <button class="close" id="m-close" aria-label="Close">×</button>
-        <div class="in">
-          <h3 class="sr" id="m-name"></h3>
-          <div class="card cf-static" id="m-card"></div>
-          <h4 id="m-h-mean"></h4>
-          <p id="m-mean"></p>
-          <h4 id="m-h-when"></h4>
-          <p id="m-when"></p>
-          <h4 id="m-h-qa"></h4>
-          <ul class="qa" id="m-qa"></ul>
-          <h4 id="m-h-links"></h4>
-          <ul class="links" id="m-links"></ul>
-          <div id="m-conf-wrap">
-            <h4 id="m-h-conf"></h4>
-            <div class="mini" id="m-conf"></div>
-          </div>
-        </div>
-        <button class="back" id="m-back"></button>
-      </div>
     </div>
 
     <script type="module" src="js/app.js"></script>

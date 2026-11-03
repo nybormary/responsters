@@ -15,8 +15,11 @@
   --c3: #78b6e2;
   --c4: #f2a15a;
   --c5: #ee776b;
-  --display: 'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
-  --body: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Fonts (decided 2026-10-30): Bitter for titles, a slab serif like a sign at a zoo enclosure; Atkinson Hyperlegible
+     Next for text, made for low vision, and unlike the first Atkinson it covers the extended Latin of pl, lt, et, da.
+     Both are loaded in index.html (the page build reuses that link). */
+  --display: 'Bitter', Georgia, serif;
+  --body: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {
@@ -72,7 +75,8 @@ header {
   justify-content: space-between;
   gap: 16px;
 }
-.brand h1 {
+.brand h1,
+.brand .brand-name {
   font-family: var(--display);
   font-weight: 800;
   font-size: clamp(40px, 8vw, 64px);
@@ -82,12 +86,14 @@ header {
   color: var(--accent);
 }
 /* RSP-125: the title is the logo link to the Collection; it looks like the title, not like a link. */
-.brand h1 a {
+.brand h1 a,
+.brand .brand-name a {
   color: inherit;
   text-decoration: none;
   border-radius: 8px;
 }
-.brand h1 a:focus-visible {
+.brand h1 a:focus-visible,
+.brand .brand-name a:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 4px;
 }
@@ -142,7 +148,8 @@ header {
   color: var(--muted);
   transition: transform 0.15s;
 }
-.langbtn[aria-expanded='true'] .lang-chev {
+.langbtn[aria-expanded='true'] .lang-chev,
+.langmenu[open] .lang-chev {
   transform: rotate(180deg);
 }
 .langbtn .lang-name {
@@ -177,7 +184,8 @@ header {
   border-radius: 14px;
   box-shadow: 0 8px 24px rgb(0 0 0 / 0.14);
 }
-.langlist button {
+.langlist button,
+.langlist a {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -193,15 +201,31 @@ header {
   text-align: left;
   cursor: pointer;
 }
-.langlist button:hover {
+.langlist button:hover,
+.langlist a:hover {
   background: var(--soft);
 }
-.langlist button:focus-visible {
+.langlist button:focus-visible,
+.langlist a:focus-visible {
   outline-offset: -3px;
 }
-.langlist button[aria-checked='true'] {
+.langlist button[aria-checked='true'],
+.langlist a[aria-current='page'] {
   font-weight: 800;
   color: var(--accent);
+}
+/* Card pages (RSP-90): the menu is a <details>, so the pill is its <summary> and the items are links. */
+summary.langbtn {
+  list-style: none;
+}
+summary.langbtn::-webkit-details-marker {
+  display: none;
+}
+.langlist a {
+  text-decoration: none;
+}
+.tools > .langmenu:only-child {
+  margin-left: auto;
 }
 .langlist .lang-check {
   display: inline-flex;
@@ -229,6 +253,13 @@ header {
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
+}
+.to-top {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px; /* touch target */
+  margin-top: 32px;
+  font-size: 15px;
 }
 .howto {
   margin-top: 20px;

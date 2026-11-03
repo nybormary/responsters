@@ -4,6 +4,7 @@
   "type": "module",
   "description": "Repo tools: scripts/ and the Playwright UI tests in tests/. The site itself has no build step: Netlify publishes site/ as is.",
   "scripts": {
+    "build": "node scripts/build-pages.mjs",
     "test": "playwright test",
     "test:smoke": "playwright test --grep @smoke",
     "test:preview": "TARGET=preview playwright test",
