@@ -58,6 +58,11 @@ document.addEventListener('click', (e) => {
     showHint();
   } else if (b.dataset.sc) {
     scAnswer(b.dataset.sc, +b.dataset.v);
+  } else if (b.id === 'to-top') {
+    // RSP-154: a button, not a link: href="#top" would change the hash and with it the tab (RSP-114).
+    // Focus goes to the logo link, so the next Tab continues from the top of the page.
+    document.querySelector('.home-link').focus({ preventScroll: true }); // focus first: it would stop a smooth scroll
+    window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   } else if (b.id === 'howto-open') {
     state.howtoOpen = !state.howtoOpen;
     renderChrome();

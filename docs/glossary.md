@@ -88,6 +88,7 @@ Added after the first screenshots; the numbers continue so the screenshots stay 
 | 48 | answer | One option to pick: a button in Practice or a code button in a trap. | Practice `.opt` (`.imgopt`, `.hardopt`), `data-ans`; Traps `.btns button`, `data-v`; states `.right`, `.wrong` | — | choice, variant |
 | 49 | feedback | What appears after an answer: the verdict and the right code with its meaning. | Practice `.reveal`, `.verdict` (`ui.ok`, `ui.no`); Traps `.why` | — | result, explanation |
 | 50 | question | The prompt in Practice; one per practice mode. | `.q`, `.nerdq`; `ui.qArt`, `ui.qCode`, `ui.qHard` | — | task, exercise |
+| 51 | back to top | The link at the end of a long page that brings you back to the top (RSP-154). | app: button `#to-top` (a link would change the tab hash); card page: `a[href="#top"]`; `ui.top` | `to-top` | scroll up, go up |
 
 ## Translations
 
@@ -117,6 +118,7 @@ The words as they appear on the site (`site/i18n/<lang>.js`). Names, moves, stat
 | 50 | question (picture → code, Nerd mode) | Which code is this? | Який це код? | Jaki to kod? | Hvilken kode er det? | Koks tai kodas? | Mis kood see on? |
 | 50 | question (code → creature) | Which one is it? | Хто з них? | Który to? | Hvem er det? | Kuris iš jų? | Kes see on? |
 | 50 | question (Hardcore) | What is this status called? | Як називається цей статус? | Jak nazywa się ten status? | Hvad hedder denne status? | Kaip vadinasi ši būsena? | Mis on selle oleku nimi? |
+| 51 | back to top | Back to top | Нагору | Do góry | Til toppen | Į viršų | Üles |
 
 ### Class names
 

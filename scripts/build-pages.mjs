@@ -75,12 +75,13 @@ function creaturePage(lang, tx, d) {
     <link rel="stylesheet" href="/css/detail.css" />
   </head>
   <body>
-    <div class="wrap">
+    <div class="wrap" id="top">
       <header>
         <div class="brand"><div class="brand-name"><a class="home-link" href="/">Responsters</a></div></div>
         <div class="tools">${langMenu}</div>
       </header>
       <main class="page" data-testid="card-page">
+        <a class="page-back" href="/#collection">← ${esc(ui.back)}</a>
         <article class="sheet" style="--cls: ${CLS[cls(c)].c}">
           <div class="in page-grid">
             <h1 class="sr">${esc(title)}</h1>
@@ -104,7 +105,10 @@ function creaturePage(lang, tx, d) {
               }
             </aside>
           </div>
-          <a class="back" href="/#collection">← ${esc(ui.back)}</a>
+          <div class="page-bottom">
+            <a class="back" href="/#collection">← ${esc(ui.back)}</a>
+            <a class="back" href="#top">↑ ${esc(ui.top)}</a>
+          </div>
         </article>
       </main>
       <footer>${esc(ui.foot)}</footer>

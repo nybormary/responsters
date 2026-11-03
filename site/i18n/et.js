@@ -38,6 +38,7 @@ export default {
     lang: 'Keel',
     close: 'Sulge',
     back: 'Tagasi kogusse',
+    top: 'Üles',
     howto: 'Kuidas kasutada',
     howtoSteps: [
       '<b>Kogu.</b> Puuduta kaarti, et olendiga tutvuda: mida kood tähendab, kus sellega kokku puutud ja mida testida.',

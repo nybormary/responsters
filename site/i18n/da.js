@@ -38,6 +38,7 @@ export default {
     lang: 'Sprog',
     close: 'Luk',
     back: 'Tilbage til samlingen',
+    top: 'Til toppen',
     howto: 'Sådan bruger du det',
     howtoSteps: [
       '<b>Samling.</b> Tryk på et kort for at møde væsenet: hvad koden betyder, hvor du møder den, og hvad du skal teste.',

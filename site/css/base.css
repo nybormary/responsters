@@ -254,6 +254,13 @@ summary.langbtn::-webkit-details-marker {
   text-underline-offset: 3px;
   cursor: pointer;
 }
+.to-top {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px; /* touch target */
+  margin-top: 32px;
+  font-size: 15px;
+}
 .howto {
   margin-top: 20px;
   background: var(--surface);

@@ -49,6 +49,7 @@ export function renderChrome() {
   $('howto-note').textContent = t().howtoNote;
   $('howto-close').textContent = t().howtoClose;
   $('traps-lede').textContent = t().traps;
+  $('to-top').textContent = '↑ ' + t().top;
   $('foot').textContent = t().foot;
 }
 

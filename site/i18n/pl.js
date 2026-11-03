@@ -38,6 +38,7 @@ export default {
     lang: 'Język',
     close: 'Zamknij',
     back: 'Wróć do kolekcji',
+    top: 'Do góry',
     howto: 'Jak korzystać',
     howtoSteps: [
       '<b>Kolekcja.</b> Dotknij karty, żeby poznać stworka: co znaczy kod, gdzie go spotkasz i co testować.',

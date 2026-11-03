@@ -113,3 +113,36 @@ a.back {
   display: inline-block;
   text-decoration: none;
 }
+/* Way back at the top of the card page: on a phone the sheet looks like a modal, so the exit must be visible
+   without scrolling (the back link at the bottom stays for those who read to the end). */
+.page-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+}
+.page-back:hover {
+  text-decoration: underline;
+}
+.page .page-back + .sheet {
+  margin-top: 8px;
+}
+/* The links at the bottom (back to the collection, back to top, RSP-154) are for phones, where the page is long;
+   on desktop the page fits and the top link is enough. */
+.page-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 22px 0;
+}
+.page-bottom .back {
+  margin: 0;
+}
+@media (min-width: 900px) {
+  .page-bottom {
+    display: none;
+  }
+}

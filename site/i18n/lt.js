@@ -38,6 +38,7 @@ export default {
     lang: 'Kalba',
     close: 'Uždaryti',
     back: 'Atgal į kolekciją',
+    top: 'Į viršų',
     howto: 'Kaip naudotis',
     howtoSteps: [
       '<b>Kolekcija.</b> Paliesk kortelę ir susipažink su padaru: ką reiškia kodas, kur su juo susiduri ir ką testuoti.',
