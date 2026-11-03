@@ -2,24 +2,11 @@
 import { CLS } from '../data/classes.js';
 import { BY } from '../data/cards.js';
 import { CONF } from '../data/traps.js';
-import { TOOLS, REF, MORE } from '../data/links.js';
 import { state, t, tx } from './state.js';
 import { $, cls } from './util.js';
 import { cardBody } from './card.js';
+import { cardLinks } from './render.js';
 
-// Links for one code, in order: RFC section → MDN page → extra links → general tools.
-function cardLinks(c) {
-  const r = REF[c],
-    d = BY[c],
-    out = [];
-  if (r) out.push({ label: `RFC ${r[0]} §${r[1]}`, u: `https://www.rfc-editor.org/rfc/rfc${r[0]}#section-${r[1]}` });
-  out.push({ label: `MDN: ${c} ${d.s}`, u: `https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/${c}` });
-  const more = (MORE[c] || []).map((x) => ({ label: x.label[state.lang] || x.label.en, u: x.u }));
-  return out.concat(
-    more,
-    TOOLS.map((x, i) => ({ label: tx().tools[i], u: x.u })),
-  );
-}
 export function openCard(c) {
   const d = BY[c],
     L = tx().cards[c];
@@ -34,7 +21,7 @@ export function openCard(c) {
   $('m-h-qa').textContent = t().qa;
   $('m-qa').innerHTML = (tx().qa[c] || []).map((x) => `<li>${x.replace(/</g, '&lt;')}</li>`).join('');
   $('m-h-links').textContent = t().links;
-  $('m-links').innerHTML = cardLinks(c)
+  $('m-links').innerHTML = cardLinks(c, state.lang, tx().tools)
     .map((x) => `<li><a href="${x.u}" target="_blank" rel="noopener">${x.label} ↗</a></li>`)
     .join('');
   const cf = CONF[c] || [];
