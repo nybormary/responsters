@@ -106,9 +106,30 @@
   cursor: pointer;
 }
 
-/* The same sheet as a page of its own (RSP-90, /<lang>/http/<code>/): in the flow, not a modal. */
+/* The same sheet as a page of its own (RSP-90, /<lang>/http/<code>/): in the flow, not a modal.
+   Phones: one column, as in the card detail. Desktop: the whole width in three columns, card | text | links,
+   so the text keeps a comfortable line length and nothing needs scrolling past a narrow column. */
 .page .sheet {
   margin: 24px auto 0;
+}
+@media (min-width: 900px) {
+  .page .sheet {
+    max-width: none;
+  }
+  .page-grid {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr) minmax(220px, 280px);
+    gap: 0 40px;
+    align-items: start;
+  }
+  .page-card {
+    position: sticky;
+    top: 24px;
+  }
+  .page-main > h2:first-child,
+  .page-side > h2:first-child {
+    margin-top: 6px;
+  }
 }
 .page .card.cf-static {
   margin-top: 4px;

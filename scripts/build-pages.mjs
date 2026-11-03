@@ -75,23 +75,27 @@ function creaturePage(lang, tx, d) {
       </header>
       <main class="page" data-testid="creature-page">
         <article class="sheet" style="--cls: ${CLS[cls(c)].c}">
-          <div class="in">
+          <div class="in page-grid">
             <h1 class="sr">${esc(title)}</h1>
-            <div class="card cf-static">${cardBody(d, L.line, '/')}</div>
-            <h2>${esc(ui.mean)}</h2>
-            <p>${esc(L.mean)}</p>
-            <h2>${esc(ui.when)}</h2>
-            <p>${esc(L.when)}</p>
-            <h2>${esc(ui.qa)}</h2>
-            <ul class="qa">${qa}</ul>
-            <h2>${esc(ui.links)}</h2>
-            <ul class="links">${links}</ul>${
-              conf
-                ? `
-            <h2>${esc(ui.conf)}</h2>
-            <div class="mini">${conf}</div>`
-                : ''
-            }
+            <div class="page-card"><div class="card cf-static">${cardBody(d, L.line, '/')}</div></div>
+            <div class="page-main">
+              <h2>${esc(ui.mean)}</h2>
+              <p>${esc(L.mean)}</p>
+              <h2>${esc(ui.when)}</h2>
+              <p>${esc(L.when)}</p>
+              <h2>${esc(ui.qa)}</h2>
+              <ul class="qa">${qa}</ul>
+            </div>
+            <aside class="page-side">
+              <h2>${esc(ui.links)}</h2>
+              <ul class="links">${links}</ul>${
+                conf
+                  ? `
+              <h2>${esc(ui.conf)}</h2>
+              <div class="mini">${conf}</div>`
+                  : ''
+              }
+            </aside>
           </div>
           <a class="back" href="/#collection">← ${esc(ui.back)}</a>
         </article>
