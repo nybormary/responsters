@@ -16,6 +16,7 @@ import en from '../site/i18n/en.js';
 import { fill } from '../site/i18n/fill.js';
 import { cardBody, cardLinks, esc } from '../site/js/render.js';
 import { cls } from '../site/js/util.js';
+import { GLOBE, CHEVRON, CHECK } from '../site/js/icons.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const SITE = path.join(ROOT, 'site');
@@ -35,11 +36,16 @@ function creaturePage(lang, tx, d) {
   const alternates = LANGS.map((l) => `<link rel="alternate" hreflang="${l}" href="${ORIGIN}${creatureUrl(l, c)}" />`)
     .concat(`<link rel="alternate" hreflang="x-default" href="${ORIGIN}${creatureUrl('en', c)}" />`)
     .join('\n    ');
-  const langLinks = LANGS.map((l) =>
-    l === lang
-      ? `<a href="${creatureUrl(l, c)}" lang="${l}" aria-current="page">${LANG_NAMES[l][0]}</a>`
-      : `<a href="${creatureUrl(l, c)}" lang="${l}" hreflang="${l}">${LANG_NAMES[l][0]}</a>`,
-  ).join('');
+  // Language menu: the same pill and list as in the app (RSP-109), built on <details> so it works without JS.
+  const [name, code] = LANG_NAMES[lang];
+  const langMenu = `<details class="langmenu">
+          <summary class="langbtn" aria-label="${esc(`${ui.lang}: ${name}`)}">${GLOBE}<span class="lang-code" aria-hidden="true">${code}</span><span class="lang-name" lang="${lang}">${name}</span>${CHEVRON}</summary>
+          <ul class="langlist" aria-label="${esc(ui.lang)}">${LANGS.map((l) =>
+            l === lang
+              ? `<li><a href="${creatureUrl(l, c)}" lang="${l}" aria-current="page"><span>${LANG_NAMES[l][0]}</span><span class="lang-check">${CHECK}</span></a></li>`
+              : `<li><a href="${creatureUrl(l, c)}" lang="${l}" hreflang="${l}"><span>${LANG_NAMES[l][0]}</span><span class="lang-check"></span></a></li>`,
+          ).join('')}</ul>
+        </details>`;
   const qa = (tx.qa[c] || []).map((x) => `<li>${esc(x)}</li>`).join('');
   const links = cardLinks(c, lang, tx.tools)
     .map((x) => `<li><a href="${x.u}" target="_blank" rel="noopener">${esc(x.label)} ↗</a></li>`)
@@ -71,7 +77,7 @@ function creaturePage(lang, tx, d) {
     <div class="wrap">
       <header>
         <div class="brand"><div class="brand-name"><a class="home-link" href="/">Responsters</a></div></div>
-        <nav class="page-langs" aria-label="${esc(ui.lang)}">${langLinks}</nav>
+        <div class="tools">${langMenu}</div>
       </header>
       <main class="page" data-testid="creature-page">
         <article class="sheet" style="--cls: ${CLS[cls(c)].c}">

@@ -145,7 +145,8 @@ header {
   color: var(--muted);
   transition: transform 0.15s;
 }
-.langbtn[aria-expanded='true'] .lang-chev {
+.langbtn[aria-expanded='true'] .lang-chev,
+.langmenu[open] .lang-chev {
   transform: rotate(180deg);
 }
 .langbtn .lang-name {
@@ -180,7 +181,8 @@ header {
   border-radius: 14px;
   box-shadow: 0 8px 24px rgb(0 0 0 / 0.14);
 }
-.langlist button {
+.langlist button,
+.langlist a {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -196,15 +198,31 @@ header {
   text-align: left;
   cursor: pointer;
 }
-.langlist button:hover {
+.langlist button:hover,
+.langlist a:hover {
   background: var(--soft);
 }
-.langlist button:focus-visible {
+.langlist button:focus-visible,
+.langlist a:focus-visible {
   outline-offset: -3px;
 }
-.langlist button[aria-checked='true'] {
+.langlist button[aria-checked='true'],
+.langlist a[aria-current='page'] {
   font-weight: 800;
   color: var(--accent);
+}
+/* Card pages (RSP-90): the menu is a <details>, so the pill is its <summary> and the items are links. */
+summary.langbtn {
+  list-style: none;
+}
+summary.langbtn::-webkit-details-marker {
+  display: none;
+}
+.langlist a {
+  text-decoration: none;
+}
+.tools > .langmenu:only-child {
+  margin-left: auto;
 }
 .langlist .lang-check {
   display: inline-flex;
@@ -296,21 +314,6 @@ button:focus-visible,
 }
 section.view {
   padding-top: 24px;
-}
-/* Generated pages (RSP-90): links to the same page in the other languages, no JS. */
-.page-langs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  font-size: 14px;
-}
-.page-langs a {
-  color: var(--muted);
-}
-.page-langs a[aria-current='page'] {
-  color: var(--ink);
-  font-weight: 700;
-  text-decoration: none;
 }
 footer {
   margin-top: 40px;
