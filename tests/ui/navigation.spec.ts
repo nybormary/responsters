@@ -1,6 +1,6 @@
 // Navigation: the three tabs and the URL hash (RSP-114); the app lives at /<lang>/http/ (RSP-138).
 // testomat.io folder "Navigation", suite "Tabs and the URL (RSP-114)".
-import { test, expect, TAG, VIEWS, LANGS, type App, type View } from '../fixtures';
+import { test, expect, TAG, TID, VIEWS, LANGS, type App, type View } from '../fixtures';
 
 /** `view` is the one open: its tab is selected, its section shown, the other two hidden. */
 async function expectView(app: App, view: View) {
@@ -109,3 +109,17 @@ test(
     });
   },
 );
+
+// ── RSP-138 AC13: one <main> landmark (testomat.io case to add) ───────────────────────────────
+
+test('The app has one main landmark with the tabs and the views ', { tag: [TAG.navigation] }, async ({ app, page }) => {
+  await app.open();
+  await expect(app.main).toHaveCount(1);
+  for (const v of VIEWS) {
+    await expect(app.main.getByTestId(TID.tab(v))).toHaveCount(1);
+    await expect(app.main.getByTestId(TID.view(v))).toHaveCount(1);
+  }
+  // <header> and <footer> are landmarks (banner, contentinfo) only outside <main>: so they are outside it.
+  await expect(page.getByRole('banner')).toHaveCount(1);
+  await expect(page.getByRole('contentinfo')).toHaveCount(1);
+});

@@ -61,6 +61,11 @@ export class App {
     return this.page.locator('html');
   }
 
+  /** The page's <main> landmark (RSP-138): holds the tabs and the three views. */
+  get main(): Locator {
+    return this.page.getByRole('main');
+  }
+
   tab(view: View): Locator {
     return this.page.getByTestId(TID.tab(view));
   }
