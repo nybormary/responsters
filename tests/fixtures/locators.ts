@@ -15,7 +15,9 @@ export const TID = {
   howto: 'howto',
   howtoClose: 'howto-close',
 
-  // Card page /<lang>/http/<code>/ (RSP-90)
+  // Cards (glossary: card, card picture) and the card page /<lang>/http/<code>/ (RSP-90)
+  card: (code: number) => `card-${code}`,
+  cardArt: 'card-art',
   cardPage: 'card-page',
 
   // Tabs and views

@@ -9,6 +9,6 @@ export const TAG = {
   language: '@language',
   progress: '@progress',
   navigation: '@navigation', // tabs and the URL (RSP-114)
-  cardPages: '@card-pages', // /<lang>/http/<code>/ (RSP-90); testomat.io folder to add
+  a11y: '@a11y', // automated accessibility checks: landmarks, alt text, later axe (RSP-138, RSP-162)
   smoke: '@smoke', // the short production check in the release flow
 } as const;

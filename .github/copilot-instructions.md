@@ -32,7 +32,7 @@ Adapted from Robert C. Martin's [ub-mode](https://github.com/unclebob/ub-mode) (
 Source of truth for test cases: testomat.io (project `responsters`). Automate only cases that exist there.
 
 ### Structure
-- `tests/ui/*.spec.ts`: specs, one file per area (collection, practice, traps, language, progress).
+- `tests/ui/*.spec.ts`: specs, one file per area (collection, practice, traps, language, progress, navigation, a11y).
 - `tests/fixtures/`: everything a spec needs. Specs import only from `../fixtures`:
   `import { test, expect, TAG } from '../fixtures';`
 - `tests/fixtures/locators.ts`: all `data-testid` values (`TID`). The only place selectors are written.
@@ -42,7 +42,7 @@ Source of truth for test cases: testomat.io (project `responsters`). Automate on
 1. **No locators in specs.** No CSS/XPath strings, no `getByTestId('…')`, no `getByText('literal')` in a spec. A spec calls page objects from fixtures; page objects use `TID`. A missing test id → add it to the markup with a `data-testid` attribute and to `TID`.
 2. **No copied texts.** Expected texts come from the `texts` fixture (`texts.ui.tabs[1]`), never typed into the test. Status codes and creature names come from `site/data/`.
 3. **Independent tests.** No shared state between tests, no order, no `test.describe.serial`. Each test sets its starting state with `test.use({ seed: { … } })` and opens the page itself. Never rely on what an earlier test clicked.
-4. **Tags.** Every test has exactly one group tag from `TAG` (`@collection`, `@practice`, `@traps`, `@language`, `@progress`, `@navigation`) and optionally `TAG.smoke`, passed as `{ tag: [...] }`. Screen sizes are not tags either: they come at random (rule 8); browsers are projects in `playwright.config.ts`.
+4. **Tags.** Every test has exactly one group tag from `TAG` (`@collection`, `@practice`, `@traps`, `@language`, `@progress`, `@navigation`, `@a11y`) and optionally `TAG.smoke`, passed as `{ tag: [...] }`. Screen sizes are not tags either: they come at random (rule 8); browsers are projects in `playwright.config.ts`.
 5. **testomat.io id.** The test title is the testomat.io case title followed by its id: `'Language from the browser is picked on first visit @T1a2b3c4d'`.
 6. **Waiting.** Use web-first assertions (`await expect(locator).toBeVisible()`). No `waitForTimeout`, no fixed sleeps.
 7. **One behaviour per test.** Steps follow the testomat.io case; use `test.step('…')` for its steps.

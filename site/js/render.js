@@ -13,7 +13,7 @@ export const esc = (s) =>
 // Only phrasing elements (span, img) so the markup is valid inside a <button>.
 // alt: text for the art; '' (decoration) in the Collection grid, where the card's own text says it all.
 export function cardBody(d, line, alt = '') {
-  return `<span class="cf-art"><img src="${art(d.c)}" alt="${esc(alt)}" loading="lazy"></span>
+  return `<span class="cf-art"><img src="${art(d.c)}" alt="${esc(alt)}" loading="lazy" data-testid="card-art"></span>
   <span class="cf-status"><span class="cf-badgerow"><span class="cf-code" style="background:${CLS[cls(d.c)].c}">${d.c}</span><span class="cf-sym">${clsSym(cls(d.c))}</span></span><span class="cf-name">${d.s}</span></span>
   <span class="cf-panel"><span class="cf-creature">${d.n}</span><span class="cf-move">${d.m}</span><span class="cf-line">${line}</span></span>`;
 }

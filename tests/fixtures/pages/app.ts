@@ -61,9 +61,27 @@ export class App {
     return this.page.locator('html');
   }
 
-  /** The page's <main> landmark (RSP-138): holds the tabs and the three views. */
+  /** Landmarks (RSP-138). Found by role on purpose: the role is what is checked. */
   get main(): Locator {
     return this.page.getByRole('main');
+  }
+  get banner(): Locator {
+    return this.page.getByRole('banner');
+  }
+  get contentinfo(): Locator {
+    return this.page.getByRole('contentinfo');
+  }
+  /** A tab or a view inside <main>. */
+  tabInMain(view: View): Locator {
+    return this.main.getByTestId(TID.tab(view));
+  }
+  viewInMain(view: View): Locator {
+    return this.main.getByTestId(TID.view(view));
+  }
+
+  /** The picture of one card in the Collection grid. */
+  collectionArt(code: number): Locator {
+    return this.page.getByTestId(TID.card(code)).getByTestId(TID.cardArt);
   }
 
   tab(view: View): Locator {
