@@ -96,7 +96,7 @@ function creaturePage(lang, tx, d) {
         <article class="sheet" style="--cls: ${CLS[cls(c)].c}">
           <div class="in page-grid">
             <h1 class="sr">${esc(title)}</h1>
-            <div class="page-card"><div class="card cf-static">${cardBody(d, L.line)}</div></div>
+            <div class="page-card"><div class="card cf-static">${cardBody(d, L.line, L.art)}</div></div>
             <div class="page-main">
               <h2>${esc(ui.mean)}</h2>
               <p>${esc(L.mean)}</p>

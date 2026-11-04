@@ -58,122 +58,147 @@ export default {
     4: { name: 'Gatekeepers', rule: 'Client error: fix the request.' },
     5: { name: 'Server beasts', rule: 'Server error: not your fault.' },
   },
-  // Cards: what it means, where you meet it, and the card line in the creature's voice (max ~55 characters).
+  // Cards: what it means, where you meet it, the card line in the creature's voice (max ~55 characters)
+  // and art: what the picture shows (alt text, without the name or the code).
   cards: {
     102: {
       mean: 'The server accepted the request and is still working on it. No response yet.',
       when: 'Long WebDAV operations; rare in everyday APIs.',
       line: "I'm on it! No result yet.",
+      // art: what the picture shows, one sentence, without the name or the code (RSP-138: alt text on card pages; RSP-19: Practice).
+      art: 'A tiny round critter peeks over the rim of a cracked egg; the shell is painted like a loading spinner and spins.',
     },
     200: {
       mean: 'The request succeeded and the response carries the result.',
       when: 'GET of a page or list, a POST that did not create a resource.',
       line: 'What can I say? All good!',
+      art: 'A calm, shaggy little yak with small horns stands on the grass and nods with a contented smile.',
     },
     201: {
       mean: 'A new resource was created. Its address is in the Location header.',
       when: 'POST /orders created an order.',
       line: 'Brand new! Built it myself!',
+      art: 'A beaver in a yellow hard hat stands proudly by a sparkling brand-new log cabin, next to a signpost that says “NEW”.',
     },
     204: {
       mean: 'Success, but there is no response body.',
       when: 'DELETE or PUT with nothing to return.',
       line: 'Did it! Just nothing to show.',
+      art: 'A pale, fluffy moth with glassy wings sits full and happy on a board next to an empty coat hanger and a few crumbs of wool; a green tick floats above.',
     },
     301: {
       mean: 'The resource moved for good. Clients and search engines should update the URL.',
       when: 'Moving to a new domain, or http to https.',
       line: 'Migrated for good. Use the new address.',
+      art: 'A hermit crab sits in a shiny new shell; behind it the old, empty shell has a wooden sign with an arrow pointing away.',
     },
     302: {
       mean: 'The resource is temporarily elsewhere. The original URL stays correct.',
       when: 'Redirect after login, a temporary promo page.',
       line: 'Away for now. Back soon.',
+      art: 'A round bat hangs upside down and winks next to a sign that says “BRB”; a curved arrow points to a tiny cave marked “HOME”.',
     },
     304: {
       mean: 'Nothing changed since you cached it. Use your copy.',
       when: 'The browser sent If-None-Match or If-Modified-Since.',
       line: "Haven't changed. Check your cache.",
+      art: 'A green chameleon on a branch holds up an instant photo of itself in the same pose, with an equals sign between them.',
     },
     400: {
       mean: 'The request is malformed: syntax, format or invalid data.',
       when: 'Broken JSON, a missing required field, invalid query parameters, a request body cut off halfway.',
       line: "What nonsense! I can't understand a word.",
+      art: 'A goblin in round glasses squints in confusion at a crumpled note full of scribbles, with question marks above his head.',
     },
     401: {
       mean: 'Authentication is required: credentials are missing or invalid.',
       when: 'No Authorization header, an expired token.',
       line: 'Who are you? Do I know you?',
+      art: 'A round, fluffy owl stands behind a small gate, one wing raised like a guard, and asks “Who?”.',
     },
     403: {
       mean: 'Your identity is known, but you lack permission.',
       when: 'A regular user opens the admin panel.',
       line: "Oh, it's you? Not letting you in!",
+      art: 'A plump pelican with crossed wings stands firmly in front of a brick wall and a door locked with a chain and a padlock.',
     },
     404: {
       mean: 'Nothing exists at this address.',
       when: 'A typo in the URL, a deleted product.',
       line: 'Nobody here. Look elsewhere yourself.',
+      art: 'A ferret drawn only as a faint dotted outline stands beside an empty burrow; only its curious eyes are clear.',
     },
     405: {
       mean: 'The server knows this address but doesn’t accept this method.',
       when: 'A DELETE sent to an endpoint that only accepts GET.',
       line: 'Not like that! Change your methods.',
+      art: "A badger in a doorman's cap stands at a door with a sign “GET POST” and raises a paw to stop an envelope marked “DELETE”, crossed out in red.",
     },
     408: {
       mean: 'The client took too long to send the request, so the server stopped waiting.',
       when: 'A slow connection, a stalled upload.',
       line: 'Overslept. The server gave up waiting.',
+      art: 'A sloth hangs asleep from a branch, mid-yawn; below it lie an unfinished letter and a pen, next to an hourglass.',
     },
     409: {
       mean: 'The request conflicts with the current state of the resource.',
       when: 'An email that’s already taken at sign-up, a version conflict while editing.',
       line: 'I was here first! Back off!',
+      art: 'Two stubborn goats on a narrow plank lock horns with a big spark between them, frowning; neither can pass.',
     },
     413: {
       mean: 'The request body is larger than the allowed limit.',
       when: 'Uploading a file that’s too big.',
       line: "Too much! It won't fit!",
+      art: 'A small mouse pushes a huge wheel of cheese into its mouse hole; the cheese is stuck and the wall cracks under a sign “MAX 10 MB”.',
     },
     415: {
       mean: 'The server doesn’t support this data format.',
       when: 'XML instead of JSON, a wrong Content-Type.',
       line: 'Ew! Not eating that! Check what I like.',
+      art: 'A koala in a bib turns away and pushes a plate with an “XML” box off the table, hugging a eucalyptus leaf marked “JSON”.',
     },
     418: {
       mean: 'A joke code from RFC 2324: a teapot refuses to brew coffee.',
       when: 'Easter eggs in APIs. A nice bonus in an interview.',
       line: "I'm a teapot. No coffee.",
+      art: 'A round hippo shaped like a porcelain teapot lets off steam; next to it a coffee cup and coffee beans stand by a “no coffee” sign.',
     },
     422: {
       mean: 'The request was read, but the data fails validation.',
       when: 'A string instead of a number, a negative age, “email: banana”.',
       line: 'Read it. But age -5? Seriously?',
+      art: 'A woodpecker in round glasses sits on a neat form: “name: Ann” has a green tick, “age: -5” and “email: banana” have red crosses.',
     },
     429: {
       mean: 'Too many requests in a short time; a rate limit kicked in.',
       when: 'A script without pauses, a Retry-After header in the response.',
       line: 'Stop! Too many. Let me breathe.',
+      art: 'A sweating hamster sprints in a wheel while a stream of envelopes flies out; a clamp under the wheel brakes it.',
     },
     500: {
       mean: 'Something unexpected broke on the server.',
       when: 'An unhandled exception in backend code.',
       line: "It's not you, it's me.",
+      art: 'A small unicorn panics, mane frazzled and sweat flying, trailing a long tail of tangled code.',
     },
     502: {
       mean: 'A gateway or proxy passed the request on, but got an invalid response from the server.',
       when: 'Nginx in front of a backend that crashed.',
       line: 'It came broken. I just pass it on!',
+      art: 'A parrot on a cable between two servers squawks a garbled speech bubble; the server behind it smokes under a red warning light.',
     },
     503: {
       mean: 'The server is temporarily unavailable: overload or maintenance.',
       when: 'Planned maintenance, an overloaded server.',
       line: 'Closed for repairs. Come back later.',
+      art: 'A big bear in a nightcap sleeps in a cosy cave beside a “Closed for maintenance” sign and a wrench.',
     },
     504: {
       mean: 'A gateway or proxy passed the request on, but never got a response from the server.',
       when: 'A slow backend behind nginx or a CDN.',
       line: 'I waited and waited. No reply from the server.',
+      art: 'An alligator leans on an open garden gate with a stopwatch, waiting; a long empty path leads to a tiny server far away.',
     },
   },
   // "What to test": short test cases, steps → expected result (RSP-11).
