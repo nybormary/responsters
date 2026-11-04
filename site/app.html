@@ -1,27 +1,27 @@
 <!doctype html>
-<html lang="uk">
+<!-- App template (RSP-138): not served as is. scripts/build-pages.mjs writes it as /<lang>/http/ per language,
+     with lang, title, description, canonical and hreflang filled in. Paths are absolute for that reason. -->
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta
-      name="description"
-      content="Responsters: original creatures for memorizing HTTP status codes, with a practice deck and drills for codes that are easy to confuse."
-    />
+    <meta name="description" content="Original creatures for memorizing HTTP status codes." />
     <title>Responsters</title>
-    <link rel="icon" href="favicon.png" type="image/png" />
-    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <!-- build: canonical and hreflang -->
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700;800&family=Atkinson+Hyperlegible+Next:wght@400;700&family=JetBrains+Mono:wght@600;800&display=swap"
     />
-    <link rel="stylesheet" href="css/base.css" />
-    <link rel="stylesheet" href="css/card.css" />
-    <link rel="stylesheet" href="css/collection.css" />
-    <link rel="stylesheet" href="css/practice.css" />
-    <link rel="stylesheet" href="css/traps.css" />
-    <link rel="stylesheet" href="css/detail.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/card.css" />
+    <link rel="stylesheet" href="/css/collection.css" />
+    <link rel="stylesheet" href="/css/practice.css" />
+    <link rel="stylesheet" href="/css/traps.css" />
+    <link rel="stylesheet" href="/css/detail.css" />
   </head>
   <body>
     <div class="wrap" id="top">
@@ -95,6 +95,6 @@
       <footer id="foot"></footer>
     </div>
 
-    <script type="module" src="js/app.js"></script>
+    <script type="module" src="/js/app.js"></script>
   </body>
 </html>

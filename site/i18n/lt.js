@@ -5,6 +5,7 @@ export default {
   // Interface. Functions build texts that contain numbers or names.
   ui: {
     tag: 'Originalūs padarai HTTP būsenos kodams įsiminti. Kiekvienas kodas turi savo Responsterį, o kiekvienas jo judesys paaiškina, ką kodas reiškia.',
+    appTitle: 'Responsters: HTTP būsenos kodai kaip padarai',
     tabs: ['Kolekcija', 'Treniruotė', 'Spąstai'],
     all: 'Visi',
     mastered: (a, b) => `Išmokta ${a} iš ${b}`,

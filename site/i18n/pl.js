@@ -5,6 +5,7 @@ export default {
   // Interface. Functions build texts that contain numbers or names.
   ui: {
     tag: 'Oryginalne stworki do zapamiętywania kodów statusu HTTP. Każdy kod ma swojego Responstera, a każdy jego ruch wyjaśnia, co kod znaczy.',
+    appTitle: 'Responsters: kody statusu HTTP jako stworki',
     tabs: ['Kolekcja', 'Trening', 'Pułapki'],
     all: 'Wszystkie',
     mastered: (a, b) => `${a} z ${b} opanowanych`,

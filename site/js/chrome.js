@@ -28,8 +28,18 @@ function renderModes() {
   ).join('');
 }
 
-export function renderChrome() {
+// Page head in the current language (RSP-138): the build writes it for /<lang>/http/; after a language change
+// in the app it has to follow, so a bookmark or a share made then carries the right title and address.
+function renderHead() {
   document.documentElement.lang = state.lang;
+  document.title = t().appTitle;
+  document.querySelector('meta[name="description"]')?.setAttribute('content', t().tag);
+  const canon = document.querySelector('link[rel="canonical"]'); // always names production: swap only the language
+  canon?.setAttribute('href', canon.href.replace(/\/[a-z]{2}\/http\//, `/${state.lang}/http/`));
+}
+
+export function renderChrome() {
+  renderHead();
   $('tagline').textContent = t().tag;
   renderLangMenu();
   ['collection', 'practice', 'traps'].forEach((v, i) => {

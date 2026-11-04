@@ -14,10 +14,20 @@ export class App {
     page.on('pageerror', (e) => this.errors.push(e));
   }
 
-  /** Open the site, optionally on a view (#practice, #traps) or any raw hash ('nonsense'). */
+  /**
+   * Open the app by its language-less URL /http/, optionally on a view (#practice, #traps) or any raw hash
+   * ('nonsense'). The site sends the browser on to /<lang>/http/ (RSP-138): Netlify by a redirect, a local
+   * run by a chooser page. Either way the saved language, then the browser language decides.
+   */
   async open(view?: View | string) {
-    await this.page.goto(view ? `/#${view}` : '/');
+    await this.page.goto(view ? `/http/#${view}` : '/http/');
+    await expect(this.page).toHaveURL(/\/[a-z]{2}\/http\/(#.*)?$/);
     await this.ready();
+  }
+
+  /** The language in the URL path: '/pl/http/#practice' → 'pl'. */
+  pathLang(): string {
+    return new URL(this.page.url()).pathname.split('/')[1];
   }
 
   /**

@@ -92,8 +92,12 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
 
   // Writes the seed into localStorage before any site script runs, once per tab:
   // a reload inside the test keeps what the site saved (e.g. a language picked in the test).
-  page: async ({ page, seed, randomLang, lang }, use) => {
+  // A saved language is also set as the nf_lang cookie, as the site's switcher does (RSP-138): on Netlify the
+  // language-less URLs (/http/) are redirected by that cookie before any page script runs.
+  page: async ({ page, seed, randomLang, lang, baseURL }, use) => {
     const stored: Seed = randomLang ? { ...seed, lang } : seed; // the random language is saved like a menu choice
+    if (stored.lang && baseURL)
+      await page.context().addCookies([{ name: 'nf_lang', value: stored.lang, url: baseURL }]);
     await page.addInitScript((s: Record<string, unknown>) => {
       try {
         if (sessionStorage.getItem('pw.seeded')) return;

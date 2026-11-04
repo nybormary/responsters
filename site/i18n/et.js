@@ -5,6 +5,7 @@ export default {
   // Interface. Functions build texts that contain numbers or names.
   ui: {
     tag: 'Originaalsed olendid HTTP olekukoodide meeldejätmiseks. Igal koodil on oma Responster ja iga liigutus selgitab, mida kood tähendab.',
+    appTitle: 'Responsters: HTTP olekukoodid olenditena',
     tabs: ['Kogu', 'Harjutamine', 'Lõksud'],
     all: 'Kõik',
     mastered: (a, b) => `${a}/${b} selgeks õpitud`,

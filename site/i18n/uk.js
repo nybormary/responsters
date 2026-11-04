@@ -5,6 +5,7 @@ export default {
   // Interface. Functions build texts that contain numbers or names.
   ui: {
     tag: 'Оригінальні істоти для запам’ятовування HTTP-статусів. У кожного коду свій Responster, а кожен рух пояснює, що код означає.',
+    appTitle: 'Responsters: HTTP-статуси як істоти',
     tabs: ['Колекція', 'Тренування', 'Пастки'],
     all: 'Усі',
     mastered: (a, b) => `Засвоєно ${a} з ${b}`,

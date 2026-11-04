@@ -1,4 +1,4 @@
-// Navigation: the three tabs and the URL hash (RSP-114).
+// Navigation: the three tabs and the URL hash (RSP-114); the app lives at /<lang>/http/ (RSP-138).
 // testomat.io folder "Navigation", suite "Tabs and the URL (RSP-114)".
 import { test, expect, TAG, VIEWS, LANGS, type App, type View } from '../fixtures';
 
@@ -97,7 +97,7 @@ test(
 
     await langMenu.pick(other);
     await expect(app.html).toHaveAttribute('lang', other);
-    await expect(page).toHaveURL(/#practice$/);
+    await expect(page).toHaveURL(new RegExp(`/${other}/http/#practice$`)); // RSP-138: the path follows the language
     await expectView(app, 'practice');
 
     await test.step('no history entry for the language switch: Back goes to Collection', async () => {
@@ -105,6 +105,7 @@ test(
       expect(app.hash()).toBe('');
       await expectView(app, 'collection');
       await expect(app.html).toHaveAttribute('lang', other); // the language stays picked
+      expect(app.pathLang()).toBe(other); // and so does the path
     });
   },
 );

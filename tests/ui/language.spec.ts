@@ -5,9 +5,10 @@ import { test, expect, TAG, LANGS, textsFor, langName, type Lang, type App } fro
 // These tests check how the language is chosen, so no random language is saved before they start.
 test.use({ randomLang: false });
 
-/** The page is shown in `lang`: <html lang> and the tab names come from that language's file. */
+/** The page is shown in `lang`: the URL path /<lang>/http/ (RSP-138), <html lang> and the tab names from that language's file. */
 async function expectLanguage(app: App, lang: Lang) {
   const tabs = (await textsFor(lang)).ui.tabs;
+  await expect(app.page).toHaveURL(new RegExp(`/${lang}/http/`));
   await expect(app.html).toHaveAttribute('lang', lang);
   await expect(app.tab('collection')).toHaveText(tabs[0]);
   await expect(app.tab('practice')).toHaveText(tabs[1]);

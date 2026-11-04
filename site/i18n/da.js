@@ -5,6 +5,7 @@ export default {
   // Interface. Functions build texts that contain numbers or names.
   ui: {
     tag: 'Originale væsner, der hjælper dig med at huske HTTP-statuskoder. Hver kode har sin egen Responster, og hvert træk forklarer, hvad koden betyder.',
+    appTitle: 'Responsters: HTTP-statuskoder som væsner',
     tabs: ['Samling', 'Træning', 'Fælder'],
     all: 'Alle',
     mastered: (a, b) => `${a} af ${b} lært`,
