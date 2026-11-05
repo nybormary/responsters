@@ -26,9 +26,25 @@ The backlog in Jira is private, so here is where the process shows in public:
   - 401/403, 301/302, 200/201/204;
   - 408/503, 408/504, 500/502, 502/504, 429/503;
   - 400/404, 400/415, 400/422, 404/405, 409/422.
-- **Six languages:** Ukrainian, English, Polish, Danish, Lithuanian and Estonian. The first language comes from the browser.
+- **Six languages:** Ukrainian, English, Polish, Danish, Lithuanian and Estonian. Every language has its own URLs (see [URLs](#urls)). On a link without a language, the site uses your saved choice, then the browser language, then English.
+- **A page per creature:** `/<lang>/http/<code>/`, e.g. `/en/http/404/`, so one creature can be found in search and shared.
 
-The site is static, with no build step: plain HTML, CSS and JavaScript modules that Netlify serves as they are.
+The site is plain HTML, CSS and JavaScript modules, no framework. A small build script copies them and writes the pages per language and creature.
+
+## URLs
+
+The language is always the first part of the path, then the rubric. URLs end with a slash.
+
+| URL | What it is |
+|---|---|
+| `/<lang>/http/` | The HTTP rubric: Collection, Practice, Traps (`#collection`, `#practice`, `#traps`) |
+| `/<lang>/http/<code>/` | One creature, e.g. `/uk/http/401/` |
+| `/`, `/http/`, `/http/<code>/` | No language: sends you to your language with the same hash. Use these in shared links and QR codes. |
+| `/#collection`, `/#practice`, `/#traps` | Old links: open `/<lang>/http/` with the same hash |
+
+`<lang>` is one of `uk`, `en`, `pl`, `da`, `lt`, `et`. Later rubrics follow the same pattern (`/<lang>/git/…`).
+
+**How a link without a language is resolved:** on Netlify, `_redirects` (written by the build) sends a 302 by the cookie `nf_lang` or by the browser's first language. If neither matches, a small chooser page reads the whole browser language list, then falls back to English. The same chooser pages do the job locally, where there are no redirects. A language saved before the cookie existed (localStorage only) still wins: the redirect target carries `?via=lang`, and the page follows the saved choice.
 
 ## How to use it
 
@@ -41,14 +57,14 @@ The site is static, with no build step: plain HTML, CSS and JavaScript modules t
 
    Codes you get wrong come back more often. After two correct answers in a row, a code gets a ✓ in the Collection.
 3. **Check the traps.** Open **Traps** once the basics feel easy. Each trap is a pair of codes that people mix up, with a short rule and real-life scenarios to sort.
-4. **Switch the language** with the language button at the top (🌐).
+4. **Switch the language** with the language button at the top (🌐). The address changes to the new language, e.g. `/pl/http/`.
 
-Your progress is saved in your browser only. There's no account and nothing is sent anywhere, so a different browser or device starts fresh.
+Your progress is saved in your browser only (localStorage). There's no account, so a different browser or device starts fresh. The language you pick is also saved in a cookie (`nf_lang`), so a link without a language opens in it. Your progress is never sent anywhere.
 
 ## Roadmap
 
 - **Home page and About:** what the site is and who made it; after that the site takes the name Mnemozoo everywhere.
-- **A URL per language, a page per creature and per trap:** so a single creature or an "X vs Y" trap can be found in search and shared.
+- **A page per trap:** so an "X vs Y" trap can be found in search and shared.
 - **Accessibility pass:** WCAG 2.2 AA checks for the whole site.
 - **Static checks:** linting and type checks in CI next to the UI tests.
 - **Visitor feedback:** ideas and bug reports through GitHub Issues.
@@ -62,29 +78,31 @@ Your progress is saved in your browser only. There's no account and nothing is s
 - **Flow:** one branch per ticket → pull request → CI runs the Playwright tests on the Netlify deploy preview and reports them to testomat.io → manual check on the preview → merge.
 - **Release:** tickets that go to production together share a Jira version. Before the merge a JQL query checks the version is complete; release notes go to Confluence; after the deploy a production test run decides whether the tickets move to Done.
 - **Docs:** the repository is the source of truth (README, `docs/`); Confluence pages mirror them for people.
+- **Secrets:** tokens and keys live only in CI secrets (GitHub Actions) or the connector settings, never in files. Anything that was ever committed stays public in the history. `master` is protected: changes only through a pull request with green UI tests.
 - **Daily updates:** a Slack channel gets an evening summary and a morning list of open questions, written by an AI helper.
 
 ### Deploys and Netlify credits
 
 The site runs on Netlify's free plan (300 credits a month). When the credits run out, the site is paused until the next month.
 
-- **Production deploys cost credits:** 15 per deploy. A deploy happens on every merge to `master` that changes `site/` or `netlify/`.
+- **Production deploys cost credits:** 15 per deploy. A deploy happens on every merge to `master` that changes `site/`, `netlify/`, `scripts/build-pages.mjs` or `netlify.toml`.
 - **Deploy previews are free.** Open pull requests and test on the preview as often as needed.
-- **Changes outside `site/` and `netlify/` don't deploy at all.** The `ignore` rule in `netlify.toml` skips the build.
+- **Other changes don't deploy at all.** The `ignore` rule in `netlify.toml` skips the build.
 
 **Rule:** check the credit balance before every merge to `master`, and aim for at most 10 production deploys a month. Batch several tickets into one merge when possible.
 
 ## Repository layout
 
 ```
-site/              static site, published by Netlify
-  index.html       markup only; loads css/ and js/app.js
+site/              the site's sources; the build turns them into dist/, which Netlify publishes
+  app.html         template of the HTTP rubric page; the build writes it as /<lang>/http/ per language
   css/             styles: base, card (the card frame), collection, practice, traps, detail (card modal)
   data/            shared data, the same in every language: codes, status and creature names, colours, trap answers, links
   i18n/            all texts, one file per language: uk, en, pl, da, lt, et; index.js lists the languages the site offers
   js/              logic, one file per part of the page
     app.js         entry point: clicks, keys, first render
     state.js       shared state (language, view, progress), loads the language file + t(), tx() and isKnown()
+    lang.js        which language a page is in, the saved choice (localStorage + cookie nf_lang), following it after a redirect
     store.js       progress in localStorage (prefix "httpon.")
     util.js        small helpers
     card.js        the card in the collection: a link to its card page
@@ -94,7 +112,8 @@ site/              static site, published by Netlify
   img/             creature art ({code}-art.jpg) and the old full card images ({code}.jpg)
   _headers         cache rules (images and icons: one week)
 scripts/
-  build-pages.mjs    the build: copies site/ to dist/ and writes a card page per creature and language
+  build-pages.mjs    the build: copies site/ to dist/ and writes the rubric page and a card page per creature
+                     for every language, the chooser pages for links without a language, _redirects and sitemap.xml
   check-locales.mjs  checks that every language file has the same keys as en.js
 tests/             Playwright UI tests (TypeScript); never deployed
   targets.ts       site addresses: local, deploy preview, production
@@ -110,7 +129,7 @@ playwright.config.ts  test targets; screen sizes are in tests/fixtures/screens.t
 netlify.toml       publish folder and the rule that skips builds without site changes
 ```
 
-**Run locally:** `npm run build`, then `npx serve dist` and open http://localhost:3000. The build copies `site/` to `dist/` and adds a page per creature and language, e.g. `/en/http/404/`. JavaScript modules don't load from `file://`, so opening `index.html` by double-click shows an empty page.
+**Run locally:** `npm run build`, then `npx serve dist` and open http://localhost:3000. The chooser page sends you to your language, e.g. `/en/http/`. Card pages are at `/<lang>/http/<code>/`. Always open `dist/`, not `site/`: `site/app.html` is only a template, and JavaScript modules don't load from `file://`.
 
 **Adding a language:** copy `site/i18n/en.js` to `site/i18n/<code>.js` and translate the texts (keep the keys, `{…}` functions and `<b>` tags). Run `node scripts/check-locales.mjs` until it passes, then add the language to `LOCALES` in `site/i18n/index.js`. A text that is still missing shows in English, with a warning in the browser console.
 

@@ -6,7 +6,7 @@ export default {
   ui: {
     tag: 'Original creatures for memorizing HTTP status codes. Every code has its own Responster, and every move explains what the code means.',
     // Title of the app page /<lang>/http/ (RSP-138): browser tab and search results.
-    appTitle: 'Responsters: HTTP status codes as creatures',
+    appTitle: 'Responsters: memorize, understand and test HTTP status codes',
     tabs: ['Collection', 'Practice', 'Traps'],
     all: 'All',
     mastered: (a, b) => `${a} of ${b} learned`,
