@@ -466,8 +466,7 @@ export default {
       'Mnemozoo træner netop genkendelsen. Siden er lavet med AI, men AI tænker ikke for dig.',
     ],
     aboutTitle: 'Om projektet',
-    aboutText:
-      'Et selvstændigt QA-projekt af Maryna Bortnyk: testdesign, Playwright-tests, releases med Jira og testomat.io. Koden er åben.',
+    aboutText: 'Et selvstændigt QA-projekt af Maryna Bortnyk.',
   },
   // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network-panelet', 'Firefox: Edit and Resend', 'Postman: send en forespørgsel'],

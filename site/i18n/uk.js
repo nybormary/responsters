@@ -469,8 +469,7 @@ export default {
       'Mnemozoo тренує саме впізнавання. Цей сайт зроблено з AI, але думати за тебе він не буде.',
     ],
     aboutTitle: 'Про проект',
-    aboutText:
-      'Незалежний QA-проект Maryna Bortnyk: тест-дизайн, автотести на Playwright, релізи з Jira і testomat.io. Код відкритий.',
+    aboutText: 'Незалежний QA-проект Maryna Bortnyk.',
   },
   // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: вкладка Network', 'Firefox: Edit and Resend', 'Postman: як надіслати запит'],

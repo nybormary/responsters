@@ -469,8 +469,7 @@ export default {
       'Mnemozoo trains exactly that: recognition. This site was made with AI, but AI won’t do the thinking for you.',
     ],
     aboutTitle: 'About the project',
-    aboutText:
-      'An independent QA project by Maryna Bortnyk: test design, Playwright tests, releases with Jira and testomat.io. The code is open.',
+    aboutText: 'An independent QA project by Maryna Bortnyk.',
   },
   // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: the Network panel', 'Firefox: Edit and Resend', 'Postman: send a request'],

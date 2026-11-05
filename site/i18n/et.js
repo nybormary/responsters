@@ -466,8 +466,7 @@ export default {
       'Mnemozoo treenib just äratundmist. See sait on tehtud AI-ga, kuid AI ei mõtle sinu eest.',
     ],
     aboutTitle: 'Projektist',
-    aboutText:
-      'Maryna Bortnyki sõltumatu QA-projekt: testide disain, Playwrighti testid, väljalasked Jira ja testomat.io-ga. Kood on avatud.',
+    aboutText: 'Maryna Bortnyki sõltumatu QA-projekt.',
   },
   // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network paneel', 'Firefox: Edit and Resend', 'Postman: päringu saatmine'],

@@ -469,8 +469,7 @@ export default {
       'Mnemozoo treniruoja būtent atpažinimą. Ši svetainė sukurta su AI, bet AI už tave negalvos.',
     ],
     aboutTitle: 'Apie projektą',
-    aboutText:
-      'Nepriklausomas Marynos Bortnyk QA projektas: testų projektavimas, Playwright testai, leidimai su Jira ir testomat.io. Kodas atviras.',
+    aboutText: 'Nepriklausomas Marynos Bortnyk QA projektas.',
   },
   // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network skydelis', 'Firefox: Edit and Resend', 'Postman: užklausos siuntimas'],

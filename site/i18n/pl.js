@@ -469,8 +469,7 @@ export default {
       'Mnemozoo ćwiczy właśnie rozpoznawanie. Ta strona powstała z pomocą AI, ale AI nie będzie myśleć za ciebie.',
     ],
     aboutTitle: 'O projekcie',
-    aboutText:
-      'Niezależny projekt QA Maryny Bortnyk: projektowanie testów, testy automatyczne w Playwright, wydania z Jira i testomat.io. Kod jest otwarty.',
+    aboutText: 'Niezależny projekt QA Maryny Bortnyk.',
   },
   // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: panel Network', 'Firefox: Edit and Resend', 'Postman: wysyłanie żądania'],

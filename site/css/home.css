@@ -274,7 +274,12 @@
 .home-links {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 4px 20px;
+}
+/* Bottom right corner of the about block (Maryna, 2026-11-05). Two classes: beats `.home p { margin: 0 }`. */
+.home-author .home-links {
+  margin-top: auto;
 }
 .home-links a {
   display: inline-flex;
