@@ -53,3 +53,26 @@ export function syncCookie() {
   const saved = store.get('lang', null);
   if (known(saved) && cookieLang() !== saved) setCookie(saved);
 }
+
+// Netlify marks the target of its language redirect with ?via=lang (dist/_redirects). A visitor who picked a
+// language before RSP-138 has it only in localStorage, not in the nf_lang cookie, so Netlify chose by the browser
+// language. On such a visit the saved choice wins (found by Copilot code review, PR #27). The marker is always
+// removed; a URL with a language and no marker is never overridden (a shared link stays as it is).
+// Returns true when the page is moving to another language.
+export function followSavedLanguage() {
+  const params = new URLSearchParams(location.search);
+  if (params.get('via') !== 'lang') return false;
+  params.delete('via');
+  const rest = params.toString();
+  const saved = store.get('lang', null);
+  const here = langFromPath();
+  const path =
+    known(saved) && here && saved !== here ? location.pathname.replace(`/${here}/`, `/${saved}/`) : location.pathname;
+  const url = path + (rest ? `?${rest}` : '') + location.hash;
+  if (path !== location.pathname) {
+    location.replace(url);
+    return true;
+  }
+  history.replaceState(history.state, '', url);
+  return false;
+}

@@ -1,7 +1,7 @@
 // The app's shared state. Every module reads and changes it through this one object,
 // e.g. state.lang = 'en'. Saved parts (lang, weight, streak, howtoSeen) come from localStorage.
 import { store } from './store.js';
-import { langFromPath, pickLang } from './lang.js';
+import { langFromPath, pickLang, followSavedLanguage } from './lang.js';
 import { LOCALES, LANG_NAMES } from '../i18n/index.js';
 import en from '../i18n/en.js';
 import { fill } from '../i18n/fill.js';
@@ -12,6 +12,9 @@ export const LANGS = Object.keys(LOCALES); // what the language menu lists (only
 // Which language to show (RSP-97, RSP-138): the language in the URL (/uk/http/) wins; on a language-less
 // path the saved choice, then the browser language (lang.js). Opening a URL never saves a choice:
 // only the switcher does.
+// After a Netlify language redirect a language saved before RSP-138 wins (lang.js); the page then reloads there.
+followSavedLanguage();
+
 export const state = {
   lang: langFromPath() || pickLang(), // a key of LOCALES: 'uk' | 'en' | …
   view: 'collection', // 'collection' | 'practice' | 'traps'
