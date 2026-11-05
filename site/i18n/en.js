@@ -428,6 +428,50 @@ export default {
       ],
     },
   },
+  // Site header and footer (RSP-156): the same on every page of the zoo. The footer note replaces ui.foot there.
+  site: {
+    nav: 'Site menu',
+    map: 'Map',
+    about: 'About the project',
+    foot: 'Mnemozoo · original characters and copy; status names from the IANA registry.',
+  },
+  // Home page /<lang>/ (RSP-156). Numbers come from site/data, so they stay true when cards or pairs are added.
+  home: {
+    title: 'Mnemozoo: tech zoo for your memory',
+    description:
+      'Original creatures for HTTP status codes: a card for every code, practice and traps with look-alike codes. Six languages.',
+    kicker: 'Tech zoo for your memory',
+    h1: 'Get the response before you even ask',
+    lead: 'Original creatures for the HTTP status codes you meet every day in the browser, logs and console. A card, practice, traps with look-alike codes. Six languages.',
+    mapTitle: 'Zoo map',
+    open: 'Open',
+    httpZone: 'Wild animals',
+    httpName: 'HTTP status codes',
+    httpText: (n, first, last) =>
+      `${n} creatures from ${first} to ${last}. A card for every code, practice in four modes, traps with codes people mix up.`,
+    enter: 'Meet the residents →',
+    gitZone: 'Pets',
+    gitDate: '1 December',
+    gitText: 'Git commands as everyday scenes. Opening with an advent calendar: a new card every day.',
+    pavilions: 'Themed pavilions',
+    pairsName: 'Look-alike species',
+    pairsText: 'Pairs people mix up: 401 and 403, 502 and 504. A rule and situations to sort them.',
+    pairsLink: (n) => `${n} pairs in the HTTP enclosure →`,
+    howTitle: 'How it works',
+    steps: [
+      ['Meet it', 'The creature’s card: what the code means, where you meet it and what to test.'],
+      ['Practise', 'From picture to code and back. Two right answers in a row and the code gets a ✓.'],
+      ['Don’t mix them up', 'Traps with look-alike codes: one rule and a few situations to sort.'],
+    ],
+    whyTitle: 'Why train your memory when there is AI?',
+    why: [
+      'It answers questions. But you can only ask about what you know exists. If a 429 flashes by in the logs and you know why exactly this status appears, you save a few questions and tokens 😉',
+      'Mnemozoo trains exactly that: recognition. This site was made with AI, but AI won’t do the thinking for you.',
+    ],
+    aboutTitle: 'About the project',
+    aboutText:
+      'An independent QA project by Maryna Bortnyk: test design, Playwright tests, releases with Jira and testomat.io. The code is open.',
+  },
   // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: the Network panel', 'Firefox: Edit and Resend', 'Postman: send a request'],
 };

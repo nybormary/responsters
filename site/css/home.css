@@ -1,0 +1,284 @@
+/* Home page /<lang>/ (RSP-156): hero, zoo map, "How it works", why and about. Mockup: Design canvas "Mnemozoo home". */
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  margin-top: 40px;
+  font-size: 17px;
+}
+.home h2 {
+  margin: 0;
+  font: 800 clamp(26px, 5vw, 34px) / 1.15 var(--display);
+}
+.home h3 {
+  margin: 0;
+}
+.home p {
+  margin: 0;
+}
+.home a {
+  color: var(--accent);
+}
+.home a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Hero */
+.home-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+}
+.home-hero-text {
+  flex: 1 1 420px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.home-kicker {
+  font: 700 13px var(--body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.home-hero h1 {
+  margin: 0;
+  font: 800 clamp(36px, 7vw, 56px) / 1.05 var(--display);
+  letter-spacing: -0.015em;
+  overflow-wrap: break-word;
+}
+.home-lead {
+  font-size: 19px;
+  max-width: 34em;
+}
+.home-hero-cards {
+  flex: 1 1 340px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* five cards: three in the first row, two centred in the second */
+  gap: 14px;
+}
+.hero-card {
+  flex: 0 0 calc((100% - 28px) / 3);
+  min-width: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.hero-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+}
+.hero-card figcaption {
+  font: 800 15px var(--mono);
+  text-align: center;
+}
+
+/* Zoo map */
+.home-map {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px clamp(16px, 4vw, 28px);
+  border: 1.5px solid var(--line);
+  border-radius: 24px;
+  background-color: var(--surface);
+  background-image: radial-gradient(var(--line) 1.2px, transparent 1.2px);
+  background-size: 18px 18px;
+  scroll-margin-top: 16px;
+}
+.enclosures,
+.pavilion-list,
+.home-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 16px;
+}
+@media (min-width: 760px) {
+  .enclosure-wide {
+    grid-column: span 2;
+  }
+}
+.enclosure > a,
+.enclosure-soon {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 20px 18px;
+  border: 2.5px solid var(--ink);
+  border-top: 12px solid var(--stripe);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+}
+.home .enclosure > a {
+  color: var(--ink);
+}
+.enclosure-soon {
+  border-style: dashed;
+  border-top-style: solid;
+}
+.enclosure-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 12px;
+}
+.enclosure-zone {
+  font: 700 13px var(--body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1.5px solid currentColor;
+  font-weight: 700;
+  font-size: 14px;
+}
+.badge-open {
+  color: var(--ink); /* text in ink: green text on white is below 4.5:1 */
+  border-color: var(--good);
+}
+.badge-open::before {
+  content: '● ';
+  color: var(--good);
+}
+.badge-date {
+  color: var(--muted);
+}
+.enclosure-name {
+  font: 800 28px/1.15 var(--display);
+}
+.enclosure-go {
+  margin-top: auto;
+  font-weight: 700;
+  color: var(--accent);
+}
+.pavilions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1.5px dashed var(--line);
+}
+.pavilions h3 {
+  font: 700 13px var(--body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.pavilion > a {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  text-decoration: none;
+}
+.home .pavilion > a {
+  color: var(--ink);
+}
+.pavilion-name {
+  font: 800 22px var(--display);
+}
+
+/* How it works */
+.home-how {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  scroll-margin-top: 16px;
+}
+.home-step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+/* Each step in a soft tint of the next status class colour, like the logo letters (1xx, 2xx, 3xx). color-mix keeps
+   it soft in both themes: the tint is mixed into the surface colour of the current theme. */
+.home-step:nth-child(1) {
+  --tint: var(--c1);
+}
+.home-step:nth-child(2) {
+  --tint: var(--c2);
+}
+.home-step:nth-child(3) {
+  --tint: var(--c3);
+}
+.home-step {
+  background: color-mix(in srgb, var(--tint, var(--surface)) 16%, var(--surface));
+  border-color: color-mix(in srgb, var(--tint, var(--line)) 45%, var(--surface));
+}
+.home-step h3 {
+  font: 800 22px var(--display);
+}
+
+/* Why and about */
+.home-about {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  padding: 32px clamp(16px, 4vw, 28px);
+  border: 1.5px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  scroll-margin-top: 16px;
+}
+.home-why {
+  flex: 1 1 380px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.home-author {
+  flex: 1 1 260px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.home-author h2 {
+  font: 700 13px var(--body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.home-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+.home-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 700;
+}

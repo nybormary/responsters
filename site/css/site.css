@@ -1,0 +1,72 @@
+/* Site header and footer (RSP-156): the same on every page of the zoo. Colour tokens and the language menu come
+   from base.css. The home page uses them first; RSP-155 puts them on the app and the card pages. */
+.site-header {
+  align-items: center;
+  gap: 8px 16px;
+}
+.site-logo {
+  font: 800 32px/1.1 var(--display);
+  letter-spacing: -0.01em;
+  color: var(--accent);
+  text-decoration: none;
+  border-radius: 8px;
+}
+/* Logo letters in the status class colours (--c1-ink … --c5-ink, base.css). */
+.site-logo .k1 {
+  color: var(--c1-ink);
+}
+.site-logo .k2 {
+  color: var(--c2-ink);
+}
+.site-logo .k3 {
+  color: var(--c3-ink);
+}
+.site-logo .k4 {
+  color: var(--c4-ink);
+}
+.site-logo .k5 {
+  color: var(--c5-ink);
+}
+/* The word for screen readers: hidden on screen, read once. */
+.logo-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.site-logo:focus-visible,
+.site-nav a:focus-visible,
+.site-footer a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 20px;
+}
+.site-nav > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px; /* touch target */
+  color: var(--accent);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-top: 56px;
+  padding-top: 20px;
+  border-top: 1.5px solid var(--line);
+  color: var(--muted);
+  font-size: 14px;
+}
+.site-footer a {
+  color: var(--muted);
+}

@@ -1,6 +1,9 @@
 // Polish: every text on the site in one file (RSP-85). Keys must match i18n/en.js; check with: node scripts/check-locales.mjs
 // Drafted by Claude, reviewed by Maryna (2026-10-13). Status names and creature names stay in English (they live in data/).
 // Terminology: "request" in What to test and Traps (testers' language); the formal term in card meanings.
+// Plural form for a number (RSP-156): 1 stworek, 2 stworki, 5 stworków.
+const plural = (n, forms) => forms[new Intl.PluralRules('pl').select(n)] ?? forms.other;
+
 export default {
   // Interface. Functions build texts that contain numbers or names.
   ui: {
@@ -424,6 +427,50 @@ export default {
         'Proxy czekało na mikroserwis płatności, który milczy.',
       ],
     },
+  },
+  // Nagłówek i stopka strony (RSP-156): takie same na każdej stronie zoo.
+  site: {
+    nav: 'Menu strony',
+    map: 'Mapa',
+    about: 'O projekcie',
+    foot: 'Mnemozoo · oryginalne postacie i teksty; nazwy statusów według rejestru IANA.',
+  },
+  // Strona główna /<lang>/ (RSP-156).
+  home: {
+    title: 'Mnemozoo: techniczne zoo dla twojej pamięci',
+    description:
+      'Oryginalne stworki dla kodów statusu HTTP: karta każdego kodu, trening i pułapki z podobnymi kodami. Sześć języków.',
+    kicker: 'Techniczne zoo dla twojej pamięci',
+    h1: 'Otrzymaj odpowiedź, zanim w ogóle zapytasz',
+    lead: 'Oryginalne stworki dla kodów statusu HTTP, które spotykasz codziennie w przeglądarce, logach i konsoli. Karta, trening, pułapki z podobnymi kodami. Sześć języków.',
+    mapTitle: 'Mapa zoo',
+    open: 'Otwarte',
+    httpZone: 'Dzikie zwierzęta',
+    httpName: 'Kody statusu HTTP',
+    httpText: (n, first, last) =>
+      `${n} ${plural(n, { one: 'stworek', few: 'stworki', many: 'stworków', other: 'stworka' })} od ${first} do ${last}. Karta każdego kodu, trening w czterech trybach, pułapki z kodami, które się mylą.`,
+    enter: 'Poznaj mieszkańców →',
+    gitZone: 'Zwierzęta domowe',
+    gitDate: '1 grudnia',
+    gitText: 'Polecenia gita jako scenki z codzienności. Zaczynamy od kalendarza adwentowego: codziennie nowa karta.',
+    pavilions: 'Pawilony tematyczne',
+    pairsName: 'Podobne gatunki',
+    pairsText: 'Pary, które się mylą: 401 i 403, 502 i 504. Reguła i sytuacje do przyporządkowania.',
+    pairsLink: (n) => `${n} ${plural(n, { one: 'para', few: 'pary', many: 'par', other: 'pary' })} na wybiegu HTTP →`,
+    howTitle: 'Jak to działa',
+    steps: [
+      ['Poznaj', 'Karta stworka: co znaczy kod, gdzie go spotkasz i co testować.'],
+      ['Trenuj', 'Od rysunku do kodu i odwrotnie. Dwie poprawne odpowiedzi z rzędu i kod dostaje ✓.'],
+      ['Nie pomyl', 'Pułapki z podobnymi kodami: jedna reguła i kilka sytuacji do przyporządkowania.'],
+    ],
+    whyTitle: 'Po co ćwiczyć pamięć, skoro jest AI?',
+    why: [
+      'Odpowiada na pytania. Ale zapytać można tylko o to, o czym wiesz, że istnieje. Jeśli w logach mignie 429, a ty wiesz, dlaczego pojawia się właśnie ten status, oszczędzisz kilka pytań i tokenów 😉',
+      'Mnemozoo ćwiczy właśnie rozpoznawanie. Ta strona powstała z pomocą AI, ale AI nie będzie myśleć za ciebie.',
+    ],
+    aboutTitle: 'O projekcie',
+    aboutText:
+      'Niezależny projekt QA Maryny Bortnyk: projektowanie testów, testy automatyczne w Playwright, wydania z Jira i testomat.io. Kod jest otwarty.',
   },
   // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: panel Network', 'Firefox: Edit and Resend', 'Postman: wysyłanie żądania'],

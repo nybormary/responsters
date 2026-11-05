@@ -1,6 +1,9 @@
 // Ukrainian: every text on the site in one file (RSP-85). Keys must match i18n/en.js; check with: node scripts/check-locales.mjs
 // Codes, status names, creature names, moves, colours, links and trap answers live in data/ and are shared by all languages.
 // A key missing here falls back to English and logs a warning in the console.
+// Plural form for a number (RSP-156): 1 істота, 2 істоти, 5 істот.
+const plural = (n, forms) => forms[new Intl.PluralRules('uk').select(n)] ?? forms.other;
+
 export default {
   // Interface. Functions build texts that contain numbers or names.
   ui: {
@@ -424,6 +427,50 @@ export default {
         'Проксі чекав на мікросервіс оплати, а той мовчить.',
       ],
     },
+  },
+  // Шапка і футер сайту (RSP-156): однакові на всіх сторінках зоопарку.
+  site: {
+    nav: 'Меню сайту',
+    map: 'Мапа',
+    about: 'Про проект',
+    foot: 'Mnemozoo · оригінальні персонажі й тексти; назви статусів за реєстром IANA.',
+  },
+  // Головна сторінка /<lang>/ (RSP-156).
+  home: {
+    title: 'Mnemozoo: технічний зоопарк для твоєї пам’яті',
+    description:
+      'Оригінальні істоти для кодів стану HTTP: картка кожного коду, практика і пастки зі схожими кодами. Шість мов.',
+    kicker: 'Технічний зоопарк для твоєї пам’яті',
+    h1: 'Отримай відповідь ще до того, як запитаєш',
+    lead: 'Оригінальні істоти для кодів стану HTTP, які трапляються щодня в браузері, логах і консолі. Картка, практика, пастки зі схожими кодами. Шість мов.',
+    mapTitle: 'Мапа зоопарку',
+    open: 'Відкрито',
+    httpZone: 'Дикі звірі',
+    httpName: 'Коди стану HTTP',
+    httpText: (n, first, last) =>
+      `${n} ${plural(n, { one: 'істота', few: 'істоти', many: 'істот', other: 'істоти' })} від ${first} до ${last}. Картка кожного коду, практика у чотирьох режимах, пастки з кодами, які плутають.`,
+    enter: 'Познайомитися з мешканцями →',
+    gitZone: 'Домашні улюбленці',
+    gitDate: '1 грудня',
+    gitText: 'Команди git як побутові сценки. Відкриваємось адвент-календарем: щодня нова картка.',
+    pavilions: 'Тематичні павільйони',
+    pairsName: 'Схожі види',
+    pairsText: 'Пари, які плутають: 401 і 403, 502 і 504. Правило і ситуації, щоб розсортувати.',
+    pairsLink: (n) => `${n} ${plural(n, { one: 'пара', few: 'пари', many: 'пар', other: 'пари' })} у вольєрі HTTP →`,
+    howTitle: 'Як це працює',
+    steps: [
+      ['Познайомся', 'Картка істоти: що означає код, де ти його зустрінеш і що протестувати.'],
+      ['Потренуйся', 'Від картинки до коду і навпаки. Дві правильні відповіді поспіль, і код отримує ✓.'],
+      ['Не переплутай', 'Пастки зі схожими кодами: одне правило і кілька ситуацій, щоб розсортувати.'],
+    ],
+    whyTitle: 'Навіщо тренувати пам’ять, якщо є AI?',
+    why: [
+      'Він відповідає на питання. Але спитати можна лише про те, про що знаєш. Якщо в логах промайнуло 429 і ти розумієш, чому виникає саме цей статус, ти зекономиш кілька питань і токенів 😉',
+      'Mnemozoo тренує саме впізнавання. Цей сайт зроблено з AI, але думати за тебе він не буде.',
+    ],
+    aboutTitle: 'Про проект',
+    aboutText:
+      'Незалежний QA-проект Maryna Bortnyk: тест-дизайн, автотести на Playwright, релізи з Jira і testomat.io. Код відкритий.',
   },
   // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: вкладка Network', 'Firefox: Edit and Resend', 'Postman: як надіслати запит'],

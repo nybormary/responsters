@@ -425,6 +425,50 @@ export default {
       ],
     },
   },
+  // Sidehoved og sidefod (RSP-156): de samme på alle sider i zooen.
+  site: {
+    nav: 'Sidemenu',
+    map: 'Kort',
+    about: 'Om projektet',
+    foot: 'Mnemozoo · originale figurer og tekster; statusnavne fra IANA-registret.',
+  },
+  // Forside /<lang>/ (RSP-156).
+  home: {
+    title: 'Mnemozoo: teknisk zoo for din hukommelse',
+    description:
+      'Originale væsner til HTTP-statuskoder: et kort for hver kode, træning og fælder med koder, der ligner hinanden. Seks sprog.',
+    kicker: 'Teknisk zoo for din hukommelse',
+    h1: 'Få svaret, før du overhovedet spørger',
+    lead: 'Originale væsner til de HTTP-statuskoder, du møder hver dag i browseren, logfilerne og konsollen. Kort, træning, fælder med koder, der ligner hinanden. Seks sprog.',
+    mapTitle: 'Zookort',
+    open: 'Åbent',
+    httpZone: 'Vilde dyr',
+    httpName: 'HTTP-statuskoder',
+    httpText: (n, first, last) =>
+      `${n} ${n === 1 ? 'væsen' : 'væsner'} fra ${first} til ${last}. Et kort for hver kode, træning i fire tilstande, fælder med koder, som folk forveksler.`,
+    enter: 'Mød beboerne →',
+    gitZone: 'Kæledyr',
+    gitDate: '1. december',
+    gitText: 'Git-kommandoer som scener fra hverdagen. Vi åbner med en julekalender: et nyt kort hver dag.',
+    pavilions: 'Temapavilloner',
+    pairsName: 'Arter, der ligner hinanden',
+    pairsText: 'Par, som folk forveksler: 401 og 403, 502 og 504. En regel og situationer, der skal sorteres.',
+    pairsLink: (n) => `${n} par i HTTP-anlægget →`,
+    howTitle: 'Sådan virker det',
+    steps: [
+      ['Mød væsenet', 'Væsenets kort: hvad koden betyder, hvor du møder den, og hvad du skal teste.'],
+      ['Træn', 'Fra billede til kode og omvendt. To rigtige svar i træk, og koden får sit ✓.'],
+      ['Forveksl dem ikke', 'Fælder med koder, der ligner hinanden: én regel og nogle situationer, der skal sorteres.'],
+    ],
+    whyTitle: 'Hvorfor træne hukommelsen, når der er AI?',
+    why: [
+      'Den svarer på spørgsmål. Men du kan kun spørge om det, du ved findes. Hvis en 429 glimter forbi i logfilerne, og du ved, hvorfor netop denne status opstår, sparer du et par spørgsmål og tokens 😉',
+      'Mnemozoo træner netop genkendelsen. Siden er lavet med AI, men AI tænker ikke for dig.',
+    ],
+    aboutTitle: 'Om projektet',
+    aboutText:
+      'Et selvstændigt QA-projekt af Maryna Bortnyk: testdesign, Playwright-tests, releases med Jira og testomat.io. Koden er åben.',
+  },
   // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network-panelet', 'Firefox: Edit and Resend', 'Postman: send en forespørgsel'],
 };

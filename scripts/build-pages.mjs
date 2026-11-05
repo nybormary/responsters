@@ -1,5 +1,5 @@
-// Page build (RSP-90, URL scheme RSP-138): copies site/ to dist/ and writes, per language,
-// the app at /<lang>/http/ and one static page per creature at /<lang>/http/<code>/. Language-less URLs
+// Page build (RSP-90, URL scheme RSP-138, home page RSP-156): copies site/ to dist/ and writes, per language,
+// the home page at /<lang>/, the app at /<lang>/http/ and one static page per creature at /<lang>/http/<code>/. Language-less URLs
 // (/, /http/, /http/<code>/) go to the visitor's language: Netlify redirects them (dist/_redirects);
 // for local runs (npx serve dist knows no redirects) small chooser pages at those paths do the same.
 // Netlify runs the build before every deploy (netlify.toml) and publishes dist/.
@@ -13,13 +13,12 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { D, BY } from '../site/data/cards.js';
 import { CLS } from '../site/data/classes.js';
-import { CONF } from '../site/data/traps.js';
+import { CONF, PAIRS } from '../site/data/traps.js';
 import { LOCALES, LANG_NAMES } from '../site/i18n/index.js';
 import en from '../site/i18n/en.js';
 import { fill } from '../site/i18n/fill.js';
-import { cardBody, cardLinks, esc } from '../site/js/render.js';
-import { cls } from '../site/js/util.js';
-import { GLOBE, CHEVRON, CHECK } from '../site/js/icons.js';
+import { cardBody, cardLinks, esc, homeUrl, langMenu, siteHeader, siteFooter } from '../site/js/render.js';
+import { cls, art } from '../site/js/util.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const SITE = path.join(ROOT, 'site');
@@ -52,15 +51,7 @@ function creaturePage(lang, tx, d) {
   const ui = tx.ui;
   const title = `${c} ${d.s}: ${d.n}`;
   // Language menu: the same pill and list as in the app (RSP-109), built on <details> so it works without JS.
-  const [name, code] = LANG_NAMES[lang];
-  const langMenu = `<details class="langmenu">
-          <summary class="langbtn" aria-label="${esc(`${ui.lang}: ${name}`)}">${GLOBE}<span class="lang-code" aria-hidden="true">${code}</span><span class="lang-name" lang="${lang}">${name}</span>${CHEVRON}</summary>
-          <ul class="langlist" aria-label="${esc(ui.lang)}">${LANGS.map((l) =>
-            l === lang
-              ? `<li><a href="${creatureUrl(l, c)}" lang="${l}" aria-current="page"><span>${LANG_NAMES[l][0]}</span><span class="lang-check">${CHECK}</span></a></li>`
-              : `<li><a href="${creatureUrl(l, c)}" lang="${l}" hreflang="${l}"><span>${LANG_NAMES[l][0]}</span><span class="lang-check"></span></a></li>`,
-          ).join('')}</ul>
-        </details>`;
+  const menu = langMenu(lang, (l) => creatureUrl(l, c), LANG_NAMES, ui.lang);
   const qa = (tx.qa[c] || []).map((x) => `<li>${esc(x)}</li>`).join('');
   const links = cardLinks(c, lang, tx.tools)
     .map((x) => `<li><a href="${x.u}" target="_blank" rel="noopener">${esc(x.label)} ↗</a></li>`)
@@ -93,7 +84,7 @@ function creaturePage(lang, tx, d) {
     <div class="wrap" id="top">
       <header>
         <div class="brand"><div class="brand-name"><a class="home-link" href="${appUrl(lang)}">Responsters</a></div></div>
-        <div class="tools">${langMenu}</div>
+        <div class="tools">${menu}</div>
       </header>
       <main class="page" data-testid="card-page">
         <a class="page-back" href="${appUrl(lang)}#collection">← ${esc(ui.back)}</a>
@@ -127,6 +118,123 @@ function creaturePage(lang, tx, d) {
         </article>
       </main>
       <footer>${esc(ui.foot)}</footer>
+    </div>
+  </body>
+</html>
+`;
+}
+
+/** The creatures in the hero of the home page (RSP-156 AC2): one from each status class, so all five colours show. */
+const HERO = [102, 201, 304, 418, 502];
+
+/** Home page /<lang>/ (RSP-156): what the zoo is, what is open and who builds it. Texts: i18n `home`, `site`. */
+function homePage(lang, tx) {
+  const h = tx.home;
+  const app = appUrl(lang);
+  const hero = HERO.map(
+    (c) => `<figure class="hero-card">
+            <img src="${art(c)}" alt="${esc(tx.cards[c].art)}" width="640" height="573" />
+            <figcaption>${c}</figcaption>
+          </figure>`,
+  ).join('\n          ');
+  const steps = h.steps
+    .map(
+      ([title, text]) => `<li class="home-step">
+            <h3>${esc(title)}</h3>
+            <p>${esc(text)}</p>
+          </li>`,
+    )
+    .join('\n          ');
+  const why = h.why.map((p) => `<p>${esc(p)}</p>`).join('\n          ');
+
+  return `<!doctype html>
+<html lang="${lang}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>${esc(h.title)}</title>
+    <meta name="description" content="${esc(h.description)}" />
+    <link rel="canonical" href="${ORIGIN}${homeUrl(lang)}" />
+    ${alternates((l) => (l ? homeUrl(l) : '/'))}
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="${FONTS}" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="/css/home.css" />
+    <script type="module" src="/js/site.js"></script>
+  </head>
+  <body>
+    <div class="wrap">
+    ${siteHeader(lang, tx.site, langMenu(lang, homeUrl, LANG_NAMES, tx.ui.lang), true)}
+    <main class="home" data-testid="home-page">
+      <section class="home-hero" aria-labelledby="home-title">
+        <div class="home-hero-text">
+          <p class="home-kicker">${esc(h.kicker)}</p>
+          <h1 id="home-title">${esc(h.h1)}</h1>
+          <p class="home-lead">${esc(h.lead)}</p>
+        </div>
+        <div class="home-hero-cards" data-testid="home-hero">
+          ${hero}
+        </div>
+      </section>
+
+      <section id="map" class="home-map" aria-labelledby="map-title" data-testid="zoo-map">
+        <h2 id="map-title">${esc(h.mapTitle)}</h2>
+        <ul class="enclosures">
+          <li class="enclosure enclosure-wide" style="--stripe: var(--c5)">
+            <a href="${app}#collection" data-testid="enclosure-http">
+              <span class="enclosure-top"><span class="enclosure-zone">${esc(h.httpZone)}</span><span class="badge badge-open">${esc(h.open)}</span></span>
+              <span class="enclosure-name">${esc(h.httpName)}</span>
+              <span>${esc(h.httpText(D.length, D[0].c, D[D.length - 1].c))}</span>
+              <span class="enclosure-go">${esc(h.enter)}</span>
+            </a>
+          </li>
+          <li class="enclosure enclosure-soon" style="--stripe: var(--c4)" data-testid="enclosure-git">
+            <span class="enclosure-top"><span class="enclosure-zone">${esc(h.gitZone)}</span><span class="badge badge-date">${esc(h.gitDate)}</span></span>
+            <span class="enclosure-name">Git</span>
+            <span>${esc(h.gitText)}</span>
+          </li>
+        </ul>
+        <div class="pavilions">
+          <h3>${esc(h.pavilions)}</h3>
+          <ul class="pavilion-list">
+            <li class="pavilion">
+              <a href="${app}#traps" data-testid="pavilion-traps">
+                <span class="pavilion-name">${esc(h.pairsName)}</span>
+                <span>${esc(h.pairsText)}</span>
+                <span class="enclosure-go">${esc(h.pairsLink(PAIRS.length))}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="how" class="home-how" aria-labelledby="how-title">
+        <h2 id="how-title">${esc(h.howTitle)}</h2>
+        <ol class="home-steps">
+          ${steps}
+        </ol>
+      </section>
+
+      <section id="about" class="home-about" aria-labelledby="why-title">
+        <div class="home-why">
+          <h2 id="why-title">${esc(h.whyTitle)}</h2>
+          ${why}
+        </div>
+        <div class="home-author" data-testid="home-about">
+          <h2>${esc(h.aboutTitle)}</h2>
+          <p>${esc(h.aboutText)}</p>
+          <p class="home-links">
+            <a href="https://github.com/nybormary/responsters">GitHub</a>
+            <a href="https://www.linkedin.com/in/maryna-bortnyk/">LinkedIn</a>
+          </p>
+        </div>
+      </section>
+    </main>
+    ${siteFooter(tx.site)}
     </div>
   </body>
 </html>
@@ -237,6 +345,7 @@ async function build() {
   let pages = 0;
   for (const lang of LANGS) {
     const tx = lang === 'en' ? en : fill((await LOCALES[lang]()).default, en, '', lang);
+    await page(homeUrl(lang), homePage(lang, tx));
     await page(appUrl(lang), appPage(lang, tx));
     for (const d of D) {
       await page(creatureUrl(lang, d.c), creaturePage(lang, tx, d));
@@ -248,7 +357,7 @@ async function build() {
   await writeFile(path.join(DIST, '_redirects'), redirects());
   await writeFile(path.join(DIST, 'sitemap.xml'), sitemap(new Date().toISOString().slice(0, 10)));
   console.log(
-    `build-pages: ${LANGS.length} app pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards), chooser pages, _redirects → dist/`,
+    `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards), chooser pages, _redirects → dist/`,
   );
 }
 
