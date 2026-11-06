@@ -54,7 +54,7 @@ npm run typecheck && npm test
 
 - **When:** quick look while you work on one part of the site.
 - **Runs against:** your local copy.
-- **Tests / language / screen:** one group: `@collection`, `@practice`, `@traps`, `@language`, `@progress`, `@navigation`, `@a11y` (automated accessibility checks: landmarks, alt text); random.
+- **Tests / language / screen:** one group: `@collection`, `@practice`, `@traps`, `@language`, `@progress`, `@navigation`, `@home` (the home page and language-less `/`), `@a11y` (automated accessibility checks: landmarks, alt text); random.
 - **Needs:** nothing extra.
 
 ```sh
@@ -255,6 +255,7 @@ Some language behaviour can't be checked locally: Netlify's redirects by `nf_lan
 
   `<list>` is comma-separated, first language first, e.g. `be,pl`. Delete the folder after the check.
 - **Without a browser:** `curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' -H 'Accept-Language: <list>' <url>` shows the redirect Netlify chose. Add `-b 'nf_lang=<lang>'` for a saved choice.
+- **Where `/` should land:** on the home page `/<lang>/`; old app links like `/#traps` go on from there to `/<lang>/http/#traps`.
 - **A saved choice in localStorage:** values are JSON, so a language is a quoted string. In the DevTools console: `localStorage.setItem("httpon.lang", '"pl"')`. Without the inner quotes the site reads no saved language.
 
 ## Known pitfalls

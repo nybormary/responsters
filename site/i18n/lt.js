@@ -1,6 +1,9 @@
 // Lithuanian: every text on the site in one file (RSP-85). Keys must match i18n/en.js; check with: node scripts/check-locales.mjs
 // Drafted by Claude, native review on the site pending (RSP-89). Status names and creature names stay in English (they live in data/).
 // Terminology: "request" in What to test and Traps (testers' language); the formal term in card meanings.
+// Plural form for a number (RSP-156): 1 padaras, 2 padarai, 10 padarų.
+const plural = (n, forms) => forms[new Intl.PluralRules('lt').select(n)] ?? forms.other;
+
 export default {
   // Interface. Functions build texts that contain numbers or names.
   ui: {
@@ -424,6 +427,49 @@ export default {
         'Proxy laukė mokėjimų mikroserviso, kuris tyli.',
       ],
     },
+  },
+  // Svetainės antraštė ir poraštė (RSP-156): tokios pačios visuose zoologijos sodo puslapiuose.
+  site: {
+    nav: 'Svetainės meniu',
+    map: 'Žemėlapis',
+    about: 'Apie projektą',
+    foot: 'Mnemozoo · originalūs personažai ir tekstai; būsenų pavadinimai pagal IANA registrą.',
+  },
+  // Pagrindinis puslapis /<lang>/ (RSP-156).
+  home: {
+    title: 'Mnemozoo: technologijų zoologijos sodas tavo atminčiai',
+    description:
+      'Originalūs padarai HTTP būsenos kodams: kortelė kiekvienam kodui, treniruotė ir spąstai su panašiais kodais. Šešios kalbos.',
+    kicker: 'Technologijų zoologijos sodas tavo atminčiai',
+    h1: 'Gauk atsakymą dar prieš klausimą',
+    lead: 'Originalūs padarai HTTP būsenos kodams, kuriuos kasdien sutinki naršyklėje, žurnaluose ir konsolėje. Kortelė, treniruotė, spąstai su panašiais kodais. Šešios kalbos.',
+    mapTitle: 'Zoologijos sodo žemėlapis',
+    open: 'Atidaryta',
+    httpZone: 'Laukiniai gyvūnai',
+    httpName: 'HTTP būsenos kodai',
+    httpText: (n, first, last) =>
+      `${n} ${plural(n, { one: 'padaras', few: 'padarai', many: 'padaro', other: 'padarų' })} nuo ${first} iki ${last}. Kortelė kiekvienam kodui, treniruotė keturiais režimais, spąstai su kodais, kuriuos painioja.`,
+    enter: 'Susipažink su gyventojais →',
+    gitZone: 'Naminiai gyvūnai',
+    gitDate: 'gruodžio 1 d.',
+    gitText: 'Git komandos kaip buitinės scenos. Pradedame advento kalendoriumi: kasdien nauja kortelė.',
+    pavilions: 'Teminiai paviljonai',
+    pairsName: 'Panašios rūšys',
+    pairsText: 'Poros, kurias painioja: 401 ir 403, 502 ir 504. Taisyklė ir situacijos rūšiavimui.',
+    pairsLink: (n) => `${n} ${plural(n, { one: 'pora', few: 'poros', many: 'poros', other: 'porų' })} HTTP aptvare →`,
+    howTitle: 'Kaip tai veikia',
+    steps: [
+      ['Susipažink', 'Padaro kortelė: ką reiškia kodas, kur su juo susiduri ir ką testuoti.'],
+      ['Treniruokis', 'Nuo paveikslėlio prie kodo ir atvirkščiai. Du teisingi atsakymai iš eilės – ir kodas gauna ✓.'],
+      ['Nesupainiok', 'Spąstai su panašiais kodais: viena taisyklė ir kelios situacijos rūšiavimui.'],
+    ],
+    whyTitle: 'Kam treniruoti atmintį, jei yra AI?',
+    why: [
+      'Jis atsako į klausimus. Bet paklausti gali tik apie tai, apie ką žinai. Jei žurnale šmėstelėjo 429 ir tu žinai, kodėl atsiranda būtent ši būsena, sutaupysi kelis klausimus ir žetonus 😉',
+      'Mnemozoo treniruoja būtent atpažinimą. Ši svetainė sukurta su AI, bet AI už tave negalvos.',
+    ],
+    aboutTitle: 'Apie projektą',
+    aboutText: 'Nepriklausomas Marynos Bortnyk QA projektas.',
   },
   // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network skydelis', 'Firefox: Edit and Resend', 'Postman: užklausos siuntimas'],

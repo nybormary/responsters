@@ -4,6 +4,7 @@ import { CLS, clsSym } from '../data/classes.js';
 import { BY } from '../data/cards.js';
 import { TOOLS, REF, MORE } from '../data/links.js';
 import { cls, art } from './util.js';
+import { GLOBE, CHEVRON, CHECK } from './icons.js';
 
 // Text for HTML: & < > " become entities.
 export const esc = (s) =>
@@ -31,4 +32,62 @@ export function cardLinks(c, lang, toolLabels) {
     more,
     TOOLS.map((x, i) => ({ label: toolLabels[i], u: x.u })),
   );
+}
+
+// Site header and footer (RSP-156): the same on every page of the zoo. The home page uses them first;
+// RSP-155 puts them on the app and the card pages. Pure markup, like the card above.
+
+/**
+ * The Mnemozoo logo: each letter in the next status class colour, 1xx to 5xx and round again (M n e m o = 1–5).
+ * Screen readers get the word once; the coloured letters are hidden from them (some read single spans letter by letter).
+ */
+const LOGO = `<span class="logo-text">Mnemozoo</span><span aria-hidden="true">${[...'Mnemozoo']
+  .map((ch, i) => `<span class="k${(i % 5) + 1}">${ch}</span>`)
+  .join('')}</span>`;
+
+/** Path of the home page, e.g. homeUrl('uk') → '/uk/'. */
+export const homeUrl = (lang) => `/${lang}/`;
+
+/**
+ * Language menu (RSP-109): a pill with the current language opens a list of all languages, each in its own language.
+ * Built on <details> with plain links, so it works without JS; js/site.js saves the choice on a click.
+ * urlFor(l): the same page in language l. names: LANG_NAMES (i18n/index.js). label: ui.lang in the page language.
+ */
+export function langMenu(lang, urlFor, names, label) {
+  const [name, code] = names[lang];
+  const items = Object.keys(names)
+    .map((l) =>
+      l === lang
+        ? `<li><a href="${urlFor(l)}" lang="${l}" aria-current="page"><span>${names[l][0]}</span><span class="lang-check">${CHECK}</span></a></li>`
+        : `<li><a href="${urlFor(l)}" lang="${l}" hreflang="${l}"><span>${names[l][0]}</span><span class="lang-check"></span></a></li>`,
+    )
+    .join('');
+  return `<details class="langmenu">
+          <summary class="langbtn" aria-label="${esc(`${label}: ${name}`)}">${GLOBE}<span class="lang-code" aria-hidden="true">${code}</span><span class="lang-name" lang="${lang}">${name}</span>${CHEVRON}</summary>
+          <ul class="langlist" aria-label="${esc(label)}">${items}</ul>
+        </details>`;
+}
+
+/**
+ * Site header: Mnemozoo (home) · zoo map · about · language menu. A real banner landmark: it must stay outside <main>.
+ * site: i18n `site` block; onHome: the logo is the current page there.
+ */
+export function siteHeader(lang, site, menu, onHome = false) {
+  const home = homeUrl(lang);
+  return `<header class="site-header" data-testid="site-header">
+      <a class="site-logo" href="${home}"${onHome ? ' aria-current="page"' : ''}>${LOGO}</a>
+      <nav class="site-nav" aria-label="${esc(site.nav)}">
+        <a href="${home}#map" data-testid="nav-map">${esc(site.map)}</a>
+        <a href="${home}#about" data-testid="nav-about">${esc(site.about)}</a>
+        ${menu}
+      </nav>
+    </header>`;
+}
+
+/** Site footer: a real contentinfo landmark (outside <main>): the copy note and security.txt (RSP-137). */
+export function siteFooter(site) {
+  return `<footer class="site-footer" data-testid="site-footer">
+      <span>${esc(site.foot)}</span>
+      <a href="/.well-known/security.txt">security.txt</a>
+    </footer>`;
 }

@@ -15,6 +15,13 @@
   --c3: #78b6e2;
   --c4: #f2a15a;
   --c5: #ee776b;
+  /* Class colours as text (RSP-156, the Mnemozoo logo): the class colours are too light for text on the light
+     background (1.9–2.6:1), so light mode uses darker shades of the same hues (at least 4.5:1). */
+  --c1-ink: #6f58de;
+  --c2-ink: #2a7c58;
+  --c3-ink: #2471a7;
+  --c4-ink: #ab570d;
+  --c5-ink: #d12918;
   /* Fonts (decided 2026-10-30): Bitter for titles, a slab serif like a sign at a zoo enclosure; Atkinson Hyperlegible
      Next for text, made for low vision, and unlike the first Atkinson it covers the extended Latin of pl, lt, et, da.
      Both are loaded in index.html (the page build reuses that link). */
@@ -33,6 +40,11 @@
     --accent: #e7b8db;
     --good: #5dd29c;
     --bad: #f07f74;
+    --c1-ink: var(--c1);
+    --c2-ink: var(--c2);
+    --c3-ink: var(--c3);
+    --c4-ink: var(--c4);
+    --c5-ink: var(--c5);
     color-scheme: dark;
   }
 }
@@ -46,6 +58,11 @@
   --accent: #e7b8db;
   --good: #5dd29c;
   --bad: #f07f74;
+  --c1-ink: var(--c1);
+  --c2-ink: var(--c2);
+  --c3-ink: var(--c3);
+  --c4-ink: var(--c4);
+  --c5-ink: var(--c5);
   color-scheme: dark;
 }
 * {

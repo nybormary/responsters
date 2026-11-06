@@ -91,6 +91,21 @@ Added after the first screenshots; the numbers continue so the screenshots stay 
 | 51 | back to top | The link at the end of a long page that brings you back to the top (RSP-154). | app: button `#to-top` (a link would change the tab hash); card page: `a[href="#top"]`; `ui.top` | `to-top` | scroll up, go up |
 | 52 | card picture | The creature's picture on a card. On the card page its alt text is the picture description (`cards[c].art`): one sentence, without the name or the code (RSP-138); in the collection the alt is empty, the card's own text is next to it. | `.cf-art`, `art(c)` in `site/js/util.js`, `cards[c].art` | `card-art` | image, illustration; art (alone: the file) |
 
+## Site pages (Mnemozoo)
+
+The pages around the rubrics (RSP-156; the header and footer go on every page with RSP-155). The numbers continue.
+
+| # | Term | Definition | Name in code | Test id | Don't use |
+|---|------|------------|--------------|---------|-----------|
+| 53 | site header | The top of every Mnemozoo page: Mnemozoo (home) · zoo map · about · language menu. The banner landmark, outside `<main>`. | `siteHeader()` in `site/js/render.js`, `.site-header`, `.site-nav`; texts `site.*` | `site-header`; links `nav-map`, `nav-about` | navbar, top bar, menu |
+| 54 | site footer | The bottom of every Mnemozoo page: the copy note and security.txt. The contentinfo landmark, outside `<main>`. | `siteFooter()` in `site/js/render.js`, `.site-footer`; `site.foot` | `site-footer` | bottom bar |
+| 55 | home page | The page of the whole zoo, `/<lang>/`: hero, zoo map, how it works, why, about. Language-less `/` goes there. | `homePage()` in `scripts/build-pages.mjs`, `main.home`, `site/css/home.css`; texts `home.*` | `home-page` | landing page, start page, index |
+| 56 | hero | The top of the home page: h1, lead and five creatures, one per status class. | `.home-hero`, `.home-hero-cards`; `home.h1`, `home.lead` | `home-hero` | banner (the banner is the site header) |
+| 57 | zoo map | The home page section `#map` with the enclosures and the pavilions; the site header links to it. | `#map`, `.home-map`; `home.mapTitle`, `site.map` | `zoo-map` | catalogue, menu |
+| 58 | enclosure | One rubric on the zoo map: HTTP (open) or Git (opens 1 December). | `.enclosure`, `.enclosure-soon`; `home.httpZone`, `home.gitZone` | `enclosure-http`, `enclosure-git` | section, tile |
+| 59 | pavilion | A themed place on the zoo map that leads into a rubric; now "Look-alike species" → Traps. | `.pavilion-list`; `home.pavilions`, `home.pairsName` | `pavilion-traps` | exhibit, tile |
+| 60 | about | The home page section `#about`: who builds the project, GitHub and LinkedIn; the site header links to it. | `#about`, `.home-author`; `home.aboutTitle`, `site.about` | `home-about` | contacts, team |
+
 ## Translations
 
 The words as they appear on the site (`site/i18n/<lang>.js`). Names, moves, status names and official class names stay English in every language. "Nerd mode" and "Hardcore" are not translated on purpose.
@@ -120,6 +135,10 @@ The words as they appear on the site (`site/i18n/<lang>.js`). Names, moves, stat
 | 50 | question (code → creature) | Which one is it? | Хто з них? | Który to? | Hvem er det? | Kuris iš jų? | Kes see on? |
 | 50 | question (Hardcore) | What is this status called? | Як називається цей статус? | Jak nazywa się ten status? | Hvad hedder denne status? | Kaip vadinasi ši būsena? | Mis on selle oleku nimi? |
 | 51 | back to top | Back to top | Нагору | Do góry | Til toppen | Į viršų | Üles |
+| 57 | zoo map (section title) | Zoo map | Мапа зоопарку | Mapa zoo | Zookort | Zoologijos sodo žemėlapis | Loomaaia kaart |
+| 57 | zoo map (site header link) | Map | Мапа | Mapa | Kort | Žemėlapis | Kaart |
+| 59 | pavilion (zoo map group) | Themed pavilions | Тематичні павільйони | Pawilony tematyczne | Temapavilloner | Teminiai paviljonai | Teemapaviljonid |
+| 60 | about (section title, site header link) | About the project | Про проект | O projekcie | Om projektet | Apie projektą | Projektist |
 
 ### Class names
 

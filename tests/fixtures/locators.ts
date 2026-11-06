@@ -23,6 +23,20 @@ export const TID = {
   // Tabs and views
   tab: (view: View) => `tab-${view}`,
   view: (view: View) => `view-${view}`,
+
+  // Site header and footer (RSP-156; on every page with RSP-155)
+  siteHeader: 'site-header',
+  siteFooter: 'site-footer',
+  navMap: 'nav-map',
+  navAbout: 'nav-about',
+
+  // Home page /<lang>/ (RSP-156): glossary terms home page, hero, zoo map, enclosure, pavilion, about
+  homePage: 'home-page',
+  homeHero: 'home-hero',
+  zooMap: 'zoo-map',
+  enclosure: (rubric: 'http' | 'git') => `enclosure-${rubric}`,
+  pavilionTraps: 'pavilion-traps',
+  homeAbout: 'home-about',
 } as const;
 
 export type View = 'collection' | 'practice' | 'traps';

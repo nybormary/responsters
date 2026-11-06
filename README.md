@@ -1,8 +1,8 @@
-# Responsters
+# Mnemozoo
 
 Learn HTTP status codes with original creatures. Also a portfolio project: a small product run with a full QA process, from Jira ticket to production.
 
-**Live:** https://mnemozoo.com. Mnemozoo is the site's new name; this repository keeps the working name Responsters for now.
+**Live:** https://mnemozoo.com. The repository keeps the working name Responsters, which is also the name of the HTTP rubric (`/<lang>/http/`).
 
 Every status code has its own creature, a pun name and a "move" that explains what the code means: Nowherret vanishes (404), Spamster spins its wheel too fast (429), Cachameleon holds up a photo of itself (304).
 
@@ -10,6 +10,7 @@ Every status code has its own creature, a pun name and a "move" that explains wh
 
 The backlog in Jira is private, so here is where the process shows in public:
 
+- **The live site:** [mnemozoo.com](https://mnemozoo.com): the home page says what the zoo is; its zoo map leads to the HTTP rubric.
 - **Pull requests:** each one carries its ticket key, and its checks show the Playwright run against the Netlify deploy preview.
 - **Commit messages:** ticket key, then *Why* and *Checked* (`RSP-N: … / Why: … / Checked: …`).
 - **[docs/testing.md](docs/testing.md):** how tests are run and reported, from a local check to a production run after a release.
@@ -20,6 +21,7 @@ The backlog in Jira is private, so here is where the process shows in public:
 
 ## The site
 
+- **Home page:** `/<lang>/`: what the zoo is, the zoo map with what is open, how it works, and who builds it.
 - **Collection:** 23 creatures grouped by status class (1xx–5xx). Each card says what the code means, where you meet it, what to test, and which codes it's often confused with.
 - **Practice:** four modes: picture → code, code → creature, Nerd (text only) and Hardcore (code only). Codes you miss come back more often; two correct answers in a row mark a code as known.
 - **Traps:** drills for the pairs people mix up most:
@@ -37,10 +39,11 @@ The language is always the first part of the path, then the rubric. URLs end wit
 
 | URL | What it is |
 |---|---|
+| `/<lang>/` | The home page: zoo map (`#map`), about (`#about`) |
 | `/<lang>/http/` | The HTTP rubric: Collection, Practice, Traps (`#collection`, `#practice`, `#traps`) |
 | `/<lang>/http/<code>/` | One creature, e.g. `/uk/http/401/` |
 | `/`, `/http/`, `/http/<code>/` | No language: sends you to your language with the same hash. Use these in shared links and QR codes. |
-| `/#collection`, `/#practice`, `/#traps` | Old links: open `/<lang>/http/` with the same hash |
+| `/#collection`, `/#practice`, `/#traps` | Old links: land on the home page, which sends them on to `/<lang>/http/` with the same hash |
 
 `<lang>` is one of `uk`, `en`, `pl`, `da`, `lt`, `et`. Later rubrics follow the same pattern (`/<lang>/git/…`).
 
@@ -63,7 +66,7 @@ Your progress is saved in your browser only (localStorage). There's no account, 
 
 ## Roadmap
 
-- **Home page and About:** what the site is and who made it; after that the site takes the name Mnemozoo everywhere.
+- **Mnemozoo everywhere:** the site header and footer of the home page on every page.
 - **A page per trap:** so an "X vs Y" trap can be found in search and shared.
 - **Accessibility pass:** WCAG 2.2 AA checks for the whole site.
 - **Static checks:** linting and type checks in CI next to the UI tests.
@@ -96,7 +99,7 @@ The site runs on Netlify's free plan (300 credits a month). When the credits run
 ```
 site/              the site's sources; the build turns them into dist/, which Netlify publishes
   app.html         template of the HTTP rubric page; the build writes it as /<lang>/http/ per language
-  css/             styles: base, card (the card frame), collection, practice, traps, detail (card modal)
+  css/             styles: base, site (header and footer), home, card (the card frame), collection, practice, traps, detail (card page)
   data/            shared data, the same in every language: codes, status and creature names, colours, trap answers, links
   i18n/            all texts, one file per language: uk, en, pl, da, lt, et; index.js lists the languages the site offers
   js/              logic, one file per part of the page
@@ -106,13 +109,14 @@ site/              the site's sources; the build turns them into dist/, which Ne
     store.js       progress in localStorage (prefix "httpon.")
     util.js        small helpers
     card.js        the card in the collection: a link to its card page
-    render.js      card markup and card links, shared with the page build
+    render.js      card markup, card links, site header and footer, shared with the page build
+    site.js        script of the generated pages (home page): saves a language picked in the menu, sends old app links on
     modes.js       the Practice modes shown as cards (add a line per new mode)
     chrome.js · collection.js · practice.js · traps.js
   img/             creature art ({code}-art.jpg) and the old full card images ({code}.jpg)
   _headers         cache rules (images and icons: one week)
 scripts/
-  build-pages.mjs    the build: copies site/ to dist/ and writes the rubric page and a card page per creature
+  build-pages.mjs    the build: copies site/ to dist/ and writes the home page, the rubric page and a card page per creature
                      for every language, the chooser pages for links without a language, _redirects and sitemap.xml
   check-locales.mjs  checks that every language file has the same keys as en.js
 tests/             Playwright UI tests (TypeScript); never deployed
@@ -129,7 +133,7 @@ playwright.config.ts  test targets; screen sizes are in tests/fixtures/screens.t
 netlify.toml       publish folder and the rule that skips builds without site changes
 ```
 
-**Run locally:** `npm run build`, then `npx serve dist` and open http://localhost:3000. The chooser page sends you to your language, e.g. `/en/http/`. Card pages are at `/<lang>/http/<code>/`. Always open `dist/`, not `site/`: `site/app.html` is only a template, and JavaScript modules don't load from `file://`.
+**Run locally:** `npm run build`, then `npx serve dist` and open http://localhost:3000. The chooser page sends you to your language, e.g. `/en/`; the HTTP rubric is at `/en/http/`. Card pages are at `/<lang>/http/<code>/`. Always open `dist/`, not `site/`: `site/app.html` is only a template, and JavaScript modules don't load from `file://`.
 
 **Adding a language:** copy `site/i18n/en.js` to `site/i18n/<code>.js` and translate the texts (keep the keys, `{…}` functions and `<b>` tags). Run `node scripts/check-locales.mjs` until it passes, then add the language to `LOCALES` in `site/i18n/index.js`. A text that is still missing shows in English, with a warning in the browser console.
 

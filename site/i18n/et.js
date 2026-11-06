@@ -425,6 +425,49 @@ export default {
       ],
     },
   },
+  // Saidi päis ja jalus (RSP-156): samad loomaaia igal lehel.
+  site: {
+    nav: 'Saidi menüü',
+    map: 'Kaart',
+    about: 'Projektist',
+    foot: 'Mnemozoo · originaalsed tegelased ja tekstid; olekute nimed IANA registri järgi.',
+  },
+  // Avaleht /<lang>/ (RSP-156).
+  home: {
+    title: 'Mnemozoo: tehnikaloomaaed sinu mälule',
+    description:
+      'Originaalsed olendid HTTP olekukoodidele: kaart iga koodi kohta, harjutamine ja lõksud sarnaste koodidega. Kuus keelt.',
+    kicker: 'Tehnikaloomaaed sinu mälule',
+    h1: 'Saa vastus enne, kui küsidki',
+    lead: 'Originaalsed olendid HTTP olekukoodidele, mida kohtad iga päev brauseris, logides ja konsoolis. Kaart, harjutamine, lõksud sarnaste koodidega. Kuus keelt.',
+    mapTitle: 'Loomaaia kaart',
+    open: 'Avatud',
+    httpZone: 'Metsloomad',
+    httpName: 'HTTP olekukoodid',
+    httpText: (n, first, last) =>
+      `${n} ${n === 1 ? 'olend' : 'olendit'} vahemikus ${first}–${last}. Kaart iga koodi kohta, harjutamine neljas režiimis, lõksud koodidega, mida aetakse segi.`,
+    enter: 'Tutvu elanikega →',
+    gitZone: 'Lemmikloomad',
+    gitDate: '1. detsember',
+    gitText: 'Git-käsud igapäevaste stseenidena. Avame jõulukalendriga: iga päev uus kaart.',
+    pavilions: 'Teemapaviljonid',
+    pairsName: 'Sarnased liigid',
+    pairsText: 'Paarid, mida aetakse segi: 401 ja 403, 502 ja 504. Reegel ja olukorrad sorteerimiseks.',
+    pairsLink: (n) => `${n} ${n === 1 ? 'paar' : 'paari'} HTTP aedikus →`,
+    howTitle: 'Kuidas see töötab',
+    steps: [
+      ['Tutvu', 'Olendi kaart: mida kood tähendab, kus sellega kokku puutud ja mida testida.'],
+      ['Harjuta', 'Pildist koodini ja vastupidi. Kaks õiget vastust järjest ja kood saab ✓.'],
+      ['Ära aja segi', 'Lõksud sarnaste koodidega: üks reegel ja mõned olukorrad sorteerimiseks.'],
+    ],
+    whyTitle: 'Milleks treenida mälu, kui on AI?',
+    why: [
+      'See vastab küsimustele. Aga küsida saad ainult selle kohta, millest tead. Kui logides vilksatab 429 ja sa tead, miks just see olek tekib, säästad paar küsimust ja tokenit 😉',
+      'Mnemozoo treenib just äratundmist. See sait on tehtud AI-ga, kuid AI ei mõtle sinu eest.',
+    ],
+    aboutTitle: 'Projektist',
+    aboutText: 'Maryna Bortnyki sõltumatu QA-projekt.',
+  },
   // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network paneel', 'Firefox: Edit and Resend', 'Postman: päringu saatmine'],
 };
