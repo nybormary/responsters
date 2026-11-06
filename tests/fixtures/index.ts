@@ -26,6 +26,7 @@ import { LanguageMenu } from './pages/language-menu';
 import { CardPage } from './pages/card-page';
 import { HomePage } from './pages/home-page';
 import { SiteChrome } from './pages/site-chrome';
+import { NotFoundPage } from './pages/not-found-page';
 
 // What the site keeps in localStorage (site/js/store.js adds the prefix "httpon." to every key).
 export type Seed = {
@@ -50,6 +51,7 @@ type Fixtures = {
   cardPage: CardPage;
   homePage: HomePage;
   site: SiteChrome;
+  notFoundPage: NotFoundPage;
 };
 
 export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
@@ -136,6 +138,9 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   site: async ({ page }, use) => {
     await use(new SiteChrome(page));
   },
+  notFoundPage: async ({ page }, use) => {
+    await use(new NotFoundPage(page));
+  },
 });
 
 export { expect };
@@ -147,4 +152,5 @@ export type { LanguageMenu } from './pages/language-menu';
 export type { CardPage } from './pages/card-page';
 export { ORIGIN, type HomePage } from './pages/home-page';
 export type { SiteChrome } from './pages/site-chrome';
+export type { NotFoundPage } from './pages/not-found-page';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';

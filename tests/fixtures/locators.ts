@@ -39,6 +39,10 @@ export const TID = {
   enclosure: (rubric: 'http' | 'git') => `enclosure-${rubric}`,
   pavilionTraps: 'pavilion-traps',
   homeAbout: 'home-about',
+
+  // Not-found page /<lang>/404.html (RSP-148)
+  notFoundPage: 'not-found-page',
+  notFoundBack: 'not-found-back',
 } as const;
 
 export type View = 'collection' | 'practice' | 'traps';
