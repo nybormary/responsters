@@ -1,6 +1,6 @@
 // Home page /<lang>/ (RSP-156): the page per language, and language-less / going to it.
-// testomat.io folder "Home", suite "Home page (RSP-156)". Manual only: a395f99d (hero), cefb4fde (browser language).
-import { test, expect, TAG, LANGS, ORIGIN } from '../fixtures';
+// testomat.io folder "Home", suite "Home page (RSP-156)". Manual only: a395f99d (hero).
+import { test, expect, TAG, LANGS, ORIGIN, type Lang } from '../fixtures';
 
 // ── 38210569 ────────────────────────────────────────────────────────────────────────────────────
 
@@ -48,6 +48,31 @@ test.describe('language-less /', () => {
       },
     );
   });
+
+  // ── cefb4fde ──────────────────────────────────────────────────────────────────────────────────
+  // Nothing saved: the browser language decides; one the site doesn't have falls back to English.
+  // One test per browser language, so each runs in its own fresh context.
+  const BROWSER_CASES: { locale: string; expected: Lang }[] = [
+    { locale: 'pl-PL', expected: 'pl' },
+    { locale: 'fi-FI', expected: 'en' }, // not a site language
+  ];
+
+  for (const { locale, expected } of BROWSER_CASES) {
+    test.describe(`browser language ${locale}`, () => {
+      test.use({ locale });
+
+      test(
+        `Language-less / opens the home page in the browser language, English as fallback: ${locale} → ${expected} @Tcefb4fde`,
+        { tag: [TAG.home, TAG.language] },
+        async ({ homePage, page }) => {
+          await homePage.openLanguageless('/');
+          await expect(page).toHaveURL(new RegExp(`/${expected}/$`));
+          await expect(homePage.root).toBeVisible();
+          await expect(homePage.html).toHaveAttribute('lang', expected);
+        },
+      );
+    });
+  }
 
   // ── d27aaf82 ──────────────────────────────────────────────────────────────────────────────────
 
