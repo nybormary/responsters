@@ -24,6 +24,7 @@ import { SCREENS, SCREEN_NAMES, type ScreenName } from './screens';
 import { App } from './pages/app';
 import { LanguageMenu } from './pages/language-menu';
 import { CardPage } from './pages/card-page';
+import { HomePage } from './pages/home-page';
 
 // What the site keeps in localStorage (site/js/store.js adds the prefix "httpon." to every key).
 export type Seed = {
@@ -46,6 +47,7 @@ type Fixtures = {
   app: App;
   langMenu: LanguageMenu;
   cardPage: CardPage;
+  homePage: HomePage;
 };
 
 export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
@@ -126,6 +128,9 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   cardPage: async ({ page }, use) => {
     await use(new CardPage(page));
   },
+  homePage: async ({ page }, use) => {
+    await use(new HomePage(page));
+  },
 });
 
 export { expect };
@@ -135,4 +140,5 @@ export { SCREENS, SCREEN_NAMES, type ScreenName } from './screens';
 export { VIEWS, type App } from './pages/app';
 export type { LanguageMenu } from './pages/language-menu';
 export type { CardPage } from './pages/card-page';
+export { ORIGIN, type HomePage } from './pages/home-page';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';
