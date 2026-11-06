@@ -1,8 +1,38 @@
-/* Site header and footer (RSP-156): the same on every page of the zoo. Colour tokens and the language menu come
-   from base.css. The home page uses them first; RSP-155 puts them on the app and the card pages. */
+/* Site header and footer (RSP-156, RSP-155): the same on every page of the zoo. Colour tokens and the language menu come
+   from base.css. Home page, app and card pages. */
 .site-header {
   align-items: center;
   gap: 8px 16px;
+}
+/* Phones (RSP-155): logo and language menu share the first row, the menu's right edge on the content edge;
+   the nav links get the second row. Wider screens: logo · links · menu in one row. DOM order stays logo, nav, menu. */
+.site-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'logo menu'
+    'nav nav';
+}
+.site-logo {
+  grid-area: logo;
+  justify-self: start;
+}
+.site-nav {
+  grid-area: nav;
+}
+.site-header > .langmenu {
+  grid-area: menu;
+  justify-self: end;
+}
+@media (min-width: 600px) {
+  .site-header {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: 'logo nav menu';
+    column-gap: 20px;
+  }
+  .site-nav {
+    justify-self: end;
+  }
 }
 .site-logo {
   font: 800 32px/1.1 var(--display);

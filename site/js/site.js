@@ -1,5 +1,5 @@
-// Shared script of the pages built by scripts/build-pages.mjs (RSP-156): the home page now, the card pages
-// with RSP-155. The language menu there is a <details> with plain links (works without JS); a click on a
+// Shared script of the pages built by scripts/build-pages.mjs (RSP-156, RSP-155): the home page and the card pages.
+// The language menu there is a <details> with plain links (works without JS); a click on a
 // language also saves it, like the switcher in the app, so the next language-less visit uses it (RSP-138).
 import { saveLang, followSavedLanguage, langFromPath } from './lang.js';
 

@@ -36,7 +36,6 @@ export default {
     qa: 'What to test',
     links: 'Tools and Read more',
     traps: 'Pairs of codes people mix up most. Read the rule, then sort the situations.',
-    foot: 'Responsters · original characters and copy; status names per RFC 9110.',
     lang: 'Language',
     close: 'Close',
     back: 'Back to collection',
@@ -428,7 +427,7 @@ export default {
       ],
     },
   },
-  // Site header and footer (RSP-156): the same on every page of the zoo. The footer note replaces ui.foot there.
+  // Site header and footer (RSP-156, RSP-155): the same on every page of the zoo.
   site: {
     nav: 'Site menu',
     map: 'Map',

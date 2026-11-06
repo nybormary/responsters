@@ -35,7 +35,6 @@ export default {
     qa: 'Hvad skal testes',
     links: 'Værktøjer og læs mere',
     traps: 'Par af koder, som folk oftest forveksler. Læs reglen, og sortér så situationerne.',
-    foot: 'Responsters · egne figurer og tekster; statusnavne efter RFC 9110.',
     lang: 'Sprog',
     close: 'Luk',
     back: 'Tilbage til samlingen',

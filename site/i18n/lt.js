@@ -38,7 +38,6 @@ export default {
     qa: 'Ką testuoti',
     links: 'Įrankiai ir daugiau skaitymo',
     traps: 'Kodų poros, kurias dažniausiai supainioja. Perskaityk taisyklę ir surūšiuok situacijas.',
-    foot: 'Responsters · originalūs personažai ir tekstai; būsenų pavadinimai pagal RFC 9110.',
     lang: 'Kalba',
     close: 'Uždaryti',
     back: 'Atgal į kolekciją',

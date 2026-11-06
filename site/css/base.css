@@ -92,6 +92,10 @@ header {
   justify-content: space-between;
   gap: 16px;
 }
+/* RSP-155: the rubric's own header sits in <main>, under the site header; space between the two. */
+.enclosure-header {
+  margin-top: 32px;
+}
 .brand h1,
 .brand .brand-name {
   font-family: var(--display);

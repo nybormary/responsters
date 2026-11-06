@@ -93,11 +93,11 @@ Added after the first screenshots; the numbers continue so the screenshots stay 
 
 ## Site pages (Mnemozoo)
 
-The pages around the rubrics (RSP-156; the header and footer go on every page with RSP-155). The numbers continue.
+The pages around the rubrics (RSP-156; the header and footer on every page since RSP-155). The numbers continue.
 
 | # | Term | Definition | Name in code | Test id | Don't use |
 |---|------|------------|--------------|---------|-----------|
-| 53 | site header | The top of every Mnemozoo page: Mnemozoo (home) · zoo map · about · language menu. The banner landmark, outside `<main>`. | `siteHeader()` in `site/js/render.js`, `.site-header`, `.site-nav`; texts `site.*` | `site-header`; links `nav-map`, `nav-about` | navbar, top bar, menu |
+| 53 | site header | The top of every Mnemozoo page: Mnemozoo (home) · zoo map · about · language menu. The banner landmark, outside `<main>`. | `siteHeader()` in `site/js/render.js`, `.site-header`, `.site-nav`; texts `site.*`; in the app with the JS language menu `APP_LANG_MENU`, updated by `renderSite()` in `site/js/chrome.js` | `site-header`; links `nav-map`, `nav-about` | navbar, top bar, menu |
 | 54 | site footer | The bottom of every Mnemozoo page: the copy note and security.txt. The contentinfo landmark, outside `<main>`. | `siteFooter()` in `site/js/render.js`, `.site-footer`; `site.foot` | `site-footer` | bottom bar |
 | 55 | home page | The page of the whole zoo, `/<lang>/`: hero, zoo map, how it works, why, about. Language-less `/` goes there. | `homePage()` in `scripts/build-pages.mjs`, `main.home`, `site/css/home.css`; texts `home.*` | `home-page` | landing page, start page, index |
 | 56 | hero | The top of the home page: h1, lead and five creatures, one per status class. | `.home-hero`, `.home-hero-cards`; `home.h1`, `home.lead` | `home-hero` | banner (the banner is the site header) |
@@ -105,6 +105,7 @@ The pages around the rubrics (RSP-156; the header and footer go on every page wi
 | 58 | enclosure | One rubric on the zoo map: HTTP (open) or Git (opens 1 December). | `.enclosure`, `.enclosure-soon`; `home.httpZone`, `home.gitZone` | `enclosure-http`, `enclosure-git` | section, tile |
 | 59 | pavilion | A themed place on the zoo map that leads into a rubric; now "Look-alike species" → Traps. | `.pavilion-list`; `home.pavilions`, `home.pairsName` | `pavilion-traps` | exhibit, tile |
 | 60 | about | The home page section `#about`: who builds the project, GitHub and LinkedIn; the site header links to it. | `#about`, `.home-author`; `home.aboutTitle`, `site.about` | `home-about` | contacts, team |
+| 61 | enclosure header | The rubric's own header on its page, under the site header: the rubric name as h1 (Responsters), tagline, colour dots, "How to use". Inside `<main>`, so it is not a second banner (RSP-155). | `header.enclosure-header` in `site/app.html`, `.brand`, `.tools` | `enclosure-header` | site header, banner, logo |
 
 ## Translations
 

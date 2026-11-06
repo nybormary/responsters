@@ -70,6 +70,7 @@ export function langMenu(lang, urlFor, names, label) {
 
 /**
  * Site header: Mnemozoo (home) · zoo map · about · language menu. A real banner landmark: it must stay outside <main>.
+ * The language menu sits after the nav, not in it: on phones it moves up next to the logo (site.css).
  * site: i18n `site` block; onHome: the logo is the current page there.
  */
 export function siteHeader(lang, site, menu, onHome = false) {
@@ -79,10 +80,19 @@ export function siteHeader(lang, site, menu, onHome = false) {
       <nav class="site-nav" aria-label="${esc(site.nav)}">
         <a href="${home}#map" data-testid="nav-map">${esc(site.map)}</a>
         <a href="${home}#about" data-testid="nav-about">${esc(site.about)}</a>
-        ${menu}
       </nav>
+      ${menu}
     </header>`;
 }
+
+/**
+ * The app's language menu (RSP-109, RSP-155): the same pill and list, but a JS menu button with keyboard support
+ * (js/chrome.js fills it and redraws it on a language change). The app page puts it into the site header.
+ */
+export const APP_LANG_MENU = `<div class="langmenu" id="langmenu">
+          <button class="langbtn" id="lang-btn" data-testid="lang-button" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-list"></button>
+          <ul class="langlist" id="lang-list" data-testid="lang-menu" role="menu" hidden></ul>
+        </div>`;
 
 /** Site footer: a real contentinfo landmark (outside <main>): the copy note and security.txt (RSP-137). */
 export function siteFooter(site) {
