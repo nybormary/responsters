@@ -54,7 +54,7 @@ npm run typecheck && npm test
 
 - **When:** quick look while you work on one part of the site.
 - **Runs against:** your local copy.
-- **Tests / language / screen:** one group: `@collection`, `@practice`, `@traps`, `@language`, `@progress`, `@navigation`; random.
+- **Tests / language / screen:** one group: `@collection`, `@practice`, `@traps`, `@language`, `@progress`, `@navigation`, `@a11y` (automated accessibility checks: landmarks, alt text); random.
 - **Needs:** nothing extra.
 
 ```sh
@@ -243,6 +243,20 @@ npm run test:ui                # Playwright UI mode: step through tests in a bro
 npx playwright show-report     # last report: steps, screenshots of failures, lang / screen
 ```
 
+## Language checks by hand
+
+Some language behaviour can't be checked locally: Netlify's redirects by `nf_lang` cookie and browser language exist only on a deploy preview or production. Check them there.
+
+- **Use a clean Chrome profile.** Your normal profile may send more languages than its settings show (on macOS the system languages come first; check `navigator.languages` in the console). A clean profile sends exactly the list you give it:
+
+  ```sh
+  open -na "Google Chrome" --args --user-data-dir="$HOME/chrome-lang-test" --accept-lang=<list> "<url>"
+  ```
+
+  `<list>` is comma-separated, first language first, e.g. `be,pl`. Delete the folder after the check.
+- **Without a browser:** `curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' -H 'Accept-Language: <list>' <url>` shows the redirect Netlify chose. Add `-b 'nf_lang=<lang>'` for a saved choice.
+- **A saved choice in localStorage:** values are JSON, so a language is a quoted string. In the DevTools console: `localStorage.setItem("httpon.lang", '"pl"')`. Without the inner quotes the site reads no saved language.
+
 ## Known pitfalls
 
 | What you see | Why | Fix |
@@ -253,6 +267,7 @@ npx playwright show-report     # last report: steps, screenshots of failures, la
 | `TEST_SCREEN=…: not one of …` or `TEST_LANG=…: not one of …` | A typo in the screen or language name | Use exactly one of the names in variants 5 and 6 |
 | `TARGET=preview needs the PR number` | `npm run test:preview` without `PR=<number>` | Put the PR number before the command: `PR=14 npm run test:preview` |
 | Tests pass locally but time out on a preview | Preview not built yet, or a network blip | Wait for the green Netlify check; the config already retries once and waits longer for remote targets |
+| A language check by hand gives the wrong language | Your Chrome profile sends other languages first (macOS system languages), or the localStorage value isn't JSON | Use a clean profile and a quoted value, see [Language checks by hand](#language-checks-by-hand) |
 | CI: `No ready deploy preview after 10 minutes` | Netlify's build is slow or failed, or Netlify names its status differently | The step lists the statuses it saw on the commit; check the build in Netlify, then **Re-run jobs** |
 
 ## Rules
@@ -268,7 +283,7 @@ Workflow: `.github/workflows/ui-tests.yml` (RSP-127). It runs by itself on every
 
 | The PR changes | What CI does | Goes to testomat.io |
 |---|---|---|
-| `site/` or `netlify/` | Waits until Netlify reports the deploy preview of the PR's last commit as ready (up to 10 minutes), then runs [variant 8](#8-deploy-preview-of-a-pr) | Yes: title `🦭 CI · PR #<n> (<branch>) on deploy preview`, environment `Target:deploy-preview,Browser:Chrome` |
+| `site/`, `netlify/`, `scripts/build-pages.mjs` or `netlify.toml` | Waits until Netlify reports the deploy preview of the PR's last commit as ready (up to 10 minutes), then runs [variant 8](#8-deploy-preview-of-a-pr) | Yes: title `🦭 CI · PR #<n> (<branch>) on deploy preview`, environment `Target:deploy-preview,Browser:Chrome` |
 | Anything else | No deploy preview exists (Netlify's `ignore` rule), so it runs [variant 1](#1-before-a-commit) on the PR's own files | No |
 
 **A push with only tests or docs in a PR that changes the site** (RSP-174): Netlify compares the push with its last built preview, not with `master`, finds no site change and cancels the preview ("Deploy Preview canceled"). CI then runs [variant 1](#1-before-a-commit) on the PR's own files, not reported, and says so in the log. A failed Netlify build, or no preview after 10 minutes, still fails the check.
@@ -279,4 +294,5 @@ Every run also does `npm run typecheck` and `npm run check-locales`.
 - **Report:** the run's page → **Artifacts** → `playwright-report-pr-<n>`. Download, unzip, then `npx playwright show-report <folder>`. Kept for 14 days.
 - **testomat.io key:** only the GitHub secret `TESTOMATIO` (repo Settings → Secrets and variables → Actions). Never in the repo, never in the logs. Without the secret the tests still run; nothing is reported.
 - **Check the run:** as in [Check a reported run](#check-a-reported-run), then link it in the ticket comment.
-- **Not yet:** the check doesn't block a merge (RSP-99), and there is no automatic production smoke after a deploy (follow-up).
+- **Required check:** `master` is protected (RSP-99): a merge needs a pull request with a green **UI tests** check, up to date with `master`.
+- **Not yet:** an automatic production smoke after a deploy (RSP-161).

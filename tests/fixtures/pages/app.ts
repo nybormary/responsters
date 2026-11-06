@@ -14,10 +14,20 @@ export class App {
     page.on('pageerror', (e) => this.errors.push(e));
   }
 
-  /** Open the site, optionally on a view (#practice, #traps) or any raw hash ('nonsense'). */
+  /**
+   * Open the app by its language-less URL /http/, optionally on a view (#practice, #traps) or any raw hash
+   * ('nonsense'). The site sends the browser on to /<lang>/http/ (RSP-138): Netlify by a redirect, a local
+   * run by a chooser page. Either way the saved language, then the browser language decides.
+   */
   async open(view?: View | string) {
-    await this.page.goto(view ? `/#${view}` : '/');
+    await this.page.goto(view ? `/http/#${view}` : '/http/');
+    await expect(this.page).toHaveURL(/\/[a-z]{2}\/http\/(#.*)?$/);
     await this.ready();
+  }
+
+  /** The language in the URL path: '/pl/http/#practice' → 'pl'. */
+  pathLang(): string {
+    return new URL(this.page.url()).pathname.split('/')[1];
   }
 
   /**
@@ -49,6 +59,29 @@ export class App {
   /** The <html> element; its lang attribute is the language the page is shown in. */
   get html(): Locator {
     return this.page.locator('html');
+  }
+
+  /** Landmarks (RSP-138). Found by role on purpose: the role is what is checked. */
+  get main(): Locator {
+    return this.page.getByRole('main');
+  }
+  get banner(): Locator {
+    return this.page.getByRole('banner');
+  }
+  get contentinfo(): Locator {
+    return this.page.getByRole('contentinfo');
+  }
+  /** A tab or a view inside <main>. */
+  tabInMain(view: View): Locator {
+    return this.main.getByTestId(TID.tab(view));
+  }
+  viewInMain(view: View): Locator {
+    return this.main.getByTestId(TID.view(view));
+  }
+
+  /** The picture of one card in the Collection grid. */
+  collectionArt(code: number): Locator {
+    return this.page.getByTestId(TID.card(code)).getByTestId(TID.cardArt);
   }
 
   tab(view: View): Locator {

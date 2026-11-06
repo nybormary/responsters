@@ -1,8 +1,9 @@
 // Entry point: wires clicks and keys to the views and draws the first screen.
-// Everything else lives in its own module; index.html only loads this file.
+// Everything else lives in its own module; the app page (site/app.html, built as /<lang>/http/) only loads this file.
 import { store } from './store.js';
 import { $ } from './util.js';
 import { state, loadLang } from './state.js';
+import { langFromPath, saveLang, syncCookie } from './lang.js';
 import { renderChrome, langOpen, langClose, langKeys } from './chrome.js';
 import { renderCollection } from './collection.js';
 import { newRound, nextRound, renderPractice, answer, showHint } from './practice.js';
@@ -36,7 +37,8 @@ document.addEventListener('click', (e) => {
     langClose();
     loadLang(l).then(() => {
       state.lang = l;
-      store.set('lang', l);
+      saveLang(l);
+      syncPath();
       render();
       $('lang-btn').focus();
     });
@@ -81,6 +83,14 @@ document.addEventListener('keydown', (e) => {
 $('langmenu').addEventListener('focusout', (e) => {
   if (!$('langmenu').contains(e.relatedTarget) && e.relatedTarget) langClose();
 });
+// The page lives at /<lang>/http/ (RSP-138). A language change rewrites the path in place
+// (/uk/http/#practice → /pl/http/#practice): no reload and no new history entry, so Back still moves
+// between tabs. Back can land on an entry written before the change (/uk/http/): the path follows the
+// current language again, the language stays as picked.
+function syncPath() {
+  if (langFromPath() !== state.lang) history.replaceState(history.state, '', `/${state.lang}/http/${location.hash}`);
+}
+
 // Tabs live in the URL hash (RSP-114): #collection, #practice, #traps. A tab click writes the hash, so reload,
 // Back/Forward and shared links open the same tab. An empty or unknown hash opens the Collection.
 const VIEWS = ['collection', 'practice', 'traps'];
@@ -88,13 +98,19 @@ const viewFromHash = () => {
   const h = location.hash.slice(1);
   return VIEWS.includes(h) ? h : 'collection';
 };
-window.addEventListener('hashchange', () => {
+// Back/Forward fire popstate and usually hashchange too; after syncPath rewrites the URL in popstate,
+// Chrome may skip hashchange, so both run the same idempotent handler.
+function onNavigate() {
+  syncPath();
   const v = viewFromHash();
   if (v !== state.view) {
     state.view = v;
     render();
   }
-});
+}
+window.addEventListener('hashchange', onNavigate);
+window.addEventListener('popstate', onNavigate);
 // Start: open the view from the URL hash, if any.
+syncCookie();
 state.view = viewFromHash();
 render();

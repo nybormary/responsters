@@ -11,5 +11,5 @@ export const cardBody = (d) => body(d, tx().cards[d.c].line);
 // The "known" check is decoration; screen readers hear the word instead.
 export function renderCard(d) {
   const k = isKnown(d.c);
-  return `<a class="card" href="/${state.lang}/http/${d.c}/">${cardBody(d)}${k ? `<span class="badge" aria-hidden="true">✓</span><span class="sr">${t().known}</span>` : ''}</a>`;
+  return `<a class="card" href="/${state.lang}/http/${d.c}/" data-testid="card-${d.c}">${cardBody(d)}${k ? `<span class="badge" aria-hidden="true">✓</span><span class="sr">${t().known}</span>` : ''}</a>`;
 }
