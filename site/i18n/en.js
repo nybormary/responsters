@@ -435,6 +435,13 @@ export default {
     foot: 'Mnemozoo · original characters and copy; status names from the IANA registry.',
   },
   // Home page /<lang>/ (RSP-156). Numbers come from site/data, so they stay true when cards or pairs are added.
+  // Page for a missing address (RSP-148): /<lang>/404.html, served by Netlify with status 404.
+  notFound: {
+    title: '404: nothing lives here · Mnemozoo',
+    h1: 'Nothing lives at this address',
+    text: 'The page may have moved, or the address has a typo.',
+    back: 'Back to the zoo →',
+  },
   home: {
     title: 'Mnemozoo: tech zoo for your memory',
     description:

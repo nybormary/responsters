@@ -43,6 +43,7 @@ The language is always the first part of the path, then the rubric. URLs end wit
 | `/<lang>/http/` | The HTTP rubric: Collection, Practice, Traps (`#collection`, `#practice`, `#traps`) |
 | `/<lang>/http/<code>/` | One creature, e.g. `/uk/http/401/` |
 | `/`, `/http/`, `/http/<code>/` | No language: sends you to your language with the same hash. Use these in shared links and QR codes. |
+| Any missing address | The 404 page in your language (status 404): the path's language, otherwise your saved or browser language |
 | `/#collection`, `/#practice`, `/#traps` | Old links: land on the home page, which sends them on to `/<lang>/http/` with the same hash |
 
 `<lang>` is one of `uk`, `en`, `pl`, `da`, `lt`, `et`. Later rubrics follow the same pattern (`/<lang>/git/…`).
@@ -115,7 +116,7 @@ site/              the site's sources; the build turns them into dist/, which Ne
   img/             creature art ({code}-art.jpg) and the old full card images ({code}.jpg)
   _headers         cache rules (images and icons: one week)
 scripts/
-  build-pages.mjs    the build: copies site/ to dist/ and writes the home page, the rubric page and a card page per creature
+  build-pages.mjs    the build: copies site/ to dist/ and writes the home page, the rubric page, a card page per creature and the 404 page
                      for every language, the chooser pages for links without a language, _redirects and sitemap.xml
   check-locales.mjs  checks that every language file has the same keys as en.js
 tests/             Playwright UI tests (TypeScript); never deployed

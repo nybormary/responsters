@@ -435,6 +435,12 @@ export default {
     foot: 'Mnemozoo · oryginalne postacie i teksty; nazwy statusów według rejestru IANA.',
   },
   // Strona główna /<lang>/ (RSP-156).
+  notFound: {
+    title: '404: nikt tu nie mieszka · Mnemozoo',
+    h1: 'Pod tym adresem nikt nie mieszka',
+    text: 'Możliwe, że strona się przeniosła albo w adresie jest literówka.',
+    back: 'Wróć do zoo →',
+  },
   home: {
     title: 'Mnemozoo: techniczne zoo dla twojej pamięci',
     description:
