@@ -435,6 +435,12 @@ export default {
     foot: 'Mnemozoo · originalūs personažai ir tekstai; būsenų pavadinimai pagal IANA registrą.',
   },
   // Pagrindinis puslapis /<lang>/ (RSP-156).
+  notFound: {
+    title: '404: čia niekas negyvena · Mnemozoo',
+    h1: 'Šiuo adresu niekas negyvena',
+    text: 'Galbūt puslapis perkeltas arba adrese yra klaida.',
+    back: 'Atgal į zoologijos sodą →',
+  },
   home: {
     title: 'Mnemozoo: technologijų zoologijos sodas tavo atminčiai',
     description:

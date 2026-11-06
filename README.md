@@ -43,6 +43,7 @@ The language is always the first part of the path, then the rubric. URLs end wit
 | `/<lang>/http/` | The HTTP rubric: Collection, Practice, Traps (`#collection`, `#practice`, `#traps`) |
 | `/<lang>/http/<code>/` | One creature, e.g. `/uk/http/401/` |
 | `/`, `/http/`, `/http/<code>/` | No language: sends you to your language with the same hash. Use these in shared links and QR codes. |
+| Any missing address | The 404 page in your language (status 404): the path's language, otherwise your saved or browser language |
 | `/#collection`, `/#practice`, `/#traps` | Old links: land on the home page, which sends them on to `/<lang>/http/` with the same hash |
 
 `<lang>` is one of `uk`, `en`, `pl`, `da`, `lt`, `et`. Later rubrics follow the same pattern (`/<lang>/git/…`).
@@ -68,7 +69,6 @@ Your progress is saved in your browser only (localStorage). There's no account, 
 
 - **A page per trap:** so an "X vs Y" trap can be found in search and shared.
 - **Accessibility pass:** WCAG 2.2 AA checks for the whole site.
-- **Static checks:** linting and type checks in CI next to the UI tests.
 - **Visitor feedback:** ideas and bug reports through GitHub Issues.
 - **Git rubric:** a second collection, for Git commands.
 - **API + tests:** a small Responsters API on Netlify Functions where each endpoint returns real status codes. It's covered by Playwright API tests tagged by code (`npx playwright test --grep @404`).
@@ -115,7 +115,7 @@ site/              the site's sources; the build turns them into dist/, which Ne
   img/             creature art ({code}-art.jpg) and the old full card images ({code}.jpg)
   _headers         cache rules (images and icons: one week)
 scripts/
-  build-pages.mjs    the build: copies site/ to dist/ and writes the home page, the rubric page and a card page per creature
+  build-pages.mjs    the build: copies site/ to dist/ and writes the home page, the rubric page, a card page per creature and the 404 page
                      for every language, the chooser pages for links without a language, _redirects and sitemap.xml
   check-locales.mjs  checks that every language file has the same keys as en.js
 tests/             Playwright UI tests (TypeScript); never deployed

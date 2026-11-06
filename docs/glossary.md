@@ -106,6 +106,7 @@ The pages around the rubrics (RSP-156; the header and footer on every page since
 | 59 | pavilion | A themed place on the zoo map that leads into a rubric; now "Look-alike species" → Traps. | `.pavilion-list`; `home.pavilions`, `home.pairsName` | `pavilion-traps` | exhibit, tile |
 | 60 | about | The home page section `#about`: who builds the project, GitHub and LinkedIn; the site header links to it. | `#about`, `.home-author`; `home.aboutTitle`, `site.about` | `home-about` | contacts, team |
 | 61 | enclosure header | The rubric's own header on its page, under the site header: the rubric name as h1 (Responsters), tagline, colour dots, "How to use". Inside `<main>`, so it is not a second banner (RSP-155). | `header.enclosure-header` in `site/app.html`, `.brand`, `.tools` | `enclosure-header` | site header, banner, logo |
+| 62 | not-found page | The page for a missing address: the 404 creature, a line of text and the way back to the zoo, with HTTP status 404 (RSP-148). | `notFoundPage()` in `scripts/build-pages.mjs`, `dist/<lang>/404.html`, `main.not-found`; texts `notFound.*` | `not-found-page`, `not-found-back`; card `card-404` | 404 page (in texts: say what happened), error page |
 
 ## Translations
 

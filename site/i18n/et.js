@@ -432,6 +432,12 @@ export default {
     foot: 'Mnemozoo · originaalsed tegelased ja tekstid; olekute nimed IANA registri järgi.',
   },
   // Avaleht /<lang>/ (RSP-156).
+  notFound: {
+    title: '404: siin ei ela kedagi · Mnemozoo',
+    h1: 'Sellel aadressil ei ela kedagi',
+    text: 'Võib-olla on leht kolinud või on aadressis trükiviga.',
+    back: 'Tagasi loomaaeda →',
+  },
   home: {
     title: 'Mnemozoo: tehnikaloomaaed sinu mälule',
     description:

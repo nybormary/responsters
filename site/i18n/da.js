@@ -432,6 +432,12 @@ export default {
     foot: 'Mnemozoo · originale figurer og tekster; statusnavne fra IANA-registret.',
   },
   // Forside /<lang>/ (RSP-156).
+  notFound: {
+    title: '404: her bor ingen · Mnemozoo',
+    h1: 'Der bor ingen på denne adresse',
+    text: 'Måske er siden flyttet, eller der er en tastefejl i adressen.',
+    back: 'Tilbage til zooen →',
+  },
   home: {
     title: 'Mnemozoo: teknisk zoo for din hukommelse',
     description:

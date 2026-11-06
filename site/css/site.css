@@ -100,3 +100,40 @@
 .site-footer a {
   color: var(--muted);
 }
+
+/* Page for a missing address (RSP-148): text and the 404 creature card side by side, stacked on phones. */
+.not-found {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 32px 48px;
+  margin-top: 40px;
+}
+.not-found-text {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+.not-found h1 {
+  margin: 0 0 12px;
+  font: 800 clamp(32px, 6vw, 48px) / 1.08 var(--display);
+}
+.not-found p {
+  margin: 0 0 20px;
+  font-size: 18px;
+}
+.not-found-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px; /* touch target */
+  color: var(--accent);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+.not-found-back:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.not-found-card {
+  flex: 0 1 260px;
+  margin-inline: auto;
+}
