@@ -17,7 +17,16 @@ import { CONF, PAIRS } from '../site/data/traps.js';
 import { LOCALES, LANG_NAMES } from '../site/i18n/index.js';
 import en from '../site/i18n/en.js';
 import { fill } from '../site/i18n/fill.js';
-import { cardBody, cardLinks, esc, homeUrl, langMenu, siteHeader, siteFooter } from '../site/js/render.js';
+import {
+  cardBody,
+  cardLinks,
+  esc,
+  homeUrl,
+  langMenu,
+  siteHeader,
+  siteFooter,
+  APP_LANG_MENU,
+} from '../site/js/render.js';
 import { cls, art } from '../site/js/util.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
@@ -83,19 +92,14 @@ function creaturePage(lang, tx, d) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="${FONTS}" />
     <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/site.css" />
     <link rel="stylesheet" href="/css/card.css" />
     <link rel="stylesheet" href="/css/detail.css" />
-    <script type="module">
-      import { followSavedLanguage } from '/js/lang.js';
-      followSavedLanguage();
-    </script>
+    <script type="module" src="/js/site.js"></script>
   </head>
   <body>
     <div class="wrap" id="top">
-      <header>
-        <div class="brand"><div class="brand-name"><a class="home-link" href="${appUrl(lang)}">Responsters</a></div></div>
-        <div class="tools">${menu}</div>
-      </header>
+      ${siteHeader(lang, tx.site, menu)}
       <main class="page" data-testid="card-page">
         <a class="page-back" href="${appUrl(lang)}#collection">← ${esc(ui.back)}</a>
         <article class="sheet" style="--cls: ${CLS[cls(c)].c}">
@@ -127,7 +131,7 @@ function creaturePage(lang, tx, d) {
           </div>
         </article>
       </main>
-      <footer>${esc(ui.foot)}</footer>
+      ${siteFooter(tx.site)}
     </div>
   </body>
 </html>
@@ -263,6 +267,9 @@ function appPage(lang, tx) {
       '<!-- build: canonical and hreflang -->',
       `<link rel="canonical" href="${ORIGIN}${appUrl(lang)}" />\n    ${alternates(appUrl)}`,
     ],
+    // RSP-155: the same site header and footer as on every page; in the header, the app's own JS language menu.
+    ['<!-- build: site header -->', siteHeader(lang, tx.site, APP_LANG_MENU)],
+    ['<!-- build: site footer -->', siteFooter(tx.site)],
   ];
   return fills.reduce((html, [from, to]) => {
     if (!html.match(from)) throw new Error(`build-pages: site/app.html has no ${from}`);

@@ -1,9 +1,11 @@
-// Page chrome: everything outside the three views (language menu, tabs, "How to use", Practice mode cards, footer)
+// Page chrome: everything outside the three views (site header and footer, language menu, tabs, "How to use",
+// Practice mode cards)
 // is redrawn in the current language and state.
-import { state, t, LANGS, LANG_NAMES } from './state.js';
+import { state, t, tx, LANGS, LANG_NAMES } from './state.js';
 import { $ } from './util.js';
 import { MODES } from './modes.js';
 import { GLOBE, CHEVRON, CHECK } from './icons.js';
+import { homeUrl } from './render.js';
 
 // Language menu (RSP-109): a button with the current language; the list holds every language that has texts,
 // each written in its own language and marked with its own lang, so screen readers pronounce it right.
@@ -38,8 +40,29 @@ function renderHead() {
   canon?.setAttribute('href', canon.href.replace(/\/[a-z]{2}\/http\//, `/${state.lang}/http/`));
 }
 
+// Site header and footer (RSP-155): the build writes them in the page language (render.js); after a language change
+// in the app their links and texts follow. Updated in place: the language menu inside keeps its listeners.
+function renderSite() {
+  const site = tx().site;
+  const home = homeUrl(state.lang);
+  document.querySelector('.site-logo')?.setAttribute('href', home);
+  document.querySelector('.site-nav')?.setAttribute('aria-label', site.nav);
+  for (const [id, hash, text] of [
+    ['nav-map', '#map', site.map],
+    ['nav-about', '#about', site.about],
+  ]) {
+    const a = document.querySelector(`[data-testid="${id}"]`);
+    if (!a) continue;
+    a.href = home + hash;
+    a.textContent = text;
+  }
+  const note = document.querySelector('.site-footer > span');
+  if (note) note.textContent = site.foot;
+}
+
 export function renderChrome() {
   renderHead();
+  renderSite();
   $('tagline').textContent = t().tag;
   renderLangMenu();
   ['collection', 'practice', 'traps'].forEach((v, i) => {
@@ -60,7 +83,6 @@ export function renderChrome() {
   $('howto-close').textContent = t().howtoClose;
   $('traps-lede').textContent = t().traps;
   $('to-top').textContent = '↑ ' + t().top;
-  $('foot').textContent = t().foot;
 }
 
 // Opening and closing the language menu. Keyboard: Enter/Space/↓ open and focus the current language,

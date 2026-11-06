@@ -39,7 +39,7 @@ test.describe('language-less /', () => {
 
     test(
       'Language-less / opens the home page in the saved language @Tdbd1834c',
-      { tag: [TAG.home, TAG.language] },
+      { tag: [TAG.home] },
       async ({ homePage, page }) => {
         await homePage.openLanguageless('/');
         await expect(page).toHaveURL(/\/da\/$/); // no ?via=lang left in the address
@@ -63,7 +63,7 @@ test.describe('language-less /', () => {
 
       test(
         `Language-less / opens the home page in the browser language, English as fallback: ${locale} → ${expected} @Tcefb4fde`,
-        { tag: [TAG.home, TAG.language] },
+        { tag: [TAG.home] },
         async ({ homePage, page }) => {
           await homePage.openLanguageless('/');
           await expect(page).toHaveURL(new RegExp(`/${expected}/$`));
@@ -78,7 +78,7 @@ test.describe('language-less /', () => {
 
   test(
     'Old app links /#collection, /#practice, /#traps still open the app tab @Td27aaf82',
-    { tag: [TAG.home, TAG.navigation] },
+    { tag: [TAG.home] },
     async ({ homePage, app, page }) => {
       for (const view of ['traps', 'practice', 'collection'] as const) {
         await test.step(`/#${view} → /en/http/#${view}, ${view} open`, async () => {

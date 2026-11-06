@@ -17,6 +17,16 @@ export class CardPage {
     await this.page.goto(`/${lang}/http/${code}/`);
   }
 
+  /** Open the language-less card page /http/<code>/: the site sends the browser on to its language (RSP-138). */
+  async openLanguageless(code: number) {
+    await this.page.goto(`/http/${code}/`);
+  }
+
+  /** The <html> element; its lang attribute is the language the page is shown in. */
+  get html(): Locator {
+    return this.page.locator('html');
+  }
+
   /** The creature picture on the card page. */
   get art(): Locator {
     return this.root.getByTestId(TID.cardArt);

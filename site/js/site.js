@@ -1,7 +1,7 @@
-// Shared script of the pages built by scripts/build-pages.mjs (RSP-156): the home page now, the card pages
-// with RSP-155. The language menu there is a <details> with plain links (works without JS); a click on a
+// Shared script of the pages built by scripts/build-pages.mjs (RSP-156, RSP-155): the home page and the card pages.
+// The language menu there is a <details> with plain links (works without JS); a click on a
 // language also saves it, like the switcher in the app, so the next language-less visit uses it (RSP-138).
-import { saveLang, followSavedLanguage, langFromPath } from './lang.js';
+import { saveLang, followSavedLanguage, langFromPath, syncCookie } from './lang.js';
 
 // Old links to the app (/#collection, /#practice, /#traps) now land on the home page /<lang>/ with the same hash
 // (dist/_redirects, chooser page at /): send them on to the app /<lang>/http/ (RSP-138, RSP-156).
@@ -13,6 +13,9 @@ function followOldAppLink() {
   location.replace(`/${lang}/http/${location.hash}`);
 }
 
+// A language saved before RSP-138 lives only in localStorage: copy it to the nf_lang cookie, as the app does, so the
+// next language-less visit is redirected by Netlify straight to it (found by Copilot code review, PR #30).
+syncCookie();
 if (!followSavedLanguage()) followOldAppLink();
 
 document.addEventListener('click', (e) => {

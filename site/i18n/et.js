@@ -35,7 +35,6 @@ export default {
     qa: 'Mida testida',
     links: 'Tööriistad ja lisalugemine',
     traps: 'Koodipaarid, mida aetakse kõige sagedamini segi. Loe reeglit ja sorteeri olukorrad.',
-    foot: 'Responsters · omad tegelased ja tekstid; olekute nimed RFC 9110 järgi.',
     lang: 'Keel',
     close: 'Sulge',
     back: 'Tagasi kogusse',

@@ -46,3 +46,29 @@ test(
     });
   },
 );
+
+// ── 89fcd537 ────────────────────────────────────────────────────────────────────────────────────
+// testomat.io suite "Site landmarks (RSP-155)": the site header and footer on the app and the card pages.
+
+test(
+  'App and card pages have one banner, one main and one contentinfo @T89fcd537',
+  { tag: [TAG.a11y] },
+  async ({ app, cardPage, site, lang, texts }) => {
+    await test.step('app: one of each; the enclosure header is inside main', async () => {
+      await app.open();
+      await expect(site.banners).toHaveCount(1);
+      await expect(site.mains).toHaveCount(1);
+      await expect(site.contentinfos).toHaveCount(1);
+      await expect(site.nav).toHaveAccessibleName(texts.site.nav);
+      await expect(site.enclosureHeaderInMain).toHaveCount(1);
+    });
+
+    await test.step(`card page /${lang}/http/404/: one of each`, async () => {
+      await cardPage.open(lang, 404);
+      await expect(site.banners).toHaveCount(1);
+      await expect(site.mains).toHaveCount(1);
+      await expect(site.contentinfos).toHaveCount(1);
+      await expect(site.nav).toHaveAccessibleName(texts.site.nav);
+    });
+  },
+);

@@ -38,7 +38,6 @@ export default {
     qa: 'Co testować',
     links: 'Narzędzia i więcej',
     traps: 'Pary kodów, które najczęściej się mylą. Przeczytaj regułę, potem przyporządkuj sytuacje.',
-    foot: 'Responsters · postacie i teksty własne; nazwy statusów według RFC 9110.',
     lang: 'Język',
     close: 'Zamknij',
     back: 'Wróć do kolekcji',

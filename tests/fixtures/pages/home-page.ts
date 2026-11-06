@@ -43,6 +43,9 @@ export class HomePage {
   get about(): Locator {
     return this.root.getByTestId(TID.homeAbout);
   }
+  get zooMap(): Locator {
+    return this.root.getByTestId(TID.zooMap);
+  }
 
   /** Head: what search engines read. */
   get description(): Locator {
