@@ -66,7 +66,6 @@ Your progress is saved in your browser only (localStorage). There's no account, 
 
 ## Roadmap
 
-- **Mnemozoo everywhere:** the site header and footer of the home page on every page.
 - **A page per trap:** so an "X vs Y" trap can be found in search and shared.
 - **Accessibility pass:** WCAG 2.2 AA checks for the whole site.
 - **Static checks:** linting and type checks in CI next to the UI tests.
