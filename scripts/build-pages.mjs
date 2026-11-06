@@ -260,7 +260,8 @@ function homePage(lang, tx) {
  * Page for a missing address (RSP-148), one per language: dist/<lang>/404.html, and dist/404.html in English.
  * Netlify serves it with status 404 (dist/_redirects picks the language). Bots ask for missing paths thousands of
  * times, so the HTML stays small (AC6, under 10 KB): no inline images, the creature picture loads lazily.
- * The language menu leads to the home page in each language: a missing address has no translation.
+ * The language menu links to the home page in each language; site.js turns them into the same address in the other
+ * language (/uk/foo → /pl/foo), so the menu works as on every other page (Maryna, 2026-11-06).
  */
 function notFoundPage(lang, tx) {
   const t = tx.notFound;
