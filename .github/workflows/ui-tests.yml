@@ -4,6 +4,8 @@
 #   this exact commit → run the suite against the preview (variant 8) and report the run to testomat.io.
 # PR changes nothing there → Netlify skips the preview (the `ignore` rule in netlify.toml) → run the suite
 #   on the PR's own files inside CI (variant 1). Not reported to testomat.io: it isn't a deployed site.
+# PR changes the site, but this push only tests or docs → Netlify compares with its LAST BUILT preview, not with
+#   master, and cancels this commit's preview → also variant 1 on the PR's own files (RSP-174).
 # Either way: type check, locale check, lint, format check, and the HTML report kept as an artifact for 14 days.
 
 name: UI tests
@@ -71,11 +73,14 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Wait for the Netlify deploy preview of this commit
+        id: preview
         if: steps.changes.outputs.site == 'true'
         # An older preview of the same PR also answers 200, so a plain URL check could test the wrong build.
         # Netlify reports each commit's preview as a commit status `netlify/responsters/deploy-preview`.
         # Wait for "success" with "ready" in its text on this commit. A skipped build is ALSO "success",
-        # but its text is "Deploy Preview canceled." (seen on the RSP-127 PR): that must not count. Up to 10 minutes.
+        # but its text is "Deploy Preview canceled." (seen on the RSP-127 PR): that must not count as a preview.
+        # Netlify cancels when nothing in the site changed since its last built preview (e.g. a push with only
+        # tests or docs, RSP-174): then the tests run on the PR's own files below. Up to 10 minutes.
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -88,7 +93,11 @@ jobs:
             case "$state" in
               success)
                 case "$text" in
-                  *[Rr]eady*) exit 0 ;;
+                  *[Rr]eady*) echo "ready=true" >> "$GITHUB_OUTPUT"; exit 0 ;;
+                  *[Cc]anceled*)
+                    echo "ready=false" >> "$GITHUB_OUTPUT"
+                    echo "::notice::Netlify skipped this commit's preview ($text): nothing in the site changed since its last built preview. The tests run on the PR's own files (variant 1, not reported)."
+                    exit 0 ;;
                   *) echo "::error::Netlify did not build a deploy preview for this commit ($text), although site/ or netlify/ changed."; exit 1 ;;
                 esac ;;
               failure|error) echo "::error::Netlify could not build the deploy preview of this commit ($text)."; exit 1 ;;
@@ -100,7 +109,7 @@ jobs:
           exit 1
 
       - name: UI tests on the deploy preview (variant 8, reported to testomat.io)
-        if: steps.changes.outputs.site == 'true'
+        if: steps.preview.outputs.ready == 'true'
         env:
           TARGET: preview
           PR: ${{ github.event.pull_request.number }}
@@ -111,7 +120,7 @@ jobs:
           npx playwright test
 
       - name: UI tests on the PR's own files (variant 1, not reported)
-        if: steps.changes.outputs.site == 'false'
+        if: steps.changes.outputs.site == 'false' || steps.preview.outputs.ready == 'false'
         run: npx playwright test
 
       - name: Keep the HTML report
