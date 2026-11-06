@@ -69,7 +69,6 @@ Your progress is saved in your browser only (localStorage). There's no account, 
 
 - **A page per trap:** so an "X vs Y" trap can be found in search and shared.
 - **Accessibility pass:** WCAG 2.2 AA checks for the whole site.
-- **Static checks:** linting and type checks in CI next to the UI tests.
 - **Visitor feedback:** ideas and bug reports through GitHub Issues.
 - **Git rubric:** a second collection, for Git commands.
 - **API + tests:** a small Responsters API on Netlify Functions where each endpoint returns real status codes. It's covered by Playwright API tests tagged by code (`npx playwright test --grep @404`).
