@@ -286,6 +286,8 @@ Workflow: `.github/workflows/ui-tests.yml` (RSP-127). It runs by itself on every
 | `site/`, `netlify/`, `scripts/build-pages.mjs` or `netlify.toml` | Waits until Netlify reports the deploy preview of the PR's last commit as ready (up to 10 minutes), then runs [variant 8](#8-deploy-preview-of-a-pr) | Yes: title `🦭 CI · PR #<n> (<branch>) on deploy preview`, environment `Target:deploy-preview,Browser:Chrome` |
 | Anything else | No deploy preview exists (Netlify's `ignore` rule), so it runs [variant 1](#1-before-a-commit) on the PR's own files | No |
 
+**A push with only tests or docs in a PR that changes the site** (RSP-174): Netlify compares the push with its last built preview, not with `master`, finds no site change and cancels the preview ("Deploy Preview canceled"). CI then runs [variant 1](#1-before-a-commit) on the PR's own files, not reported, and says so in the log. A failed Netlify build, or no preview after 10 minutes, still fails the check.
+
 Every run also does `npm run typecheck` and `npm run check-locales`.
 
 - **Result:** the PR's checks → **UI tests**. A failing test, type error or locale problem makes the check red.
