@@ -5,7 +5,7 @@
 // Planned for the first spec (RSP-97, language); the attributes are added to the markup in the next commit.
 
 export const TID = {
-  // Header
+  // Language menu: the app's JS menu and the <details> menu of the generated pages carry the same ids (RSP-155)
   langButton: 'lang-button',
   langMenu: 'lang-menu',
   langOption: (lang: string) => `lang-${lang}`,
@@ -26,6 +26,8 @@ export const TID = {
 
   // Site header and footer (RSP-156; on every page with RSP-155)
   siteHeader: 'site-header',
+  siteLogo: 'site-logo',
+  enclosureHeader: 'enclosure-header', // the app's own header inside <main> (RSP-155)
   siteFooter: 'site-footer',
   navMap: 'nav-map',
   navAbout: 'nav-about',

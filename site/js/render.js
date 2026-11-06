@@ -58,13 +58,13 @@ export function langMenu(lang, urlFor, names, label) {
   const items = Object.keys(names)
     .map((l) =>
       l === lang
-        ? `<li><a href="${urlFor(l)}" lang="${l}" aria-current="page"><span>${names[l][0]}</span><span class="lang-check">${CHECK}</span></a></li>`
-        : `<li><a href="${urlFor(l)}" lang="${l}" hreflang="${l}"><span>${names[l][0]}</span><span class="lang-check"></span></a></li>`,
+        ? `<li><a href="${urlFor(l)}" lang="${l}" data-testid="lang-${l}" aria-current="page"><span>${names[l][0]}</span><span class="lang-check">${CHECK}</span></a></li>`
+        : `<li><a href="${urlFor(l)}" lang="${l}" hreflang="${l}" data-testid="lang-${l}"><span>${names[l][0]}</span><span class="lang-check"></span></a></li>`,
     )
     .join('');
   return `<details class="langmenu">
-          <summary class="langbtn" aria-label="${esc(`${label}: ${name}`)}">${GLOBE}<span class="lang-code" aria-hidden="true">${code}</span><span class="lang-name" lang="${lang}">${name}</span>${CHEVRON}</summary>
-          <ul class="langlist" aria-label="${esc(label)}">${items}</ul>
+          <summary class="langbtn" data-testid="lang-button" aria-label="${esc(`${label}: ${name}`)}">${GLOBE}<span class="lang-code" aria-hidden="true">${code}</span><span class="lang-name" lang="${lang}">${name}</span>${CHEVRON}</summary>
+          <ul class="langlist" data-testid="lang-menu" aria-label="${esc(label)}">${items}</ul>
         </details>`;
 }
 
@@ -76,7 +76,7 @@ export function langMenu(lang, urlFor, names, label) {
 export function siteHeader(lang, site, menu, onHome = false) {
   const home = homeUrl(lang);
   return `<header class="site-header" data-testid="site-header">
-      <a class="site-logo" href="${home}"${onHome ? ' aria-current="page"' : ''}>${LOGO}</a>
+      <a class="site-logo" href="${home}" data-testid="site-logo"${onHome ? ' aria-current="page"' : ''}>${LOGO}</a>
       <nav class="site-nav" aria-label="${esc(site.nav)}">
         <a href="${home}#map" data-testid="nav-map">${esc(site.map)}</a>
         <a href="${home}#about" data-testid="nav-about">${esc(site.about)}</a>
