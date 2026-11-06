@@ -8,19 +8,7 @@
   publish = "dist"
   ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- site/ netlify/ scripts/build-pages.mjs netlify.toml"
 
-# Own domain since 2026-10-30 (RSP-136): the old Netlify address sends everyone to https://mnemozoo.com,
-# keeping the path. Only this exact host matches, so deploy previews (deploy-preview-N--responsters.netlify.app)
-# are not redirected. Netlify doesn't do this by itself here.
-[[redirects]]
-  from = "https://responsters.netlify.app/*"
-  to = "https://mnemozoo.com/:splat"
-  status = 301
-  force = true
-
-# security.txt (RSP-137, RFC 9116): the file lives at /.well-known/security.txt;
-# scanners also ask for /security.txt at the root, so send them there too.
-[[redirects]]
-  from = "/security.txt"
-  to = "/.well-known/security.txt"
-  status = 301
-  force = true
+# Redirects: all in dist/_redirects, written by the build (RSP-148). Netlify reads that file before any
+# [[redirects]] here, so the old ones moved there, first: the old Netlify address → https://mnemozoo.com keeping the
+# path (RSP-136; only that exact host, deploy previews are not redirected) and /security.txt →
+# /.well-known/security.txt (RSP-137, RFC 9116).
