@@ -91,6 +91,29 @@ export class App {
     return this.page.getByTestId(TID.view(view));
   }
 
+  /** "How to use" (the hint above the tabs) and the link that opens it. */
+  get howto(): Locator {
+    return this.page.getByTestId(TID.howto);
+  }
+  /** Show "How to use". A first-time visitor already sees it open; the link toggles it, so click only when closed. */
+  async openHowto() {
+    if (await this.howto.isHidden()) await this.page.getByTestId(TID.howtoOpen).click();
+    await expect(this.howto).toBeVisible();
+  }
+
+  /** Practice (RSP-162): the answers of the current question and the feedback after an answer. */
+  get answers(): Locator {
+    return this.view('practice').locator(TID.anyAnswer);
+  }
+  get feedback(): Locator {
+    return this.view('practice').getByTestId(TID.feedback);
+  }
+  /** Answer the current Practice question with its first answer (right or wrong) and wait for the feedback. */
+  async answerPractice() {
+    await this.answers.first().click();
+    await expect(this.feedback).toBeVisible();
+  }
+
   /** Click an empty spot in the top-left corner, outside every control. */
   async clickOutside() {
     await this.page.mouse.click(2, 2);
