@@ -83,15 +83,15 @@
 }
 /* Hardcore (RSP-101): dark card with orange; selected = orange border, a ring and an orange check. */
 .mode.hard {
-  background: #33202f;
-  border-color: #33202f;
-  color: #f7eef4;
+  background: var(--card-ink);
+  border-color: var(--card-ink);
+  color: #fbf6ea;
 }
 .mode.hard .mode-icon {
   color: #f2a15a;
 }
 .mode.hard .mode-hint {
-  color: #d9c6d3;
+  color: #d6cbb8;
 }
 .mode.hard[aria-pressed='true'] {
   border-color: #f2a15a;
@@ -101,7 +101,7 @@
 }
 .mode.hard .mode-check {
   background: #f2a15a;
-  color: #33202f;
+  color: var(--card-ink);
 }
 .score {
   font: 600 14px var(--mono);
@@ -219,9 +219,9 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #ffffff;
-  border: 2px solid #33202f;
-  color: #33202f;
+  background: var(--card-paper);
+  border: 2px solid var(--card-ink);
+  color: var(--card-ink);
   display: grid;
   place-items: center;
   pointer-events: none;
