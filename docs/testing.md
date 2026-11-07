@@ -258,6 +258,22 @@ Some language behaviour can't be checked locally: Netlify's redirects by `nf_lan
 - **Where `/` should land:** on the home page `/<lang>/`; old app links like `/#traps` go on from there to `/<lang>/http/#traps`.
 - **A saved choice in localStorage:** values are JSON, so a language is a quoted string. In the DevTools console: `localStorage.setItem("httpon.lang", '"pl"')`. Without the inner quotes the site reads no saved language.
 
+## Accessibility: what axe checks and what stays manual
+
+The `@a11y` tests run [axe-core](https://github.com/dequelabs/axe-core) (`tests/fixtures/pages/axe.ts`, RSP-162) on every page type and state: the app on Collection, Practice with the feedback after an answer, Traps, "How to use" open and the language menu open; a card page, the home page and the 404 page. Each page is checked in the light and the dark theme, in a random language on a random screen size.
+
+- **Rules:** WCAG 2.0, 2.1 and 2.2, levels A and AA, plus axe best-practice (landmarks such as `landmark-one-main`).
+- **A failure** names the rule, its help link and the elements; the full axe result is attached to the report.
+- **Known violations** with their own ticket are listed in `tests/fixtures/a11y-exceptions.ts`: one rule on one element (by test id), with the ticket key. An entry without a ticket doesn't compile. Remove the entry in the PR that fixes the ticket.
+
+axe finds what can be computed from the page: missing names and labels, contrast, landmarks and headings, ARIA roles and states, alt attributes that are missing. It can't judge meaning or use. These stay manual, with the **KAZOO** checklist (Confluence "Mnemozoo — concept and ideas"):
+
+- **K**eyboard: everything reachable and usable with the keyboard, no keyboard trap, focus always visible.
+- **A**lt text makes sense: axe checks that it exists, not what it says.
+- **Z**oom: 200 % and 400 % page zoom, text size 130 % and 150 % on a phone; nothing overlaps or disappears.
+- **O**rder: focus follows the visual order; what a screen reader announces makes sense (e.g. the Practice feedback).
+- **O**nly colour? Meaning is never carried by colour alone.
+
 ## Known pitfalls
 
 | What you see | Why | Fix |
