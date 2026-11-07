@@ -46,8 +46,8 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 1.5px solid #33202f;
-  color: #33202f;
+  border: 1.5px solid var(--card-ink);
+  color: var(--card-ink);
   display: grid;
   place-items: center;
 }
@@ -79,7 +79,7 @@
   font: 800 15px var(--mono);
   padding: 2px 8px;
   border-radius: 6px;
-  color: #2b1a28;
+  color: var(--card-ink);
   display: inline-flex;
   align-items: center;
   gap: 5px;
