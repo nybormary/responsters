@@ -27,6 +27,7 @@ import { CardPage } from './pages/card-page';
 import { HomePage } from './pages/home-page';
 import { SiteChrome } from './pages/site-chrome';
 import { NotFoundPage } from './pages/not-found-page';
+import { Network } from './pages/network';
 
 // What the site keeps in localStorage (site/js/store.js adds the prefix "httpon." to every key).
 export type Seed = {
@@ -52,6 +53,7 @@ type Fixtures = {
   homePage: HomePage;
   site: SiteChrome;
   notFoundPage: NotFoundPage;
+  network: Network;
 };
 
 export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
@@ -141,6 +143,10 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   notFoundPage: async ({ page }, use) => {
     await use(new NotFoundPage(page));
   },
+  // Records requests from the moment a test asks for it: ask for it before the first navigation.
+  network: async ({ page }, use) => {
+    await use(new Network(page));
+  },
 });
 
 export { expect };
@@ -153,4 +159,5 @@ export type { CardPage } from './pages/card-page';
 export { ORIGIN, type HomePage } from './pages/home-page';
 export type { SiteChrome } from './pages/site-chrome';
 export type { NotFoundPage } from './pages/not-found-page';
+export type { Network } from './pages/network';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';

@@ -54,7 +54,7 @@ npm run typecheck && npm test
 
 - **When:** quick look while you work on one part of the site.
 - **Runs against:** your local copy.
-- **Tests / language / screen:** one group: `@collection`, `@practice`, `@traps`, `@language`, `@progress`, `@navigation`, `@home` (the home page and language-less `/`), `@a11y` (automated accessibility checks: landmarks, alt text); random.
+- **Tests / language / screen:** one group: `@collection`, `@practice`, `@traps`, `@language`, `@progress`, `@navigation`, `@home` (the home page and language-less `/`), `@privacy` (what leaves the browser: requests to other hosts), `@a11y` (automated accessibility checks: landmarks, alt text); random.
 - **Needs:** nothing extra.
 
 ```sh
