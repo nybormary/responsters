@@ -14,3 +14,8 @@
 # security.txt (RSP-137): RFC 9116 asks for plain text in UTF-8.
 /.well-known/security.txt
   Content-Type: text/plain; charset=utf-8
+
+# Web fonts (RSP-160): the folder name carries the package version, so a new version is a new URL.
+# Browsers may keep the files for a year without asking again.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
