@@ -10,7 +10,7 @@
     <!-- build: canonical and hreflang -->
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <!-- fonts (RSP-160): served from the site; the build copies this block into every page.
+    <!-- fonts (RSP-160): served from the site (@font-face in css/fonts.css); the build copies this block into every page.
          Preload only the two Latin files the first screen needs: body text and the site name. -->
     <link
       rel="preload"
@@ -26,8 +26,9 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="/css/fonts.css" />
     <!-- /fonts -->
+    <!-- styles (RSP-160): the build joins these files, in this order, into one /css/page-app.css. -->
+    <link rel="stylesheet" href="/css/fonts.css" />
     <link rel="stylesheet" href="/css/base.css" />
     <link rel="stylesheet" href="/css/site.css" />
     <link rel="stylesheet" href="/css/card.css" />
@@ -35,6 +36,7 @@
     <link rel="stylesheet" href="/css/practice.css" />
     <link rel="stylesheet" href="/css/traps.css" />
     <link rel="stylesheet" href="/css/detail.css" />
+    <!-- /styles -->
   </head>
   <body>
     <div class="wrap" id="top">

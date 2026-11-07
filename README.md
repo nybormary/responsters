@@ -98,7 +98,7 @@ The site runs on Netlify's free plan (300 credits a month). When the credits run
 ```
 site/              the site's sources; the build turns them into dist/, which Netlify publishes
   app.html         template of the HTTP rubric page; the build writes it as /<lang>/http/ per language
-  css/             styles: fonts (@font-face), base, site (header and footer), home, card (the card frame), collection, practice, traps, detail (card page)
+  css/             styles, split for editing; the build joins them into one page-<type>.css per page type: fonts (@font-face), base, site (header and footer), home, card (the card frame), collection, practice, traps, detail (card page)
   fonts/           web fonts, served from the site (no Google Fonts): one folder per font and package version, with its OFL.txt
   data/            shared data, the same in every language: codes, status and creature names, colours, trap answers, links
   i18n/            all texts, one file per language: uk, en, pl, da, lt, et; index.js lists the languages the site offers

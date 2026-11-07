@@ -39,6 +39,18 @@ const APP = await readFile(path.join(SITE, 'app.html'), 'utf8');
 // The fonts block (preloads + fonts.css, RSP-160) is taken from the app template, so the app and the pages
 // always load the same fonts from the same place.
 const FONTS = APP.match(/ *<!-- fonts [\s\S]*?<!-- \/fonts -->/)[0].trim();
+// One stylesheet per page type (RSP-160): the build joins the source files of site/css/, in this order, into
+// dist/css/page-<type>.css, so a page waits for one CSS request instead of up to eight. The app's list is the
+// styles block of the app template, so site/app.html stays readable on its own.
+const STYLES = {
+  app: [...APP.match(/<!-- styles [\s\S]*?<!-- \/styles -->/)[0].matchAll(/href="\/css\/([\w-]+)\.css"/g)].map(
+    (m) => m[1],
+  ),
+  creature: ['fonts', 'base', 'site', 'card', 'detail'],
+  home: ['fonts', 'base', 'site', 'home'],
+  'not-found': ['fonts', 'base', 'site', 'card'],
+};
+const styles = (type) => `<link rel="stylesheet" href="/css/page-${type}.css" />`;
 // WebSite structured data on every home page (RSP-156 AC17): Google shows the site name "Mnemozoo" above the URL
 // in search results, so rubric pages can keep their own name in the title ("Responsters: …").
 const WEBSITE = JSON.stringify({
@@ -90,10 +102,7 @@ function creaturePage(lang, tx, d) {
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     ${FONTS}
-    <link rel="stylesheet" href="/css/base.css" />
-    <link rel="stylesheet" href="/css/site.css" />
-    <link rel="stylesheet" href="/css/card.css" />
-    <link rel="stylesheet" href="/css/detail.css" />
+    ${styles('creature')}
     <script type="module" src="/js/site.js"></script>
   </head>
   <body>
@@ -173,9 +182,7 @@ function homePage(lang, tx) {
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     ${FONTS}
-    <link rel="stylesheet" href="/css/base.css" />
-    <link rel="stylesheet" href="/css/site.css" />
-    <link rel="stylesheet" href="/css/home.css" />
+    ${styles('home')}
     <script type="module" src="/js/site.js"></script>
   </head>
   <body>
@@ -272,9 +279,7 @@ function notFoundPage(lang, tx) {
     <title>${esc(t.title)}</title>
     <link rel="icon" href="/favicon.png" type="image/png" />
     ${FONTS}
-    <link rel="stylesheet" href="/css/base.css" />
-    <link rel="stylesheet" href="/css/site.css" />
-    <link rel="stylesheet" href="/css/card.css" />
+    ${styles('not-found')}
     <script type="module" src="/js/site.js"></script>
   </head>
   <body>
@@ -300,6 +305,7 @@ function appPage(lang, tx) {
   const fills = [
     [/<!-- App template[\s\S]*?-->\n/, ''], // the note is for people reading the source, not for visitors
     [/<html lang="[^"]*">/, `<html lang="${lang}">`],
+    [/<!-- styles [\s\S]*?<!-- \/styles -->/, styles('app')],
     [/<title>[^<]*<\/title>/, `<title>${esc(tx.ui.appTitle)}</title>`],
     [/<meta\s+name="description"\s+content="[^"]*"\s*\/>/, `<meta name="description" content="${esc(tx.ui.tag)}" />`],
     [
@@ -410,10 +416,21 @@ async function page(url, html) {
   await writeFile(path.join(dir, 'index.html'), html);
 }
 
+/** Writes dist/css/page-<type>.css for every page type in STYLES (RSP-160). */
+async function writeStyles() {
+  for (const [type, files] of Object.entries(STYLES)) {
+    const parts = await Promise.all(
+      files.map(async (f) => `/* ${f}.css */\n${await readFile(path.join(SITE, 'css', `${f}.css`), 'utf8')}`),
+    );
+    await writeFile(path.join(DIST, 'css', `page-${type}.css`), parts.join('\n'));
+  }
+}
+
 async function build() {
   await rm(DIST, { recursive: true, force: true });
   await cp(SITE, DIST, { recursive: true });
   await rm(path.join(DIST, 'app.html')); // the template is not a page
+  await writeStyles();
 
   let pages = 0;
   for (const lang of LANGS) {
