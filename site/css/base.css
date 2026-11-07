@@ -1,7 +1,9 @@
 /* Base: colour tokens (light + dark), reset, page shell, header, language menu, "How to use" panel, tabs, footer. */
 /* Palette (RSP-168, "own look"): warm paper and ink like the creature art, no lavender; green for open areas,
    yellow for announcements (they also differ in lightness, not only in hue). Contrast: text at least 4.5:1,
-   large text and UI borders at least 3:1, in both themes (checked by the axe UI tests, RSP-162). */
+   large text at least 3:1, in both themes; the axe UI tests (RSP-162) check text contrast. Borders of controls
+   need 3:1 too (WCAG 1.4.11), which axe doesn't check: they get the dark ink outline in RSP-169; --line is
+   for dividers only. */
 /* Layout: a field guide. Header with tabs → collection grouped by status class, practice deck, and confusable pairs. Card art is the hero; the UI stays quiet around it. */
 :root {
   --bg: #f7f2e8;
