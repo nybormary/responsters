@@ -36,8 +36,9 @@ const ORIGIN = 'https://mnemozoo.com'; // canonical and hreflang links always na
 const LANGS = Object.keys(LOCALES);
 // The app template (RSP-138): written per language, never served as is.
 const APP = await readFile(path.join(SITE, 'app.html'), 'utf8');
-// The web fonts link is taken from the app template, so the app and the pages always load the same fonts.
-const FONTS = APP.match(/href="(https:\/\/fonts\.googleapis\.com\/css2\?[^"]+)"/)[1];
+// The fonts block (preloads + fonts.css, RSP-160) is taken from the app template, so the app and the pages
+// always load the same fonts from the same place.
+const FONTS = APP.match(/ *<!-- fonts [\s\S]*?<!-- \/fonts -->/)[0].trim();
 // WebSite structured data on every home page (RSP-156 AC17): Google shows the site name "Mnemozoo" above the URL
 // in search results, so rubric pages can keep their own name in the title ("Responsters: …").
 const WEBSITE = JSON.stringify({
@@ -88,9 +89,7 @@ function creaturePage(lang, tx, d) {
     ${alternates((l) => creatureUrl(l, c))}
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="${FONTS}" />
+    ${FONTS}
     <link rel="stylesheet" href="/css/base.css" />
     <link rel="stylesheet" href="/css/site.css" />
     <link rel="stylesheet" href="/css/card.css" />
@@ -173,9 +172,7 @@ function homePage(lang, tx) {
     <script type="application/ld+json">${WEBSITE}</script>
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="${FONTS}" />
+    ${FONTS}
     <link rel="stylesheet" href="/css/base.css" />
     <link rel="stylesheet" href="/css/site.css" />
     <link rel="stylesheet" href="/css/home.css" />
@@ -274,9 +271,7 @@ function notFoundPage(lang, tx) {
     <meta name="robots" content="noindex" />
     <title>${esc(t.title)}</title>
     <link rel="icon" href="/favicon.png" type="image/png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="${FONTS}" />
+    ${FONTS}
     <link rel="stylesheet" href="/css/base.css" />
     <link rel="stylesheet" href="/css/site.css" />
     <link rel="stylesheet" href="/css/card.css" />
