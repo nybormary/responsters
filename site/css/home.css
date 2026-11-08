@@ -80,6 +80,23 @@
   border: 2.5px solid var(--ink);
   border-radius: 16px;
 }
+/* Small, different static tilts (RSP-172 AC6, mockup): the cards look laid out by hand. The whole figure turns, so the
+   code caption stays with its card; 2° at most keeps the corners inside the 14px gap. */
+.hero-card:nth-child(1) {
+  transform: rotate(-2deg);
+}
+.hero-card:nth-child(2) {
+  transform: rotate(1.5deg);
+}
+.hero-card:nth-child(3) {
+  transform: rotate(-1deg);
+}
+.hero-card:nth-child(4) {
+  transform: rotate(2deg);
+}
+.hero-card:nth-child(5) {
+  transform: rotate(-1.5deg);
+}
 .hero-card figcaption {
   font: 800 15px var(--mono);
   text-align: center;
