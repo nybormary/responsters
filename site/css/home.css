@@ -99,8 +99,7 @@
   scroll-margin-top: 16px;
 }
 .enclosures,
-.pavilion-list,
-.home-steps {
+.pavilion-list {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -216,28 +215,40 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 20px;
-  border: 1.5px solid var(--line);
-  border-radius: 18px;
-  background: var(--surface);
-}
-/* Each step in a soft tint of the next status class colour, like the logo letters (1xx, 2xx, 3xx). color-mix keeps
-   it soft in both themes: the tint is mixed into the surface colour of the current theme. */
-.home-step:nth-child(1) {
-  --tint: var(--c1);
-}
-.home-step:nth-child(2) {
-  --tint: var(--c2);
-}
-.home-step:nth-child(3) {
-  --tint: var(--c3);
-}
-.home-step {
-  background: color-mix(in srgb, var(--tint, var(--surface)) 16%, var(--surface));
-  border-color: color-mix(in srgb, var(--tint, var(--line)) 45%, var(--surface));
 }
 .home-step h3 {
+  margin: 0;
   font: 800 22px var(--display);
+}
+.home-step p {
+  margin: 0;
+}
+/* The picture row of a step (RSP-172 AC3): creature thumbnails and code chips, same outline as the hero cards. */
+.step-art {
+  min-height: 72px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.step-art img {
+  width: 80px;
+  height: auto;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+}
+.step-chip {
+  padding: 6px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 800 17px var(--mono);
+  white-space: nowrap;
+}
+.step-sign {
+  font: 800 20px var(--mono);
+  color: var(--muted);
 }
 
 /* Why and about */

@@ -141,6 +141,16 @@ function creaturePage(lang, tx, d) {
 /** The creatures in the hero of the home page (RSP-156 AC2): one from each status class, so all five colours show. */
 const HERO = [102, 201, 304, 418, 502];
 
+/** What each "How it works" step shows (RSP-172 AC3): meet a creature, picture → code, codes that look alike.
+ * Decoration only: the step text carries the meaning, so the block is aria-hidden and the pictures have empty alt. */
+const stepImg = (c) => `<img src="${art(c)}" alt="" width="640" height="573" loading="lazy" />`;
+const chip = (text) => `<span class="step-chip">${text}</span>`;
+const STEP_ART = [
+  stepImg(418),
+  `${stepImg(304)}<span class="step-sign">→</span>${chip('304 ✓')}`,
+  `${chip('502')}<span class="step-sign">≠</span>${chip('504')}`,
+];
+
 /** Home page /<lang>/ (RSP-156): what the zoo is, what is open and who builds it. Texts: i18n `home`, `site`. */
 function homePage(lang, tx) {
   const h = tx.home;
@@ -153,7 +163,9 @@ function homePage(lang, tx) {
   ).join('\n          ');
   const steps = h.steps
     .map(
-      ([title, text]) => `<li class="home-step">
+      ([title, text], i) => `<li class="path-step home-step">
+            <span class="path-mark" aria-hidden="true">${i + 1}</span>
+            <div class="step-art" aria-hidden="true">${STEP_ART[i]}</div>
             <h3>${esc(title)}</h3>
             <p>${esc(text)}</p>
           </li>`,
@@ -229,7 +241,7 @@ function homePage(lang, tx) {
 
       <section id="how" class="home-how" aria-labelledby="how-title">
         <h2 id="how-title">${esc(h.howTitle)}</h2>
-        <ol class="home-steps">
+        <ol class="path-steps path-steps-row home-steps" role="list">
           ${steps}
         </ol>
       </section>
