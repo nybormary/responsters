@@ -1,6 +1,6 @@
 // Accessibility: landmarks and alt text (automated part; manual checks follow KAZOO).
 // testomat.io folder "Accessibility", suite "Landmarks and alt text (RSP-138)". Later: axe (RSP-162).
-import { test, expect, TAG, VIEWS } from '../fixtures';
+import { test, expect, TAG, VIEWS, type MarkerLook } from '../fixtures';
 
 // ── d6f8bf2f ────────────────────────────────────────────────────────────────────────────────────
 
@@ -69,6 +69,51 @@ test(
       await expect(site.mains).toHaveCount(1);
       await expect(site.contentinfos).toHaveCount(1);
       await expect(site.nav).toHaveAccessibleName(texts.site.nav);
+    });
+  },
+);
+
+// ── 5cd29001 ────────────────────────────────────────────────────────────────────────────────────
+// RSP-172: both lists of path steps keep list semantics; the step number (marker) and the step art are decoration.
+// A marker text in the accessibility tree would show as a line "- text: 1".
+const MARKER_TEXT = /^\s*- text: "?[123]"?$/m;
+
+test(
+  'Path steps on the home page and in the app\'s "How to use" are read once, without the decoration @T5cd29001',
+  { tag: [TAG.a11y] },
+  async ({ homePage, app, lang }) => {
+    let homeMarker: MarkerLook | undefined;
+
+    await test.step('home "How it works": a list of 3 items; markers and step art aria-hidden, pictures alt=""', async () => {
+      await homePage.open(lang);
+      const steps = homePage.steps;
+      await expect(steps.root).toHaveRole('list');
+      await expect(steps.root).toHaveAttribute('role', 'list'); // Chromium keeps <ol> a list anyway; Safari needs it
+      await expect(steps.items).toHaveCount(3);
+      for (const i of [0, 1, 2]) {
+        await expect(steps.marker(i)).toHaveAttribute('aria-hidden', 'true');
+        await expect(steps.art(i)).toHaveAttribute('aria-hidden', 'true');
+      }
+      for (const i of [0, 1]) await expect(steps.pictures(i)).toHaveAttribute('alt', '');
+      homeMarker = await steps.markerLook(0);
+    });
+
+    await test.step('home: the accessibility tree has no step numbers, chips, arrow or "≠"', async () => {
+      const tree = await homePage.steps.root.ariaSnapshot();
+      expect(tree).not.toMatch(MARKER_TEXT);
+      expect(tree).not.toMatch(/304 ✓|≠|→|img/);
+    });
+
+    await test.step('app "How to use": the same component, a list of 3 items, markers aria-hidden', async () => {
+      await app.open();
+      await app.openHowto();
+      const steps = app.howtoSteps;
+      await expect(steps.root).toHaveRole('list');
+      await expect(steps.root).toHaveAttribute('role', 'list');
+      await expect(steps.items).toHaveCount(3);
+      for (const i of [0, 1, 2]) await expect(steps.marker(i)).toHaveAttribute('aria-hidden', 'true');
+      expect(await steps.root.ariaSnapshot()).not.toMatch(MARKER_TEXT);
+      expect(await steps.markerLook(0)).toEqual(homeMarker);
     });
   },
 );

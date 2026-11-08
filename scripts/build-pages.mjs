@@ -144,7 +144,7 @@ const HERO = [102, 201, 304, 418, 502];
 /** What each "How it works" step shows (RSP-172 AC3): meet a creature, picture → code, codes that look alike.
  * Decoration only: the step text carries the meaning, so the block is aria-hidden and the pictures have empty alt. */
 const stepImg = (c) => `<img src="${art(c)}" alt="" width="640" height="573" loading="lazy" />`;
-const chip = (text) => `<span class="step-chip">${text}</span>`;
+const chip = (text) => `<span class="step-chip" data-testid="step-chip">${text}</span>`;
 const STEP_ART = [
   stepImg(418),
   `${stepImg(304)}<span class="step-sign">→</span>${chip('304 ✓')}`,
@@ -156,7 +156,7 @@ function homePage(lang, tx) {
   const h = tx.home;
   const app = appUrl(lang);
   const hero = HERO.map(
-    (c) => `<figure class="hero-card">
+    (c) => `<figure class="hero-card" data-testid="hero-card-${c}">
             <img src="${art(c)}" alt="${esc(tx.cards[c].art)}" width="640" height="573" />
             <figcaption>${c}</figcaption>
           </figure>`,
@@ -164,8 +164,8 @@ function homePage(lang, tx) {
   const steps = h.steps
     .map(
       ([title, text], i) => `<li class="path-step home-step">
-            <span class="path-mark" aria-hidden="true">${i + 1}</span>
-            <div class="step-art" aria-hidden="true">${STEP_ART[i]}</div>
+            <span class="path-mark" aria-hidden="true" data-testid="step-marker">${i + 1}</span>
+            <div class="step-art" aria-hidden="true" data-testid="step-art">${STEP_ART[i]}</div>
             <h3>${esc(title)}</h3>
             <p>${esc(text)}</p>
           </li>`,
@@ -241,7 +241,7 @@ function homePage(lang, tx) {
 
       <section id="how" class="home-how" aria-labelledby="how-title">
         <h2 id="how-title">${esc(h.howTitle)}</h2>
-        <ol class="path-steps path-steps-row home-steps" role="list">
+        <ol class="path-steps path-steps-row home-steps" role="list" data-testid="home-steps">
           ${steps}
         </ol>
       </section>

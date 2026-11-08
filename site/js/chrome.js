@@ -78,7 +78,8 @@ export function renderChrome() {
   $('howto-title').textContent = t().howto;
   $('howto-steps').innerHTML = t()
     .howtoSteps.map(
-      (s, i) => `<li class="path-step"><span class="path-mark" aria-hidden="true">${i + 1}</span>${s}</li>`,
+      (s, i) =>
+        `<li class="path-step"><span class="path-mark" aria-hidden="true" data-testid="step-marker">${i + 1}</span>${s}</li>`,
     )
     .join('');
   $('howto-note').textContent = t().howtoNote;
