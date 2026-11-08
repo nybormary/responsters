@@ -77,7 +77,9 @@ export function renderChrome() {
   $('howto').hidden = !state.howtoOpen;
   $('howto-title').textContent = t().howto;
   $('howto-steps').innerHTML = t()
-    .howtoSteps.map((s) => `<li>${s}</li>`)
+    .howtoSteps.map(
+      (s, i) => `<li class="path-step"><span class="path-mark" aria-hidden="true">${i + 1}</span>${s}</li>`,
+    )
     .join('');
   $('howto-note').textContent = t().howtoNote;
   $('howto-close').textContent = t().howtoClose;

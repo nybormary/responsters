@@ -309,11 +309,17 @@ summary.langbtn::-webkit-details-marker {
   font: 800 20px var(--display);
   margin: 0;
 }
-.howto ol {
-  margin: 0;
-  padding-left: 1.4em;
-  display: grid;
-  gap: 6px;
+.howto .path-steps {
+  --mark: 28px;
+  --step-gap: 14px;
+  --line-pad: 2px; /* one-line steps are as tall as the marker: keep a visible bit of line between them */
+}
+.howto .path-step {
+  min-height: var(--mark);
+  padding-top: 3px;
+}
+.howto .path-mark {
+  font-size: 14px;
 }
 .howto .note {
   margin: 0;
