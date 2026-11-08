@@ -445,7 +445,7 @@ export default {
     title: 'Mnemozoo: technologijų zoologijos sodas tavo atminčiai',
     description:
       'Originalūs padarai HTTP būsenos kodams: kortelė kiekvienam kodui, treniruotė ir spąstai su panašiais kodais. Šešios kalbos.',
-    kicker: 'Technologijų zoologijos sodas tavo atminčiai',
+    kicker: 'IT memo zoo',
     h1: 'Gauk atsakymą dar prieš klausimą',
     lead: 'Originalūs padarai HTTP būsenos kodams, kuriuos kasdien sutinki naršyklėje, žurnaluose ir konsolėje. Kortelė, treniruotė, spąstai su panašiais kodais. Šešios kalbos.',
     mapTitle: 'Zoologijos sodo žemėlapis',

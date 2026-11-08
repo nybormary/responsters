@@ -442,7 +442,7 @@ export default {
     title: 'Mnemozoo: tehnikaloomaaed sinu mälule',
     description:
       'Originaalsed olendid HTTP olekukoodidele: kaart iga koodi kohta, harjutamine ja lõksud sarnaste koodidega. Kuus keelt.',
-    kicker: 'Tehnikaloomaaed sinu mälule',
+    kicker: 'IT memo zoo',
     h1: 'Saa vastus enne, kui küsidki',
     lead: 'Originaalsed olendid HTTP olekukoodidele, mida kohtad iga päev brauseris, logides ja konsoolis. Kaart, harjutamine, lõksud sarnaste koodidega. Kuus keelt.',
     mapTitle: 'Loomaaia kaart',

@@ -445,7 +445,7 @@ export default {
     title: 'Mnemozoo: techniczne zoo dla twojej pamięci',
     description:
       'Oryginalne stworki dla kodów statusu HTTP: karta każdego kodu, trening i pułapki z podobnymi kodami. Sześć języków.',
-    kicker: 'Techniczne zoo dla twojej pamięci',
+    kicker: 'IT memo zoo',
     h1: 'Otrzymaj odpowiedź, zanim w ogóle zapytasz',
     lead: 'Oryginalne stworki dla kodów statusu HTTP, które spotykasz codziennie w przeglądarce, logach i konsoli. Karta, trening, pułapki z podobnymi kodami. Sześć języków.',
     mapTitle: 'Mapa zoo',

@@ -446,7 +446,7 @@ export default {
     title: 'Mnemozoo: tech zoo for your memory',
     description:
       'Original creatures for HTTP status codes: a card for every code, practice and traps with look-alike codes. Six languages.',
-    kicker: 'Tech zoo for your memory',
+    kicker: 'IT memo zoo',
     h1: 'Get the response before you even ask',
     lead: 'Original creatures for the HTTP status codes you meet every day in the browser, logs and console. A card, practice, traps with look-alike codes. Six languages.',
     mapTitle: 'Zoo map',
