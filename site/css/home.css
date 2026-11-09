@@ -78,7 +78,7 @@
   width: 100%;
   height: auto;
   border: 2.5px solid var(--ink);
-  border-radius: 16px;
+  border-radius: var(--r-l);
 }
 /* Small, different static tilts (RSP-172 AC6, mockup): the cards look laid out by hand. The whole figure turns, so the
    code caption stays with its card; 2° at most keeps the corners inside the 14px gap. */
@@ -138,7 +138,7 @@
   padding: 0 20px 18px;
   border: 2.5px solid var(--ink);
   border-top: 12px solid var(--stripe);
-  border-radius: 20px;
+  border-radius: var(--r-l);
   background: var(--surface);
   color: var(--ink);
   text-decoration: none;
@@ -210,7 +210,7 @@
   gap: 6px;
   padding: 18px 20px;
   border: 1.5px solid var(--line);
-  border-radius: 18px;
+  border-radius: var(--r-l);
   background: var(--surface);
   text-decoration: none;
 }
@@ -252,12 +252,12 @@
   width: 80px;
   height: auto;
   border: 2px solid var(--ink);
-  border-radius: 12px;
+  border-radius: var(--r-l);
 }
 .step-chip {
   padding: 6px 12px;
   border: 2px solid var(--ink);
-  border-radius: 6px;
+  border-radius: var(--r-s);
   background: var(--surface);
   color: var(--ink);
   font: 800 17px var(--mono);
@@ -275,7 +275,7 @@
   gap: 32px;
   padding: 32px clamp(16px, 4vw, 28px);
   border: 1.5px solid var(--line);
-  border-radius: 24px;
+  border-radius: var(--r-l);
   background: var(--surface);
   scroll-margin-top: 16px;
 }

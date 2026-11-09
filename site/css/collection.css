@@ -12,7 +12,7 @@
   max-width: 320px;
   height: 8px;
   background: var(--soft);
-  border-radius: 4px;
+  border-radius: var(--r-s);
   overflow: hidden;
 }
 .bar span {
@@ -78,7 +78,7 @@
 .group h2 code {
   font: 800 15px var(--mono);
   padding: 2px 8px;
-  border-radius: 6px;
+  border-radius: var(--r-s);
   color: var(--card-ink);
   display: inline-flex;
   align-items: center;
