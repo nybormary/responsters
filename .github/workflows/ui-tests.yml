@@ -7,6 +7,7 @@
 # PR changes the site, but this push only tests or docs → Netlify compares with its LAST BUILT preview, not with
 #   master, and cancels this commit's preview → also variant 1 on the PR's own files (RSP-174).
 # Either way: type check, locale check, lint, format check, and the HTML report kept as an artifact for 14 days.
+# A failed run posts one alert to Slack #ci-alerts (RSP-179, scripts/ci-alert.mjs); a green run posts nothing.
 
 name: UI tests
 
@@ -46,15 +47,19 @@ jobs:
         run: npm ci
 
       - name: Type check
+        id: typecheck
         run: npm run typecheck
 
       - name: Locale check
+        id: locales
         run: npm run check-locales
 
       - name: Lint
+        id: lint
         run: npm run lint
 
       - name: Format check
+        id: format
         run: npm run format:check
 
       - name: Does this PR change the site?
@@ -109,6 +114,7 @@ jobs:
           exit 1
 
       - name: UI tests on the deploy preview (variant 8, reported to testomat.io)
+        id: tests-preview
         if: steps.preview.outputs.ready == 'true'
         env:
           TARGET: preview
@@ -120,6 +126,7 @@ jobs:
           npx playwright test
 
       - name: UI tests on the PR's own files (variant 1, not reported)
+        id: tests-own
         if: steps.changes.outputs.site == 'false' || steps.preview.outputs.ready == 'false'
         run: npx playwright test
 
@@ -131,3 +138,16 @@ jobs:
           path: playwright-report/
           retention-days: 14
           if-no-files-found: ignore
+
+      - name: Alert #ci-alerts
+        if: failure()
+        continue-on-error: true # best effort: Slack down or no secret must not change the result
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          ALERT_KIND: pr
+          STEPS_JSON: ${{ toJSON(steps) }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          BRANCH: ${{ github.head_ref }}
+          SUITE_WAY: ${{ steps.preview.outputs.ready == 'true' && 'the deploy preview' || 'the PR''s own files' }}
+        run: node scripts/ci-alert.mjs
