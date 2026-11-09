@@ -199,7 +199,7 @@ function homePage(lang, tx) {
     <main class="home" data-testid="home-page">
       <section class="home-hero" aria-labelledby="home-title">
         <div class="home-hero-text">
-          <p class="home-kicker">${esc(h.kicker)}</p>
+          <p class="sign sign-open home-kicker" data-testid="home-kicker">${esc(h.kicker)}</p>
           <h1 id="home-title">${esc(h.h1)}</h1>
           <p class="home-lead">${esc(h.lead)}</p>
         </div>
@@ -213,23 +213,23 @@ function homePage(lang, tx) {
         <ul class="enclosures">
           <li class="enclosure enclosure-wide" style="--stripe: var(--c5)">
             <a href="${app}#collection" data-testid="enclosure-http">
-              <span class="enclosure-top"><span class="enclosure-zone">${esc(h.httpZone)}</span><span class="badge badge-open">${esc(h.open)}</span></span>
+              <span class="enclosure-top"><span class="sign sign-open" data-testid="sign-http">${esc(h.httpSign)}</span></span>
               <span class="enclosure-name">${esc(h.httpName)}</span>
               <span>${esc(h.httpText(D.length, D[0].c, D[D.length - 1].c))}</span>
               <span class="enclosure-go">${esc(h.enter)}</span>
             </a>
           </li>
           <li class="enclosure enclosure-soon" style="--stripe: var(--c4)" data-testid="enclosure-git">
-            <span class="enclosure-top"><span class="enclosure-zone">${esc(h.gitZone)}</span><span class="badge badge-date">${esc(h.gitDate)}</span></span>
+            <span class="enclosure-top"><span class="sign sign-notice" data-testid="sign-git">${esc(h.gitSign)}</span></span>
             <span class="enclosure-name">Git</span>
             <span>${esc(h.gitText)}</span>
           </li>
         </ul>
         <div class="pavilions">
-          <h3>${esc(h.pavilions)}</h3>
           <ul class="pavilion-list">
             <li class="pavilion">
               <a href="${app}#traps" data-testid="pavilion-traps">
+                <span class="sign" data-testid="sign-pavilion">${esc(h.pavilionSign)}</span>
                 <span class="pavilion-name">${esc(h.pairsName)}</span>
                 <span>${esc(h.pairsText)}</span>
                 <span class="enclosure-go">${esc(h.pairsLink(PAIRS.length))}</span>

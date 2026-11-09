@@ -39,10 +39,7 @@
   gap: 20px;
 }
 .home-kicker {
-  font: 700 13px var(--body);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
+  width: fit-content;
 }
 .home-hero h1 {
   margin: 0;
@@ -158,30 +155,6 @@
   gap: 8px;
   padding-top: 12px;
 }
-.enclosure-zone {
-  font: 700 13px var(--body);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.badge {
-  padding: 3px 10px;
-  border-radius: 999px;
-  border: 1.5px solid currentColor;
-  font-weight: 700;
-  font-size: 14px;
-}
-.badge-open {
-  color: var(--ink); /* text in ink: green text on white is below 4.5:1 */
-  border-color: var(--good);
-}
-.badge-open::before {
-  content: '● ';
-  color: var(--good);
-}
-.badge-date {
-  color: var(--muted);
-}
 .enclosure-name {
   font: 800 28px/1.15 var(--display);
 }
@@ -196,12 +169,6 @@
   gap: 12px;
   padding-top: 16px;
   border-top: 1.5px dashed var(--line);
-}
-.pavilions h3 {
-  font: 700 13px var(--body);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
 }
 .pavilion > a {
   height: 100%;
@@ -294,10 +261,7 @@
   gap: 12px;
 }
 .home-author h2 {
-  font: 700 13px var(--body);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
+  font: 800 22px/1.2 var(--display);
 }
 .home-links {
   display: flex;

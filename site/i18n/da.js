@@ -446,16 +446,14 @@ export default {
     h1: 'Få svaret, før du overhovedet spørger',
     lead: 'Originale væsner til de HTTP-statuskoder, du møder hver dag i browseren, logfilerne og konsollen. Kort, træning, fælder med koder, der ligner hinanden. Seks sprog.',
     mapTitle: 'Zookort',
-    open: 'Åbent',
-    httpZone: 'Vilde dyr',
+    httpSign: 'Vilde dyr · åbent', // zone sign with its status (RSP-170)
     httpName: 'HTTP-statuskoder',
     httpText: (n, first, last) =>
       `${n} ${n === 1 ? 'væsen' : 'væsner'} fra ${first} til ${last}. Et kort for hver kode, træning i fire tilstande, fælder med koder, som folk forveksler.`,
     enter: 'Mød beboerne →',
-    gitZone: 'Kæledyr',
-    gitDate: '1. december',
+    gitSign: 'Kæledyr · åbner 1. december', // announcement sign; the Git date stays on purpose
     gitText: 'Git-kommandoer som scener fra hverdagen. Vi åbner med en julekalender: et nyt kort hver dag.',
-    pavilions: 'Temapavilloner',
+    pavilionSign: 'Temapavillon', // singular: the sign hangs on the pavilion itself
     pairsName: 'Arter, der ligner hinanden',
     pairsText: 'Par, som folk forveksler: 401 og 403, 502 og 504. En regel og situationer, der skal sorteres.',
     pairsLink: (n) => `${n} par i HTTP-anlægget →`,

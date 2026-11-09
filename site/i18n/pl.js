@@ -449,16 +449,14 @@ export default {
     h1: 'Otrzymaj odpowiedź, zanim w ogóle zapytasz',
     lead: 'Oryginalne stworki dla kodów statusu HTTP, które spotykasz codziennie w przeglądarce, logach i konsoli. Karta, trening, pułapki z podobnymi kodami. Sześć języków.',
     mapTitle: 'Mapa zoo',
-    open: 'Otwarte',
-    httpZone: 'Dzikie zwierzęta',
+    httpSign: 'Dzikie zwierzęta · otwarte', // zone sign with its status (RSP-170)
     httpName: 'Kody statusu HTTP',
     httpText: (n, first, last) =>
       `${n} ${plural(n, { one: 'stworek', few: 'stworki', many: 'stworków', other: 'stworka' })} od ${first} do ${last}. Karta każdego kodu, trening w czterech trybach, pułapki z kodami, które się mylą.`,
     enter: 'Poznaj mieszkańców →',
-    gitZone: 'Zwierzęta domowe',
-    gitDate: '1 grudnia',
+    gitSign: 'Zwierzęta domowe · otwarcie 1 grudnia', // announcement sign; the Git date stays on purpose
     gitText: 'Polecenia gita jako scenki z codzienności. Zaczynamy od kalendarza adwentowego: codziennie nowa karta.',
-    pavilions: 'Pawilony tematyczne',
+    pavilionSign: 'Pawilon tematyczny', // singular: the sign hangs on the pavilion itself
     pairsName: 'Podobne gatunki',
     pairsText: 'Pary, które się mylą: 401 i 403, 502 i 504. Reguła i sytuacje do przyporządkowania.',
     pairsLink: (n) => `${n} ${plural(n, { one: 'para', few: 'pary', many: 'par', other: 'pary' })} na wybiegu HTTP →`,
