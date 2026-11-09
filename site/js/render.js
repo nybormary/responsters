@@ -63,7 +63,7 @@ export function langMenu(lang, urlFor, names, label) {
     )
     .join('');
   return `<details class="langmenu">
-          <summary class="langbtn" data-testid="lang-button" aria-label="${esc(`${label}: ${name}`)}">${GLOBE}<span class="lang-code" aria-hidden="true">${code}</span><span class="lang-name" lang="${lang}">${name}</span>${CHEVRON}</summary>
+          <summary class="langbtn" data-testid="lang-button">${GLOBE}<span class="sr-only">${esc(label)}: </span><span class="lang-code">${code}</span><span class="lang-name" lang="${lang}">${name}</span>${CHEVRON}</summary>
           <ul class="langlist" data-testid="lang-menu" aria-label="${esc(label)}">${items}</ul>
         </details>`;
 }
