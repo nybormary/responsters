@@ -1,7 +1,7 @@
 /* Traps: confusable pairs, their rule and the situation drills. */
 .pair {
   background: var(--surface);
-  border: 1px solid var(--line);
+  border: var(--outline);
   border-radius: var(--r-l);
   padding: 16px;
   margin-bottom: 18px;
@@ -52,7 +52,7 @@
   flex-wrap: wrap;
 }
 .sc button {
-  border: 2px solid var(--line);
+  border: var(--outline);
   background: var(--surface);
   color: var(--ink);
   font: 800 14px var(--mono);
@@ -62,11 +62,30 @@
 }
 .sc button.right {
   border-color: var(--good);
+  box-shadow: 0 0 0 2px var(--good); /* thicker frame, not only colour (WCAG 1.4.1) */
   color: var(--good);
 }
 .sc button.wrong {
+  position: relative;
   border-color: var(--bad);
   color: var(--bad);
+}
+/* ✕ badge on the wrong choice, as in Practice (not only colour, WCAG 1.4.1); decoration, the line below says why. */
+.sc button.wrong::after {
+  content: '✕' / '';
+  top: -8px;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bad);
+  color: var(--surface);
+  font:
+    700 12px/1 system-ui,
+    sans-serif;
 }
 .sc .why {
   flex-basis: 100%;

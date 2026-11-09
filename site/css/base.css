@@ -6,9 +6,10 @@
    for dividers only. */
 /* Layout: a field guide. Header with tabs → collection grouped by status class, practice deck, and confusable pairs. Card art is the hero; the UI stays quiet around it. */
 :root {
-  /* Own look (RSP-169): two corner radii for everything that isn't round. */
+  /* Own look (RSP-169): two corner radii and one ink outline for cards, art and controls. --line is for dividers only. */
   --r-s: 6px; /* signs, chips, buttons */
   --r-l: 16px; /* cards, panels, art */
+  --outline: 2.5px solid var(--ink);
   --bg: #f7f2e8;
   --surface: #fffdf8;
   --ink: #2b2027;
@@ -162,7 +163,7 @@ header {
   gap: 6px;
   min-height: 44px;
   padding: 6px 12px;
-  border: 1.5px solid var(--line);
+  border: var(--outline);
   border-radius: 999px;
   background: var(--surface);
   color: var(--ink);
@@ -218,7 +219,7 @@ header {
   padding: 6px;
   list-style: none;
   background: var(--surface);
-  border: 1.5px solid var(--line);
+  border: var(--outline);
   border-radius: var(--r-l);
   box-shadow: 0 8px 24px rgb(0 0 0 / 0.14);
 }
@@ -302,7 +303,7 @@ summary.langbtn::-webkit-details-marker {
 .howto {
   margin-top: 20px;
   background: var(--surface);
-  border: 1.5px solid var(--line);
+  border: var(--outline);
   border-radius: var(--r-l);
   padding: 16px 20px;
   display: grid;
@@ -331,7 +332,7 @@ summary.langbtn::-webkit-details-marker {
 }
 .howto-done {
   justify-self: start;
-  border: 1.5px solid var(--line);
+  border: var(--outline);
   background: var(--soft);
   color: var(--ink);
   border-radius: 999px;
@@ -408,7 +409,7 @@ footer {
   height: var(--mark);
   display: grid;
   place-items: center;
-  border: 2px solid var(--ink);
+  border: var(--outline);
   border-radius: 50%;
   background: var(--sign);
   color: var(--sign-ink);

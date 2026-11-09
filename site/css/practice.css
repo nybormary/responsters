@@ -30,7 +30,7 @@
   gap: 4px;
   min-height: 44px;
   padding: 12px 14px;
-  border: 1.5px solid var(--line);
+  border: var(--outline);
   border-radius: var(--r-l);
   background: var(--surface);
   color: var(--ink);
@@ -175,7 +175,7 @@
 }
 .prompt {
   background: var(--surface);
-  border: 1px solid var(--line);
+  border: var(--outline);
   border-radius: var(--r-l);
   padding: 16px;
   display: flex;
@@ -300,7 +300,7 @@
   gap: 10px;
 }
 .opt {
-  border: 2px solid var(--line);
+  border: var(--outline);
   background: var(--surface);
   color: var(--ink);
   border-radius: var(--r-l);
@@ -340,13 +340,35 @@
 .opt:hover:not(:disabled) {
   border-color: var(--accent);
 }
+/* The right answer is told apart by more than colour (WCAG 1.4.1, colour-blind users): a thicker frame. The extra
+   width is a box-shadow ring, so nothing moves when the answer is shown. */
 .opt.right {
   border-color: var(--good);
+  box-shadow: 0 0 0 2.5px var(--good);
   background: color-mix(in srgb, var(--good) 12%, var(--surface));
 }
 .opt.wrong {
+  position: relative;
   border-color: var(--bad);
   background: color-mix(in srgb, var(--bad) 12%, var(--surface));
+}
+/* A wrong answer also gets a ✕ badge: in grey it would look like an answer nobody picked (WCAG 1.4.1). Decoration
+   only (empty alt text after the slash): the verdict says the result in words. */
+.opt.wrong::after {
+  content: '✕' / '';
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bad);
+  color: var(--surface);
+  font:
+    700 15px/1 system-ui,
+    sans-serif;
 }
 .opt:disabled {
   cursor: default;
@@ -356,7 +378,7 @@
   gap: 16px;
   align-items: flex-start;
   background: var(--surface);
-  border: 1px solid var(--line);
+  border: var(--outline);
   border-radius: var(--r-l);
   padding: 14px;
 }
