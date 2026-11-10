@@ -27,16 +27,17 @@ export class Axe {
 
   /**
    * Run axe on the page as it is now and fail on any violation that isn't a listed exception.
-   * The message names the rule, its help link and the elements; the full axe result is attached to the report.
+   * The message names the rule, its help link and the elements. Whenever axe finds anything, its raw violations
+   * (listed exceptions included, so a known one stays visible) are attached to the report.
    */
   async expectNoViolations(where: string) {
     const result = await new AxeBuilder({ page: this.page }).withTags(AXE_TAGS).analyze();
     const left = result.violations
       .map((v) => ({ ...v, nodes: v.nodes.filter((n) => !excused(v.id, n.html)) }))
       .filter((v) => v.nodes.length > 0);
-    if (left.length)
+    if (result.violations.length)
       await this.testInfo.attach(`axe: ${where}`, {
-        body: JSON.stringify(left, null, 2),
+        body: JSON.stringify(result.violations, null, 2), // raw: not `left` (Copilot review, PR #33)
         contentType: 'application/json',
       });
     expect(left.map(describe), `axe violations: ${where}`).toEqual([]);
