@@ -2,7 +2,9 @@
 // Best effort: whatever happens here, the job's result stays what the tests made it; problems only go to the log.
 // Input (env): SLACK_WEBHOOK_URL (GitHub secret), ALERT_KIND (pr | production), STEPS_JSON (toJSON(steps)),
 // PR_NUMBER, PR_TITLE, PR_URL, BRANCH, HEAD_SHA, SUITE_WAY, and GitHub's own GITHUB_* variables.
-// Test counts come from the JSON reporter (ci-results.json, written on CI by playwright.config.ts).
+// Test counts and the failed tests come from the JSON reporter (ci-results.json, written on CI by
+// playwright.config.ts). The testomat.io run link comes from the reporter's own log line "📊 Report URL: …",
+// which the workflow keeps in testomat-run.log; a run that wasn't reported (the PR's own files) says so.
 import { readFile } from 'node:fs/promises';
 
 const e = process.env;
@@ -37,11 +39,37 @@ try {
 }
 
 let counts = 'no test results (the run stopped before the tests)';
+const failed = [];
 try {
-  const { stats } = JSON.parse(await readFile('ci-results.json', 'utf8'));
+  const report = JSON.parse(await readFile('ci-results.json', 'utf8'));
+  const { stats } = report;
   counts = `${stats.unexpected} failed, ${stats.flaky} flaky, ${stats.expected} passed`;
+  // Failed = "unexpected" after the retry. Title without the trailing tags and @T ids, plus file:line.
+  const walk = (suite) => {
+    for (const spec of suite.specs ?? []) {
+      if (spec.tests?.some((t) => t.status === 'unexpected')) {
+        const title = spec.title.replace(/(\s+@[\w-]+)+$/, '');
+        failed.push(`• ${esc(title)} (\`${spec.file}:${spec.line}\`)`);
+      }
+    }
+    for (const child of suite.suites ?? []) walk(child);
+  };
+  for (const suite of report.suites ?? []) walk(suite);
 } catch {
-  // keep the default
+  // keep the defaults
+}
+const MAX_LISTED = 5;
+const failedLines = failed.slice(0, MAX_LISTED);
+if (failed.length > MAX_LISTED) failedLines.push(`…and ${failed.length - MAX_LISTED} more`);
+
+let testomat = "not reported to testomat.io (the PR's own files)";
+try {
+  // eslint-disable-next-line no-control-regex
+  const log = (await readFile('testomat-run.log', 'utf8')).replace(/\u001b\[[0-9;]*m/g, '');
+  const url = log.match(/Report URL:\s*(https:\/\/app\.testomat\.io\/\S+)/)?.[1];
+  testomat = url ? `<${url}|testomat.io run>` : 'testomat.io: no run link in the log';
+} catch {
+  // not reported: keep the default
 }
 
 const run = `${e.GITHUB_SERVER_URL}/${e.GITHUB_REPOSITORY}/actions/runs/${e.GITHUB_RUN_ID}`;
@@ -52,8 +80,9 @@ const where =
 const lines = [
   `🔴 *UI tests failed*: ${where}`,
   `Failed at: ${failedStep} · ${counts}${e.SUITE_WAY ? ` · ran on ${e.SUITE_WAY}` : ''}`,
+  ...failedLines,
   e.ALERT_KIND === 'production' ? '' : `Branch \`${esc(e.BRANCH)}\` · commit \`${(e.HEAD_SHA || '').slice(0, 7)}\``,
-  `<${run}|Run and HTML report> · <https://app.testomat.io/projects/responsters/runs|testomat.io runs>`,
+  `<${run}|Run and HTML report> · ${testomat}`,
 ].filter(Boolean);
 
 try {

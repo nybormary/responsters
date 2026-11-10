@@ -123,7 +123,7 @@ jobs:
           BRANCH: ${{ github.head_ref }}
         run: |
           export TESTOMATIO_TITLE="🦭 CI · PR #$PR ($BRANCH) on deploy preview"
-          npx playwright test
+          npx playwright test 2>&1 | tee testomat-run.log # the alert takes the run link from this log
 
       - name: UI tests on the PR's own files (variant 1, not reported)
         id: tests-own
