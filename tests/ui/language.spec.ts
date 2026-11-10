@@ -28,13 +28,13 @@ const BROWSER_CASES: { locale: string; expected: Lang }[] = [
 
 for (const { locale, expected } of BROWSER_CASES) {
   test.describe(`browser language ${locale}`, () => {
-    test.use({ locale });
+    test.use({ locale, langRedirect: true });
 
     test(
       `Browser language picks the site language: ${locale} → ${expected} @Tc727f8eb`,
       { tag: [TAG.language] },
       async ({ app }) => {
-        await app.open();
+        await app.openLanguageless();
         await expectLanguage(app, expected);
       },
     );
@@ -42,13 +42,13 @@ for (const { locale, expected } of BROWSER_CASES) {
 }
 
 test.describe('browser language vs. saved choice', () => {
-  test.use({ locale: 'pl-PL', seed: { lang: 'da' } });
+  test.use({ locale: 'pl-PL', seed: { lang: 'da' }, langRedirect: true });
 
   test(
     'Browser language picks the site language: a language picked in the menu wins @Tc727f8eb',
     { tag: [TAG.language] },
     async ({ app }) => {
-      await app.open();
+      await app.openLanguageless();
       await expectLanguage(app, 'da');
     },
   );
