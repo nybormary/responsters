@@ -33,7 +33,7 @@ jobs:
         id: tests
         env:
           TESTOMATIO: ${{ secrets.TESTOMATIO }}
-        run: npm run test:prod:smoke
+        run: npm run test:prod:smoke 2>&1 | tee testomat-run.log # the alert takes the run link from this log
 
       - name: Keep the HTML report
         if: always()
