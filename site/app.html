@@ -53,7 +53,7 @@
 
         <section class="howto" id="howto" data-testid="howto" aria-labelledby="howto-title" hidden>
           <h2 id="howto-title"></h2>
-          <ol id="howto-steps"></ol>
+          <ol class="path-steps" id="howto-steps" role="list" data-testid="howto-steps"></ol>
           <p class="note" id="howto-note"></p>
           <button class="howto-done" id="howto-close" data-testid="howto-close"></button>
         </section>
@@ -74,7 +74,7 @@
             <div class="modes" id="modes" role="group" aria-labelledby="modes-title"></div>
           </div>
           <div class="stage" id="stage">
-            <div class="prompt" id="prompt"></div>
+            <div class="prompt" id="prompt" data-testid="question"></div>
             <div class="opts" id="opts"></div>
             <div id="result"></div>
           </div>

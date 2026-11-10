@@ -445,20 +445,18 @@ export default {
     title: 'Mnemozoo: technologijų zoologijos sodas tavo atminčiai',
     description:
       'Originalūs padarai HTTP būsenos kodams: kortelė kiekvienam kodui, treniruotė ir spąstai su panašiais kodais. Šešios kalbos.',
-    kicker: 'Technologijų zoologijos sodas tavo atminčiai',
+    kicker: 'IT memo zoo',
     h1: 'Gauk atsakymą dar prieš klausimą',
     lead: 'Originalūs padarai HTTP būsenos kodams, kuriuos kasdien sutinki naršyklėje, žurnaluose ir konsolėje. Kortelė, treniruotė, spąstai su panašiais kodais. Šešios kalbos.',
     mapTitle: 'Zoologijos sodo žemėlapis',
-    open: 'Atidaryta',
-    httpZone: 'Laukiniai gyvūnai',
+    httpSign: 'Laukiniai gyvūnai · atidaryta', // zone sign with its status (RSP-170)
     httpName: 'HTTP būsenos kodai',
     httpText: (n, first, last) =>
       `${n} ${plural(n, { one: 'padaras', few: 'padarai', many: 'padaro', other: 'padarų' })} nuo ${first} iki ${last}. Kortelė kiekvienam kodui, treniruotė keturiais režimais, spąstai su kodais, kuriuos painioja.`,
     enter: 'Susipažink su gyventojais →',
-    gitZone: 'Naminiai gyvūnai',
-    gitDate: 'gruodžio 1 d.',
+    gitSign: 'Naminiai gyvūnai · atidaroma gruodžio 1 d.', // announcement sign; the Git date stays on purpose
     gitText: 'Git komandos kaip buitinės scenos. Pradedame advento kalendoriumi: kasdien nauja kortelė.',
-    pavilions: 'Teminiai paviljonai',
+    pavilionSign: 'Teminis paviljonas', // singular: the sign hangs on the pavilion itself
     pairsName: 'Panašios rūšys',
     pairsText: 'Poros, kurias painioja: 401 ir 403, 502 ir 504. Taisyklė ir situacijos rūšiavimui.',
     pairsLink: (n) => `${n} ${plural(n, { one: 'pora', few: 'poros', many: 'poros', other: 'porų' })} HTTP aptvare →`,

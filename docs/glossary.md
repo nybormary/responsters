@@ -36,7 +36,7 @@ Pick the right word before you write a ticket, a test title, an i18n key, a CSS 
 | 15 | streak | Right answers in a row. | `state.streakBy` (per card), `ui.score` | — | combo |
 | 16 | hint | Help in Practice that names the creature; an answer after a hint counts in the score but not toward known. | `ui.hint`, `.hintbtn`, `.hint-out` | — | clue, tip (tip is git) |
 | 17 | often confused with | Card page section: the cards this one shares a trap with. | `CONF` in `site/data/traps.js`, `#m-conf`, `ui.conf` | — | related, see also |
-| 18 | how to use | The short guide opened from the header. | `#howto`, `ui.howto`, `ui.howtoSteps` | `howto-open`, `howto`, `howto-close` | help, onboarding, tutorial |
+| 18 | how to use | The short guide opened from the header; its steps are path steps (#63). | `#howto`, `#howto-steps`, `ui.howto`, `ui.howtoSteps` | `howto-open`, `howto`, `howto-close`; its list `howto-steps` | help, onboarding, tutorial |
 | 19 | language menu | The menu in the site header that switches the site language. | app: `#lang-btn`, `#lang-list`, `site/js/chrome.js`; home and card pages: `<details class="langmenu">` from `langMenu()` in `site/js/render.js` | `lang-button`, `lang-menu`, `lang-<code>` (the same on both menus, RSP-155) | locale switcher (in texts) |
 
 ## HTTP only
@@ -84,10 +84,10 @@ Added after the first screenshots; the numbers continue so the screenshots stay 
 
 | # | Term | Definition | Name in code | Test id | Don't use |
 |---|------|------------|--------------|---------|-----------|
-| 47 | situation | One line in a trap to sort into one of its codes, e.g. "The token has expired." | `traps[key].s[i]`, `.sc`, `.scen` | — | scenario, case, example |
-| 48 | answer | One option to pick: a button in Practice or a code button in a trap. | Practice `.opt` (`.imgopt`, `.hardopt`), `data-ans`; Traps `.btns button`, `data-v`; states `.right`, `.wrong` | — | choice, variant |
-| 49 | feedback | What appears after an answer: the verdict and the right code with its meaning. | Practice `.reveal`, `.verdict` (`ui.ok`, `ui.no`); Traps `.why` | — | result, explanation |
-| 50 | question | The prompt in Practice; one per practice mode. | `.q`, `.nerdq`; `ui.qArt`, `ui.qCode`, `ui.qHard` | — | task, exercise |
+| 47 | situation | One line in a trap to sort into one of its codes, e.g. "The token has expired." | `traps[key].s[i]`, `.sc`, `.scen` | `situation-<pair>-<line>` (e.g. `situation-0-1`) | scenario, case, example |
+| 48 | answer | One option to pick: a button in Practice or a code button in a trap. After answering, the right one has a thicker frame and a wrong one a ✕ badge, so they differ without colour (RSP-169). | Practice `.opt` (`.imgopt`, `.hardopt`), `data-ans`; Traps `.btns button`, `data-v`; states `.right`, `.wrong` | `answer-<code>` (Practice and Traps) | choice, variant |
+| 49 | feedback | What appears after an answer: the verdict and the right code with its meaning. | Practice `.reveal`, `.verdict` (`ui.ok`, `ui.no`); Traps `.why` | `feedback` (Practice) | result, explanation |
+| 50 | question | The prompt in Practice; one per practice mode. | `.q`, `.nerdq`; `ui.qArt`, `ui.qCode`, `ui.qHard` | `question` (Practice) | task, exercise |
 | 51 | back to top | The link at the end of a long page that brings you back to the top (RSP-154). | app: button `#to-top` (a link would change the tab hash); card page: `a[href="#top"]`; `ui.top` | `to-top` | scroll up, go up |
 | 52 | card picture | The creature's picture on a card. On the card page its alt text is the picture description (`cards[c].art`): one sentence, without the name or the code (RSP-138); in the collection the alt is empty, the card's own text is next to it. | `.cf-art`, `art(c)` in `site/js/util.js`, `cards[c].art` | `card-art` | image, illustration; art (alone: the file) |
 
@@ -100,14 +100,23 @@ The pages around the rubrics (RSP-156; the header and footer on every page since
 | 53 | site header | The top of every Mnemozoo page: Mnemozoo (home) · zoo map · about · language menu. The banner landmark, outside `<main>`. | `siteHeader()` in `site/js/render.js`, `.site-header`, `.site-nav`; texts `site.*`; in the app with the JS language menu `APP_LANG_MENU`, updated by `renderSite()` in `site/js/chrome.js` | `site-header`; logo `site-logo`; links `nav-map`, `nav-about` | navbar, top bar, menu |
 | 54 | site footer | The bottom of every Mnemozoo page: the copy note and security.txt. The contentinfo landmark, outside `<main>`. | `siteFooter()` in `site/js/render.js`, `.site-footer`; `site.foot` | `site-footer` | bottom bar |
 | 55 | home page | The page of the whole zoo, `/<lang>/`: hero, zoo map, how it works, why, about. Language-less `/` goes there. | `homePage()` in `scripts/build-pages.mjs`, `main.home`, `site/css/home.css`; texts `home.*` | `home-page` | landing page, start page, index |
-| 56 | hero | The top of the home page: h1, lead and five creatures, one per status class. | `.home-hero`, `.home-hero-cards`; `home.h1`, `home.lead` | `home-hero` | banner (the banner is the site header) |
+| 56 | hero | The top of the home page: kicker, h1, lead and five creatures, one per status class, each tilted a little (RSP-172). | `.home-hero`, `.home-hero-cards`, `.hero-card` (`figure` + `figcaption`); `home.kicker`, `home.h1`, `home.lead` | `home-hero`; one card `hero-card-<code>` (e.g. `hero-card-418`) | banner (the banner is the site header) |
 | 57 | zoo map | The home page section `#map` with the enclosures and the pavilions; the site header links to it. | `#map`, `.home-map`; `home.mapTitle`, `site.map` | `zoo-map` | catalogue, menu |
-| 58 | enclosure | One rubric on the zoo map: HTTP (open) or Git (opens 1 December). | `.enclosure`, `.enclosure-soon`; `home.httpZone`, `home.gitZone` | `enclosure-http`, `enclosure-git` | section, tile |
-| 59 | pavilion | A themed place on the zoo map that leads into a rubric; now "Look-alike species" → Traps. | `.pavilion-list`; `home.pavilions`, `home.pairsName` | `pavilion-traps` | exhibit, tile |
+| 58 | enclosure | One rubric on the zoo map: HTTP (open) or Git (opens 1 December); its sign says the zone and the status. | `.enclosure`, `.enclosure-soon`; `home.httpSign`, `home.gitSign` (its sign, #70) | `enclosure-http`, `enclosure-git` | section, tile |
+| 59 | pavilion | A themed place on the zoo map that leads into a rubric; now "Look-alike species" → Traps. | `.pavilion-list`; `home.pavilionSign`, `home.pairsName` | `pavilion-traps`; its sign `sign-pavilion` | exhibit, tile |
 | 60 | about | The home page section `#about`: who builds the project, GitHub and LinkedIn; the site header links to it. | `#about`, `.home-author`; `home.aboutTitle`, `site.about` | `home-about` | contacts, team |
 | 61 | enclosure header | The rubric's own header on its page, under the site header: the rubric name as h1 (Responsters), tagline, colour dots, "How to use". Inside `<main>`, so it is not a second banner (RSP-155). | `header.enclosure-header` in `site/app.html`, `.brand`, `.tools` | `enclosure-header` | site header, banner, logo |
 | 62 | not-found page | The page for a missing address: the 404 creature, a line of text and the way back to the zoo, with HTTP status 404 (RSP-148). | `notFoundPage()` in `scripts/build-pages.mjs`, `dist/<lang>/404.html`, `main.not-found`; texts `notFound.*` | `not-found-page`, `not-found-back`; card `card-404` | 404 page (in texts: say what happened), error page |
+| 63 | path steps | The shared component for a list of steps on any page: an ordered list, each step with a step marker and a dashed line to the next step. One column with the line down the left; side by side on wide screens with `.path-steps-row` (RSP-172). | `ol.path-steps` (`role="list"`), `li.path-step`, `.path-steps-row`; `site/css/base.css` | `home-steps`, `howto-steps` (one per list) | timeline, stepper, progress (progress is #13) |
+| 64 | step marker | The round numbered badge of a path step. Hidden from screen readers: the list already gives the position. | `.path-mark` (`aria-hidden="true"`) | `step-marker` | bullet, badge (badges are #12; zoo labels are signs, #70) |
+| 65 | how it works | The home page section `#how`: three path steps (meet a creature, practise, don't mix up), each with step art. | `#how`, `.home-how`, `.home-steps`; `home.howTitle`, `home.steps` | `home-steps` | onboarding, tutorial, how to use (that is #18) |
+| 66 | step art | The decorative picture row of a "how it works" step: creature pictures and step chips ("304 ✓", "502 ≠ 504"). Hidden from screen readers; the step text carries the meaning. | `.step-art` (`aria-hidden="true"`), `.step-chip`, `.step-sign`; `STEP_ART` in `scripts/build-pages.mjs` | `step-art`, `step-chip` | chip alone (chips are the class filter, #29), icon |
+| 67 | kicker | The sign above the home page h1: "IT memo zoo", the same in all languages, normal case (a slogan, not translated; RSP-178, RSP-170). | `.home-kicker`; `home.kicker` | `home-kicker` | tagline (the tagline is in the enclosure header, #61), subtitle |
+| 68 | ink outline | The one frame style of cards, art and controls: 2.5px in ink. Thin `--line` borders are only for dividers. | `--outline` (`base.css`) | — | border colour, stroke |
+| 69 | corner radius | Two sizes only: small for signs, chips and buttons; large for cards, panels and art. Round markers and pills stay round. | `--r-s` (6px), `--r-l` (16px) | — | rounding, radius 12 / 14 / 20 |
+| 70 | sign | The zoo's one label component on any page: a small plate in the display font, normal case, with the ink outline. Green = open area, yellow = announcement, plain = name plate. The status is written on it, so it reads without colour (RSP-170). | `.sign`, `.sign-open`, `.sign-notice` (`base.css`); `home.httpSign`, `home.gitSign`, `home.pavilionSign`, `home.kicker` | `sign-http`, `sign-git`, `sign-pavilion`, `home-kicker` | badge (that is #12), label, tag, chip |
 | 71 | CI alert | One Slack message in #ci-alerts when a CI run fails (a PR's UI tests or the production smoke from GitHub). A green run posts nothing (RSP-179). | `scripts/ci-alert.mjs`; secret `SLACK_WEBHOOK_URL`; step "Alert #ci-alerts" | — | notification, ping, CI message |
+| 72 | focus outline | The ring that shows which link or button has keyboard focus: 3px in the accent colour, outside the control's own ink outline, on every page and in both themes (RSP-169). Not the ink outline (#68). | `a:focus-visible`, `summary:focus-visible`, `button:focus-visible` (`base.css`); `focusRingsByTab` (tests) | — | focus ring, focus border, highlight |
 
 ## Translations
 
@@ -140,7 +149,7 @@ The words as they appear on the site (`site/i18n/<lang>.js`). Names, moves, stat
 | 51 | back to top | Back to top | Нагору | Do góry | Til toppen | Į viršų | Üles |
 | 57 | zoo map (section title) | Zoo map | Мапа зоопарку | Mapa zoo | Zookort | Zoologijos sodo žemėlapis | Loomaaia kaart |
 | 57 | zoo map (site header link) | Map | Мапа | Mapa | Kort | Žemėlapis | Kaart |
-| 59 | pavilion (zoo map group) | Themed pavilions | Тематичні павільйони | Pawilony tematyczne | Temapavilloner | Teminiai paviljonai | Teemapaviljonid |
+| 59 | pavilion (sign) | Themed pavilion | Тематичний павільйон | Pawilon tematyczny | Temapavillon | Teminis paviljonas | Teemapaviljon |
 | 60 | about (section title, site header link) | About the project | Про проект | O projekcie | Om projektet | Apie projektą | Projektist |
 
 ### Class names

@@ -446,20 +446,18 @@ export default {
     title: 'Mnemozoo: tech zoo for your memory',
     description:
       'Original creatures for HTTP status codes: a card for every code, practice and traps with look-alike codes. Six languages.',
-    kicker: 'Tech zoo for your memory',
+    kicker: 'IT memo zoo',
     h1: 'Get the response before you even ask',
     lead: 'Original creatures for the HTTP status codes you meet every day in the browser, logs and console. A card, practice, traps with look-alike codes. Six languages.',
     mapTitle: 'Zoo map',
-    open: 'Open',
-    httpZone: 'Wild animals',
+    httpSign: 'Wild animals · open', // zone sign with its status (RSP-170)
     httpName: 'HTTP status codes',
     httpText: (n, first, last) =>
       `${n} creatures from ${first} to ${last}. A card for every code, practice in four modes, traps with codes people mix up.`,
     enter: 'Meet the residents →',
-    gitZone: 'Pets',
-    gitDate: '1 December',
+    gitSign: 'Pets · opening 1 December', // announcement sign; the Git date stays on purpose
     gitText: 'Git commands as everyday scenes. Opening with an advent calendar: a new card every day.',
-    pavilions: 'Themed pavilions',
+    pavilionSign: 'Themed pavilion', // singular: the sign hangs on the pavilion itself
     pairsName: 'Look-alike species',
     pairsText: 'Pairs people mix up: 401 and 403, 502 and 504. A rule and situations to sort them.',
     pairsLink: (n) => `${n} pairs in the HTTP enclosure →`,

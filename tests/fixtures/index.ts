@@ -153,4 +153,16 @@ export type { CardPage } from './pages/card-page';
 export { ORIGIN, type HomePage } from './pages/home-page';
 export type { SiteChrome } from './pages/site-chrome';
 export type { NotFoundPage } from './pages/not-found-page';
+export type { PathSteps, MarkerLook } from './pages/path-steps';
+export {
+  lookOf,
+  resolveColor,
+  textContrast,
+  insideParent,
+  uppercaseElements,
+  type Look,
+  type Shouting,
+} from './pages/styles';
+export { markOf, boxes, controlBorderContrasts, type Mark, type BorderContrast } from './pages/answer-marks';
+export { focusRingsByTab, type FocusRing } from './pages/focus';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';

@@ -163,3 +163,82 @@ test('Language menu with the keyboard @T641973be', { tag: [TAG.language] }, asyn
     await expect(langMenu.list).toBeHidden();
   });
 });
+
+// ── 8f2e5f9c ────────────────────────────────────────────────────────────────────────────────────
+// RSP-169 AC7 (WCAG 2.5.3 Label in Name): the name is the button text, "<Language>: <what you see>", so speech
+// input ("click UA") finds it. No aria-label replaces the text.
+
+test(
+  'Language button: its name says what it does and contains the visible text, on phones and desktops @T8f2e5f9c',
+  { tag: [TAG.language] },
+  async ({ app, cardPage, homePage, langMenu, lang, texts, page }) => {
+    const pages: [string, () => Promise<unknown>][] = [
+      ['app', () => app.open()],
+      ['card page', () => cardPage.open(lang, 418)],
+      ['home page', () => homePage.open(lang)],
+    ];
+    for (const width of [1280, 375]) {
+      for (const [name, open] of pages) {
+        await test.step(`${name} at ${width} px`, async () => {
+          await page.setViewportSize({ width, height: 800 });
+          await open();
+          const visible = await langMenu.visibleText();
+          if (width === 1280) expect(visible).toBe(langName(lang));
+          else expect(visible).toMatch(/^[A-Z]{2}$/);
+          await expect(langMenu.button).toHaveAccessibleName(`${texts.ui.lang}: ${visible}`);
+          await expect(langMenu.button).not.toHaveAttribute('aria-label');
+        });
+      }
+    }
+  },
+);
+
+// ── fb783e1f ────────────────────────────────────────────────────────────────────────────────────
+// RSP-181: the menu closes on a click outside it and on Escape, on every page (the app's JS menu and the <details>
+// menu of the generated pages). A click inside keeps it open; a click on a link outside still opens the link.
+
+test(
+  'Language menu closes on a click outside it and on Escape, in the app and on generated pages @Tfb783e1f',
+  { tag: [TAG.language] },
+  async ({ app, cardPage, homePage, notFoundPage, langMenu, site, lang, page }) => {
+    const pages: [string, () => Promise<unknown>][] = [
+      ['app', () => app.open()],
+      ['card page', () => cardPage.open(lang, 404)],
+      ['home page', () => homePage.open(lang)],
+      ['404 page', () => notFoundPage.open(`/${lang}/no-such-page`)],
+    ];
+    for (const [name, open] of pages) {
+      await test.step(`${name}: click outside closes`, async () => {
+        await open();
+        await langMenu.open();
+        await expect(langMenu.list).toBeVisible();
+        await langMenu.clickOutside();
+        await expect(langMenu.list).toBeHidden();
+      });
+      await test.step(`${name}: Escape closes the menu opened with the mouse`, async () => {
+        await langMenu.open();
+        await expect(langMenu.list).toBeVisible();
+        await page.keyboard.press('Escape');
+        await expect(langMenu.list).toBeHidden();
+      });
+      await test.step(`${name}: Escape with the focus on a language closes and puts the focus back on the button`, async () => {
+        await langMenu.openWithKeyboardFocusInside();
+        await expect(langMenu.list).toBeVisible();
+        await expect(langMenu.button).not.toBeFocused();
+        await page.keyboard.press('Escape');
+        await expect(langMenu.list).toBeHidden();
+        await expect(langMenu.button).toBeFocused();
+      });
+      await test.step(`${name}: a click inside the menu keeps it open`, async () => {
+        await langMenu.open();
+        await langMenu.clickInsideEdge();
+        await expect(langMenu.list).toBeVisible();
+      });
+      await test.step(`${name}: a link outside still opens and the menu is gone`, async () => {
+        await site.mapLink.click();
+        await expect(page).toHaveURL(new RegExp(`/${lang}/#map$`));
+        await expect(langMenu.list).toBeHidden();
+      });
+    }
+  },
+);

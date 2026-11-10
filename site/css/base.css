@@ -1,15 +1,31 @@
 /* Base: colour tokens (light + dark), reset, page shell, header, language menu, "How to use" panel, tabs, footer. */
+/* Palette (RSP-168, "own look"): warm paper and ink like the creature art, no lavender; green for open areas,
+   yellow for announcements (they also differ in lightness, not only in hue). Contrast: text at least 4.5:1,
+   large text at least 3:1, in both themes; the axe UI tests (RSP-162) check text contrast. Borders of controls
+   need 3:1 too (WCAG 1.4.11), which axe doesn't check: they get the dark ink outline in RSP-169; --line is
+   for dividers only. */
 /* Layout: a field guide. Header with tabs → collection grouped by status class, practice deck, and confusable pairs. Card art is the hero; the UI stays quiet around it. */
 :root {
-  --bg: #f3f1f7;
-  --surface: #ffffff;
-  --ink: #33202f;
-  --muted: #6e6176;
-  --line: #e1dce8;
-  --soft: #e9e5f0;
-  --accent: #5a3352;
-  --good: #2e9d6b;
-  --bad: #d2554a;
+  /* Own look (RSP-169): two corner radii and one ink outline for cards, art and controls. --line is for dividers only. */
+  --r-s: 6px; /* signs, chips, buttons */
+  --r-l: 16px; /* cards, panels, art */
+  --outline: 2.5px solid var(--ink);
+  --bg: #f7f2e8;
+  --surface: #fffdf8;
+  --ink: #2b2027;
+  --muted: #5e5258;
+  --line: #cfc5b4;
+  --soft: #efe7d8;
+  --accent: #1e5a45;
+  --sign: #1e5a45;
+  --sign-ink: #fbf6ea;
+  --notice: #f2c230;
+  --notice-ink: #2b2027;
+  --good: #23704f;
+  --bad: #b8392c;
+  /* Printed things keep their look in both themes: the creature card, the Hardcore card, the class symbols. */
+  --card-ink: #2b2027;
+  --card-paper: #fffdf8;
   --c1: #9b8be8;
   --c2: #4fc38f;
   --c3: #78b6e2;
@@ -31,13 +47,14 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #18131c;
-    --surface: #231c29;
-    --ink: #f2ecf4;
-    --muted: #aba0b3;
-    --line: #3a3042;
-    --soft: #2e2535;
-    --accent: #e7b8db;
+    --bg: #1b1713;
+    --surface: #25201a;
+    --ink: #f4ede1;
+    --muted: #b9ae9c;
+    --line: #40372d;
+    --soft: #2e2820;
+    --accent: #8fd3b0;
+    --sign: #2a6e55;
     --good: #5dd29c;
     --bad: #f07f74;
     --c1-ink: var(--c1);
@@ -49,13 +66,14 @@
   }
 }
 :root[data-theme='dark'] {
-  --bg: #18131c;
-  --surface: #231c29;
-  --ink: #f2ecf4;
-  --muted: #aba0b3;
-  --line: #3a3042;
-  --soft: #2e2535;
-  --accent: #e7b8db;
+  --bg: #1b1713;
+  --surface: #25201a;
+  --ink: #f4ede1;
+  --muted: #b9ae9c;
+  --line: #40372d;
+  --soft: #2e2820;
+  --accent: #8fd3b0;
+  --sign: #2a6e55;
   --good: #5dd29c;
   --bad: #f07f74;
   --c1-ink: var(--c1);
@@ -111,7 +129,7 @@ header {
 .brand .brand-name a {
   color: inherit;
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: var(--r-s);
 }
 .brand h1 a:focus-visible,
 .brand .brand-name a:focus-visible {
@@ -131,7 +149,7 @@ header {
 .brand .dots i {
   width: 28px;
   height: 8px;
-  border-radius: 4px;
+  border-radius: var(--r-s);
   display: block;
 }
 /* Language menu (RSP-109): a pill with the current language opens a list of all languages, each in its own language.
@@ -145,7 +163,7 @@ header {
   gap: 6px;
   min-height: 44px;
   padding: 6px 12px;
-  border: 1.5px solid var(--line);
+  border: var(--outline);
   border-radius: 999px;
   background: var(--surface);
   color: var(--ink);
@@ -159,6 +177,18 @@ header {
   width: 18px;
   height: 18px;
   flex: none;
+}
+/* Text for screen readers only (e.g. "Мова: " before the language button text). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 .langbtn .lang-icon {
   color: var(--accent);
@@ -201,8 +231,8 @@ header {
   padding: 6px;
   list-style: none;
   background: var(--surface);
-  border: 1.5px solid var(--line);
-  border-radius: 14px;
+  border: var(--outline);
+  border-radius: var(--r-l);
   box-shadow: 0 8px 24px rgb(0 0 0 / 0.14);
 }
 .langlist button,
@@ -215,7 +245,7 @@ header {
   min-height: 44px;
   padding: 8px 12px;
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--r-s);
   background: none;
   color: var(--ink);
   font: 600 15px var(--body);
@@ -285,8 +315,8 @@ summary.langbtn::-webkit-details-marker {
 .howto {
   margin-top: 20px;
   background: var(--surface);
-  border: 1.5px solid var(--line);
-  border-radius: 16px;
+  border: var(--outline);
+  border-radius: var(--r-l);
   padding: 16px 20px;
   display: grid;
   gap: 10px;
@@ -295,11 +325,17 @@ summary.langbtn::-webkit-details-marker {
   font: 800 20px var(--display);
   margin: 0;
 }
-.howto ol {
-  margin: 0;
-  padding-left: 1.4em;
-  display: grid;
-  gap: 6px;
+.howto .path-steps {
+  --mark: 28px;
+  --step-gap: 14px;
+  --line-pad: 2px; /* one-line steps are as tall as the marker: keep a visible bit of line between them */
+}
+.howto .path-step {
+  min-height: var(--mark);
+  padding-top: 3px;
+}
+.howto .path-mark {
+  font-size: 14px;
 }
 .howto .note {
   margin: 0;
@@ -308,7 +344,7 @@ summary.langbtn::-webkit-details-marker {
 }
 .howto-done {
   justify-self: start;
-  border: 1.5px solid var(--line);
+  border: var(--outline);
   background: var(--soft);
   color: var(--ink);
   border-radius: 999px;
@@ -338,6 +374,10 @@ nav.tabs button[aria-selected='true'] {
   color: var(--ink);
   border-color: var(--accent);
 }
+/* One focus style for every link, button and the language button (<summary> on generated pages), RSP-169.
+   Without it links got only the browser's thin ring, and on the language button that ring hid behind its border. */
+a:focus-visible,
+summary:focus-visible,
 button:focus-visible,
 .card:focus-visible {
   outline: 3px solid var(--accent);
@@ -354,5 +394,91 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+  }
+}
+
+/* Sign (RSP-170): the zoo's one label component, for any page. A small plate in the display font, normal case,
+   with the ink outline. Plain = a name plate (e.g. a pavilion); .sign-open = an open area (green), .sign-notice = an
+   announcement (yellow). The status is always written on the sign, so it reads without colour. */
+.sign {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start; /* as wide as its text, also inside a flex column (pavilion, enclosure) */
+  max-width: 100%;
+  padding: 3px 10px;
+  border: var(--outline);
+  border-radius: var(--r-s);
+  background: var(--surface);
+  color: var(--ink);
+  font: 700 15px/1.3 var(--display);
+  overflow-wrap: anywhere;
+}
+.sign-open {
+  background: var(--sign);
+  color: var(--sign-ink);
+}
+.sign-notice {
+  background: var(--notice);
+  color: var(--notice-ink);
+}
+
+/* Path steps (RSP-172): one shared component for every list of steps on the site (home "How it works", the app's
+   "How to use"). An <ol role="list"> (the role keeps list semantics in Safari with list-style: none), each step with a
+   round numbered marker and a dashed line to the next step. The marker is aria-hidden: the list already says
+   "1 of 3", so the number is not read twice. Default: one column, the line runs down the left (fits any phone).
+   .path-steps-row: steps side by side on wide screens, the line runs right from each marker. */
+.path-steps {
+  --mark: 36px;
+  --step-gap: 20px;
+  --line-pad: 6px; /* space between a marker and its dashed line */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--step-gap);
+}
+.path-step {
+  position: relative;
+  min-width: 0;
+  padding-left: calc(var(--mark) + 14px);
+}
+.path-mark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--mark);
+  height: var(--mark);
+  display: grid;
+  place-items: center;
+  border: var(--outline);
+  border-radius: 50%;
+  background: var(--sign);
+  color: var(--sign-ink);
+  font: 800 16px var(--mono);
+}
+.path-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--mark) + var(--line-pad));
+  bottom: calc(var(--line-pad) - var(--step-gap));
+  left: calc(var(--mark) / 2 - 1px);
+  border-left: 2px dashed var(--muted);
+}
+@media (min-width: 760px) {
+  .path-steps-row {
+    --step-gap: 28px;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    grid-auto-flow: column;
+  }
+  .path-steps-row .path-step {
+    padding: calc(var(--mark) + 16px) 0 0;
+  }
+  .path-steps-row .path-step:not(:last-child)::after {
+    top: calc(var(--mark) / 2 - 1px);
+    bottom: auto;
+    left: calc(var(--mark) + var(--line-pad));
+    right: calc(var(--line-pad) - var(--step-gap));
+    border-left: 0;
+    border-top: 2px dashed var(--muted);
   }
 }
