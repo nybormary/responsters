@@ -28,6 +28,7 @@ import { HomePage } from './pages/home-page';
 import { SiteChrome } from './pages/site-chrome';
 import { NotFoundPage } from './pages/not-found-page';
 import { Axe } from './pages/axe';
+import { Network } from './pages/network';
 
 // What the site keeps in localStorage (site/js/store.js adds the prefix "httpon." to every key).
 export type Seed = {
@@ -54,6 +55,7 @@ type Fixtures = {
   site: SiteChrome;
   notFoundPage: NotFoundPage;
   axe: Axe;
+  network: Network;
 };
 
 export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
@@ -146,6 +148,10 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   axe: async ({ page }, use, testInfo) => {
     await use(new Axe(page, testInfo));
   },
+  // Records requests from the moment a test asks for it: ask for it before the first navigation.
+  network: async ({ page }, use) => {
+    await use(new Network(page));
+  },
 });
 
 export { expect };
@@ -159,4 +165,17 @@ export { ORIGIN, type HomePage } from './pages/home-page';
 export type { SiteChrome } from './pages/site-chrome';
 export type { NotFoundPage } from './pages/not-found-page';
 export { THEMES, type Axe, type Theme } from './pages/axe';
+export type { Network } from './pages/network';
+export type { PathSteps, MarkerLook } from './pages/path-steps';
+export {
+  lookOf,
+  resolveColor,
+  textContrast,
+  insideParent,
+  uppercaseElements,
+  type Look,
+  type Shouting,
+} from './pages/styles';
+export { markOf, boxes, controlBorderContrasts, type Mark, type BorderContrast } from './pages/answer-marks';
+export { focusRingsByTab, type FocusRing } from './pages/focus';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';

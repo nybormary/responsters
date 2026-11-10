@@ -24,6 +24,9 @@ export const TID = {
   answer: (code: number) => `answer-${code}`,
   anyAnswer: '[data-testid^="answer-"]',
   feedback: 'feedback',
+  // RSP-169: the question in Practice (its picture tells the right code) and one situation in Traps
+  question: 'question',
+  situation: (pair: number, line: number) => `situation-${pair}-${line}`,
 
   // Tabs and views
   tab: (view: View) => `tab-${view}`,
@@ -44,6 +47,17 @@ export const TID = {
   enclosure: (rubric: 'http' | 'git') => `enclosure-${rubric}`,
   pavilionTraps: 'pavilion-traps',
   homeAbout: 'home-about',
+  heroCard: (code: number) => `hero-card-${code}`, // one creature in the hero (RSP-172)
+  // Signs (RSP-170; glossary sign): the kicker and the zone / pavilion signs on the home page
+  homeKicker: 'home-kicker',
+  sign: (name: 'http' | 'git' | 'pavilion') => `sign-${name}`,
+
+  // Path steps (RSP-172; glossary path steps, step marker, step art): the same component on the home page and in the app
+  homeSteps: 'home-steps', // "How it works" on the home page
+  howtoSteps: 'howto-steps', // the list inside "How to use" in the app
+  stepMarker: 'step-marker',
+  stepArt: 'step-art',
+  stepChip: 'step-chip',
 
   // Not-found page /<lang>/404.html (RSP-148)
   notFoundPage: 'not-found-page',

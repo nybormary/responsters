@@ -39,7 +39,7 @@
   letter-spacing: -0.01em;
   color: var(--accent);
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: var(--r-s);
 }
 /* Logo letters in the status class colours (--c1-ink … --c5-ink, base.css). */
 .site-logo .k1 {

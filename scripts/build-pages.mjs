@@ -36,8 +36,21 @@ const ORIGIN = 'https://mnemozoo.com'; // canonical and hreflang links always na
 const LANGS = Object.keys(LOCALES);
 // The app template (RSP-138): written per language, never served as is.
 const APP = await readFile(path.join(SITE, 'app.html'), 'utf8');
-// The web fonts link is taken from the app template, so the app and the pages always load the same fonts.
-const FONTS = APP.match(/href="(https:\/\/fonts\.googleapis\.com\/css2\?[^"]+)"/)[1];
+// The fonts block (preloads + fonts.css, RSP-160) is taken from the app template, so the app and the pages
+// always load the same fonts from the same place.
+const FONTS = APP.match(/ *<!-- fonts [\s\S]*?<!-- \/fonts -->/)[0].trim();
+// One stylesheet per page type (RSP-160): the build joins the source files of site/css/, in this order, into
+// dist/css/page-<type>.css, so a page waits for one CSS request instead of up to eight. The app's list is the
+// styles block of the app template, so site/app.html stays readable on its own.
+const STYLES = {
+  app: [...APP.match(/<!-- styles [\s\S]*?<!-- \/styles -->/)[0].matchAll(/href="\/css\/([\w-]+)\.css"/g)].map(
+    (m) => m[1],
+  ),
+  creature: ['fonts', 'base', 'site', 'card', 'detail'],
+  home: ['fonts', 'base', 'site', 'home'],
+  'not-found': ['fonts', 'base', 'site', 'card'],
+};
+const styles = (type) => `<link rel="stylesheet" href="/css/page-${type}.css" />`;
 // WebSite structured data on every home page (RSP-156 AC17): Google shows the site name "Mnemozoo" above the URL
 // in search results, so rubric pages can keep their own name in the title ("Responsters: …").
 const WEBSITE = JSON.stringify({
@@ -88,13 +101,8 @@ function creaturePage(lang, tx, d) {
     ${alternates((l) => creatureUrl(l, c))}
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="${FONTS}" />
-    <link rel="stylesheet" href="/css/base.css" />
-    <link rel="stylesheet" href="/css/site.css" />
-    <link rel="stylesheet" href="/css/card.css" />
-    <link rel="stylesheet" href="/css/detail.css" />
+    ${FONTS}
+    ${styles('creature')}
     <script type="module" src="/js/site.js"></script>
   </head>
   <body>
@@ -141,19 +149,31 @@ function creaturePage(lang, tx, d) {
 /** The creatures in the hero of the home page (RSP-156 AC2): one from each status class, so all five colours show. */
 const HERO = [102, 201, 304, 418, 502];
 
+/** What each "How it works" step shows (RSP-172 AC3): meet a creature, picture → code, codes that look alike.
+ * Decoration only: the step text carries the meaning, so the block is aria-hidden and the pictures have empty alt. */
+const stepImg = (c) => `<img src="${art(c)}" alt="" width="640" height="573" loading="lazy" />`;
+const chip = (text) => `<span class="step-chip" data-testid="step-chip">${text}</span>`;
+const STEP_ART = [
+  stepImg(418),
+  `${stepImg(304)}<span class="step-sign">→</span>${chip('304 ✓')}`,
+  `${chip('502')}<span class="step-sign">≠</span>${chip('504')}`,
+];
+
 /** Home page /<lang>/ (RSP-156): what the zoo is, what is open and who builds it. Texts: i18n `home`, `site`. */
 function homePage(lang, tx) {
   const h = tx.home;
   const app = appUrl(lang);
   const hero = HERO.map(
-    (c) => `<figure class="hero-card">
+    (c) => `<figure class="hero-card" data-testid="hero-card-${c}">
             <img src="${art(c)}" alt="${esc(tx.cards[c].art)}" width="640" height="573" />
             <figcaption>${c}</figcaption>
           </figure>`,
   ).join('\n          ');
   const steps = h.steps
     .map(
-      ([title, text]) => `<li class="home-step">
+      ([title, text], i) => `<li class="path-step home-step">
+            <span class="path-mark" aria-hidden="true" data-testid="step-marker">${i + 1}</span>
+            <div class="step-art" aria-hidden="true" data-testid="step-art">${STEP_ART[i]}</div>
             <h3>${esc(title)}</h3>
             <p>${esc(text)}</p>
           </li>`,
@@ -173,12 +193,8 @@ function homePage(lang, tx) {
     <script type="application/ld+json">${WEBSITE}</script>
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="${FONTS}" />
-    <link rel="stylesheet" href="/css/base.css" />
-    <link rel="stylesheet" href="/css/site.css" />
-    <link rel="stylesheet" href="/css/home.css" />
+    ${FONTS}
+    ${styles('home')}
     <script type="module" src="/js/site.js"></script>
   </head>
   <body>
@@ -187,7 +203,7 @@ function homePage(lang, tx) {
     <main class="home" data-testid="home-page">
       <section class="home-hero" aria-labelledby="home-title">
         <div class="home-hero-text">
-          <p class="home-kicker">${esc(h.kicker)}</p>
+          <p class="sign sign-open home-kicker" data-testid="home-kicker">${esc(h.kicker)}</p>
           <h1 id="home-title">${esc(h.h1)}</h1>
           <p class="home-lead">${esc(h.lead)}</p>
         </div>
@@ -201,23 +217,23 @@ function homePage(lang, tx) {
         <ul class="enclosures">
           <li class="enclosure enclosure-wide" style="--stripe: var(--c5)">
             <a href="${app}#collection" data-testid="enclosure-http">
-              <span class="enclosure-top"><span class="enclosure-zone">${esc(h.httpZone)}</span><span class="badge badge-open">${esc(h.open)}</span></span>
+              <span class="enclosure-top"><span class="sign sign-open" data-testid="sign-http">${esc(h.httpSign)}</span></span>
               <span class="enclosure-name">${esc(h.httpName)}</span>
               <span>${esc(h.httpText(D.length, D[0].c, D[D.length - 1].c))}</span>
               <span class="enclosure-go">${esc(h.enter)}</span>
             </a>
           </li>
           <li class="enclosure enclosure-soon" style="--stripe: var(--c4)" data-testid="enclosure-git">
-            <span class="enclosure-top"><span class="enclosure-zone">${esc(h.gitZone)}</span><span class="badge badge-date">${esc(h.gitDate)}</span></span>
+            <span class="enclosure-top"><span class="sign sign-notice" data-testid="sign-git">${esc(h.gitSign)}</span></span>
             <span class="enclosure-name">Git</span>
             <span>${esc(h.gitText)}</span>
           </li>
         </ul>
         <div class="pavilions">
-          <h3>${esc(h.pavilions)}</h3>
           <ul class="pavilion-list">
             <li class="pavilion">
               <a href="${app}#traps" data-testid="pavilion-traps">
+                <span class="sign" data-testid="sign-pavilion">${esc(h.pavilionSign)}</span>
                 <span class="pavilion-name">${esc(h.pairsName)}</span>
                 <span>${esc(h.pairsText)}</span>
                 <span class="enclosure-go">${esc(h.pairsLink(PAIRS.length))}</span>
@@ -229,7 +245,7 @@ function homePage(lang, tx) {
 
       <section id="how" class="home-how" aria-labelledby="how-title">
         <h2 id="how-title">${esc(h.howTitle)}</h2>
-        <ol class="home-steps">
+        <ol class="path-steps path-steps-row home-steps" role="list" data-testid="home-steps">
           ${steps}
         </ol>
       </section>
@@ -274,12 +290,8 @@ function notFoundPage(lang, tx) {
     <meta name="robots" content="noindex" />
     <title>${esc(t.title)}</title>
     <link rel="icon" href="/favicon.png" type="image/png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="${FONTS}" />
-    <link rel="stylesheet" href="/css/base.css" />
-    <link rel="stylesheet" href="/css/site.css" />
-    <link rel="stylesheet" href="/css/card.css" />
+    ${FONTS}
+    ${styles('not-found')}
     <script type="module" src="/js/site.js"></script>
   </head>
   <body>
@@ -305,6 +317,7 @@ function appPage(lang, tx) {
   const fills = [
     [/<!-- App template[\s\S]*?-->\n/, ''], // the note is for people reading the source, not for visitors
     [/<html lang="[^"]*">/, `<html lang="${lang}">`],
+    [/<!-- styles [\s\S]*?<!-- \/styles -->/, styles('app')],
     [/<title>[^<]*<\/title>/, `<title>${esc(tx.ui.appTitle)}</title>`],
     [/<meta\s+name="description"\s+content="[^"]*"\s*\/>/, `<meta name="description" content="${esc(tx.ui.tag)}" />`],
     [
@@ -415,10 +428,21 @@ async function page(url, html) {
   await writeFile(path.join(dir, 'index.html'), html);
 }
 
+/** Writes dist/css/page-<type>.css for every page type in STYLES (RSP-160). */
+async function writeStyles() {
+  for (const [type, files] of Object.entries(STYLES)) {
+    const parts = await Promise.all(
+      files.map(async (f) => `/* ${f}.css */\n${await readFile(path.join(SITE, 'css', `${f}.css`), 'utf8')}`),
+    );
+    await writeFile(path.join(DIST, 'css', `page-${type}.css`), parts.join('\n'));
+  }
+}
+
 async function build() {
   await rm(DIST, { recursive: true, force: true });
   await cp(SITE, DIST, { recursive: true });
   await rm(path.join(DIST, 'app.html')); // the template is not a page
+  await writeStyles();
 
   let pages = 0;
   for (const lang of LANGS) {

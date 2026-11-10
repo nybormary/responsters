@@ -7,6 +7,7 @@
 # PR changes the site, but this push only tests or docs → Netlify compares with its LAST BUILT preview, not with
 #   master, and cancels this commit's preview → also variant 1 on the PR's own files (RSP-174).
 # Either way: type check, locale check, lint, format check, and the HTML report kept as an artifact for 14 days.
+# A failed run posts one alert to Slack #ci-alerts (RSP-179, scripts/ci-alert.mjs); a green run posts nothing.
 
 name: UI tests
 
@@ -33,28 +34,35 @@ jobs:
       HEAD_SHA: ${{ github.event.pull_request.head.sha }}
       BASE_SHA: ${{ github.event.pull_request.base.sha }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        id: checkout
         with:
           fetch-depth: 0 # full history, to compare the PR with master
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
+        id: node
         with:
           node-version: 22
           cache: npm
 
       - name: Install
+        id: install
         run: npm ci
 
       - name: Type check
+        id: typecheck
         run: npm run typecheck
 
       - name: Locale check
+        id: locales
         run: npm run check-locales
 
       - name: Lint
+        id: lint
         run: npm run lint
 
       - name: Format check
+        id: format
         run: npm run format:check
 
       - name: Does this PR change the site?
@@ -70,6 +78,7 @@ jobs:
           fi
 
       - name: Install the browser
+        id: browser
         run: npx playwright install --with-deps chromium
 
       - name: Wait for the Netlify deploy preview of this commit
@@ -109,25 +118,47 @@ jobs:
           exit 1
 
       - name: UI tests on the deploy preview (variant 8, reported to testomat.io)
+        id: tests-preview
         if: steps.preview.outputs.ready == 'true'
         env:
           TARGET: preview
           PR: ${{ github.event.pull_request.number }}
           TESTOMATIO: ${{ secrets.TESTOMATIO }}
           BRANCH: ${{ github.head_ref }}
+        # `shell: bash` adds pipefail: without it the step takes tee's exit code, and failed tests would pass.
+        shell: bash
         run: |
           export TESTOMATIO_TITLE="🦭 CI · PR #$PR ($BRANCH) on deploy preview"
-          npx playwright test
+          npx playwright test 2>&1 | tee testomat-run.log # the alert takes the run link from this log
 
       - name: UI tests on the PR's own files (variant 1, not reported)
+        id: tests-own
         if: steps.changes.outputs.site == 'false' || steps.preview.outputs.ready == 'false'
         run: npx playwright test
 
       - name: Keep the HTML report
+        id: report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: playwright-report-pr-${{ github.event.pull_request.number }}
           path: playwright-report/
           retention-days: 14
           if-no-files-found: ignore
+
+      - name: Alert #ci-alerts
+        if: failure()
+        continue-on-error: true # best effort: Slack down or no secret must not change the result
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          ALERT_KIND: pr
+          STEPS_JSON: ${{ toJSON(steps) }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          BRANCH: ${{ github.head_ref }}
+          # Where the tests actually ran; empty when no test step ran (the run stopped earlier).
+          SUITE_WAY: >-
+            ${{ contains(fromJSON('["success","failure"]'), steps.tests-preview.outcome) && 'the deploy preview'
+            || contains(fromJSON('["success","failure"]'), steps.tests-own.outcome) && 'the PR''s own files'
+            || '' }}
+        run: node scripts/ci-alert.mjs

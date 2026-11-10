@@ -39,10 +39,7 @@
   gap: 20px;
 }
 .home-kicker {
-  font: 700 13px var(--body);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
+  width: fit-content;
 }
 .home-hero h1 {
   margin: 0;
@@ -77,8 +74,25 @@
   display: block;
   width: 100%;
   height: auto;
-  border: 2.5px solid var(--ink);
-  border-radius: 16px;
+  border: var(--outline);
+  border-radius: var(--r-l);
+}
+/* Small, different static tilts (RSP-172 AC6, mockup): the cards look laid out by hand. The whole figure turns, so the
+   code caption stays with its card; 2° at most keeps the corners inside the 14px gap. */
+.hero-card:nth-child(1) {
+  transform: rotate(-2deg);
+}
+.hero-card:nth-child(2) {
+  transform: rotate(1.5deg);
+}
+.hero-card:nth-child(3) {
+  transform: rotate(-1deg);
+}
+.hero-card:nth-child(4) {
+  transform: rotate(2deg);
+}
+.hero-card:nth-child(5) {
+  transform: rotate(-1.5deg);
 }
 .hero-card figcaption {
   font: 800 15px var(--mono);
@@ -99,8 +113,7 @@
   scroll-margin-top: 16px;
 }
 .enclosures,
-.pavilion-list,
-.home-steps {
+.pavilion-list {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -120,9 +133,9 @@
   flex-direction: column;
   gap: 8px;
   padding: 0 20px 18px;
-  border: 2.5px solid var(--ink);
+  border: var(--outline);
   border-top: 12px solid var(--stripe);
-  border-radius: 20px;
+  border-radius: var(--r-l);
   background: var(--surface);
   color: var(--ink);
   text-decoration: none;
@@ -142,30 +155,6 @@
   gap: 8px;
   padding-top: 12px;
 }
-.enclosure-zone {
-  font: 700 13px var(--body);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.badge {
-  padding: 3px 10px;
-  border-radius: 999px;
-  border: 1.5px solid currentColor;
-  font-weight: 700;
-  font-size: 14px;
-}
-.badge-open {
-  color: var(--ink); /* text in ink: green text on white is below 4.5:1 */
-  border-color: var(--good);
-}
-.badge-open::before {
-  content: '● ';
-  color: var(--good);
-}
-.badge-date {
-  color: var(--muted);
-}
 .enclosure-name {
   font: 800 28px/1.15 var(--display);
 }
@@ -181,20 +170,14 @@
   padding-top: 16px;
   border-top: 1.5px dashed var(--line);
 }
-.pavilions h3 {
-  font: 700 13px var(--body);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
 .pavilion > a {
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 6px;
   padding: 18px 20px;
-  border: 1.5px solid var(--line);
-  border-radius: 18px;
+  border: var(--outline);
+  border-radius: var(--r-l);
   background: var(--surface);
   text-decoration: none;
 }
@@ -216,28 +199,40 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 20px;
-  border: 1.5px solid var(--line);
-  border-radius: 18px;
-  background: var(--surface);
-}
-/* Each step in a soft tint of the next status class colour, like the logo letters (1xx, 2xx, 3xx). color-mix keeps
-   it soft in both themes: the tint is mixed into the surface colour of the current theme. */
-.home-step:nth-child(1) {
-  --tint: var(--c1);
-}
-.home-step:nth-child(2) {
-  --tint: var(--c2);
-}
-.home-step:nth-child(3) {
-  --tint: var(--c3);
-}
-.home-step {
-  background: color-mix(in srgb, var(--tint, var(--surface)) 16%, var(--surface));
-  border-color: color-mix(in srgb, var(--tint, var(--line)) 45%, var(--surface));
 }
 .home-step h3 {
+  margin: 0;
   font: 800 22px var(--display);
+}
+.home-step p {
+  margin: 0;
+}
+/* The picture row of a step (RSP-172 AC3): creature thumbnails and code chips, same outline as the hero cards. */
+.step-art {
+  min-height: 72px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.step-art img {
+  width: 80px;
+  height: auto;
+  border: var(--outline);
+  border-radius: var(--r-l);
+}
+.step-chip {
+  padding: 6px 12px;
+  border: var(--outline);
+  border-radius: var(--r-s);
+  background: var(--surface);
+  color: var(--ink);
+  font: 800 17px var(--mono);
+  white-space: nowrap;
+}
+.step-sign {
+  font: 800 20px var(--mono);
+  color: var(--muted);
 }
 
 /* Why and about */
@@ -246,8 +241,8 @@
   flex-wrap: wrap;
   gap: 32px;
   padding: 32px clamp(16px, 4vw, 28px);
-  border: 1.5px solid var(--line);
-  border-radius: 24px;
+  border: var(--outline);
+  border-radius: var(--r-l);
   background: var(--surface);
   scroll-margin-top: 16px;
 }
@@ -266,10 +261,7 @@
   gap: 12px;
 }
 .home-author h2 {
-  font: 700 13px var(--body);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
+  font: 800 22px/1.2 var(--display);
 }
 .home-links {
   display: flex;

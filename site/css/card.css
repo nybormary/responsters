@@ -4,8 +4,8 @@
    stretch to the same height; the card line takes the extra space and stays centred.
    The card keeps its print look in dark mode too (white card, ink text), like a real card on a dark table. */
 .card {
-  --cf-ink: #33202f;
-  --cf-pill: #e9e5f0;
+  --cf-ink: var(--card-ink);
+  --cf-pill: #efe7d8;
   --cf-pad: 8px;
   --cf-badge: 44px;
   --cf-code: 15px;
@@ -19,12 +19,12 @@
   flex-direction: column;
   width: 100%;
   text-align: left;
-  background: #ffffff;
+  background: var(--card-paper);
   color: var(--cf-ink);
   border: 2.5px solid var(--cf-ink);
   border-radius: 18px;
   padding: var(--cf-pad);
-  box-shadow: 0 2px 0 rgb(51 32 47 / 0.12);
+  box-shadow: 0 2px 0 rgb(43 32 39 / 0.12);
   font-family: var(--body);
   cursor: pointer;
   text-decoration: none; /* the card is a link (RSP-90) */
@@ -58,7 +58,7 @@
   object-fit: cover;
   border: 2.5px solid var(--cf-ink);
   border-radius: 12px;
-  background: #f3f1f7;
+  background: #f7f2e8;
 }
 
 /* Status row: the badge overlaps the art's bottom-left corner; the status name always sits under the badge,
@@ -91,7 +91,7 @@
   width: calc(var(--cf-b) * 0.5);
   height: calc(var(--cf-b) * 0.5);
   border-radius: 50%;
-  background: #ffffff;
+  background: var(--card-paper);
   border: 2px solid var(--cf-ink);
   color: var(--cf-ink);
   display: grid !important;
@@ -224,7 +224,7 @@
   height: 28px;
   display: grid;
   place-items: center;
-  background: #1e7a50;
+  background: #1e5a45; /* the sign green (RSP-168); white on it 8:1 */
   color: #fff;
   font: 800 15px/1 var(--body);
   border: 3px solid var(--bg);

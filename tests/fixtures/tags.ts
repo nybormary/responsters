@@ -10,6 +10,7 @@ export const TAG = {
   progress: '@progress',
   navigation: '@navigation', // tabs and the URL (RSP-114)
   home: '@home', // the home page /<lang>/ (RSP-156)
+  privacy: '@privacy', // what leaves the browser: other hosts, analytics, cookies (RSP-160, RSP-175)
   a11y: '@a11y', // automated accessibility checks: landmarks, alt text, later axe (RSP-138, RSP-162)
   smoke: '@smoke', // the short production check in the release flow
 } as const;

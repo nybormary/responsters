@@ -10,11 +10,5 @@ export type AxeException = {
   why: string;
 };
 
-export const AXE_EXCEPTIONS: AxeException[] = [
-  {
-    rule: 'label-content-name-mismatch',
-    testId: TID.langButton,
-    ticket: 'RSP-169',
-    why: 'On narrow screens the button shows the language code (UA), its name is "Мова: Українська" (WCAG 2.5.3)',
-  },
-];
+// Empty since the Own look release: the language button's name now contains its visible text (RSP-169).
+export const AXE_EXCEPTIONS: AxeException[] = [];

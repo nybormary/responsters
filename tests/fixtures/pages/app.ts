@@ -1,6 +1,7 @@
 // The page as a whole: opening it and what is true for every view.
 import { expect, type Page, type Locator } from '@playwright/test';
 import { TID, type View } from '../locators';
+import { PathSteps } from './path-steps';
 
 export const VIEWS: View[] = ['collection', 'practice', 'traps'];
 
@@ -91,23 +92,6 @@ export class App {
     return this.page.getByTestId(TID.view(view));
   }
 
-  /** "How to use" (the hint above the tabs) and the link that opens it. */
-  get howto(): Locator {
-    return this.page.getByTestId(TID.howto);
-  }
-  /** Show "How to use". A first-time visitor already sees it open; the link toggles it, so click only when closed. */
-  async openHowto() {
-    if (await this.howto.isHidden()) await this.page.getByTestId(TID.howtoOpen).click();
-    await expect(this.howto).toBeVisible();
-  }
-
-  /** Practice (RSP-162): the answers of the current question and the feedback after an answer. */
-  get answers(): Locator {
-    return this.view('practice').locator(TID.anyAnswer);
-  }
-  get feedback(): Locator {
-    return this.view('practice').getByTestId(TID.feedback);
-  }
   /** Answer the current Practice question with its first answer (right or wrong) and wait for the feedback. */
   async answerPractice() {
     await this.answers.first().click();
@@ -117,5 +101,52 @@ export class App {
   /** Click an empty spot in the top-left corner, outside every control. */
   async clickOutside() {
     await this.page.mouse.click(2, 2);
+  }
+
+  /** "How to use" (glossary #18): the panel and its steps, the path steps component (RSP-172). */
+  get howto(): Locator {
+    return this.page.getByTestId(TID.howto);
+  }
+  get howtoSteps(): PathSteps {
+    return new PathSteps(this.howto.getByTestId(TID.howtoSteps));
+  }
+  /** Show "How to use": a first visit opens it by itself; otherwise the header button opens it. */
+  async openHowto() {
+    if (await this.howto.isHidden()) await this.page.getByTestId(TID.howtoOpen).click();
+    await expect(this.howto).toBeVisible();
+  }
+
+  /** Practice answers (RSP-162 test ids) and the feedback after an answer. */
+  get answers(): Locator {
+    return this.view('practice').locator(TID.anyAnswer);
+  }
+  answer(code: number): Locator {
+    return this.view('practice').getByTestId(TID.answer(code));
+  }
+  get feedback(): Locator {
+    return this.view('practice').getByTestId(TID.feedback);
+  }
+  /** The right code of the current Practice question in the default mode (picture → code): the picture's file name. */
+  async rightCode(): Promise<number> {
+    const src = await this.view('practice').getByTestId(TID.question).locator('img').getAttribute('src');
+    const code = Number(src?.match(/(\d{3})-art/)?.[1]);
+    if (!code) throw new Error(`No code in the question picture (${src}): is Practice in "picture → code"?`);
+    return code;
+  }
+  /** Codes of the answers shown, in order. */
+  async answerCodes(): Promise<number[]> {
+    return this.answers.evaluateAll((els) => els.map((el) => Number(el.getAttribute('data-testid')?.slice(7))));
+  }
+
+  /** One situation in Traps (pair index, line index) and its code buttons. */
+  situation(pair: number, line: number): Locator {
+    return this.view('traps').getByTestId(TID.situation(pair, line));
+  }
+  /** How many situations a trap has. */
+  async situationCount(pair: number): Promise<number> {
+    return this.view('traps').locator(`[data-testid^="situation-${pair}-"]`).count();
+  }
+  situationAnswers(pair: number, line: number): Locator {
+    return this.situation(pair, line).locator(TID.anyAnswer);
   }
 }

@@ -1,6 +1,20 @@
 // Accessibility: landmarks and alt text (automated part; manual checks follow KAZOO).
 // testomat.io folder "Accessibility", suites "Landmarks and alt text (RSP-138)" and "axe checks (RSP-162)".
-import { test, expect, TAG, VIEWS, THEMES } from '../fixtures';
+import {
+  test,
+  expect,
+  TAG,
+  VIEWS,
+  THEMES,
+  type MarkerLook,
+  uppercaseElements,
+  lookOf,
+  markOf,
+  boxes,
+  controlBorderContrasts,
+  type Mark,
+  focusRingsByTab,
+} from '../fixtures';
 
 // ── d6f8bf2f ────────────────────────────────────────────────────────────────────────────────────
 
@@ -129,6 +143,233 @@ test(
       await test.step(`${theme}: 404 page`, async () => {
         await notFoundPage.open(`/${lang}/no-such-page`);
         await axe.expectNoViolations(`${theme}, 404 page`);
+      });
+    }
+  },
+);
+
+// ── 5cd29001 ────────────────────────────────────────────────────────────────────────────────────
+// RSP-172: both lists of path steps keep list semantics; the step number (marker) and the step art are decoration.
+// A marker text in the accessibility tree would show as a line "- text: 1".
+const MARKER_TEXT = /^\s*- text: "?[123]"?$/m;
+
+test(
+  'Path steps on the home page and in the app\'s "How to use" are read once, without the decoration @T5cd29001',
+  { tag: [TAG.a11y] },
+  async ({ homePage, app, lang }) => {
+    let homeMarker: MarkerLook | undefined;
+
+    await test.step('home "How it works": a list of 3 items; markers and step art aria-hidden, pictures alt=""', async () => {
+      await homePage.open(lang);
+      const steps = homePage.steps;
+      await expect(steps.root).toHaveRole('list');
+      await expect(steps.root).toHaveAttribute('role', 'list'); // Chromium keeps <ol> a list anyway; Safari needs it
+      await expect(steps.items).toHaveCount(3);
+      for (const i of [0, 1, 2]) {
+        await expect(steps.marker(i)).toHaveAttribute('aria-hidden', 'true');
+        await expect(steps.art(i)).toHaveAttribute('aria-hidden', 'true');
+      }
+      for (const i of [0, 1]) await expect(steps.pictures(i)).toHaveAttribute('alt', '');
+      homeMarker = await steps.markerLook(0);
+    });
+
+    await test.step('home: the accessibility tree has no step numbers, chips, arrow or "≠"', async () => {
+      const tree = await homePage.steps.root.ariaSnapshot();
+      expect(tree).not.toMatch(MARKER_TEXT);
+      expect(tree).not.toMatch(/304 ✓|≠|→|img/);
+    });
+
+    await test.step('app "How to use": the same component, a list of 3 items, markers aria-hidden', async () => {
+      await app.open();
+      await app.openHowto();
+      const steps = app.howtoSteps;
+      await expect(steps.root).toHaveRole('list');
+      await expect(steps.root).toHaveAttribute('role', 'list');
+      await expect(steps.items).toHaveCount(3);
+      for (const i of [0, 1, 2]) await expect(steps.marker(i)).toHaveAttribute('aria-hidden', 'true');
+      expect(await steps.root.ariaSnapshot()).not.toMatch(MARKER_TEXT);
+      expect(await steps.markerLook(0)).toEqual(homeMarker);
+    });
+  },
+);
+
+// ── 9aa6d08e ────────────────────────────────────────────────────────────────────────────────────
+// RSP-170 AC2, AC3: no element is shown in capitals by CSS, except the English status name on a creature card
+// (.cf-name, part of the card design). The card page section labels are normal h2 headings.
+
+test(
+  'No uppercase decorative labels on any page; card page section headings keep their levels @T9aa6d08e',
+  { tag: [TAG.a11y] },
+  async ({ app, homePage, cardPage, lang, texts, page }) => {
+    const shouting: string[] = [];
+    const collect = async (where: string) => {
+      for (const e of await uppercaseElements(page)) {
+        if (!/\bcf-name\b/.test(e.classes)) shouting.push(`${where}: <${e.tag} class="${e.classes}"> ${e.text}`);
+      }
+    };
+
+    await test.step('home page', async () => {
+      await homePage.open(lang);
+      await collect('home');
+    });
+    await test.step('app: Collection with "How to use", Practice, Traps', async () => {
+      await app.open('collection');
+      await app.openHowto();
+      await collect('collection');
+      await app.open('practice');
+      await collect('practice');
+      await app.open('traps');
+      await collect('traps');
+    });
+    await test.step('card page', async () => {
+      await cardPage.open(lang, 404);
+      await collect('card page');
+    });
+
+    await test.step('only the card status names are in capitals', async () => {
+      expect(shouting).toEqual([]);
+    });
+
+    await test.step('card page: the section labels are h2 headings in normal case', async () => {
+      const headings = cardPage.sectionHeadings;
+      for (const label of [texts.ui.mean, texts.ui.when, texts.ui.qa, texts.ui.links]) {
+        const h = headings.filter({ hasText: label });
+        await expect(h, label).toHaveCount(1);
+        expect((await lookOf(h)).textTransform, label).toBe('none');
+      }
+    });
+  },
+);
+
+// ── fb7f85e7 ────────────────────────────────────────────────────────────────────────────────────
+// RSP-169 AC8 (WCAG 1.4.1): right = thicker frame (ring), wrong = ✕ badge, not picked = plain. Read from the
+// computed style, never from colour; the ✕ is decoration (empty alt text), so not in the accessibility tree.
+
+test(
+  'Right and wrong answers differ without colour in Practice and Traps @Tfb7f85e7',
+  { tag: [TAG.a11y] },
+  async ({ app, texts }) => {
+    await test.step('Practice (picture → code): a wrong pick shows ✕ on it, the ring on the right one', async () => {
+      await app.open('practice');
+      const right = await app.rightCode();
+      const codes = await app.answerCodes();
+      const wrong = codes.find((c) => c !== right) as number;
+      const before = await boxes(app.answers);
+      await app.answer(wrong).click();
+      await expect(app.feedback).toBeVisible();
+      expect(await boxes(app.answers), 'no answer moves or changes size').toEqual(before);
+      for (const c of codes) {
+        const expected: Mark = c === right ? 'right' : c === wrong ? 'wrong' : 'plain';
+        expect(await markOf(app.answer(c)), `answer ${c}`).toBe(expected);
+      }
+      expect(await app.answer(wrong).ariaSnapshot(), 'the ✕ is not read').not.toContain('✕');
+      await expect(app.feedback).toContainText(texts.ui.no);
+    });
+
+    await test.step('Traps: one ring per situation; a wrong pick shows ✕; nothing moves', async () => {
+      await app.open('traps');
+      let wrongSeen = false;
+      for (let pair = 0; pair < 3 && !wrongSeen; pair++) {
+        const lines = await app.situationCount(pair);
+        for (let line = 0; line < lines && !wrongSeen; line++) {
+          const buttons = app.situationAnswers(pair, line);
+          const before = await boxes(buttons);
+          await buttons.first().click();
+          expect(await boxes(buttons), `situation ${pair}-${line}: nothing moves`).toEqual(before);
+          const marks: Mark[] = [];
+          for (let i = 0; i < (await buttons.count()); i++) marks.push(await markOf(buttons.nth(i)));
+          expect(
+            marks.filter((m) => m === 'right'),
+            `situation ${pair}-${line}: ${marks}`,
+          ).toHaveLength(1);
+          expect(['right', 'wrong'], `situation ${pair}-${line}: the picked code is marked`).toContain(marks[0]);
+          expect(marks.slice(1).includes('wrong'), 'only the picked code can be wrong').toBe(false);
+          if (marks[0] === 'wrong') {
+            wrongSeen = true;
+            expect(await buttons.first().ariaSnapshot(), 'the ✕ is not read').not.toContain('✕');
+          }
+        }
+      }
+      expect(wrongSeen, 'some situation had a wrong first pick').toBe(true);
+    });
+  },
+);
+
+// ── 2b75b29c ────────────────────────────────────────────────────────────────────────────────────
+// RSP-169 AC2 (WCAG 1.4.11): every bordered control (button, link, summary) against the colour behind it, ≥ 3:1.
+// Dividers are not controls, so --line on them doesn't count. axe doesn't check this.
+
+test(
+  'Control borders have at least 3:1 contrast to the background, light and dark @T2b75b29c',
+  { tag: [TAG.a11y] },
+  async ({ app, cardPage, langMenu, lang, page }) => {
+    for (const theme of ['light', 'dark'] as const) {
+      await test.step(`${theme} theme`, async () => {
+        await page.emulateMedia({ colorScheme: theme });
+        const low: string[] = [];
+        let checked = 0;
+        const check = async (where: string, scope: typeof app.main) => {
+          const list = await controlBorderContrasts(scope);
+          checked += list.length;
+          for (const r of list)
+            if (r.ratio < 3) low.push(`${where}: ${r.control} ${r.ratio}:1 (${r.border} on ${r.background})`);
+        };
+
+        await app.open('collection');
+        await app.openHowto();
+        await check('collection + how to use', app.main);
+        await langMenu.open();
+        await check('header + language menu', app.banner);
+        await langMenu.button.click();
+
+        await app.open('practice');
+        const right = await app.rightCode();
+        const wrong = (await app.answerCodes()).find((c) => c !== right) as number;
+        await app.answer(wrong).click();
+        await check('practice, answered', app.main);
+
+        await app.open('traps');
+        await app.situationAnswers(0, 0).first().click();
+        await check('traps, answered', app.main);
+
+        await cardPage.open(lang, 418);
+        await check('card page', app.main);
+        await check('card page header', app.banner);
+
+        expect(checked, 'controls with a border were found').toBeGreaterThan(10);
+        expect(low, 'control borders below 3:1').toEqual([]);
+      });
+    }
+  },
+);
+
+// ── b0d62868 ────────────────────────────────────────────────────────────────────────────────────
+// RSP-169 AC5 (WCAG 2.4.7): Tab through every kind of page; each focused link, button and the language button
+// (<summary> on generated pages) has a solid outline of at least 2 px that stands out at least 3:1 from behind.
+// Found 2026-11-10: on generated pages links had only the browser's thin ring, the language button none visible.
+
+test(
+  'Every link and button shows a 3 px focus outline on every page, light and dark @Tb0d62868',
+  { tag: [TAG.a11y] },
+  async ({ app, homePage, cardPage, notFoundPage, lang, page }) => {
+    const pages: [string, () => Promise<unknown>][] = [
+      ['home', () => homePage.open(lang)],
+      ['app', () => app.open('collection')],
+      ['card page', () => cardPage.open(lang, 404)],
+      ['404 page', () => notFoundPage.open(`/${lang}/no-such-page/`)],
+    ];
+    for (const theme of ['light', 'dark'] as const) {
+      await test.step(`${theme} theme`, async () => {
+        await page.emulateMedia({ colorScheme: theme });
+        for (const [name, open] of pages) {
+          await open();
+          const rings = await focusRingsByTab(page);
+          expect(rings.length, `${name}: Tab reaches links and buttons`).toBeGreaterThan(5);
+          const weak = rings
+            .filter((r) => r.style === 'none' || r.style === 'auto' || r.width < 2 || r.ratio < 3)
+            .map((r) => `${r.element}: ${r.style} ${r.width}px, ${r.ratio}:1`);
+          expect(weak, `${name}: focus outlines that are missing, thin or low contrast`).toEqual([]);
+        }
       });
     }
   },

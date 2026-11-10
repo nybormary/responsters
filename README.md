@@ -98,7 +98,8 @@ The site runs on Netlify's free plan (300 credits a month). When the credits run
 ```
 site/              the site's sources; the build turns them into dist/, which Netlify publishes
   app.html         template of the HTTP rubric page; the build writes it as /<lang>/http/ per language
-  css/             styles: base, site (header and footer), home, card (the card frame), collection, practice, traps, detail (card page)
+  css/             styles, split for editing; the build joins them into one page-<type>.css per page type: fonts (@font-face), base, site (header and footer), home, card (the card frame), collection, practice, traps, detail (card page)
+  fonts/           web fonts, served from the site (no Google Fonts): one folder per font and package version, with its OFL.txt
   data/            shared data, the same in every language: codes, status and creature names, colours, trap answers, links
   i18n/            all texts, one file per language: uk, en, pl, da, lt, et; index.js lists the languages the site offers
   js/              logic, one file per part of the page
@@ -113,7 +114,7 @@ site/              the site's sources; the build turns them into dist/, which Ne
     modes.js       the Practice modes shown as cards (add a line per new mode)
     chrome.js · collection.js · practice.js · traps.js
   img/             creature art ({code}-art.jpg) and the old full card images ({code}.jpg)
-  _headers         cache rules (images and icons: one week)
+  _headers         cache rules (images and icons: one week; fonts: one year)
 scripts/
   build-pages.mjs    the build: copies site/ to dist/ and writes the home page, the rubric page, a card page per creature and the 404 page
                      for every language, the chooser pages for links without a language, _redirects and sitemap.xml
@@ -161,3 +162,6 @@ The site addresses live in `tests/targets.ts`; when the site moves to another ho
 ## Credits
 
 Characters, card concepts and copy by Maryna Bortnyk. Status names per RFC 9110.
+
+Fonts, all under the SIL Open Font License 1.1, served from the site (`site/fonts/`, licence next to each font), files from the [fontsource](https://fontsource.org) npm packages:
+[Bitter](https://github.com/solmatas/BitterPro) (headings), [Atkinson Hyperlegible Next](https://github.com/googlefonts/atkinson-hyperlegible-next) by the Braille Institute (text), [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) (codes).
