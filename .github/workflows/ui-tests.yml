@@ -35,15 +35,18 @@ jobs:
       BASE_SHA: ${{ github.event.pull_request.base.sha }}
     steps:
       - uses: actions/checkout@v6
+        id: checkout
         with:
           fetch-depth: 0 # full history, to compare the PR with master
 
       - uses: actions/setup-node@v6
+        id: node
         with:
           node-version: 22
           cache: npm
 
       - name: Install
+        id: install
         run: npm ci
 
       - name: Type check
@@ -75,6 +78,7 @@ jobs:
           fi
 
       - name: Install the browser
+        id: browser
         run: npx playwright install --with-deps chromium
 
       - name: Wait for the Netlify deploy preview of this commit
@@ -121,6 +125,8 @@ jobs:
           PR: ${{ github.event.pull_request.number }}
           TESTOMATIO: ${{ secrets.TESTOMATIO }}
           BRANCH: ${{ github.head_ref }}
+        # `shell: bash` adds pipefail: without it the step takes tee's exit code, and failed tests would pass.
+        shell: bash
         run: |
           export TESTOMATIO_TITLE="🦭 CI · PR #$PR ($BRANCH) on deploy preview"
           npx playwright test 2>&1 | tee testomat-run.log # the alert takes the run link from this log
@@ -131,6 +137,7 @@ jobs:
         run: npx playwright test
 
       - name: Keep the HTML report
+        id: report
         if: always()
         uses: actions/upload-artifact@v6
         with:
@@ -149,5 +156,9 @@ jobs:
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_URL: ${{ github.event.pull_request.html_url }}
           BRANCH: ${{ github.head_ref }}
-          SUITE_WAY: ${{ steps.preview.outputs.ready == 'true' && 'the deploy preview' || 'the PR''s own files' }}
+          # Where the tests actually ran; empty when no test step ran (the run stopped earlier).
+          SUITE_WAY: >-
+            ${{ contains(fromJSON('["success","failure"]'), steps.tests-preview.outcome) && 'the deploy preview'
+            || contains(fromJSON('["success","failure"]'), steps.tests-own.outcome) && 'the PR''s own files'
+            || '' }}
         run: node scripts/ci-alert.mjs

@@ -4,7 +4,8 @@
 // PR_NUMBER, PR_TITLE, PR_URL, BRANCH, HEAD_SHA, SUITE_WAY, and GitHub's own GITHUB_* variables.
 // Test counts and the failed tests come from the JSON reporter (ci-results.json, written on CI by
 // playwright.config.ts). The testomat.io run link comes from the reporter's own log line "📊 Report URL: …",
-// which the workflow keeps in testomat-run.log; a run that wasn't reported (the PR's own files) says so.
+// which the workflow keeps in testomat-run.log; a run that wasn't reported (the PR's own files) says so,
+// and a run that stopped before the tests (SUITE_WAY empty) says nothing about testomat.io.
 import { readFile } from 'node:fs/promises';
 
 const e = process.env;
@@ -20,6 +21,11 @@ const esc = (s = '') => String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;
 
 // The first step that failed, by its id in the workflow; named for people, not for YAML.
 const STEP_NAMES = {
+  checkout: 'checking out the code',
+  node: 'setting up Node.js',
+  install: 'npm ci',
+  browser: 'installing the browser',
+  changes: 'checking what the PR changes',
   typecheck: 'type check',
   locales: 'locale check',
   lint: 'lint',
@@ -28,6 +34,7 @@ const STEP_NAMES = {
   'tests-preview': 'UI tests',
   'tests-own': 'UI tests',
   tests: 'UI tests',
+  report: 'keeping the HTML report',
 };
 let failedStep = 'see the run';
 try {
@@ -62,14 +69,18 @@ const MAX_LISTED = 5;
 const failedLines = failed.slice(0, MAX_LISTED);
 if (failed.length > MAX_LISTED) failedLines.push(`…and ${failed.length - MAX_LISTED} more`);
 
-let testomat = "not reported to testomat.io (the PR's own files)";
-try {
-  // eslint-disable-next-line no-control-regex
-  const log = (await readFile('testomat-run.log', 'utf8')).replace(/\u001b\[[0-9;]*m/g, '');
-  const url = log.match(/Report URL:\s*(https:\/\/app\.testomat\.io\/\S+)/)?.[1];
-  testomat = url ? `<${url}|testomat.io run>` : 'testomat.io: no run link in the log';
-} catch {
-  // not reported: keep the default
+// testomat.io part: nothing when no tests ran (SUITE_WAY empty); the run link when the tests wrote the log;
+// "not reported" when they ran without it (the PR's own files are not a deployed site, so not reported).
+let testomat = '';
+if (e.SUITE_WAY) {
+  try {
+    // eslint-disable-next-line no-control-regex
+    const log = (await readFile('testomat-run.log', 'utf8')).replace(/\u001b\[[0-9;]*m/g, '');
+    const url = log.match(/Report URL:\s*(https:\/\/app\.testomat\.io\/\S+)/)?.[1];
+    testomat = url ? `<${url}|testomat.io run>` : 'testomat.io: no run link in the log';
+  } catch {
+    testomat = `not reported to testomat.io (${esc(e.SUITE_WAY)})`;
+  }
 }
 
 const run = `${e.GITHUB_SERVER_URL}/${e.GITHUB_REPOSITORY}/actions/runs/${e.GITHUB_RUN_ID}`;
@@ -78,11 +89,11 @@ const where =
     ? '*production smoke* (mnemozoo.com)'
     : `PR <${e.PR_URL}|#${e.PR_NUMBER} ${esc(e.PR_TITLE)}>`;
 const lines = [
-  `🔴 *UI tests failed*: ${where}`,
+  `🔴 *CI run failed*: ${where}`,
   `Failed at: ${failedStep} · ${counts}${e.SUITE_WAY ? ` · ran on ${e.SUITE_WAY}` : ''}`,
   ...failedLines,
   e.ALERT_KIND === 'production' ? '' : `Branch \`${esc(e.BRANCH)}\` · commit \`${(e.HEAD_SHA || '').slice(0, 7)}\``,
-  `<${run}|Run and HTML report> · ${testomat}`,
+  `<${run}|Run and HTML report>${testomat ? ` · ${testomat}` : ''}`,
 ].filter(Boolean);
 
 try {
