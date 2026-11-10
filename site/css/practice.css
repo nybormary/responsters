@@ -84,7 +84,9 @@
 /* Hardcore (RSP-101): dark card with orange; selected = orange border, a ring and an orange check. */
 .mode.hard {
   background: var(--card-ink);
-  border-color: var(--card-ink);
+  /* The ink outline like every control: in the dark theme the dark card has to stand out from the dark page
+     (it was card-ink on the page, 1.1:1; WCAG 1.4.11 needs 3:1). Found by the border contrast test (RSP-169). */
+  border-color: var(--ink);
   color: #fbf6ea;
 }
 .mode.hard .mode-icon {
