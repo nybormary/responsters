@@ -6,6 +6,10 @@
    for dividers only. */
 /* Layout: a field guide. Header with tabs → collection grouped by status class, practice deck, and confusable pairs. Card art is the hero; the UI stays quiet around it. */
 :root {
+  /* Own look (RSP-169): two corner radii and one ink outline for cards, art and controls. --line is for dividers only. */
+  --r-s: 6px; /* signs, chips, buttons */
+  --r-l: 16px; /* cards, panels, art */
+  --outline: 2.5px solid var(--ink);
   --bg: #f7f2e8;
   --surface: #fffdf8;
   --ink: #2b2027;
@@ -125,7 +129,7 @@ header {
 .brand .brand-name a {
   color: inherit;
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: var(--r-s);
 }
 .brand h1 a:focus-visible,
 .brand .brand-name a:focus-visible {
@@ -145,7 +149,7 @@ header {
 .brand .dots i {
   width: 28px;
   height: 8px;
-  border-radius: 4px;
+  border-radius: var(--r-s);
   display: block;
 }
 /* Language menu (RSP-109): a pill with the current language opens a list of all languages, each in its own language.
@@ -159,7 +163,7 @@ header {
   gap: 6px;
   min-height: 44px;
   padding: 6px 12px;
-  border: 1.5px solid var(--line);
+  border: var(--outline);
   border-radius: 999px;
   background: var(--surface);
   color: var(--ink);
@@ -173,6 +177,18 @@ header {
   width: 18px;
   height: 18px;
   flex: none;
+}
+/* Text for screen readers only (e.g. "Мова: " before the language button text). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 .langbtn .lang-icon {
   color: var(--accent);
@@ -215,8 +231,8 @@ header {
   padding: 6px;
   list-style: none;
   background: var(--surface);
-  border: 1.5px solid var(--line);
-  border-radius: 14px;
+  border: var(--outline);
+  border-radius: var(--r-l);
   box-shadow: 0 8px 24px rgb(0 0 0 / 0.14);
 }
 .langlist button,
@@ -229,7 +245,7 @@ header {
   min-height: 44px;
   padding: 8px 12px;
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--r-s);
   background: none;
   color: var(--ink);
   font: 600 15px var(--body);
@@ -299,8 +315,8 @@ summary.langbtn::-webkit-details-marker {
 .howto {
   margin-top: 20px;
   background: var(--surface);
-  border: 1.5px solid var(--line);
-  border-radius: 16px;
+  border: var(--outline);
+  border-radius: var(--r-l);
   padding: 16px 20px;
   display: grid;
   gap: 10px;
@@ -328,7 +344,7 @@ summary.langbtn::-webkit-details-marker {
 }
 .howto-done {
   justify-self: start;
-  border: 1.5px solid var(--line);
+  border: var(--outline);
   background: var(--soft);
   color: var(--ink);
   border-radius: 999px;
@@ -405,7 +421,7 @@ footer {
   height: var(--mark);
   display: grid;
   place-items: center;
-  border: 2px solid var(--ink);
+  border: var(--outline);
   border-radius: 50%;
   background: var(--sign);
   color: var(--sign-ink);

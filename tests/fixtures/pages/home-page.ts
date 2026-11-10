@@ -82,6 +82,21 @@ export class HomePage {
     return this.heroCard(code).evaluate((el) => el.getAnimations({ subtree: true }).length);
   }
 
+  /** True when the code caption lies inside the hero. 5px slack: a card at the hero's edge turned by up to 2° pushes
+   * its corner out by about half its width × sin 2° (1px at 375px, 3.1px at 600px for 418); nothing is cut, the hero
+   * hides nothing. A caption pushed away or covered is far beyond that. */
+  async heroCaptionInsideHero(code: number): Promise<boolean> {
+    const hero = await this.hero.boundingBox();
+    const cap = await this.heroCaption(code).boundingBox();
+    if (!hero || !cap) return false;
+    return (
+      cap.x >= hero.x - 5 &&
+      cap.y >= hero.y - 5 &&
+      cap.x + cap.width <= hero.x + hero.width + 5 &&
+      cap.y + cap.height <= hero.y + hero.height + 5
+    );
+  }
+
   /** True when the middle of the code caption is not covered by anything else (e.g. the next tilted card). */
   async heroCaptionOnTop(code: number): Promise<boolean> {
     return this.heroCaption(code).evaluate((el) => {
