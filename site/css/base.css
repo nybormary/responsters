@@ -393,6 +393,31 @@ footer {
   }
 }
 
+/* Sign (RSP-170): the zoo's one label component, for any page. A small plate in the display font, normal case,
+   with the ink outline. Plain = a name plate (e.g. a pavilion); .sign-open = an open area (green), .sign-notice = an
+   announcement (yellow). The status is always written on the sign, so it reads without colour. */
+.sign {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start; /* as wide as its text, also inside a flex column (pavilion, enclosure) */
+  max-width: 100%;
+  padding: 3px 10px;
+  border: var(--outline);
+  border-radius: var(--r-s);
+  background: var(--surface);
+  color: var(--ink);
+  font: 700 15px/1.3 var(--display);
+  overflow-wrap: anywhere;
+}
+.sign-open {
+  background: var(--sign);
+  color: var(--sign-ink);
+}
+.sign-notice {
+  background: var(--notice);
+  color: var(--notice-ink);
+}
+
 /* Path steps (RSP-172): one shared component for every list of steps on the site (home "How it works", the app's
    "How to use"). An <ol role="list"> (the role keeps list semantics in Safari with list-style: none), each step with a
    round numbered marker and a dashed line to the next step. The marker is aria-hidden: the list already says

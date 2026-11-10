@@ -27,13 +27,12 @@
   font: 800 28px var(--display);
   margin: 0;
 }
+/* Section headings of the sheet: normal headings in the display font, not uppercase labels (RSP-170 AC3). */
 .sheet h4,
 .sheet h2 {
-  font: 700 13px var(--body);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  margin: 16px 0 4px;
+  font: 800 19px/1.25 var(--display);
+  color: var(--ink);
+  margin: 18px 0 4px;
 }
 .sheet p {
   margin: 0;

@@ -5,10 +5,12 @@ import {
   expect,
   TAG,
   VIEWS,
+  type MarkerLook,
+  uppercaseElements,
+  lookOf,
   markOf,
   boxes,
   controlBorderContrasts,
-  type MarkerLook,
   type Mark,
 } from '../fixtures';
 
@@ -124,6 +126,54 @@ test(
       for (const i of [0, 1, 2]) await expect(steps.marker(i)).toHaveAttribute('aria-hidden', 'true');
       expect(await steps.root.ariaSnapshot()).not.toMatch(MARKER_TEXT);
       expect(await steps.markerLook(0)).toEqual(homeMarker);
+    });
+  },
+);
+
+// ── 9aa6d08e ────────────────────────────────────────────────────────────────────────────────────
+// RSP-170 AC2, AC3: no element is shown in capitals by CSS, except the English status name on a creature card
+// (.cf-name, part of the card design). The card page section labels are normal h2 headings.
+
+test(
+  'No uppercase decorative labels on any page; card page section headings keep their levels @T9aa6d08e',
+  { tag: [TAG.a11y] },
+  async ({ app, homePage, cardPage, lang, texts, page }) => {
+    const shouting: string[] = [];
+    const collect = async (where: string) => {
+      for (const e of await uppercaseElements(page)) {
+        if (!/\bcf-name\b/.test(e.classes)) shouting.push(`${where}: <${e.tag} class="${e.classes}"> ${e.text}`);
+      }
+    };
+
+    await test.step('home page', async () => {
+      await homePage.open(lang);
+      await collect('home');
+    });
+    await test.step('app: Collection with "How to use", Practice, Traps', async () => {
+      await app.open('collection');
+      await app.openHowto();
+      await collect('collection');
+      await app.open('practice');
+      await collect('practice');
+      await app.open('traps');
+      await collect('traps');
+    });
+    await test.step('card page', async () => {
+      await cardPage.open(lang, 404);
+      await collect('card page');
+    });
+
+    await test.step('only the card status names are in capitals', async () => {
+      expect(shouting).toEqual([]);
+    });
+
+    await test.step('card page: the section labels are h2 headings in normal case', async () => {
+      const headings = cardPage.sectionHeadings;
+      for (const label of [texts.ui.mean, texts.ui.when, texts.ui.qa, texts.ui.links]) {
+        const h = headings.filter({ hasText: label });
+        await expect(h, label).toHaveCount(1);
+        expect((await lookOf(h)).textTransform, label).toBe('none');
+      }
     });
   },
 );

@@ -446,16 +446,14 @@ export default {
     h1: 'Saa vastus enne, kui küsidki',
     lead: 'Originaalsed olendid HTTP olekukoodidele, mida kohtad iga päev brauseris, logides ja konsoolis. Kaart, harjutamine, lõksud sarnaste koodidega. Kuus keelt.',
     mapTitle: 'Loomaaia kaart',
-    open: 'Avatud',
-    httpZone: 'Metsloomad',
+    httpSign: 'Metsloomad · avatud', // zone sign with its status (RSP-170)
     httpName: 'HTTP olekukoodid',
     httpText: (n, first, last) =>
       `${n} ${n === 1 ? 'olend' : 'olendit'} vahemikus ${first}–${last}. Kaart iga koodi kohta, harjutamine neljas režiimis, lõksud koodidega, mida aetakse segi.`,
     enter: 'Tutvu elanikega →',
-    gitZone: 'Lemmikloomad',
-    gitDate: '1. detsember',
+    gitSign: 'Lemmikloomad · avatakse 1. detsembril', // announcement sign; the Git date stays on purpose
     gitText: 'Git-käsud igapäevaste stseenidena. Avame jõulukalendriga: iga päev uus kaart.',
-    pavilions: 'Teemapaviljonid',
+    pavilionSign: 'Teemapaviljon', // singular: the sign hangs on the pavilion itself
     pairsName: 'Sarnased liigid',
     pairsText: 'Paarid, mida aetakse segi: 401 ja 403, 502 ja 504. Reegel ja olukorrad sorteerimiseks.',
     pairsLink: (n) => `${n} ${n === 1 ? 'paar' : 'paari'} HTTP aedikus →`,
