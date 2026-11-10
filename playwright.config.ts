@@ -29,6 +29,8 @@ export default defineConfig<Options>({
   reporter: [
     ['list'],
     ['html', { open: 'never' }],
+    // On CI also a JSON summary, read by scripts/ci-alert.mjs for the Slack alert (RSP-179).
+    ...(process.env.CI ? [['json', { outputFile: 'ci-results.json' }] as const] : []),
     ...(process.env.TESTOMATIO
       ? [
           [

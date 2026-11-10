@@ -1,0 +1,63 @@
+# Production smoke (variant 10) from GitHub Actions (RSP-179): Actions → "Production smoke" → Run workflow.
+# Same tests as `npm run test:prod:smoke` on a computer, reported to testomat.io, and a failed run posts one alert
+# to Slack #ci-alerts. A green run posts nothing. Started by hand for now; starting it by itself after each
+# production deploy is RSP-161. GitHub shows the "Run workflow" button only once this file is on master.
+
+name: Production smoke
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        id: checkout
+
+      - uses: actions/setup-node@v6
+        id: node
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        id: install
+        run: npm ci
+
+      - name: Install the browser
+        id: browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Smoke tests on production (variant 10, reported to testomat.io)
+        id: tests
+        env:
+          TESTOMATIO: ${{ secrets.TESTOMATIO }}
+        # `shell: bash` adds pipefail: without it the step takes tee's exit code, and failed tests would pass.
+        shell: bash
+        run: npm run test:prod:smoke 2>&1 | tee testomat-run.log # the alert takes the run link from this log
+
+      - name: Keep the HTML report
+        id: report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-report-prod-smoke-${{ github.run_number }}
+          path: playwright-report/
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Alert #ci-alerts
+        if: failure()
+        continue-on-error: true # best effort: Slack down or no secret must not change the result
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          ALERT_KIND: production
+          STEPS_JSON: ${{ toJSON(steps) }}
+          # Empty when the tests didn't run (the run stopped earlier).
+          SUITE_WAY: ${{ contains(fromJSON('["success","failure"]'), steps.tests.outcome) && 'production' || '' }}
+        run: node scripts/ci-alert.mjs
