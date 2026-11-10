@@ -77,6 +77,13 @@ document.addEventListener('click', (e) => {
   }
 });
 document.addEventListener('keydown', (e) => {
+  // Escape closes an open language menu wherever the focus is (RSP-181): opened with the mouse, the focus is on the
+  // button (Chrome) or nowhere (Safari doesn't focus a clicked button), and langKeys only saw Escape inside the menu.
+  if (e.key === 'Escape' && !$('lang-list').hidden) {
+    e.preventDefault();
+    langClose(true);
+    return;
+  }
   langKeys(e);
 });
 // Focus leaving the language menu (e.g. Shift+Tab) closes it.
