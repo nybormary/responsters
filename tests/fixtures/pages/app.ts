@@ -1,4 +1,5 @@
 // The page as a whole: opening it and what is true for every view.
+import type { Lang } from '../texts';
 import { expect, type Page, type Locator } from '@playwright/test';
 import { TID, type View } from '../locators';
 import { PathSteps } from './path-steps';
@@ -7,20 +8,37 @@ export const VIEWS: View[] = ['collection', 'practice', 'traps'];
 
 export class App {
   readonly page: Page;
+  /** The language of the test: open() goes straight to /<lang>/http/. */
+  readonly lang: Lang;
   /** Uncaught page errors since the page was created (e.g. a broken module). */
   readonly errors: Error[] = [];
 
-  constructor(page: Page) {
+  constructor(page: Page, lang: Lang) {
     this.page = page;
+    this.lang = lang;
     page.on('pageerror', (e) => this.errors.push(e));
   }
 
   /**
-   * Open the app by its language-less URL /http/, optionally on a view (#practice, #traps) or any raw hash
-   * ('nonsense'). The site sends the browser on to /<lang>/http/ (RSP-138): Netlify by a redirect, a local
-   * run by a chooser page. Either way the saved language, then the browser language decides.
+   * Open the app in the test's language, /<lang>/http/, optionally on a view (#practice, #traps) or any raw hash
+   * ('nonsense'). No redirect on the way: tests that aren't about choosing the language don't depend on it (RSP-183).
+   * Always a fresh page load, also when the app is already open in this tab.
    */
   async open(view?: View | string) {
+    const path = `/${this.lang}/http/`;
+    const sameDocument = this.page.url().includes(path);
+    await this.page.goto(`${path}${view ? `#${view}` : ''}`);
+    if (sameDocument) await this.page.reload(); // a new hash alone doesn't load the page again: start fresh, as before
+    await expect(this.page).toHaveURL(/\/[a-z]{2}\/http\/(#.*)?$/);
+    await this.ready();
+  }
+
+  /**
+   * Open the app by its language-less URL /http/ (only for tests of choosing the language). The site sends the
+   * browser on to /<lang>/http/ (RSP-138): Netlify by a redirect, a local run by a chooser page. Either way the
+   * saved language, then the browser language decides. On Netlify that redirect is unreliable: see LANG_REDIRECT.
+   */
+  async openLanguageless(view?: View | string) {
     await this.page.goto(view ? `/http/#${view}` : '/http/');
     await expect(this.page).toHaveURL(/\/[a-z]{2}\/http\/(#.*)?$/);
     await this.ready();

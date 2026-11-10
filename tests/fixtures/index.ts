@@ -21,6 +21,7 @@
 import { test as base, expect } from '@playwright/test';
 import { textsFor, LANGS, type Lang, type Texts } from './texts';
 import { SCREENS, SCREEN_NAMES, type ScreenName } from './screens';
+import { LANG_REDIRECT } from './known-issues';
 import { App } from './pages/app';
 import { LanguageMenu } from './pages/language-menu';
 import { CardPage } from './pages/card-page';
@@ -40,9 +41,12 @@ export type Options = {
   seed: Seed;
   randomLang: boolean;
   screenPreset: ScreenName | 'random'; // not `screen`: that name is Playwright's own option
+  // The test checks the language redirect of a language-less URL: skipped on Netlify until RSP-183 (known-issues.ts).
+  langRedirect: boolean;
 };
 
 type Fixtures = {
+  langRedirectGuard: void;
   screenName: ScreenName;
   lang: Lang;
   texts: Texts;
@@ -59,6 +63,16 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   seed: [{}, { option: true }],
   randomLang: [true, { option: true }],
   screenPreset: ['random', { option: true }],
+  langRedirect: [false, { option: true }],
+
+  // Skips a test of the language redirect on a deployed target, with the ticket in the reason (RSP-183).
+  langRedirectGuard: [
+    async ({ langRedirect }, use, testInfo) => {
+      testInfo.skip(langRedirect && LANG_REDIRECT.skip, LANG_REDIRECT.reason);
+      await use();
+    },
+    { auto: true },
+  ],
 
   // The screen of this test: test.use / project > TEST_SCREEN > random.
   screenName: async ({ screenPreset }, use, testInfo) => {
@@ -123,8 +137,8 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
     await use(await textsFor(lang));
   },
 
-  app: async ({ page }, use) => {
-    await use(new App(page));
+  app: async ({ page, lang }, use) => {
+    await use(new App(page, lang));
   },
   langMenu: async ({ page }, use) => {
     await use(new LanguageMenu(page));
@@ -155,3 +169,4 @@ export type { SiteChrome } from './pages/site-chrome';
 export type { NotFoundPage } from './pages/not-found-page';
 export type { PathSteps, MarkerLook } from './pages/path-steps';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';
+export { LANG_REDIRECT } from './known-issues';
