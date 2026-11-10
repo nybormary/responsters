@@ -149,19 +149,31 @@ function creaturePage(lang, tx, d) {
 /** The creatures in the hero of the home page (RSP-156 AC2): one from each status class, so all five colours show. */
 const HERO = [102, 201, 304, 418, 502];
 
+/** What each "How it works" step shows (RSP-172 AC3): meet a creature, picture → code, codes that look alike.
+ * Decoration only: the step text carries the meaning, so the block is aria-hidden and the pictures have empty alt. */
+const stepImg = (c) => `<img src="${art(c)}" alt="" width="640" height="573" loading="lazy" />`;
+const chip = (text) => `<span class="step-chip" data-testid="step-chip">${text}</span>`;
+const STEP_ART = [
+  stepImg(418),
+  `${stepImg(304)}<span class="step-sign">→</span>${chip('304 ✓')}`,
+  `${chip('502')}<span class="step-sign">≠</span>${chip('504')}`,
+];
+
 /** Home page /<lang>/ (RSP-156): what the zoo is, what is open and who builds it. Texts: i18n `home`, `site`. */
 function homePage(lang, tx) {
   const h = tx.home;
   const app = appUrl(lang);
   const hero = HERO.map(
-    (c) => `<figure class="hero-card">
+    (c) => `<figure class="hero-card" data-testid="hero-card-${c}">
             <img src="${art(c)}" alt="${esc(tx.cards[c].art)}" width="640" height="573" />
             <figcaption>${c}</figcaption>
           </figure>`,
   ).join('\n          ');
   const steps = h.steps
     .map(
-      ([title, text]) => `<li class="home-step">
+      ([title, text], i) => `<li class="path-step home-step">
+            <span class="path-mark" aria-hidden="true" data-testid="step-marker">${i + 1}</span>
+            <div class="step-art" aria-hidden="true" data-testid="step-art">${STEP_ART[i]}</div>
             <h3>${esc(title)}</h3>
             <p>${esc(text)}</p>
           </li>`,
@@ -191,7 +203,7 @@ function homePage(lang, tx) {
     <main class="home" data-testid="home-page">
       <section class="home-hero" aria-labelledby="home-title">
         <div class="home-hero-text">
-          <p class="home-kicker">${esc(h.kicker)}</p>
+          <p class="sign sign-open home-kicker" data-testid="home-kicker">${esc(h.kicker)}</p>
           <h1 id="home-title">${esc(h.h1)}</h1>
           <p class="home-lead">${esc(h.lead)}</p>
         </div>
@@ -205,23 +217,23 @@ function homePage(lang, tx) {
         <ul class="enclosures">
           <li class="enclosure enclosure-wide" style="--stripe: var(--c5)">
             <a href="${app}#collection" data-testid="enclosure-http">
-              <span class="enclosure-top"><span class="enclosure-zone">${esc(h.httpZone)}</span><span class="badge badge-open">${esc(h.open)}</span></span>
+              <span class="enclosure-top"><span class="sign sign-open" data-testid="sign-http">${esc(h.httpSign)}</span></span>
               <span class="enclosure-name">${esc(h.httpName)}</span>
               <span>${esc(h.httpText(D.length, D[0].c, D[D.length - 1].c))}</span>
               <span class="enclosure-go">${esc(h.enter)}</span>
             </a>
           </li>
           <li class="enclosure enclosure-soon" style="--stripe: var(--c4)" data-testid="enclosure-git">
-            <span class="enclosure-top"><span class="enclosure-zone">${esc(h.gitZone)}</span><span class="badge badge-date">${esc(h.gitDate)}</span></span>
+            <span class="enclosure-top"><span class="sign sign-notice" data-testid="sign-git">${esc(h.gitSign)}</span></span>
             <span class="enclosure-name">Git</span>
             <span>${esc(h.gitText)}</span>
           </li>
         </ul>
         <div class="pavilions">
-          <h3>${esc(h.pavilions)}</h3>
           <ul class="pavilion-list">
             <li class="pavilion">
               <a href="${app}#traps" data-testid="pavilion-traps">
+                <span class="sign" data-testid="sign-pavilion">${esc(h.pavilionSign)}</span>
                 <span class="pavilion-name">${esc(h.pairsName)}</span>
                 <span>${esc(h.pairsText)}</span>
                 <span class="enclosure-go">${esc(h.pairsLink(PAIRS.length))}</span>
@@ -233,7 +245,7 @@ function homePage(lang, tx) {
 
       <section id="how" class="home-how" aria-labelledby="how-title">
         <h2 id="how-title">${esc(h.howTitle)}</h2>
-        <ol class="home-steps">
+        <ol class="path-steps path-steps-row home-steps" role="list" data-testid="home-steps">
           ${steps}
         </ol>
       </section>

@@ -10,6 +10,8 @@ dist/
 
 # Playwright output
 test-results/
+ci-results.json
+testomat-run.log
 playwright-report/
 
 # Secrets: API tokens will live here, never commit them

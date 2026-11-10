@@ -12,7 +12,7 @@
   max-width: 320px;
   height: 8px;
   background: var(--soft);
-  border-radius: 4px;
+  border-radius: var(--r-s);
   overflow: hidden;
 }
 .bar span {
@@ -29,7 +29,7 @@
   margin: 16px 0 8px;
 }
 .chip {
-  border: 1.5px solid var(--line);
+  border: var(--outline);
   background: var(--surface);
   color: var(--ink);
   border-radius: 999px;
@@ -46,8 +46,8 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 1.5px solid #33202f;
-  color: #33202f;
+  border: 1.5px solid var(--card-ink);
+  color: var(--card-ink);
   display: grid;
   place-items: center;
 }
@@ -78,8 +78,8 @@
 .group h2 code {
   font: 800 15px var(--mono);
   padding: 2px 8px;
-  border-radius: 6px;
-  color: #2b1a28;
+  border-radius: var(--r-s);
+  color: var(--card-ink);
   display: inline-flex;
   align-items: center;
   gap: 5px;

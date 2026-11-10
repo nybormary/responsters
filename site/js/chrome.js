@@ -12,8 +12,10 @@ import { homeUrl } from './render.js';
 function renderLangMenu() {
   const [name, code] = LANG_NAMES[state.lang];
   const b = $('lang-btn');
-  b.innerHTML = `${GLOBE}<span class="lang-code" aria-hidden="true">${code}</span><span class="lang-name" lang="${state.lang}">${name}</span>${CHEVRON}`;
-  b.setAttribute('aria-label', `${t().lang}: ${name}`);
+  // No aria-label: the name is the button text (RSP-169 AC7, WCAG 2.5.3 Label in Name). Screen readers hear
+  // "Мова: Українська" on wide screens and "Мова: UA" on phones, where only the code shows: the visible text is
+  // always part of the name, so "click UA" works for speech input.
+  b.innerHTML = `${GLOBE}<span class="sr-only">${t().lang}: </span><span class="lang-code">${code}</span><span class="lang-name" lang="${state.lang}">${name}</span>${CHEVRON}`;
   $('lang-list').setAttribute('aria-label', t().lang);
   $('lang-list').innerHTML = LANGS.map(
     (l) =>
@@ -77,7 +79,10 @@ export function renderChrome() {
   $('howto').hidden = !state.howtoOpen;
   $('howto-title').textContent = t().howto;
   $('howto-steps').innerHTML = t()
-    .howtoSteps.map((s) => `<li>${s}</li>`)
+    .howtoSteps.map(
+      (s, i) =>
+        `<li class="path-step"><span class="path-mark" aria-hidden="true" data-testid="step-marker">${i + 1}</span>${s}</li>`,
+    )
     .join('');
   $('howto-note').textContent = t().howtoNote;
   $('howto-close').textContent = t().howtoClose;

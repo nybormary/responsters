@@ -31,4 +31,9 @@ export class CardPage {
   get art(): Locator {
     return this.root.getByTestId(TID.cardArt);
   }
+
+  /** The section headings of the card page (What it means, When you meet it, …): h2 (RSP-170 AC3). */
+  get sectionHeadings(): Locator {
+    return this.page.getByRole('main').getByRole('heading', { level: 2 });
+  }
 }

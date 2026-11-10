@@ -32,7 +32,21 @@ keepAddressInLangMenu();
 syncCookie();
 if (!followSavedLanguage()) followOldAppLink();
 
+// The language menu is a <details>, which never closes by itself (RSP-181): close it on a click outside it and
+// on Escape (focus back on its button), like the menu in the app. The click itself still does its job.
+const openMenus = () => document.querySelectorAll('details.langmenu[open]');
+
 document.addEventListener('click', (e) => {
-  const a = e.target instanceof Element ? e.target.closest('.langlist a[lang]') : null;
+  const target = e.target instanceof Element ? e.target : null;
+  const a = target?.closest('.langlist a[lang]');
   if (a) saveLang(a.getAttribute('lang'));
+  for (const menu of openMenus()) if (!target || !menu.contains(target)) menu.open = false;
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  for (const menu of openMenus()) {
+    menu.open = false;
+    menu.querySelector('summary')?.focus();
+  }
 });
