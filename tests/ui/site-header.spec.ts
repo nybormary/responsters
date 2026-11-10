@@ -1,6 +1,6 @@
 // Site header and footer on the app and the card pages (RSP-155; made for the home page in RSP-156).
 // testomat.io folder "Navigation", suite "Site header and footer (RSP-155)".
-import { test, expect, TAG, textsFor, langName, type App, type CardPage, type Lang } from '../fixtures';
+import { test, expect, TAG, textsFor, langName, LANG_REDIRECT, type App, type CardPage, type Lang } from '../fixtures';
 
 const CODES = [102, 404, 504] as const;
 
@@ -122,7 +122,8 @@ test.describe('a card page, nothing saved', () => {
         await expect(cardPage.html).toHaveAttribute('lang', 'pl');
       });
 
-      await test.step('the language-less /http/404/ opens it in Polish', async () => {
+      await test.step('the language-less /http/404/ opens it in Polish', async (step) => {
+        step.skip(LANG_REDIRECT.skip, LANG_REDIRECT.reason);
         await cardPage.openLanguageless(404);
         await expect(page).toHaveURL(/\/pl\/http\/404\/$/);
         await expect(cardPage.html).toHaveAttribute('lang', 'pl');

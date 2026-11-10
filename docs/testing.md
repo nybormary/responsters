@@ -269,6 +269,7 @@ Some language behaviour can't be checked locally: Netlify's redirects by `nf_lan
 | `TARGET=preview needs the PR number` | `npm run test:preview` without `PR=<number>` | Put the PR number before the command: `PR=14 npm run test:preview` |
 | Tests pass locally but time out on a preview | Preview not built yet, or a network blip | Wait for the green Netlify check; the config already retries once and waits longer for remote targets |
 | A language check by hand gives the wrong language | Your Chrome profile sends other languages first (macOS system languages), or the localStorage value isn't JSON | Use a clean profile and a quoted value, see [Language checks by hand](#language-checks-by-hand) |
+| On a preview or production, language-less tests (`/`, `/http/`, `/http/<code>/`) show as skipped with `RSP-183` | Netlify sometimes redirects a language-less URL to another language (RSP-183). Tests of that redirect skip on deployed targets (`test.use({ langRedirect: true })`; the skip and its reason are in `tests/fixtures/known-issues.ts`; one step on a card page uses `step.skip`) and still run locally; all other tests open `/<lang>/…` directly (`app.open()`), so they don't depend on it | Fixed in RSP-183; until then, never re-run CI until green |
 | CI: `No ready deploy preview after 10 minutes` | Netlify's build is slow or failed, or Netlify names its status differently | The step lists the statuses it saw on the commit; check the build in Netlify, then **Re-run jobs** |
 
 ## Rules
