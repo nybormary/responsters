@@ -110,6 +110,12 @@ export class App {
     return this.page.getByTestId(TID.view(view));
   }
 
+  /** Answer the current Practice question with its first answer (right or wrong) and wait for the feedback. */
+  async answerPractice() {
+    await this.answers.first().click();
+    await expect(this.feedback).toBeVisible();
+  }
+
   /** Click an empty spot in the top-left corner, outside every control. */
   async clickOutside() {
     await this.page.mouse.click(2, 2);

@@ -1,10 +1,11 @@
 // Accessibility: landmarks and alt text (automated part; manual checks follow KAZOO).
-// testomat.io folder "Accessibility", suite "Landmarks and alt text (RSP-138)". Later: axe (RSP-162).
+// testomat.io folder "Accessibility", suites "Landmarks and alt text (RSP-138)" and "axe checks (RSP-162)".
 import {
   test,
   expect,
   TAG,
   VIEWS,
+  THEMES,
   type MarkerLook,
   uppercaseElements,
   lookOf,
@@ -83,6 +84,67 @@ test(
       await expect(site.contentinfos).toHaveCount(1);
       await expect(site.nav).toHaveAccessibleName(texts.site.nav);
     });
+  },
+);
+
+// ── 280eb3bd ────────────────────────────────────────────────────────────────────────────────────
+// testomat.io suite "axe checks (RSP-162)". Exceptions with their tickets: fixtures/a11y-exceptions.ts.
+
+test(
+  'App passes axe on every view and open panel, light and dark theme @T280eb3bd',
+  { tag: [TAG.a11y, TAG.smoke] },
+  async ({ app, langMenu, axe }) => {
+    for (const theme of THEMES) {
+      await test.step(`${theme}: Collection`, async () => {
+        await axe.theme(theme);
+        await app.open('collection');
+        await app.ready();
+        await axe.expectNoViolations(`${theme}, Collection`);
+      });
+      await test.step(`${theme}: "How to use" open`, async () => {
+        await app.openHowto();
+        await axe.expectNoViolations(`${theme}, How to use`);
+      });
+      await test.step(`${theme}: Practice with the feedback after an answer`, async () => {
+        await app.tab('practice').click();
+        await app.answerPractice();
+        await axe.expectNoViolations(`${theme}, Practice feedback`);
+      });
+      await test.step(`${theme}: Traps`, async () => {
+        await app.tab('traps').click();
+        await expect(app.view('traps')).toBeVisible();
+        await axe.expectNoViolations(`${theme}, Traps`);
+      });
+      await test.step(`${theme}: language menu open`, async () => {
+        await langMenu.open();
+        await expect(langMenu.list).toBeVisible();
+        await axe.expectNoViolations(`${theme}, language menu`);
+      });
+    }
+  },
+);
+
+// ── 7f9907fe ────────────────────────────────────────────────────────────────────────────────────
+
+test(
+  'Card page, home page and 404 page pass axe, light and dark theme @T7f9907fe',
+  { tag: [TAG.a11y] },
+  async ({ cardPage, homePage, notFoundPage, axe, lang }) => {
+    for (const theme of THEMES) {
+      await test.step(`${theme}: card page`, async () => {
+        await axe.theme(theme);
+        await cardPage.open(lang, 404);
+        await axe.expectNoViolations(`${theme}, card page`);
+      });
+      await test.step(`${theme}: home page`, async () => {
+        await homePage.open(lang);
+        await axe.expectNoViolations(`${theme}, home page`);
+      });
+      await test.step(`${theme}: 404 page`, async () => {
+        await notFoundPage.open(`/${lang}/no-such-page`);
+        await axe.expectNoViolations(`${theme}, 404 page`);
+      });
+    }
   },
 );
 
