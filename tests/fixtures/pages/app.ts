@@ -2,6 +2,7 @@
 import type { Lang } from '../texts';
 import { expect, type Page, type Locator } from '@playwright/test';
 import { TID, type View } from '../locators';
+import { PathSteps } from './path-steps';
 
 export const VIEWS: View[] = ['collection', 'practice', 'traps'];
 
@@ -112,5 +113,18 @@ export class App {
   /** Click an empty spot in the top-left corner, outside every control. */
   async clickOutside() {
     await this.page.mouse.click(2, 2);
+  }
+
+  /** "How to use" (glossary #18): the panel and its steps, the path steps component (RSP-172). */
+  get howto(): Locator {
+    return this.page.getByTestId(TID.howto);
+  }
+  get howtoSteps(): PathSteps {
+    return new PathSteps(this.howto.getByTestId(TID.howtoSteps));
+  }
+  /** Show "How to use": a first visit opens it by itself; otherwise the header button opens it. */
+  async openHowto() {
+    if (await this.howto.isHidden()) await this.page.getByTestId(TID.howtoOpen).click();
+    await expect(this.howto).toBeVisible();
   }
 }

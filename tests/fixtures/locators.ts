@@ -39,6 +39,14 @@ export const TID = {
   enclosure: (rubric: 'http' | 'git') => `enclosure-${rubric}`,
   pavilionTraps: 'pavilion-traps',
   homeAbout: 'home-about',
+  heroCard: (code: number) => `hero-card-${code}`, // one creature in the hero (RSP-172)
+
+  // Path steps (RSP-172; glossary path steps, step marker, step art): the same component on the home page and in the app
+  homeSteps: 'home-steps', // "How it works" on the home page
+  howtoSteps: 'howto-steps', // the list inside "How to use" in the app
+  stepMarker: 'step-marker',
+  stepArt: 'step-art',
+  stepChip: 'step-chip',
 
   // Not-found page /<lang>/404.html (RSP-148)
   notFoundPage: 'not-found-page',

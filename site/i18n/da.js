@@ -442,7 +442,7 @@ export default {
     title: 'Mnemozoo: teknisk zoo for din hukommelse',
     description:
       'Originale væsner til HTTP-statuskoder: et kort for hver kode, træning og fælder med koder, der ligner hinanden. Seks sprog.',
-    kicker: 'Teknisk zoo for din hukommelse',
+    kicker: 'IT memo zoo',
     h1: 'Få svaret, før du overhovedet spørger',
     lead: 'Originale væsner til de HTTP-statuskoder, du møder hver dag i browseren, logfilerne og konsollen. Kort, træning, fælder med koder, der ligner hinanden. Seks sprog.',
     mapTitle: 'Zookort',
