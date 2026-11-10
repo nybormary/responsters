@@ -84,10 +84,10 @@ Added after the first screenshots; the numbers continue so the screenshots stay 
 
 | # | Term | Definition | Name in code | Test id | Don't use |
 |---|------|------------|--------------|---------|-----------|
-| 47 | situation | One line in a trap to sort into one of its codes, e.g. "The token has expired." | `traps[key].s[i]`, `.sc`, `.scen` | — | scenario, case, example |
-| 48 | answer | One option to pick: a button in Practice or a code button in a trap. After answering, the right one has a thicker frame and a wrong one a ✕ badge, so they differ without colour (RSP-169). | Practice `.opt` (`.imgopt`, `.hardopt`), `data-ans`; Traps `.btns button`, `data-v`; states `.right`, `.wrong` | — | choice, variant |
-| 49 | feedback | What appears after an answer: the verdict and the right code with its meaning. | Practice `.reveal`, `.verdict` (`ui.ok`, `ui.no`); Traps `.why` | — | result, explanation |
-| 50 | question | The prompt in Practice; one per practice mode. | `.q`, `.nerdq`; `ui.qArt`, `ui.qCode`, `ui.qHard` | — | task, exercise |
+| 47 | situation | One line in a trap to sort into one of its codes, e.g. "The token has expired." | `traps[key].s[i]`, `.sc`, `.scen` | `situation-<pair>-<line>` (e.g. `situation-0-1`) | scenario, case, example |
+| 48 | answer | One option to pick: a button in Practice or a code button in a trap. After answering, the right one has a thicker frame and a wrong one a ✕ badge, so they differ without colour (RSP-169). | Practice `.opt` (`.imgopt`, `.hardopt`), `data-ans`; Traps `.btns button`, `data-v`; states `.right`, `.wrong` | `answer-<code>` (Practice and Traps) | choice, variant |
+| 49 | feedback | What appears after an answer: the verdict and the right code with its meaning. | Practice `.reveal`, `.verdict` (`ui.ok`, `ui.no`); Traps `.why` | `feedback` (Practice) | result, explanation |
+| 50 | question | The prompt in Practice; one per practice mode. | `.q`, `.nerdq`; `ui.qArt`, `ui.qCode`, `ui.qHard` | `question` (Practice) | task, exercise |
 | 51 | back to top | The link at the end of a long page that brings you back to the top (RSP-154). | app: button `#to-top` (a link would change the tab hash); card page: `a[href="#top"]`; `ui.top` | `to-top` | scroll up, go up |
 | 52 | card picture | The creature's picture on a card. On the card page its alt text is the picture description (`cards[c].art`): one sentence, without the name or the code (RSP-138); in the collection the alt is empty, the card's own text is next to it. | `.cf-art`, `art(c)` in `site/js/util.js`, `cards[c].art` | `card-art` | image, illustration; art (alone: the file) |
 

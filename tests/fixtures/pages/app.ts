@@ -109,4 +109,38 @@ export class App {
     if (await this.howto.isHidden()) await this.page.getByTestId(TID.howtoOpen).click();
     await expect(this.howto).toBeVisible();
   }
+
+  /** Practice answers (RSP-162 test ids) and the feedback after an answer. */
+  get answers(): Locator {
+    return this.view('practice').locator(TID.anyAnswer);
+  }
+  answer(code: number): Locator {
+    return this.view('practice').getByTestId(TID.answer(code));
+  }
+  get feedback(): Locator {
+    return this.view('practice').getByTestId(TID.feedback);
+  }
+  /** The right code of the current Practice question in the default mode (picture → code): the picture's file name. */
+  async rightCode(): Promise<number> {
+    const src = await this.view('practice').getByTestId(TID.question).locator('img').getAttribute('src');
+    const code = Number(src?.match(/(\d{3})-art/)?.[1]);
+    if (!code) throw new Error(`No code in the question picture (${src}): is Practice in "picture → code"?`);
+    return code;
+  }
+  /** Codes of the answers shown, in order. */
+  async answerCodes(): Promise<number[]> {
+    return this.answers.evaluateAll((els) => els.map((el) => Number(el.getAttribute('data-testid')?.slice(7))));
+  }
+
+  /** One situation in Traps (pair index, line index) and its code buttons. */
+  situation(pair: number, line: number): Locator {
+    return this.view('traps').getByTestId(TID.situation(pair, line));
+  }
+  /** How many situations a trap has. */
+  async situationCount(pair: number): Promise<number> {
+    return this.view('traps').locator(`[data-testid^="situation-${pair}-"]`).count();
+  }
+  situationAnswers(pair: number, line: number): Locator {
+    return this.situation(pair, line).locator(TID.anyAnswer);
+  }
 }

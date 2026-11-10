@@ -86,14 +86,14 @@ export function renderPractice() {
     .map((o) => {
       const st = d.done ? (o.c === d.c ? 'right' : o.c === d.pick ? 'wrong' : '') : '';
       if (hard)
-        return `<button class="opt hardopt ${st}" data-ans="${o.c}" ${d.done ? 'disabled' : ''}><b>${o.s}</b></button>`; // status names only, always in English
+        return `<button class="opt hardopt ${st}" data-ans="${o.c}" data-testid="answer-${o.c}" ${d.done ? 'disabled' : ''}><b>${o.s}</b></button>`; // status names only, always in English
       return state.mode !== 'code'
-        ? `<button class="opt ${st}" data-ans="${o.c}" ${d.done ? 'disabled' : ''}><b>${o.c}</b><span>${o.s}</span></button>`
-        : `<button class="opt imgopt ${st}" data-ans="${o.c}" ${d.done ? 'disabled' : ''} aria-label="${o.n}"><img src="${art(o.c)}" alt=""><i class="pr-sym">${clsSym(cls(o.c))}</i><span class="nm">${o.n}</span></button>`;
+        ? `<button class="opt ${st}" data-ans="${o.c}" data-testid="answer-${o.c}" ${d.done ? 'disabled' : ''}><b>${o.c}</b><span>${o.s}</span></button>`
+        : `<button class="opt imgopt ${st}" data-ans="${o.c}" data-testid="answer-${o.c}" ${d.done ? 'disabled' : ''} aria-label="${o.n}"><img src="${art(o.c)}" alt=""><i class="pr-sym">${clsSym(cls(o.c))}</i><span class="nm">${o.n}</span></button>`;
     })
     .join('');
   $('result').innerHTML = d.done
-    ? `<div class="reveal"><div class="txt">
+    ? `<div class="reveal" data-testid="feedback"><div class="txt">
      <p class="verdict ${d.pick === d.c ? 'ok' : 'no'}">${d.pick === d.c ? t().ok : t().no}</p>
      ${nerd ? `<p><b>${d.c} ${d.s}</b></p><p>${L.mean}</p><p class="ex">${L.when}</p>` : `<p><b>${d.c} ${d.s}</b> · ${d.n}</p><p>${L.mean}</p>`}
      ${hard && d.hinted && d.pick === d.c ? `<p class="ex">${t().hintUsed}</p>` : ''}

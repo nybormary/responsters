@@ -37,4 +37,15 @@ export class LanguageMenu {
     await this.open();
     await this.option(lang).click();
   }
+
+  /** The text the button shows right now: the language name on wide screens, its code on phones (RSP-169). */
+  async visibleText(): Promise<string> {
+    return this.button.evaluate((el) =>
+      [...el.children]
+        .filter((c) => !c.classList.contains('sr-only') && getComputedStyle(c).display !== 'none')
+        .map((c) => c.textContent?.trim() ?? '')
+        .join(' ')
+        .trim(),
+    );
+  }
 }

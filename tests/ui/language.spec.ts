@@ -163,3 +163,32 @@ test('Language menu with the keyboard @T641973be', { tag: [TAG.language] }, asyn
     await expect(langMenu.list).toBeHidden();
   });
 });
+
+// ── 8f2e5f9c ────────────────────────────────────────────────────────────────────────────────────
+// RSP-169 AC7 (WCAG 2.5.3 Label in Name): the name is the button text, "<Language>: <what you see>", so speech
+// input ("click UA") finds it. No aria-label replaces the text.
+
+test(
+  'Language button: its name says what it does and contains the visible text, on phones and desktops @T8f2e5f9c',
+  { tag: [TAG.language] },
+  async ({ app, cardPage, homePage, langMenu, lang, texts, page }) => {
+    const pages: [string, () => Promise<unknown>][] = [
+      ['app', () => app.open()],
+      ['card page', () => cardPage.open(lang, 418)],
+      ['home page', () => homePage.open(lang)],
+    ];
+    for (const width of [1280, 375]) {
+      for (const [name, open] of pages) {
+        await test.step(`${name} at ${width} px`, async () => {
+          await page.setViewportSize({ width, height: 800 });
+          await open();
+          const visible = await langMenu.visibleText();
+          if (width === 1280) expect(visible).toBe(langName(lang));
+          else expect(visible).toMatch(/^[A-Z]{2}$/);
+          await expect(langMenu.button).toHaveAccessibleName(`${texts.ui.lang}: ${visible}`);
+          await expect(langMenu.button).not.toHaveAttribute('aria-label');
+        });
+      }
+    }
+  },
+);
