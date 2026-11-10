@@ -116,4 +116,16 @@ export class HomePage {
   alternate(hreflang: string): Locator {
     return this.page.locator(`head link[rel="alternate"][hreflang="${hreflang}"]`);
   }
+
+  /** Signs (RSP-170): the kicker above the h1 and the signs of the HTTP and Git enclosures and of the pavilion. */
+  get kicker(): Locator {
+    return this.root.getByTestId(TID.homeKicker);
+  }
+  sign(name: 'http' | 'git' | 'pavilion'): Locator {
+    return this.root.getByTestId(TID.sign(name));
+  }
+  /** "About the project": a normal heading now (RSP-170 AC7). */
+  get aboutHeading(): Locator {
+    return this.root.getByTestId(TID.homeAbout).getByRole('heading', { level: 2 });
+  }
 }

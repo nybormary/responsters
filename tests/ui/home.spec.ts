@@ -1,7 +1,18 @@
 // Home page /<lang>/ (RSP-156): the page per language, and language-less / going to it.
 // testomat.io folder "Home", suite "Home page (RSP-156)". Manual only: a395f99d (hero).
 // RSP-172: "How it works" as path steps (9da0bb5b) and the tilted hero cards (3b389713).
-import { test, expect, TAG, LANGS, ORIGIN, type Lang } from '../fixtures';
+import {
+  test,
+  expect,
+  TAG,
+  LANGS,
+  ORIGIN,
+  type Lang,
+  lookOf,
+  resolveColor,
+  textContrast,
+  insideParent,
+} from '../fixtures';
 
 // ── 38210569 ────────────────────────────────────────────────────────────────────────────────────
 
@@ -125,6 +136,56 @@ test(
         await expect(homePage.heroCaption(code)).toBeInViewport({ ratio: 1 });
         expect(await homePage.heroCaptionOnTop(code), `caption ${code}`).toBe(true);
       }
+    });
+  },
+);
+
+// ── 73d1e2d9 ────────────────────────────────────────────────────────────────────────────────────
+// RSP-170: the home page labels are signs (one component): green = open area, yellow = announcement, plain = name
+// plate. Colours are compared with the tokens as the browser resolves them, so a palette change needs no test change.
+
+test(
+  'Home page signs: kicker, open zone, announcement and pavilion, with the status in words @T73d1e2d9',
+  { tag: [TAG.home] },
+  async ({ homePage, lang, texts, page }) => {
+    const signs = [
+      ['kicker', homePage.kicker, texts.home.kicker, 'open'],
+      ['HTTP enclosure', homePage.sign('http'), texts.home.httpSign, 'open'],
+      ['Git enclosure', homePage.sign('git'), texts.home.gitSign, 'notice'],
+      ['pavilion', homePage.sign('pavilion'), texts.home.pavilionSign, 'plain'],
+    ] as const;
+
+    await test.step(`open /${lang}/`, async () => {
+      await homePage.open(lang);
+    });
+
+    for (const theme of ['light', 'dark'] as const) {
+      await test.step(`${theme}: texts from the locale, colours from the tokens, normal case, readable`, async () => {
+        await page.emulateMedia({ colorScheme: theme });
+        const colours = {
+          open: [await resolveColor(page, '--sign'), await resolveColor(page, '--sign-ink')],
+          notice: [await resolveColor(page, '--notice'), await resolveColor(page, '--notice-ink')],
+          plain: [await resolveColor(page, '--surface'), await resolveColor(page, '--ink')],
+        };
+        for (const [name, sign, text, kind] of signs) {
+          await expect(sign, name).toHaveText(text);
+          const look = await lookOf(sign);
+          expect([look.background, look.color], `${name}: ${kind} sign colours`).toEqual(colours[kind]);
+          expect(look.textTransform, `${name}: normal case`).toBe('none');
+          expect(await textContrast(sign), `${name}: text contrast`).toBeGreaterThanOrEqual(4.5);
+        }
+      });
+    }
+
+    await test.step('"About the project" is a normal heading', async () => {
+      await expect(homePage.aboutHeading).toBeVisible();
+      expect((await lookOf(homePage.aboutHeading)).textTransform).toBe('none');
+    });
+
+    await test.step('at 320 px every sign stays inside its box; no sideways scroll', async () => {
+      await homePage.setWidth(320);
+      for (const [name, sign] of signs) expect(await insideParent(sign), `${name} inside its box`).toBe(true);
+      expect(await homePage.fitsWidth()).toBe(true);
     });
   },
 );

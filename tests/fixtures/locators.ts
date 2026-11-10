@@ -40,6 +40,9 @@ export const TID = {
   pavilionTraps: 'pavilion-traps',
   homeAbout: 'home-about',
   heroCard: (code: number) => `hero-card-${code}`, // one creature in the hero (RSP-172)
+  // Signs (RSP-170; glossary sign): the kicker and the zone / pavilion signs on the home page
+  homeKicker: 'home-kicker',
+  sign: (name: 'http' | 'git' | 'pavilion') => `sign-${name}`,
 
   // Path steps (RSP-172; glossary path steps, step marker, step art): the same component on the home page and in the app
   homeSteps: 'home-steps', // "How it works" on the home page
