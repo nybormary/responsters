@@ -12,6 +12,7 @@ import {
   boxes,
   controlBorderContrasts,
   type Mark,
+  focusRingsByTab,
 } from '../fixtures';
 
 // ── d6f8bf2f ────────────────────────────────────────────────────────────────────────────────────
@@ -275,6 +276,38 @@ test(
 
         expect(checked, 'controls with a border were found').toBeGreaterThan(10);
         expect(low, 'control borders below 3:1').toEqual([]);
+      });
+    }
+  },
+);
+
+// ── b0d62868 ────────────────────────────────────────────────────────────────────────────────────
+// RSP-169 AC5 (WCAG 2.4.7): Tab through every kind of page; each focused link, button and the language button
+// (<summary> on generated pages) has a solid outline of at least 2 px that stands out at least 3:1 from behind.
+// Found 2026-11-10: on generated pages links had only the browser's thin ring, the language button none visible.
+
+test(
+  'Every link and button shows a 3 px focus outline on every page, light and dark @Tb0d62868',
+  { tag: [TAG.a11y] },
+  async ({ app, homePage, cardPage, notFoundPage, lang, page }) => {
+    const pages: [string, () => Promise<unknown>][] = [
+      ['home', () => homePage.open(lang)],
+      ['app', () => app.open('collection')],
+      ['card page', () => cardPage.open(lang, 404)],
+      ['404 page', () => notFoundPage.open(`/${lang}/no-such-page/`)],
+    ];
+    for (const theme of ['light', 'dark'] as const) {
+      await test.step(`${theme} theme`, async () => {
+        await page.emulateMedia({ colorScheme: theme });
+        for (const [name, open] of pages) {
+          await open();
+          const rings = await focusRingsByTab(page);
+          expect(rings.length, `${name}: Tab reaches links and buttons`).toBeGreaterThan(5);
+          const weak = rings
+            .filter((r) => r.style === 'none' || r.style === 'auto' || r.width < 2 || r.ratio < 3)
+            .map((r) => `${r.element}: ${r.style} ${r.width}px, ${r.ratio}:1`);
+          expect(weak, `${name}: focus outlines that are missing, thin or low contrast`).toEqual([]);
+        }
       });
     }
   },
