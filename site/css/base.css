@@ -374,6 +374,10 @@ nav.tabs button[aria-selected='true'] {
   color: var(--ink);
   border-color: var(--accent);
 }
+/* One focus style for every link, button and the language button (<summary> on generated pages), RSP-169.
+   Without it links got only the browser's thin ring, and on the language button that ring hid behind its border. */
+a:focus-visible,
+summary:focus-visible,
 button:focus-visible,
 .card:focus-visible {
   outline: 3px solid var(--accent);
