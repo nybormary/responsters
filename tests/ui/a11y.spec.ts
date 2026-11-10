@@ -1,6 +1,18 @@
 // Accessibility: landmarks and alt text (automated part; manual checks follow KAZOO).
 // testomat.io folder "Accessibility", suite "Landmarks and alt text (RSP-138)". Later: axe (RSP-162).
-import { test, expect, TAG, VIEWS, type MarkerLook, uppercaseElements, lookOf } from '../fixtures';
+import {
+  test,
+  expect,
+  TAG,
+  VIEWS,
+  type MarkerLook,
+  uppercaseElements,
+  lookOf,
+  markOf,
+  boxes,
+  controlBorderContrasts,
+  type Mark,
+} from '../fixtures';
 
 // ── d6f8bf2f ────────────────────────────────────────────────────────────────────────────────────
 
@@ -163,5 +175,107 @@ test(
         expect((await lookOf(h)).textTransform, label).toBe('none');
       }
     });
+  },
+);
+
+// ── fb7f85e7 ────────────────────────────────────────────────────────────────────────────────────
+// RSP-169 AC8 (WCAG 1.4.1): right = thicker frame (ring), wrong = ✕ badge, not picked = plain. Read from the
+// computed style, never from colour; the ✕ is decoration (empty alt text), so not in the accessibility tree.
+
+test(
+  'Right and wrong answers differ without colour in Practice and Traps @Tfb7f85e7',
+  { tag: [TAG.a11y] },
+  async ({ app, texts }) => {
+    await test.step('Practice (picture → code): a wrong pick shows ✕ on it, the ring on the right one', async () => {
+      await app.open('practice');
+      const right = await app.rightCode();
+      const codes = await app.answerCodes();
+      const wrong = codes.find((c) => c !== right) as number;
+      const before = await boxes(app.answers);
+      await app.answer(wrong).click();
+      await expect(app.feedback).toBeVisible();
+      expect(await boxes(app.answers), 'no answer moves or changes size').toEqual(before);
+      for (const c of codes) {
+        const expected: Mark = c === right ? 'right' : c === wrong ? 'wrong' : 'plain';
+        expect(await markOf(app.answer(c)), `answer ${c}`).toBe(expected);
+      }
+      expect(await app.answer(wrong).ariaSnapshot(), 'the ✕ is not read').not.toContain('✕');
+      await expect(app.feedback).toContainText(texts.ui.no);
+    });
+
+    await test.step('Traps: one ring per situation; a wrong pick shows ✕; nothing moves', async () => {
+      await app.open('traps');
+      let wrongSeen = false;
+      for (let pair = 0; pair < 3 && !wrongSeen; pair++) {
+        const lines = await app.situationCount(pair);
+        for (let line = 0; line < lines && !wrongSeen; line++) {
+          const buttons = app.situationAnswers(pair, line);
+          const before = await boxes(buttons);
+          await buttons.first().click();
+          expect(await boxes(buttons), `situation ${pair}-${line}: nothing moves`).toEqual(before);
+          const marks: Mark[] = [];
+          for (let i = 0; i < (await buttons.count()); i++) marks.push(await markOf(buttons.nth(i)));
+          expect(
+            marks.filter((m) => m === 'right'),
+            `situation ${pair}-${line}: ${marks}`,
+          ).toHaveLength(1);
+          expect(['right', 'wrong'], `situation ${pair}-${line}: the picked code is marked`).toContain(marks[0]);
+          expect(marks.slice(1).includes('wrong'), 'only the picked code can be wrong').toBe(false);
+          if (marks[0] === 'wrong') {
+            wrongSeen = true;
+            expect(await buttons.first().ariaSnapshot(), 'the ✕ is not read').not.toContain('✕');
+          }
+        }
+      }
+      expect(wrongSeen, 'some situation had a wrong first pick').toBe(true);
+    });
+  },
+);
+
+// ── 2b75b29c ────────────────────────────────────────────────────────────────────────────────────
+// RSP-169 AC2 (WCAG 1.4.11): every bordered control (button, link, summary) against the colour behind it, ≥ 3:1.
+// Dividers are not controls, so --line on them doesn't count. axe doesn't check this.
+
+test(
+  'Control borders have at least 3:1 contrast to the background, light and dark @T2b75b29c',
+  { tag: [TAG.a11y] },
+  async ({ app, cardPage, langMenu, lang, page }) => {
+    for (const theme of ['light', 'dark'] as const) {
+      await test.step(`${theme} theme`, async () => {
+        await page.emulateMedia({ colorScheme: theme });
+        const low: string[] = [];
+        let checked = 0;
+        const check = async (where: string, scope: typeof app.main) => {
+          const list = await controlBorderContrasts(scope);
+          checked += list.length;
+          for (const r of list)
+            if (r.ratio < 3) low.push(`${where}: ${r.control} ${r.ratio}:1 (${r.border} on ${r.background})`);
+        };
+
+        await app.open('collection');
+        await app.openHowto();
+        await check('collection + how to use', app.main);
+        await langMenu.open();
+        await check('header + language menu', app.banner);
+        await langMenu.button.click();
+
+        await app.open('practice');
+        const right = await app.rightCode();
+        const wrong = (await app.answerCodes()).find((c) => c !== right) as number;
+        await app.answer(wrong).click();
+        await check('practice, answered', app.main);
+
+        await app.open('traps');
+        await app.situationAnswers(0, 0).first().click();
+        await check('traps, answered', app.main);
+
+        await cardPage.open(lang, 418);
+        await check('card page', app.main);
+        await check('card page header', app.banner);
+
+        expect(checked, 'controls with a border were found').toBeGreaterThan(10);
+        expect(low, 'control borders below 3:1').toEqual([]);
+      });
+    }
   },
 );

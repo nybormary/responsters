@@ -20,6 +20,14 @@ export const TID = {
   cardArt: 'card-art',
   cardPage: 'card-page',
 
+  // Practice (RSP-162): the answers of the current question and the feedback after an answer
+  answer: (code: number) => `answer-${code}`,
+  anyAnswer: '[data-testid^="answer-"]',
+  feedback: 'feedback',
+  // RSP-169: the question in Practice (its picture tells the right code) and one situation in Traps
+  question: 'question',
+  situation: (pair: number, line: number) => `situation-${pair}-${line}`,
+
   // Tabs and views
   tab: (view: View) => `tab-${view}`,
   view: (view: View) => `view-${view}`,

@@ -130,10 +130,13 @@ test(
       for (const code of HERO) expect(await homePage.heroAnimations(code)).toBe(0);
     });
 
-    await test.step('every code fully on screen and not covered by a neighbouring card', async () => {
+    await test.step('every code fully inside the hero and not covered by a neighbouring card', async () => {
       for (const code of HERO) {
         await homePage.heroCaption(code).scrollIntoViewIfNeeded();
-        await expect(homePage.heroCaption(code)).toBeInViewport({ ratio: 1 });
+        await expect(homePage.heroCaption(code)).toBeVisible();
+        // Inside the hero, not just "in the window": a caption pushed sideways would scroll into view and pass.
+        // toBeInViewport({ ratio: 1 }) was flaky on CI (0.99999 for a tilted card, PR #36); the hero check has a 5px slack for the corners of tilted cards.
+        expect(await homePage.heroCaptionInsideHero(code), `caption ${code} inside the hero`).toBe(true);
         expect(await homePage.heroCaptionOnTop(code), `caption ${code}`).toBe(true);
       }
     });
