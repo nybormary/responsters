@@ -5,10 +5,12 @@ import type { Page } from '@playwright/test';
 export class Network {
   readonly page: Page;
   readonly urls: URL[] = [];
+  readonly responses: { url: URL; status: number }[] = [];
 
   constructor(page: Page) {
     this.page = page;
     page.on('request', (request) => this.urls.push(new URL(request.url())));
+    page.on('response', (response) => this.responses.push({ url: new URL(response.url()), status: response.status() }));
   }
 
   /** Wait until the page has loaded and every font it needs is in (fonts load only when text needs them). */
@@ -27,6 +29,13 @@ export class Network {
     return this.page.evaluate(() =>
       [...document.fonts].filter((f) => f.status === 'loaded').map((f) => `${f.family} ${f.weight}`),
     );
+  }
+
+  /** Paths answered from `folder` on `host` (e.g. '/img/'), each with its HTTP status (RSP-186). */
+  served(host: string, folder: string): { path: string; status: number }[] {
+    return this.responses
+      .filter((r) => r.url.host === host && r.url.pathname.startsWith(folder))
+      .map((r) => ({ path: r.url.pathname, status: r.status }));
   }
 
   /** Font files requested from the site so far (/fonts/…woff2), preloads included. */

@@ -32,6 +32,11 @@ export class CardPage {
     return this.root.getByTestId(TID.cardArt);
   }
 
+  /** True when the creature picture has loaded (a broken or missing file has naturalWidth 0). */
+  async artLoaded(): Promise<boolean> {
+    return this.art.evaluate((img) => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0);
+  }
+
   /** The section headings of the card page (What it means, When you meet it, …): h2 (RSP-170 AC3). */
   get sectionHeadings(): Locator {
     return this.page.getByRole('main').getByRole('heading', { level: 2 });

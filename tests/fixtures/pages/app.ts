@@ -98,6 +98,18 @@ export class App {
     return this.main.getByTestId(TID.view(view));
   }
 
+  /** The pictures of all cards in the Collection grid. */
+  collectionArts(): Locator {
+    return this.view('collection').getByTestId(TID.cardArt);
+  }
+
+  /** True when every card picture of the Collection has loaded (a broken or missing file has naturalWidth 0). */
+  async collectionArtsLoaded(): Promise<boolean> {
+    return this.collectionArts().evaluateAll((imgs) =>
+      imgs.every((img) => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0),
+    );
+  }
+
   /** The picture of one card in the Collection grid. */
   collectionArt(code: number): Locator {
     return this.page.getByTestId(TID.card(code)).getByTestId(TID.cardArt);
