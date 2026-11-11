@@ -18,8 +18,10 @@ export default defineConfig<Options>({
   forbidOnly: !!process.env.CI, // a forgotten test.only fails CI
   // A deployed site (BASE_URL) is reached over the network: fewer parallel browsers so we don't
   // flood it, more time for files that load on demand (locale files), one retry for network blips.
-  // A retry that passes is reported as "flaky", so a real problem still shows up.
+  // A retry that passes is reported as "flaky" and still fails the run (RSP-184): a flaky test is never green.
+  // Find the cause; if it is outside our code, skip the test with the ticket key in the reason (known-issues.ts).
   retries: process.env.CI || !isLocal ? 1 : 0,
+  failOnFlakyTests: true,
   workers: isLocal ? undefined : 2,
   expect: { timeout: isLocal ? 5_000 : 10_000 },
   // testomat.io (RSP-80): only when the TESTOMATIO env variable (project API key) is set, so a normal run

@@ -146,6 +146,15 @@ jobs:
           retention-days: 14
           if-no-files-found: ignore
 
+      - name: No green by re-run
+        id: rerun-guard
+        # RSP-184: a re-run of the same commit never ends green. It still runs the tests above, so a re-run
+        # to diagnose shows its results; only a new commit (a fix, or a skip with the ticket key) can go green.
+        if: ${{ !cancelled() && github.run_attempt > 1 }}
+        run: |
+          echo "::error::Re-run ${{ github.run_attempt }} of the same commit. Flaky? Find the cause; if it is outside our code, skip the test with the ticket key in the reason and push. Don't re-run until green."
+          exit 1
+
       - name: Alert #ci-alerts
         if: failure()
         continue-on-error: true # best effort: Slack down or no secret must not change the result
