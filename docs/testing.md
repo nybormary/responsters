@@ -274,6 +274,16 @@ axe finds what can be computed from the page: missing names and labels, contrast
 - **O**rder: focus follows the visual order; what a screen reader announces makes sense (e.g. the Practice feedback).
 - **O**nly colour? Meaning is never carried by colour alone.
 
+## Images and fonts in deployed runs
+
+On a deploy preview, production or `BASE_URL` (variants 8–11 and CI), card images (`/img/…`) and web fonts (`/fonts/…`) come from the repo files in `site/`, not from the host (RSP-186, `tests/fixtures/local-assets.ts`). Every test starts with an empty browser cache, so a full run used to download them all again: ~2,500 requests and ~18 MB, about 80% of the site's Netlify traffic, which uses the Netlify Free credits that keep the site up. Now a run is ~1,550 requests and ~2.9 MB (counted 2026-11-11 against the "as deployed" build).
+
+- The bytes are the same files the build copies to `dist/`, so the pages look and lay out exactly as on the host.
+- A file that is not in the repo still goes to the host, so a broken path fails as before.
+- Local runs (variants 1–7) are unchanged: there everything comes from your own `dist/`.
+- A test that checks the host's own files opts out with `test.use({ realAssets: true })`. Today: `privacy.spec.ts` (only the site's own host, fonts from `/fonts/` and in use).
+- In a trace or the Network tab of a deployed run, these files show as answered by the test, not by Netlify. That is expected.
+
 ## Known pitfalls
 
 | What you see | Why | Fix |

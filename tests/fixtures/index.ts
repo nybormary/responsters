@@ -18,10 +18,15 @@
 //
 // Page objects (one per part of the page, built from TID in locators.ts) live in pages/ and are
 // handed to tests as fixtures: async ({ app, langMenu }) => { … }.
+//
+// Assets: on a deployed target, card images and fonts come from the repo files, not the host (local-assets.ts,
+// RSP-186: Netlify credits). A test that checks the host's own files opts out: test.use({ realAssets: true }).
 import { test as base, expect } from '@playwright/test';
 import { textsFor, LANGS, type Lang, type Texts } from './texts';
 import { SCREENS, SCREEN_NAMES, type ScreenName } from './screens';
 import { LANG_REDIRECT } from './known-issues';
+import { serveAssetsFromRepo } from './local-assets';
+import { resolveTarget } from '../targets';
 import { App } from './pages/app';
 import { LanguageMenu } from './pages/language-menu';
 import { CardPage } from './pages/card-page';
@@ -45,10 +50,13 @@ export type Options = {
   screenPreset: ScreenName | 'random'; // not `screen`: that name is Playwright's own option
   // The test checks the language redirect of a language-less URL: skipped on Netlify until RSP-183 (known-issues.ts).
   langRedirect: boolean;
+  // Load /img/ and /fonts/ from the host even on a deployed target (default: from the repo, RSP-186).
+  realAssets: boolean;
 };
 
 type Fixtures = {
   langRedirectGuard: void;
+  localAssets: void;
   screenName: ScreenName;
   lang: Lang;
   texts: Texts;
@@ -68,11 +76,22 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   randomLang: [true, { option: true }],
   screenPreset: ['random', { option: true }],
   langRedirect: [false, { option: true }],
+  realAssets: [false, { option: true }],
 
   // Skips a test of the language redirect on a deployed target, with the ticket in the reason (RSP-183).
   langRedirectGuard: [
     async ({ langRedirect }, use, testInfo) => {
       testInfo.skip(langRedirect && LANG_REDIRECT.skip, LANG_REDIRECT.reason);
+      await use();
+    },
+    { auto: true },
+  ],
+
+  // On a deployed target, /img/ and /fonts/ are answered from site/ (RSP-186); local runs are unchanged.
+  localAssets: [
+    async ({ page, baseURL, realAssets }, use) => {
+      if (!realAssets && baseURL && resolveTarget(process.env).name !== 'local')
+        await serveAssetsFromRepo(page, baseURL);
       await use();
     },
     { auto: true },
