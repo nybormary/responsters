@@ -35,6 +35,7 @@ const STEP_NAMES = {
   'tests-own': 'UI tests',
   tests: 'UI tests',
   report: 'keeping the HTML report',
+  'rerun-guard': 'a re-run of the same commit (RSP-184: no green by re-run)',
 };
 let failedStep = 'see the run';
 try {
@@ -51,12 +52,14 @@ try {
   const report = JSON.parse(await readFile('ci-results.json', 'utf8'));
   const { stats } = report;
   counts = `${stats.unexpected} failed, ${stats.flaky} flaky, ${stats.expected} passed`;
-  // Failed = "unexpected" after the retry. Title without the trailing tags and @T ids, plus file:line.
+  // Failed = "unexpected" after the retry; flaky = passed only on the retry, which also fails the run (RSP-184).
+  // Title without the trailing tags and @T ids, plus file:line.
   const walk = (suite) => {
     for (const spec of suite.specs ?? []) {
-      if (spec.tests?.some((t) => t.status === 'unexpected')) {
+      const flaky = spec.tests?.some((t) => t.status === 'flaky');
+      if (flaky || spec.tests?.some((t) => t.status === 'unexpected')) {
         const title = spec.title.replace(/(\s+@[\w-]+)+$/, '');
-        failed.push(`• ${esc(title)} (\`${spec.file}:${spec.line}\`)`);
+        failed.push(`• ${esc(title)} (\`${spec.file}:${spec.line}\`)${flaky ? ' · flaky' : ''}`);
       }
     }
     for (const child of suite.suites ?? []) walk(child);
