@@ -281,7 +281,7 @@ On a deploy preview, production or `BASE_URL` (variants 8–11 and CI), card ima
 - The bytes are the same files the build copies to `dist/`, so the pages look and lay out exactly as on the host.
 - A file that is not in the repo still goes to the host, so a broken path fails as before.
 - Local runs (variants 1–7) are unchanged: there everything comes from your own `dist/`.
-- A test that checks the host's own files opts out with `test.use({ realAssets: true })`. Today: `privacy.spec.ts` (only the site's own host, fonts from `/fonts/` and in use).
+- A test that checks the host's own files opts out with `test.use({ realAssets: true })`. Today: `privacy.spec.ts` (only the site's own host, fonts from `/fonts/` and in use) and `host-files.spec.ts` (every card picture and the fonts load from the host; tagged `@smoke`, so Production smoke catches a release where the host doesn't serve them).
 - In a trace or the Network tab of a deployed run, these files show as answered by the test, not by Netlify. That is expected.
 
 ## Known pitfalls
