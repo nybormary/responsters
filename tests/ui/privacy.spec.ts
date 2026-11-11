@@ -1,6 +1,9 @@
 // What leaves the visitor's browser (RSP-160). testomat.io folder "Privacy", suite "Third-party requests (RSP-160)".
 import { test, expect, TAG, VIEWS } from '../fixtures';
 
+// This file checks what the browser loads from the host itself, fonts included: real host files (RSP-186).
+test.use({ realAssets: true });
+
 // ── 4ff71157 ────────────────────────────────────────────────────────────────────────────────────
 
 test(
