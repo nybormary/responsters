@@ -28,7 +28,7 @@ const BROWSER_CASES: { locale: string; expected: Lang }[] = [
 
 for (const { locale, expected } of BROWSER_CASES) {
   test.describe(`browser language ${locale}`, () => {
-    test.use({ locale, langRedirect: true });
+    test.use({ locale });
 
     test(
       `Browser language picks the site language: ${locale} → ${expected} @Tc727f8eb`,
@@ -42,7 +42,7 @@ for (const { locale, expected } of BROWSER_CASES) {
 }
 
 test.describe('browser language vs. saved choice', () => {
-  test.use({ locale: 'pl-PL', seed: { lang: 'da' }, langRedirect: true });
+  test.use({ locale: 'pl-PL', seed: { lang: 'da' } });
 
   test(
     'Browser language picks the site language: a language picked in the menu wins @Tc727f8eb',

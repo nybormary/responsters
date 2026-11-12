@@ -245,7 +245,7 @@ npx playwright show-report     # last report: steps, screenshots of failures, la
 
 ## Language checks by hand
 
-Some language behaviour can't be checked locally: Netlify's redirects by `nf_lang` cookie and browser language exist only on a deploy preview or production. Check them there.
+Links without a language (`/`, `/http/`, `/http/<code>/`) work the same locally and on Netlify: a chooser page at that path picks the language in the browser (saved choice, `nf_lang` cookie, the whole browser list, else English) and moves on with `location.replace`. There is no server-side language redirect any more (RSP-183: Netlify's edge answered two requests for the same URL with the same browser language, arriving together, with one redirect, whatever their cookie). A missing address without a language gets the English 404 page; with a language, the 404 page in that language. What still needs a real browser by hand:
 
 - **Use a clean Chrome profile.** Your normal profile may send more languages than its settings show (on macOS the system languages come first; check `navigator.languages` in the console). A clean profile sends exactly the list you give it:
 
@@ -254,7 +254,7 @@ Some language behaviour can't be checked locally: Netlify's redirects by `nf_lan
   ```
 
   `<list>` is comma-separated, first language first, e.g. `be,pl`. Delete the folder after the check.
-- **Without a browser:** `curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' -H 'Accept-Language: <list>' <url>` shows the redirect Netlify chose. Add `-b 'nf_lang=<lang>'` for a saved choice.
+- **Without a browser:** `curl -s -o /dev/null -w '%{http_code}\n' <url>` on a language-less URL must show `200` (the chooser page), never a `302`: the language is picked by the page's script, so curl can't show which one.
 - **Where `/` should land:** on the home page `/<lang>/`; old app links like `/#traps` go on from there to `/<lang>/http/#traps`.
 - **A saved choice in localStorage:** values are JSON, so a language is a quoted string. In the DevTools console: `localStorage.setItem("httpon.lang", '"pl"')`. Without the inner quotes the site reads no saved language.
 
@@ -295,7 +295,6 @@ On a deploy preview, production or `BASE_URL` (variants 8–11 and CI), card ima
 | `TARGET=preview needs the PR number` | `npm run test:preview` without `PR=<number>` | Put the PR number before the command: `PR=14 npm run test:preview` |
 | Tests pass locally but time out on a preview | Preview not built yet, or a network blip | Wait for the green Netlify check; the config waits longer for remote targets and retries once, but a test that passes only on the retry still fails the run (RSP-184): find the cause, don't re-run |
 | A language check by hand gives the wrong language | Your Chrome profile sends other languages first (macOS system languages), or the localStorage value isn't JSON | Use a clean profile and a quoted value, see [Language checks by hand](#language-checks-by-hand) |
-| On a preview or production, language-less tests (`/`, `/http/`, `/http/<code>/`) show as skipped with `RSP-183` | Netlify sometimes redirects a language-less URL to another language (RSP-183). Tests of that redirect skip on deployed targets (`test.use({ langRedirect: true })`; the skip and its reason are in `tests/fixtures/known-issues.ts`; one step on a card page uses `step.skip`) and still run locally; all other tests open `/<lang>/…` directly (`app.open()`), so they don't depend on it | Fixed in RSP-183; until then, never re-run CI until green |
 | CI: `No ready deploy preview after 10 minutes` | Netlify's build is slow or failed, or Netlify names its status differently | The step lists the statuses it saw on the commit; check the build in Netlify. A re-run of the same commit always ends red (RSP-184), so once Netlify is fine, push an empty commit: `git commit --allow-empty -m "RSP-N: re-run CI after Netlify (<why>)"`, then `git push` |
 
 ## Rules
