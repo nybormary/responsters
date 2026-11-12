@@ -48,7 +48,7 @@ The language is always the first part of the path, then the rubric. URLs end wit
 
 `<lang>` is one of `uk`, `en`, `pl`, `da`, `lt`, `et`. Later rubrics follow the same pattern (`/<lang>/git/…`).
 
-**How a link without a language is resolved:** on Netlify, `_redirects` (written by the build) sends a 302 by the cookie `nf_lang` or by the browser's first language. If neither matches, a small chooser page reads the whole browser language list, then falls back to English. The same chooser pages do the job locally, where there are no redirects. A language saved before the cookie existed (localStorage only) still wins: the redirect target carries `?via=lang`, and the page follows the saved choice.
+**How a link without a language is resolved:** a small chooser page at that path (written by the build) picks the language in the browser: the saved choice (localStorage, then the cookie `nf_lang`), then the whole browser language list, then English, and moves on to `/<lang>/…`. The same file on Netlify and locally; no server-side language redirect (RSP-183: Netlify's cache mixed up the cookie). A missing address without a language gets the English 404 page.
 
 ## How to use it
 

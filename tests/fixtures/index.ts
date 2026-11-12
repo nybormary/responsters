@@ -27,7 +27,6 @@
 import { test as base, expect } from '@playwright/test';
 import { textsFor, LANGS, type Lang, type Texts } from './texts';
 import { SCREENS, SCREEN_NAMES, type ScreenName } from './screens';
-import { LANG_REDIRECT } from './known-issues';
 import { serveAssetsFromRepo } from './local-assets';
 import { blockAnalytics } from './analytics';
 import { resolveTarget } from '../targets';
@@ -39,6 +38,8 @@ import { SiteChrome } from './pages/site-chrome';
 import { NotFoundPage } from './pages/not-found-page';
 import { Axe } from './pages/axe';
 import { Network } from './pages/network';
+import { Preloads } from './pages/preloads';
+import { D } from '../../site/data/cards.js';
 
 // What the site keeps in localStorage (site/js/store.js adds the prefix "httpon." to every key).
 export type Seed = {
@@ -52,15 +53,16 @@ export type Options = {
   seed: Seed;
   randomLang: boolean;
   screenPreset: ScreenName | 'random'; // not `screen`: that name is Playwright's own option
-  // The test checks the language redirect of a language-less URL: skipped on Netlify until RSP-183 (known-issues.ts).
-  langRedirect: boolean;
   // Load /img/ and /fonts/ from the host even on a deployed target (default: from the repo, RSP-186).
   realAssets: boolean;
 };
 
 type Fixtures = {
+<<<<<<< HEAD
   langRedirectGuard: void;
   noAnalytics: void;
+=======
+>>>>>>> origin/master
   localAssets: void;
   screenName: ScreenName;
   lang: Lang;
@@ -73,6 +75,7 @@ type Fixtures = {
   notFoundPage: NotFoundPage;
   axe: Axe;
   network: Network;
+  preloads: Preloads;
 };
 
 export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
@@ -80,9 +83,9 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   seed: [{}, { option: true }],
   randomLang: [true, { option: true }],
   screenPreset: ['random', { option: true }],
-  langRedirect: [false, { option: true }],
   realAssets: [false, { option: true }],
 
+<<<<<<< HEAD
   // Skips a test of the language redirect on a deployed target, with the ticket in the reason (RSP-183).
   langRedirectGuard: [
     async ({ langRedirect }, use, testInfo) => {
@@ -101,6 +104,8 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
     { auto: true },
   ],
 
+=======
+>>>>>>> origin/master
   // On a deployed target, /img/ and /fonts/ are answered from site/ (RSP-186); local runs are unchanged.
   localAssets: [
     async ({ page, baseURL, realAssets }, use) => {
@@ -199,9 +204,14 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   network: async ({ page }, use) => {
     await use(new Network(page));
   },
+  preloads: async ({ page }, use) => {
+    await use(new Preloads(page));
+  },
 });
 
 export { expect };
+/** Every status code with a card, in the site's order: for tests that pick a card page at random. */
+export const CARD_CODES: number[] = D.map((d: { c: number }) => d.c);
 export { TAG } from './tags';
 export { TID, type View } from './locators';
 export { SCREENS, SCREEN_NAMES, type ScreenName } from './screens';
@@ -213,6 +223,7 @@ export type { SiteChrome } from './pages/site-chrome';
 export type { NotFoundPage } from './pages/not-found-page';
 export { THEMES, type Axe, type Theme } from './pages/axe';
 export type { Network } from './pages/network';
+export type { Preloads, FontPreload, ScriptLoad } from './pages/preloads';
 export type { PathSteps, MarkerLook } from './pages/path-steps';
 export {
   lookOf,
@@ -226,7 +237,10 @@ export {
 export { markOf, boxes, controlBorderContrasts, type Mark, type BorderContrast } from './pages/answer-marks';
 export { focusRingsByTab, type FocusRing } from './pages/focus';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';
+<<<<<<< HEAD
 export { LANG_REDIRECT } from './known-issues';
 // Analytics beacon (RSP-175).
 export { AnalyticsBeacon, BeaconRequests, PRODUCTION_HOST, type BeaconTag } from './pages/analytics-beacon';
 export { ANALYTICS_HOSTS } from './analytics';
+=======
+>>>>>>> origin/master

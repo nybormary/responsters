@@ -21,7 +21,7 @@ export class App {
 
   /**
    * Open the app in the test's language, /<lang>/http/, optionally on a view (#practice, #traps) or any raw hash
-   * ('nonsense'). No redirect on the way: tests that aren't about choosing the language don't depend on it (RSP-183).
+   * ('nonsense'). No chooser page on the way: tests that aren't about choosing the language don't depend on it.
    * Always a fresh page load, also when the app is already open in this tab.
    */
   async open(view?: View | string) {
@@ -35,8 +35,8 @@ export class App {
 
   /**
    * Open the app by its language-less URL /http/ (only for tests of choosing the language). The site sends the
-   * browser on to /<lang>/http/ (RSP-138): Netlify by a redirect, a local run by a chooser page. Either way the
-   * saved language, then the browser language decides. On Netlify that redirect is unreliable: see LANG_REDIRECT.
+   * browser on to /<lang>/http/ (RSP-138) through the chooser page at /http/, on Netlify and locally alike (RSP-183):
+   * the saved language, then the browser language decides, else English.
    */
   async openLanguageless(view?: View | string) {
     await this.page.goto(view ? `/http/#${view}` : '/http/');

@@ -1,7 +1,7 @@
 // Page build (RSP-90, URL scheme RSP-138, home page RSP-156): copies site/ to dist/ and writes, per language,
 // the home page at /<lang>/, the app at /<lang>/http/ and one static page per creature at /<lang>/http/<code>/. Language-less URLs
-// (/, /http/, /http/<code>/) go to the visitor's language: Netlify redirects them (dist/_redirects);
-// for local runs (npx serve dist knows no redirects) small chooser pages at those paths do the same.
+// (/, /http/, /http/<code>/) go to the visitor's language through small chooser pages at those paths (the same
+// file on Netlify and in a local run); no server-side language redirect (RSP-183).
 // Netlify runs the build before every deploy (netlify.toml) and publishes dist/.
 // Texts and data come from the same files the app uses (site/data, site/i18n, site/js/render.js),
 // so a text changed for the app changes on the pages too.
@@ -36,9 +36,106 @@ const ORIGIN = 'https://mnemozoo.com'; // canonical and hreflang links always na
 const LANGS = Object.keys(LOCALES);
 // The app template (RSP-138): written per language, never served as is.
 const APP = await readFile(path.join(SITE, 'app.html'), 'utf8');
-// The fonts block (preloads + fonts.css, RSP-160) is taken from the app template, so the app and the pages
-// always load the same fonts from the same place.
-const FONTS = APP.match(/ *<!-- fonts [\s\S]*?<!-- \/fonts -->/)[0].trim();
+// Font preloads (RSP-188): exactly the files the first screen shows BEFORE ANY SCRIPT RUNS, per page type and
+// language, so the browser starts them with the HTML instead of finding them only in the CSS. Fonts that only the
+// script's content uses (the app's collection) are left to the CSS: preloading them too made the CSS arrive later
+// and First Contentful Paint worse (local Lighthouse, RSP-188 "Scope change").
+// Measured 2026-11-12 in Chrome with JavaScript off (phone 390×844 and desktop 1280×800, all 23 card pages): text
+// in the viewport, matched to @font-face by family, weight and unicode-range. A file is listed when the first screen
+// uses it on either size and every page of that type downloads it (a preload the page never uses is wasted
+// bandwidth and a console warning). Atkinson has no Cyrillic: Ukrainian body text uses the system font.
+// tests/ui/preloads.spec.ts measures the same way: when a CSS or text change moves a font, it fails and names the
+// files to add or remove here.
+const FONT_DIRS = {
+  atkinson: 'atkinson-hyperlegible-next-5.3.0',
+  bitter: 'bitter-5.3.0',
+  jetbrains: 'jetbrains-mono-5.3.0',
+};
+const FONT_NAMES = { atkinson: 'atkinson-hyperlegible-next', bitter: 'bitter', jetbrains: 'jetbrains-mono' };
+/** fontFile('bitter latin-ext 800') → '/fonts/bitter-5.3.0/bitter-latin-ext-800-normal.woff2' */
+const fontFile = (spec) => {
+  const [family, subset, weight] = spec.split(' ');
+  return `/fonts/${FONT_DIRS[family]}/${FONT_NAMES[family]}-${subset}-${weight}-normal.woff2`;
+};
+// Pages built as HTML (home, card, 404): body text 400 and 700, headings (Bitter 800 and 700), codes (JetBrains Mono).
+const PAGE_FONTS = [
+  'atkinson latin 400',
+  'atkinson latin 700',
+  'bitter latin 700',
+  'bitter latin 800',
+  'jetbrains latin 800',
+];
+// The app before its script: the site header and footer, and the rubric name "Responsters".
+const APP_FONTS = ['atkinson latin 400', 'atkinson latin 700', 'bitter latin 800'];
+const ATKINSON_EXT = ['atkinson latin-ext 400', 'atkinson latin-ext 700']; // ą ę ł ś ž ė ų … in body text (pl, lt)
+const FIRST_SCREEN_FONTS = {
+  home: {
+    uk: [...PAGE_FONTS, 'bitter cyrillic 700', 'bitter cyrillic 800'],
+    pl: [...PAGE_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 700', 'bitter latin-ext 800'],
+    lt: [...PAGE_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 700', 'bitter latin-ext 800'],
+    et: [...PAGE_FONTS, 'atkinson latin-ext 400'],
+  },
+  app: {
+    pl: [...APP_FONTS, 'atkinson latin-ext 400'],
+    lt: [...APP_FONTS, ...ATKINSON_EXT],
+  },
+  creature: {
+    uk: [...PAGE_FONTS, 'bitter cyrillic 800'],
+    pl: [...PAGE_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 800'],
+    lt: [...PAGE_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 800'],
+  },
+  'not-found': {
+    uk: [...PAGE_FONTS, 'bitter cyrillic 800'],
+    pl: [...PAGE_FONTS, ...ATKINSON_EXT],
+    lt: [...PAGE_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 800'],
+  },
+};
+// One card page needs more than its language's list: the Estonian 503 text has a š in the first screen's body text
+// (wider screens only; the page loads the file on every screen).
+const CARD_FONTS = { et: { 503: ['atkinson latin-ext 400'] } };
+// Every page type × language not listed above uses its type's common set.
+const firstScreenFonts = (type, lang, code) =>
+  [
+    ...(FIRST_SCREEN_FONTS[type][lang] || (type === 'app' ? APP_FONTS : PAGE_FONTS)),
+    ...((type === 'creature' && CARD_FONTS[lang]?.[code]) || []),
+  ].map(fontFile);
+
+/**
+ * Module preloads (RSP-188): every module the page's entry script imports, at any depth, so they all start with
+ * the HTML instead of one import level at a time (app.js → chrome.js → render.js → data/links.js). Read from the
+ * import statements, so a new import is preloaded without touching this file. The entry script itself is already
+ * in the HTML (<script type="module" src>).
+ */
+async function moduleGraph(entry) {
+  const found = new Set();
+  const queue = [entry];
+  while (queue.length) {
+    const url = queue.shift();
+    const source = await readFile(path.join(SITE, url), 'utf8');
+    // Static imports only: `import x from '…'`, `import { a, b } from '…'` (may span lines), `import '…'`.
+    for (const [, spec] of source.matchAll(/^import\s+(?:[\w*\s{},]+?\s+from\s+)?'([^']+)';/gm)) {
+      const dep = new URL(spec, `https://site${url}`).pathname;
+      if (found.has(dep)) continue;
+      found.add(dep);
+      queue.push(dep);
+    }
+  }
+  return [...found].sort();
+}
+const MODULES = { app: await moduleGraph('/js/app.js'), site: await moduleGraph('/js/site.js') };
+
+/**
+ * The preload links of one page. The app also loads its language file (state.js imports it on start, after
+ * all the modules above have run), so that one is preloaded too; the other pages load no language file.
+ */
+function preloads(type, lang, code) {
+  const modules = type === 'app' ? [...new Set([...MODULES.app, `/i18n/${lang}.js`])] : MODULES.site;
+  return firstScreenFonts(type, lang, code)
+    .map((f) => `<link rel="preload" href="${f}" as="font" type="font/woff2" crossorigin />`)
+    .concat(modules.map((m) => `<link rel="modulepreload" href="${m}" />`))
+    .join('\n    ');
+}
+
 // One stylesheet per page type (RSP-160): the build joins the source files of site/css/, in this order, into
 // dist/css/page-<type>.css, so a page waits for one CSS request instead of up to eight. The app's list is the
 // styles block of the app template, so site/app.html stays readable on its own.
@@ -119,8 +216,8 @@ function creaturePage(lang, tx, d) {
     ${alternates((l) => creatureUrl(l, c))}
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    ${FONTS}
     ${styles('creature')}
+    ${preloads('creature', lang, c)}
     <script type="module" src="/js/site.js"></script>
   </head>
   <body>
@@ -212,8 +309,8 @@ function homePage(lang, tx) {
     <script type="application/ld+json">${WEBSITE}</script>
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    ${FONTS}
     ${styles('home')}
+    ${preloads('home', lang)}
     <script type="module" src="/js/site.js"></script>
   </head>
   <body>
@@ -310,8 +407,8 @@ function notFoundPage(lang, tx) {
     <meta name="robots" content="noindex" />
     <title>${esc(t.title)}</title>
     <link rel="icon" href="/favicon.png" type="image/png" />
-    ${FONTS}
     ${styles('not-found')}
+    ${preloads('not-found', lang)}
     <script type="module" src="/js/site.js"></script>
   </head>
   <body>
@@ -338,6 +435,7 @@ function appPage(lang, tx) {
     [/<!-- App template[\s\S]*?-->\n/, ''], // the note is for people reading the source, not for visitors
     [/<html lang="[^"]*">/, `<html lang="${lang}">`],
     [/<!-- styles [\s\S]*?<!-- \/styles -->/, styles('app')],
+    [/<!-- build: preloads [\s\S]*?-->/, preloads('app', lang)],
     [/<title>[^<]*<\/title>/, `<title>${esc(tx.ui.appTitle)}</title>`],
     [/<meta\s+name="description"\s+content="[^"]*"\s*\/>/, `<meta name="description" content="${esc(tx.ui.tag)}" />`],
     [
@@ -387,30 +485,17 @@ function chooserPage(rest) {
 }
 
 /**
- * dist/_redirects (RSP-138): language-less URLs → the visitor's language. Netlify takes the language from the
- * nf_lang cookie (set by the switcher, js/lang.js), otherwise from the browser's Accept-Language, but it looks
- * only at the FIRST browser language (seen on deploy preview #27: "ru, pl" got no match). So there is no
- * English fallback here: when nothing matches, Netlify serves the chooser page at the same path, which checks
- * the whole browser list (pickLang) and then falls back to English, the same as a local run.
- * 302, not 301: the target depends on the visitor. "!" forces the rule over the chooser page at the same path.
- * The browser keeps the #hash across a redirect: /#traps lands on /<lang>/#traps, and the home page sends the old
- * app hashes on to /<lang>/http/#traps (js/site.js).
- * ?via=lang marks the target: there js/lang.js followSavedLanguage() lets a language saved before RSP-138
- * (localStorage only, no cookie yet) win, then removes the marker.
+ * dist/_redirects (RSP-138, RSP-183). Language-less URLs (/, /http/, /http/<code>/) are NOT redirected here: the chooser
+ * page at the same path picks the language in the browser (pickLang: saved choice, nf_lang cookie, the whole browser
+ * list, then English), on Netlify the same as in a local run.
+ * Why not Netlify's `Language=` rules (used until RSP-183): Netlify's edge answers two requests for the same URL with
+ * the same Accept-Language that arrive together with ONE redirect, whatever their nf_lang cookie (deploy preview
+ * #40, 2026-11-11: 6 wrong answers of 20). A chooser page is the same file for everyone, so that can't go wrong.
+ * The same goes for a missing address without a language: Netlify's default dist/404.html, in English (Maryna: in
+ * every unknown case, English). A missing address with a language gets the 404 page in that language (RSP-148).
  */
 function redirects() {
-  const rules = [
-    ['/', (l) => `${homeUrl(l)}?via=lang`], // the home page (RSP-156)
-    ['/http', (l) => `${appUrl(l)}?via=lang`],
-    ['/http/*', (l) => `${appUrl(l)}:splat?via=lang`],
-  ];
-  const lines = rules.flatMap(([from, to]) => LANGS.map((l) => `${from}  ${to(l)}  302!  Language=${l}`));
-  // RSP-148: a missing address gets the 404 page in its language, with status 404. Not forced, so only paths with
-  // no file match. A path with a language uses that language; any other path the visitor's (cookie, then first
-  // browser language); no match → Netlify's default dist/404.html (English).
-  const notFound = LANGS.map((l) => `/${l}/*  /${l}/404.html  404`).concat(
-    LANGS.map((l) => `/*  /${l}/404.html  404  Language=${l}`),
-  );
+  const notFound = LANGS.map((l) => `/${l}/*  /${l}/404.html  404`);
   // Netlify reads dist/_redirects BEFORE the [[redirects]] in netlify.toml, so the catch-all 404 rules above would hide
   // them. They live here, first (found by Copilot code review, PR #31): the old Netlify address goes to the own domain
   // (RSP-136); scanners asking for /security.txt go to the file (RSP-137, RFC 9116).
@@ -418,9 +503,11 @@ function redirects() {
     'https://responsters.netlify.app/*  https://mnemozoo.com/:splat  301!',
     '/security.txt  /.well-known/security.txt  301!',
   ];
-  return `# Generated by scripts/build-pages.mjs (RSP-138, RSP-148): never edit dist/, change the build.\n${first
-    .concat(lines, notFound)
-    .join('\n')}\n`;
+  const rules = first.concat(notFound);
+  // RSP-183: no rule may depend on the visitor's language or cookie (Language=, Cookie=), see above.
+  const bad = rules.filter((r) => /\b(Language|Cookie)=/.test(r));
+  if (bad.length) throw new Error(`_redirects: no Language=/Cookie= rules (RSP-183): ${bad.join(' | ')}`);
+  return `# Generated by scripts/build-pages.mjs (RSP-138, RSP-148, RSP-183): never edit dist/, change the build.\n${rules.join('\n')}\n`;
 }
 
 /** sitemap.xml: the home page, the app and every creature page in every language, each with its hreflang alternates. */
@@ -489,6 +576,17 @@ async function build() {
   await cp(SITE, DIST, { recursive: true });
   await rm(path.join(DIST, 'app.html')); // the template is not a page
   await writeStyles();
+  // A preload of a file that isn't there would be a 404 on every page view: stop the build instead.
+  for (const type of Object.keys(FIRST_SCREEN_FONTS))
+    for (const lang of LANGS)
+      for (const f of [
+        ...firstScreenFonts(type, lang),
+        ...Object.keys(CARD_FONTS[lang] || {}).flatMap((code) => firstScreenFonts('creature', lang, Number(code))),
+        ...(type === 'app' ? [`/i18n/${lang}.js`] : []),
+      ])
+        await readFile(path.join(DIST, f)).catch(() => {
+          throw new Error(`build-pages: preload of a missing file ${f} (${type}, ${lang})`);
+        });
 
   let pages = 0;
   for (const lang of LANGS) {
