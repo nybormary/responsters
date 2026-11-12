@@ -60,6 +60,23 @@ const WEBSITE = JSON.stringify({
   url: `${ORIGIN}/`,
 });
 
+// Cloudflare Web Analytics (RSP-175): cookieless visit counts. The domain is on Cloudflare DNS only, so Cloudflare
+// can't add the beacon itself: every page a visitor stays on carries it here, once, right after the viewport meta.
+// The token counts any page that sends it, whatever the host, so the beacon loads only on the production domain:
+// deploy previews, local runs, tests and Lighthouse measurements stay out of the stats. A script added this way
+// loads async, after the page: no effect on the first render. Chooser pages (they redirect at once) have none.
+// UI tests also block the beacon's hosts (tests/fixtures/analytics.ts), in case a run targets production.
+const ANALYTICS_HOST = 'mnemozoo.com';
+const ANALYTICS_TOKEN = '0b35d40b48384f0eac7566c199b949a6'; // public: it is in every page's source anyway
+const BEACON = `<script data-analytics="cloudflare">
+      if (location.hostname === '${ANALYTICS_HOST}') {
+        const beacon = document.createElement('script');
+        beacon.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+        beacon.dataset.cfBeacon = '{"token": "${ANALYTICS_TOKEN}"}';
+        document.head.append(beacon);
+      }
+    </script>`;
+
 /** Path of the app, e.g. appUrl('uk') → '/uk/http/'; appUrl(null) → '/http/', the language-less one. */
 const appUrl = (lang) => (lang ? `/${lang}` : '') + '/http/';
 /** Path of the home page; the language-less one is the site root: homeOrRoot('uk') → '/uk/', homeOrRoot(null) → '/'. */
@@ -95,6 +112,7 @@ function creaturePage(lang, tx, d) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    ${BEACON}
     <title>${esc(title)} · Responsters</title>
     <meta name="description" content="${esc(`${title}. ${L.mean}`)}" />
     <link rel="canonical" href="${ORIGIN}${creatureUrl(lang, c)}" />
@@ -186,6 +204,7 @@ function homePage(lang, tx) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    ${BEACON}
     <title>${esc(h.title)}</title>
     <meta name="description" content="${esc(h.description)}" />
     <link rel="canonical" href="${ORIGIN}${homeUrl(lang)}" />
@@ -287,6 +306,7 @@ function notFoundPage(lang, tx) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    ${BEACON}
     <meta name="robots" content="noindex" />
     <title>${esc(t.title)}</title>
     <link rel="icon" href="/favicon.png" type="image/png" />
@@ -327,6 +347,7 @@ function appPage(lang, tx) {
     // RSP-155: the same site header and footer as on every page; in the header, the app's own JS language menu.
     ['<!-- build: site header -->', siteHeader(lang, tx.site, APP_LANG_MENU)],
     ['<!-- build: site footer -->', siteFooter(tx.site)],
+    ['<!-- build: analytics -->', BEACON],
   ];
   return fills.reduce((html, [from, to]) => {
     if (!html.match(from)) throw new Error(`build-pages: site/app.html has no ${from}`);
@@ -438,6 +459,31 @@ async function writeStyles() {
   }
 }
 
+/**
+ * RSP-175 AC4: every page a visitor stays on has the analytics beacon exactly once, a chooser page none.
+ * Counted in the written files, so a template change that drops or doubles it stops the build.
+ */
+async function checkBeacons() {
+  const count = async (file) =>
+    (await readFile(path.join(DIST, file), 'utf8')).split('data-analytics="cloudflare"').length - 1;
+  const stay = LANGS.flatMap((l) => [
+    `${l}/index.html`,
+    `${l}/404.html`,
+    `${appUrl(l).slice(1)}index.html`,
+    ...D.map((d) => `${creatureUrl(l, d.c).slice(1)}index.html`),
+  ]).concat('404.html');
+  const choosers = [
+    'index.html',
+    `${appUrl(null).slice(1)}index.html`,
+    ...D.map((d) => `${creatureUrl(null, d.c).slice(1)}index.html`),
+  ];
+  for (const file of stay)
+    if ((await count(file)) !== 1)
+      throw new Error(`build-pages: ${file} has the analytics beacon ${await count(file)} times, not once`);
+  for (const file of choosers)
+    if ((await count(file)) !== 0) throw new Error(`build-pages: chooser page ${file} has the analytics beacon`);
+}
+
 async function build() {
   await rm(DIST, { recursive: true, force: true });
   await cp(SITE, DIST, { recursive: true });
@@ -460,6 +506,7 @@ async function build() {
   await page('/', chooserPage('/'));
   await writeFile(path.join(DIST, '_redirects'), redirects());
   await writeFile(path.join(DIST, 'sitemap.xml'), sitemap(new Date().toISOString().slice(0, 10)));
+  await checkBeacons();
   console.log(
     `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards), chooser pages, _redirects → dist/`,
   );

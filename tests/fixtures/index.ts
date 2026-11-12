@@ -19,6 +19,9 @@
 // Page objects (one per part of the page, built from TID in locators.ts) live in pages/ and are
 // handed to tests as fixtures: async ({ app, langMenu }) => { … }.
 //
+// Analytics: every test page fails requests to the Cloudflare beacon, so test runs never count as visits (analytics.ts,
+// RSP-175).
+//
 // Assets: on a deployed target, card images and fonts come from the repo files, not the host (local-assets.ts,
 // RSP-186: Netlify credits). A test that checks the host's own files opts out: test.use({ realAssets: true }).
 import { test as base, expect } from '@playwright/test';
@@ -26,6 +29,7 @@ import { textsFor, LANGS, type Lang, type Texts } from './texts';
 import { SCREENS, SCREEN_NAMES, type ScreenName } from './screens';
 import { LANG_REDIRECT } from './known-issues';
 import { serveAssetsFromRepo } from './local-assets';
+import { blockAnalytics } from './analytics';
 import { resolveTarget } from '../targets';
 import { App } from './pages/app';
 import { LanguageMenu } from './pages/language-menu';
@@ -56,6 +60,7 @@ export type Options = {
 
 type Fixtures = {
   langRedirectGuard: void;
+  noAnalytics: void;
   localAssets: void;
   screenName: ScreenName;
   lang: Lang;
@@ -82,6 +87,15 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   langRedirectGuard: [
     async ({ langRedirect }, use, testInfo) => {
       testInfo.skip(langRedirect && LANG_REDIRECT.skip, LANG_REDIRECT.reason);
+      await use();
+    },
+    { auto: true },
+  ],
+
+  // Every test page: requests to the analytics beacon fail at once, so no test run counts as a visit (RSP-175).
+  noAnalytics: [
+    async ({ page }, use) => {
+      await blockAnalytics(page);
       await use();
     },
     { auto: true },
