@@ -227,3 +227,6 @@ export { markOf, boxes, controlBorderContrasts, type Mark, type BorderContrast }
 export { focusRingsByTab, type FocusRing } from './pages/focus';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';
 export { LANG_REDIRECT } from './known-issues';
+// Analytics beacon (RSP-175).
+export { AnalyticsBeacon, BeaconRequests, PRODUCTION_HOST, type BeaconTag } from './pages/analytics-beacon';
+export { ANALYTICS_HOSTS } from './analytics';

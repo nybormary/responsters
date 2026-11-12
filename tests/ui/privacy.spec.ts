@@ -1,5 +1,5 @@
 // What leaves the visitor's browser (RSP-160). testomat.io folder "Privacy", suite "Third-party requests (RSP-160)".
-import { test, expect, TAG, VIEWS } from '../fixtures';
+import { test, expect, TAG, VIEWS, PRODUCTION_HOST } from '../fixtures';
 
 // This file checks what the browser loads from the host itself, fonts included: real host files (RSP-186).
 test.use({ realAssets: true });
@@ -11,9 +11,15 @@ test(
   { tag: [TAG.privacy] },
   async ({ network, homePage, app, cardPage, notFoundPage, lang, baseURL }) => {
     const own = new URL(baseURL!).host;
+    // RSP-175: on mnemozoo.com the pages also ask for the analytics beacon (blocked in tests); nowhere else.
+    const allowed = own === PRODUCTION_HOST ? [own, 'static.cloudflareinsights.com'] : [own];
     const onlyOwnHost = async (where: string) => {
       await network.settled();
-      expect(network.hosts(), `${where}: hosts requested`).toEqual([own]);
+      expect(network.hosts(), `${where}: hosts requested`).toContain(own);
+      expect(
+        network.hosts().filter((h) => !allowed.includes(h)),
+        `${where}: other hosts requested`,
+      ).toEqual([]);
     };
 
     await test.step('Home page', async () => {
