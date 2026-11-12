@@ -195,7 +195,7 @@ test(
 
 // Language-less URLs: these tests check how the language is chosen, so no random language is saved.
 test.describe('language-less /', () => {
-  test.use({ randomLang: false, langRedirect: true });
+  test.use({ randomLang: false });
 
   // ── dbd1834c ──────────────────────────────────────────────────────────────────────────────────
 
