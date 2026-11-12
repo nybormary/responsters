@@ -34,6 +34,8 @@ import { SiteChrome } from './pages/site-chrome';
 import { NotFoundPage } from './pages/not-found-page';
 import { Axe } from './pages/axe';
 import { Network } from './pages/network';
+import { Preloads } from './pages/preloads';
+import { D } from '../../site/data/cards.js';
 
 // What the site keeps in localStorage (site/js/store.js adds the prefix "httpon." to every key).
 export type Seed = {
@@ -64,6 +66,7 @@ type Fixtures = {
   notFoundPage: NotFoundPage;
   axe: Axe;
   network: Network;
+  preloads: Preloads;
 };
 
 export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
@@ -171,9 +174,14 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   network: async ({ page }, use) => {
     await use(new Network(page));
   },
+  preloads: async ({ page }, use) => {
+    await use(new Preloads(page));
+  },
 });
 
 export { expect };
+/** Every status code with a card, in the site's order: for tests that pick a card page at random. */
+export const CARD_CODES: number[] = D.map((d: { c: number }) => d.c);
 export { TAG } from './tags';
 export { TID, type View } from './locators';
 export { SCREENS, SCREEN_NAMES, type ScreenName } from './screens';
@@ -185,6 +193,7 @@ export type { SiteChrome } from './pages/site-chrome';
 export type { NotFoundPage } from './pages/not-found-page';
 export { THEMES, type Axe, type Theme } from './pages/axe';
 export type { Network } from './pages/network';
+export type { Preloads, FontPreload, ScriptLoad } from './pages/preloads';
 export type { PathSteps, MarkerLook } from './pages/path-steps';
 export {
   lookOf,

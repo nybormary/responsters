@@ -10,23 +10,6 @@
     <!-- build: canonical and hreflang -->
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <!-- fonts (RSP-160): served from the site (@font-face in css/fonts.css); the build copies this block into every page.
-         Preload only the two Latin files the first screen needs: body text and the site name. -->
-    <link
-      rel="preload"
-      href="/fonts/atkinson-hyperlegible-next-5.3.0/atkinson-hyperlegible-next-latin-400-normal.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/bitter-5.3.0/bitter-latin-800-normal.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <!-- /fonts -->
     <!-- styles (RSP-160): the build joins these files, in this order, into one /css/page-app.css. -->
     <link rel="stylesheet" href="/css/fonts.css" />
     <link rel="stylesheet" href="/css/base.css" />
@@ -37,6 +20,7 @@
     <link rel="stylesheet" href="/css/traps.css" />
     <link rel="stylesheet" href="/css/detail.css" />
     <!-- /styles -->
+    <!-- build: preloads (RSP-188): the fonts of the first screen and every module of the page, per language -->
   </head>
   <body>
     <div class="wrap" id="top">
