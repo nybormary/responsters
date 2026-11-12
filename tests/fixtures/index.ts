@@ -58,11 +58,7 @@ export type Options = {
 };
 
 type Fixtures = {
-<<<<<<< HEAD
-  langRedirectGuard: void;
   noAnalytics: void;
-=======
->>>>>>> origin/master
   localAssets: void;
   screenName: ScreenName;
   lang: Lang;
@@ -85,16 +81,6 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   screenPreset: ['random', { option: true }],
   realAssets: [false, { option: true }],
 
-<<<<<<< HEAD
-  // Skips a test of the language redirect on a deployed target, with the ticket in the reason (RSP-183).
-  langRedirectGuard: [
-    async ({ langRedirect }, use, testInfo) => {
-      testInfo.skip(langRedirect && LANG_REDIRECT.skip, LANG_REDIRECT.reason);
-      await use();
-    },
-    { auto: true },
-  ],
-
   // Every test page: requests to the analytics beacon fail at once, so no test run counts as a visit (RSP-175).
   noAnalytics: [
     async ({ page }, use) => {
@@ -104,8 +90,6 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
     { auto: true },
   ],
 
-=======
->>>>>>> origin/master
   // On a deployed target, /img/ and /fonts/ are answered from site/ (RSP-186); local runs are unchanged.
   localAssets: [
     async ({ page, baseURL, realAssets }, use) => {
@@ -237,10 +221,6 @@ export {
 export { markOf, boxes, controlBorderContrasts, type Mark, type BorderContrast } from './pages/answer-marks';
 export { focusRingsByTab, type FocusRing } from './pages/focus';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';
-<<<<<<< HEAD
-export { LANG_REDIRECT } from './known-issues';
 // Analytics beacon (RSP-175).
 export { AnalyticsBeacon, BeaconRequests, PRODUCTION_HOST, type BeaconTag } from './pages/analytics-beacon';
 export { ANALYTICS_HOSTS } from './analytics';
-=======
->>>>>>> origin/master
