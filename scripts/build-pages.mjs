@@ -90,9 +90,15 @@ const FIRST_SCREEN_FONTS = {
     lt: [...PAGE_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 800'],
   },
 };
+// One card page needs more than its language's list: the Estonian 503 text has a š in the first screen's body text
+// (wider screens only; the page loads the file on every screen).
+const CARD_FONTS = { et: { 503: ['atkinson latin-ext 400'] } };
 // Every page type × language not listed above uses its type's common set.
-const firstScreenFonts = (type, lang) =>
-  (FIRST_SCREEN_FONTS[type][lang] || (type === 'app' ? APP_FONTS : PAGE_FONTS)).map(fontFile);
+const firstScreenFonts = (type, lang, code) =>
+  [
+    ...(FIRST_SCREEN_FONTS[type][lang] || (type === 'app' ? APP_FONTS : PAGE_FONTS)),
+    ...((type === 'creature' && CARD_FONTS[lang]?.[code]) || []),
+  ].map(fontFile);
 
 /**
  * Module preloads (RSP-188): every module the page's entry script imports, at any depth, so they all start with
@@ -122,9 +128,9 @@ const MODULES = { app: await moduleGraph('/js/app.js'), site: await moduleGraph(
  * The preload links of one page. The app also loads its language file (state.js imports it on start, after
  * all the modules above have run), so that one is preloaded too; the other pages load no language file.
  */
-function preloads(type, lang) {
+function preloads(type, lang, code) {
   const modules = type === 'app' ? [...new Set([...MODULES.app, `/i18n/${lang}.js`])] : MODULES.site;
-  return firstScreenFonts(type, lang)
+  return firstScreenFonts(type, lang, code)
     .map((f) => `<link rel="preload" href="${f}" as="font" type="font/woff2" crossorigin />`)
     .concat(modules.map((m) => `<link rel="modulepreload" href="${m}" />`))
     .join('\n    ');
@@ -193,7 +199,7 @@ function creaturePage(lang, tx, d) {
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     ${styles('creature')}
-    ${preloads('creature', lang)}
+    ${preloads('creature', lang, c)}
     <script type="module" src="/js/site.js"></script>
   </head>
   <body>
@@ -538,7 +544,11 @@ async function build() {
   // A preload of a file that isn't there would be a 404 on every page view: stop the build instead.
   for (const type of Object.keys(FIRST_SCREEN_FONTS))
     for (const lang of LANGS)
-      for (const f of firstScreenFonts(type, lang).concat(type === 'app' ? `/i18n/${lang}.js` : []))
+      for (const f of [
+        ...firstScreenFonts(type, lang),
+        ...Object.keys(CARD_FONTS[lang] || {}).flatMap((code) => firstScreenFonts('creature', lang, Number(code))),
+        ...(type === 'app' ? [`/i18n/${lang}.js`] : []),
+      ])
         await readFile(path.join(DIST, f)).catch(() => {
           throw new Error(`build-pages: preload of a missing file ${f} (${type}, ${lang})`);
         });
