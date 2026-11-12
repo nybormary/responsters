@@ -19,12 +19,16 @@
 // Page objects (one per part of the page, built from TID in locators.ts) live in pages/ and are
 // handed to tests as fixtures: async ({ app, langMenu }) => { … }.
 //
+// Analytics: every test page fails requests to the Cloudflare beacon, so test runs never count as visits (analytics.ts,
+// RSP-175).
+//
 // Assets: on a deployed target, card images and fonts come from the repo files, not the host (local-assets.ts,
 // RSP-186: Netlify credits). A test that checks the host's own files opts out: test.use({ realAssets: true }).
 import { test as base, expect } from '@playwright/test';
 import { textsFor, LANGS, type Lang, type Texts } from './texts';
 import { SCREENS, SCREEN_NAMES, type ScreenName } from './screens';
 import { serveAssetsFromRepo } from './local-assets';
+import { blockAnalytics } from './analytics';
 import { resolveTarget } from '../targets';
 import { App } from './pages/app';
 import { LanguageMenu } from './pages/language-menu';
@@ -54,6 +58,7 @@ export type Options = {
 };
 
 type Fixtures = {
+  noAnalytics: void;
   localAssets: void;
   screenName: ScreenName;
   lang: Lang;
@@ -75,6 +80,15 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   randomLang: [true, { option: true }],
   screenPreset: ['random', { option: true }],
   realAssets: [false, { option: true }],
+
+  // Every test page: requests to the analytics beacon fail at once, so no test run counts as a visit (RSP-175).
+  noAnalytics: [
+    async ({ page }, use) => {
+      await blockAnalytics(page);
+      await use();
+    },
+    { auto: true },
+  ],
 
   // On a deployed target, /img/ and /fonts/ are answered from site/ (RSP-186); local runs are unchanged.
   localAssets: [
@@ -207,3 +221,6 @@ export {
 export { markOf, boxes, controlBorderContrasts, type Mark, type BorderContrast } from './pages/answer-marks';
 export { focusRingsByTab, type FocusRing } from './pages/focus';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';
+// Analytics beacon (RSP-175).
+export { AnalyticsBeacon, BeaconRequests, PRODUCTION_HOST, type BeaconTag } from './pages/analytics-beacon';
+export { ANALYTICS_HOSTS } from './analytics';
