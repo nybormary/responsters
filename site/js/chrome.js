@@ -2,7 +2,7 @@
 // Practice mode cards)
 // is redrawn in the current language and state.
 import { state, t, tx, LANGS, LANG_NAMES } from './state.js';
-import { $, contactHref } from './util.js';
+import { $ } from './util.js';
 import { MODES } from './modes.js';
 import { GLOBE, CHEVRON, CHECK } from './icons.js';
 import { homeUrl } from './render.js';
@@ -62,8 +62,6 @@ function renderSite() {
   }
   const set = (sel, text) => document.querySelectorAll(sel).forEach((el) => (el.textContent = text));
   set('.foot-contact-text', site.contact);
-  const mail = document.querySelector('[data-testid="foot-contact"]');
-  if (mail instanceof HTMLAnchorElement) mail.href = contactHref(`Mnemozoo: ${site.contact}`);
   set('.foot-mail', ` (${site.mail})`);
   set('[data-testid="foot-credits"]', site.foot);
   set('.foot-ext', ` (${site.ext})`);

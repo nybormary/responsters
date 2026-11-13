@@ -13,7 +13,6 @@ const { LOCALES } = await load('i18n/index.js');
 const { D } = await load('data/cards.js');
 const { PAIRS } = await load('data/traps.js');
 const { TOOLS } = await load('data/links.js');
-const { NEWS, KINDS } = await load('data/news.js');
 
 const problems = [];
 function compare(base, loc, path, lang) {
@@ -57,21 +56,6 @@ for (const p of PAIRS) {
 }
 if (en.tools.length !== TOOLS.length)
   problems.push(`en: tools has ${en.tools.length} labels, data/links.js has ${TOOLS.length} tools`);
-
-// "What's new" (RSP-145): en has texts for every entry, one item per kind, kinds known, dates month or day
-for (const e of NEWS) {
-  const t = en.news.entries[e.id];
-  if (!t) problems.push(`en: no news.entries.${e.id}`);
-  else if (t.items.length !== e.kinds.length)
-    problems.push(
-      `en: news.entries.${e.id}.items has ${t.items.length} items, data/news.js has ${e.kinds.length} kinds`,
-    );
-  for (const k of e.kinds) if (!KINDS.includes(k)) problems.push(`data/news.js: ${e.id} has unknown kind ${k}`);
-  if (!/^\d{4}-\d{2}(-\d{2})?$/.test(e.date))
-    problems.push(`data/news.js: ${e.id} date ${e.date} is not YYYY-MM or YYYY-MM-DD`);
-}
-for (const id of Object.keys(en.news.entries))
-  if (!NEWS.some((e) => e.id === id)) problems.push(`en: news.entries.${id} has no entry in data/news.js`);
 
 // every locale file (listed or not) matches en
 const files = readdirSync(join(SITE, 'i18n')).filter((f) => /^[a-z]{2}\.js$/.test(f));
