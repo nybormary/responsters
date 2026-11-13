@@ -449,20 +449,20 @@ export default {
     entries: {
       'footer-news': {
         title: 'Poraštė ir naujienos',
-        line: 'Dabar kiekvienas puslapis baigiasi ta pačia porašte, o šis puslapis pasakoja, kas pasikeitė.',
+        line: 'Dabar lengva mums parašyti ir sužinoti, kas pasikeitė svetainėje.',
         items: [
-          '„Klaida? Atsiliepimas?“ poraštėje atidaro laišką su jau įrašytu puslapio adresu.',
-          'Šis puslapis „Kas naujo“ visomis svetainės kalbomis.',
-          'LinkedIn ir GitHub dabar yra poraštėje kiekviename puslapyje.',
+          'Dabar galite palikti atsiliepimą ar pranešti apie klaidą paspaudę nuorodą poraštėje.',
+          'Visi svetainės pakeitimai dabar surinkti viename puslapyje — šiame.',
+          'Nuorodos į LinkedIn ir GitHub dabar yra kiekvieno puslapio apačioje.',
         ],
       },
       visitors: {
         title: 'Lankytojai',
-        line: 'Svetainė kaskart atsidaro jūsų kalba ir telefone veikia greičiau.',
+        line: 'Svetainė prisimena jūsų kalbą ir telefone atsidaro greičiau.',
         items: [
-          'Nuoroda be kalbos atidaro puslapį ta kalba, kurią pasirinkote paskutinį kartą.',
-          'Pirmasis ekranas telefone pasirodo greičiau.',
-          'Apsilankymai skaičiuojami be slapukų ir be jūsų sekimo kitose svetainėse.',
+          'Svetainė atsidaro ta kalba, kurią pasirinkote paskutinį kartą.',
+          'Telefone puslapiai pasirodo greičiau.',
+          'Apsilankymus skaičiuojame be slapukų ir jūsų nesekame.',
         ],
       },
     },

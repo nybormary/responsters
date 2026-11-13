@@ -2,7 +2,8 @@
 // first. Releases with only tests, CI or docs get none. date: 'YYYY-MM' until the release day (shown as the month),
 // then 'YYYY-MM-DD' (shown as the day) — set on release day, a step of the release flow. kinds: one per item, in the
 // order of the texts: 'new' | 'improved' | 'fixed'. Texts (title, one line, up to 3 items) in i18n/<lang>.js under
-// news.entries.<id>: plain language, what the visitor gets, no ticket numbers.
+// news.entries.<id>: what the change brings the visitor, in everyday words — not how it works ("the Collection page
+// is now much faster", not "modulepreloads"); no ticket numbers. Tone set by Maryna, 2026-11-13.
 export const NEWS = [
   { id: 'footer-news', date: '2026-11', kinds: ['new', 'new', 'improved'] },
   { id: 'visitors', date: '2026-11-12', kinds: ['improved', 'improved', 'new'] },

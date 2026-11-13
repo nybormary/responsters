@@ -446,20 +446,20 @@ export default {
     entries: {
       'footer-news': {
         title: 'Jalus ja uudised',
-        line: 'Iga leht lõpeb nüüd sama jalusega ja see leht räägib, mis muutus.',
+        line: 'Nüüd on lihtne meile kirjutada ja näha, mis saidil muutus.',
         items: [
-          '„Viga? Tagasiside?“ jaluses avab e-kirja, kus lehe aadress on juba sees.',
-          'See leht „Mis on uut“ kõigis saidi keeltes.',
-          'LinkedIn ja GitHub on nüüd jaluses igal lehel.',
+          'Nüüd saad jaluses oleva lingi kaudu tagasisidet jätta või veast teatada.',
+          'Kõik saidi muudatused on nüüd koos ühel lehel — siin.',
+          'Lingid LinkedInile ja GitHubile on nüüd iga lehe allosas.',
         ],
       },
       visitors: {
         title: 'Külastajad',
-        line: 'Sait avaneb alati sinu keeles ja on telefonis kiirem.',
+        line: 'Sait mäletab sinu keelt ja avaneb telefonis kiiremini.',
         items: [
-          'Keeleta link avab lehe keeles, mille valisid viimati.',
-          'Esimene ekraan ilmub telefonis kiiremini.',
-          'Külastusi loetakse ilma küpsisteta ja ilma sind teistel saitidel jälgimata.',
+          'Sait avaneb keeles, mille valisid viimati.',
+          'Telefonis ilmuvad lehed kiiremini.',
+          'Loendame külastusi ilma küpsisteta ega jälgi sind.',
         ],
       },
     },

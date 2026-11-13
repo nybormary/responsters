@@ -446,20 +446,20 @@ export default {
     entries: {
       'footer-news': {
         title: 'Sidefod og nyheder',
-        line: 'Alle sider slutter nu med den samme sidefod, og denne side fortæller, hvad der er ændret.',
+        line: 'Nu er det let at skrive til os og se, hvad der er ændret på siden.',
         items: [
-          '“Fejl? Feedback?” i sidefoden åbner en e-mail, hvor sidens adresse allerede står.',
-          'Denne side, “Nyheder”, på alle sidens sprog.',
-          'LinkedIn og GitHub er nu i sidefoden på alle sider.',
+          'Nu kan du give feedback eller melde en fejl via linket i sidefoden.',
+          'Alle ændringer på siden er nu samlet ét sted — her.',
+          'Links til LinkedIn og GitHub er nu nederst på alle sider.',
         ],
       },
       visitors: {
         title: 'Besøgende',
-        line: 'Siden åbner altid på dit sprog og er hurtigere på telefonen.',
+        line: 'Siden husker dit sprog og åbner hurtigere på telefonen.',
         items: [
-          'Et link uden sprog åbner siden på det sprog, du valgte sidst.',
-          'Den første skærm vises hurtigere på telefonen.',
-          'Besøg tælles uden cookies og uden at følge dig på andre sider.',
+          'Siden åbner på det sprog, du valgte sidst.',
+          'Siderne vises hurtigere på telefonen.',
+          'Vi tæller besøg uden cookies og følger dig ikke.',
         ],
       },
     },

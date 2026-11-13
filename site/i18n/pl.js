@@ -449,20 +449,20 @@ export default {
     entries: {
       'footer-news': {
         title: 'Stopka i nowości',
-        line: 'Każda strona kończy się teraz tą samą stopką, a ta strona mówi, co się zmieniło.',
+        line: 'Teraz łatwo do nas napisać i sprawdzić, co zmieniło się na stronie.',
         items: [
-          '„Błąd? Opinia?” w stopce otwiera e-mail z już wpisanym adresem strony.',
-          'Ta strona „Co nowego” we wszystkich językach strony.',
-          'LinkedIn i GitHub są teraz w stopce na każdej stronie.',
+          'Teraz możesz zostawić opinię lub zgłosić błąd, klikając link w stopce.',
+          'Wszystkie zmiany na stronie są teraz zebrane w jednym miejscu — tutaj.',
+          'Linki do LinkedIn i GitHub są teraz na dole każdej strony.',
         ],
       },
       visitors: {
         title: 'Odwiedzający',
-        line: 'Strona za każdym razem otwiera się w Twoim języku i działa szybciej na telefonie.',
+        line: 'Strona pamięta Twój język i szybciej otwiera się na telefonie.',
         items: [
-          'Link bez języka otwiera stronę w języku, który wybrano ostatnio.',
-          'Pierwszy ekran pojawia się szybciej na telefonie.',
-          'Wizyty są liczone bez plików cookie i bez śledzenia Cię na innych stronach.',
+          'Strona otwiera się w języku, który wybrano ostatnio.',
+          'Na telefonie strony pojawiają się szybciej.',
+          'Liczymy wizyty bez plików cookie i nie śledzimy Cię.',
         ],
       },
     },

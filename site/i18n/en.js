@@ -449,20 +449,20 @@ export default {
     entries: {
       'footer-news': {
         title: 'Footer and news',
-        line: 'Every page now ends with the same footer, and this page tells you what changed.',
+        line: "It's now easy to reach us and to see what has changed on the site.",
         items: [
-          '“Bug? Feedback?” in the footer opens an email with the page address already filled in.',
-          'This “What’s new” page, in every language of the site.',
-          'LinkedIn and GitHub moved to the footer, on every page.',
+          'You can now leave feedback or report a bug with the link in the footer.',
+          'All changes to the site are now collected on one page — this one.',
+          'Links to LinkedIn and GitHub are now at the bottom of every page.',
         ],
       },
       visitors: {
         title: 'Visitors',
-        line: 'The site opens in your language every time and is faster on a phone.',
+        line: 'The site remembers your language and opens faster on a phone.',
         items: [
-          'A link without a language opens the page in the language you picked last time.',
-          'The first screen shows up sooner on phones.',
-          'Visits are counted without cookies and without tracking you across sites.',
+          'The site opens in the language you picked last time.',
+          'Pages show up faster on a phone.',
+          'We count visits without cookies and don’t track you.',
         ],
       },
     },
