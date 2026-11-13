@@ -432,7 +432,11 @@ export default {
     nav: 'Site menu',
     map: 'Map',
     about: 'About the project',
-    foot: 'Mnemozoo · original characters and copy; status names from the IANA registry.',
+    foot: 'Original characters and copy; status names from the IANA registry.',
+    contact: 'Bug? Feedback?', // footer mail link (RSP-139, RSP-147)
+    mail: 'email', // screen-reader note after the footer mail link
+    page: 'Page', // first line of the feedback mail: "Page: <address>"
+    ext: 'external site', // screen-reader note after LinkedIn and GitHub in the footer
   },
   // Home page /<lang>/ (RSP-156). Numbers come from site/data, so they stay true when cards or pairs are added.
   // Page for a missing address (RSP-148): /<lang>/404.html, served by Netlify with status 404.
