@@ -430,10 +430,39 @@ export default {
     map: 'Kort',
     about: 'Om projektet',
     foot: 'Originale figurer og tekster; statusnavne fra IANA-registret.',
+    news: 'Nyheder', // footer and "How to use" link to the What's new page (RSP-145)
     contact: 'Fejl? Feedback?', // footer mail link (RSP-139, RSP-147)
     mail: 'e-mail', // screen-reader note after the footer mail link
     page: 'Side', // first line of the feedback mail: "Side: <address>"
     ext: 'ekstern side', // screen-reader note after LinkedIn and GitHub in the footer
+  },
+  // "What's new" page /<lang>/news/ (RSP-145): page texts; entries in the order of data/news.js, items in the
+  // order of its kinds. Plain language, what the visitor gets, no ticket numbers.
+  news: {
+    title: 'Nyheder · Mnemozoo',
+    h1: 'Nyheder',
+    lead: 'Hvad der er ændret på Mnemozoo, nyeste først.',
+    kinds: { new: 'Nyt', improved: 'Forbedret', fixed: 'Rettet' },
+    entries: {
+      'footer-news': {
+        title: 'Sidefod og nyheder',
+        line: 'Nu er det let at skrive til os og se, hvad der er ændret på siden.',
+        items: [
+          'Nu kan du give feedback eller melde en fejl via linket i sidefoden.',
+          'Alle ændringer på siden er nu samlet ét sted — her.',
+          'Links til LinkedIn og GitHub er nu nederst på alle sider.',
+        ],
+      },
+      visitors: {
+        title: 'Besøgende',
+        line: 'Siden husker dit sprog og åbner hurtigere på telefonen.',
+        items: [
+          'Siden åbner på det sprog, du valgte sidst.',
+          'Siderne vises hurtigere på telefonen.',
+          'Vi tæller besøg uden cookies og følger dig ikke.',
+        ],
+      },
+    },
   },
   // Forside /<lang>/ (RSP-156).
   notFound: {
@@ -445,10 +474,10 @@ export default {
   home: {
     title: 'Mnemozoo: teknisk zoo for din hukommelse',
     description:
-      'Originale væsner til HTTP-statuskoder: et kort for hver kode, træning og fælder med koder, der ligner hinanden. Seks sprog.',
+      'Originale væsner til HTTP-statuskoder: et kort for hver kode, træning og fælder med koder, der ligner hinanden. På alle sidens sprog.',
     kicker: 'IT memo zoo',
     h1: 'Få svaret, før du overhovedet spørger',
-    lead: 'Originale væsner til de HTTP-statuskoder, du møder hver dag i browseren, logfilerne og konsollen. Kort, træning, fælder med koder, der ligner hinanden. Seks sprog.',
+    lead: 'Originale væsner til de HTTP-statuskoder, du møder hver dag i browseren, logfilerne og konsollen. Kort, træning, fælder med koder, der ligner hinanden. På alle sidens sprog.',
     mapTitle: 'Zookort',
     httpSign: 'Vilde dyr · åbent', // zone sign with its status (RSP-170)
     httpName: 'HTTP-statuskoder',

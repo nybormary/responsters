@@ -433,10 +433,39 @@ export default {
     map: 'Мапа',
     about: 'Про проект',
     foot: 'Оригінальні персонажі й тексти; назви статусів за реєстром IANA.',
+    news: 'Що нового', // footer and "How to use" link to the What's new page (RSP-145)
     contact: 'Баг? Відгук?', // footer mail link (RSP-139, RSP-147)
     mail: 'електронна пошта', // screen-reader note after the footer mail link
     page: 'Сторінка', // first line of the feedback mail: "Сторінка: <address>"
     ext: 'зовнішній сайт', // screen-reader note after LinkedIn and GitHub in the footer
+  },
+  // "What's new" page /<lang>/news/ (RSP-145): page texts; entries in the order of data/news.js, items in the
+  // order of its kinds. Plain language, what the visitor gets, no ticket numbers.
+  news: {
+    title: 'Що нового · Mnemozoo',
+    h1: 'Що нового',
+    lead: 'Що змінилося в Mnemozoo, найновіше зверху.',
+    kinds: { new: 'Нове', improved: 'Покращено', fixed: 'Виправлено' },
+    entries: {
+      'footer-news': {
+        title: 'Футер і новини',
+        line: 'Тепер легко написати нам і дізнатися, що змінилося на сайті.',
+        items: [
+          'Тепер можна залишити відгук чи повідомити про помилку, натиснувши лінк у футері.',
+          'Усі зміни сайту тепер зібрані на одній сторінці — цій.',
+          'Посилання на LinkedIn і GitHub тепер унизу кожної сторінки.',
+        ],
+      },
+      visitors: {
+        title: 'Відвідувачі',
+        line: 'Сайт пам’ятає вашу мову і швидше відкривається на телефоні.',
+        items: [
+          'Сайт відкривається тією мовою, яку ви вибрали минулого разу.',
+          'На телефоні сторінки з’являються швидше.',
+          'Ми рахуємо відвідування без cookies і не стежимо за вами.',
+        ],
+      },
+    },
   },
   // Головна сторінка /<lang>/ (RSP-156).
   notFound: {
@@ -448,10 +477,10 @@ export default {
   home: {
     title: 'Mnemozoo: технічний зоопарк для твоєї пам’яті',
     description:
-      'Оригінальні істоти для кодів стану HTTP: картка кожного коду, практика і пастки зі схожими кодами. Шість мов.',
+      'Оригінальні істоти для кодів стану HTTP: картка кожного коду, практика і пастки зі схожими кодами. Усіма мовами сайту.',
     kicker: 'IT memo zoo',
     h1: 'Отримай відповідь ще до того, як запитаєш',
-    lead: 'Оригінальні істоти для кодів стану HTTP, які трапляються щодня в браузері, логах і консолі. Картка, практика, пастки зі схожими кодами. Шість мов.',
+    lead: 'Оригінальні істоти для кодів стану HTTP, які трапляються щодня в браузері, логах і консолі. Картка, практика, пастки зі схожими кодами. Усіма мовами сайту.',
     mapTitle: 'Мапа зоопарку',
     httpSign: 'Дикі звірі · відкрито', // zone sign with its status (RSP-170)
     httpName: 'Коди стану HTTP',

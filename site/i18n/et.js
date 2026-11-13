@@ -430,10 +430,39 @@ export default {
     map: 'Kaart',
     about: 'Projektist',
     foot: 'Originaalsed tegelased ja tekstid; olekute nimed IANA registri järgi.',
+    news: 'Mis on uut', // footer and "How to use" link to the What's new page (RSP-145)
     contact: 'Viga? Tagasiside?', // footer mail link (RSP-139, RSP-147)
     mail: 'e-post', // screen-reader note after the footer mail link
     page: 'Leht', // first line of the feedback mail: "Leht: <address>"
     ext: 'väline sait', // screen-reader note after LinkedIn and GitHub in the footer
+  },
+  // "What's new" page /<lang>/news/ (RSP-145): page texts; entries in the order of data/news.js, items in the
+  // order of its kinds. Plain language, what the visitor gets, no ticket numbers.
+  news: {
+    title: 'Mis on uut · Mnemozoo',
+    h1: 'Mis on uut',
+    lead: 'Mis Mnemozoos muutus, uuemad eespool.',
+    kinds: { new: 'Uus', improved: 'Täiustatud', fixed: 'Parandatud' },
+    entries: {
+      'footer-news': {
+        title: 'Jalus ja uudised',
+        line: 'Nüüd on lihtne meile kirjutada ja näha, mis saidil muutus.',
+        items: [
+          'Nüüd saad jaluses oleva lingi kaudu tagasisidet jätta või veast teatada.',
+          'Kõik saidi muudatused on nüüd koos ühel lehel — siin.',
+          'Lingid LinkedInile ja GitHubile on nüüd iga lehe allosas.',
+        ],
+      },
+      visitors: {
+        title: 'Külastajad',
+        line: 'Sait mäletab sinu keelt ja avaneb telefonis kiiremini.',
+        items: [
+          'Sait avaneb keeles, mille valisid viimati.',
+          'Telefonis ilmuvad lehed kiiremini.',
+          'Loendame külastusi ilma küpsisteta ega jälgi sind.',
+        ],
+      },
+    },
   },
   // Avaleht /<lang>/ (RSP-156).
   notFound: {
@@ -445,10 +474,10 @@ export default {
   home: {
     title: 'Mnemozoo: tehnikaloomaaed sinu mälule',
     description:
-      'Originaalsed olendid HTTP olekukoodidele: kaart iga koodi kohta, harjutamine ja lõksud sarnaste koodidega. Kuus keelt.',
+      'Originaalsed olendid HTTP olekukoodidele: kaart iga koodi kohta, harjutamine ja lõksud sarnaste koodidega. Kõigis saidi keeltes.',
     kicker: 'IT memo zoo',
     h1: 'Saa vastus enne, kui küsidki',
-    lead: 'Originaalsed olendid HTTP olekukoodidele, mida kohtad iga päev brauseris, logides ja konsoolis. Kaart, harjutamine, lõksud sarnaste koodidega. Kuus keelt.',
+    lead: 'Originaalsed olendid HTTP olekukoodidele, mida kohtad iga päev brauseris, logides ja konsoolis. Kaart, harjutamine, lõksud sarnaste koodidega. Kõigis saidi keeltes.',
     mapTitle: 'Loomaaia kaart',
     httpSign: 'Metsloomad · avatud', // zone sign with its status (RSP-170)
     httpName: 'HTTP olekukoodid',

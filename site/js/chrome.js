@@ -60,6 +60,12 @@ function renderSite() {
     a.href = home + hash;
     a.textContent = text;
   }
+  for (const id of ['foot-news', 'howto-news']) {
+    const a = document.querySelector(`[data-testid="${id}"]`);
+    if (!a) continue;
+    a.href = `/${state.lang}/news/`; // "What's new" (RSP-145)
+    a.textContent = site.news;
+  }
   const set = (sel, text) => document.querySelectorAll(sel).forEach((el) => (el.textContent = text));
   set('.foot-contact-text', site.contact);
   const mail = document.querySelector('[data-testid="foot-contact"]');
