@@ -432,6 +432,7 @@ export default {
     foot: 'Originaalsed tegelased ja tekstid; olekute nimed IANA registri järgi.',
     contact: 'Viga? Tagasiside?', // footer mail link (RSP-139, RSP-147)
     mail: 'e-post', // screen-reader note after the footer mail link
+    page: 'Leht', // first line of the feedback mail: "Leht: <address>"
     ext: 'väline sait', // screen-reader note after LinkedIn and GitHub in the footer
   },
   // Avaleht /<lang>/ (RSP-156).

@@ -435,6 +435,7 @@ export default {
     foot: 'Originalūs personažai ir tekstai; būsenų pavadinimai pagal IANA registrą.',
     contact: 'Klaida? Atsiliepimas?', // footer mail link (RSP-139, RSP-147)
     mail: 'el. paštas', // screen-reader note after the footer mail link
+    page: 'Puslapis', // first line of the feedback mail: "Puslapis: <address>"
     ext: 'išorinė svetainė', // screen-reader note after LinkedIn and GitHub in the footer
   },
   // Pagrindinis puslapis /<lang>/ (RSP-156).

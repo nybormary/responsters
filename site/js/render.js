@@ -3,7 +3,7 @@
 import { CLS, clsSym } from '../data/classes.js';
 import { BY } from '../data/cards.js';
 import { TOOLS, REF, MORE } from '../data/links.js';
-import { cls, art } from './util.js';
+import { cls, art, contactHref } from './util.js';
 import { GLOBE, CHEVRON, CHECK, EXTERNAL } from './icons.js';
 
 // Text for HTML: & < > " become entities.
@@ -98,16 +98,17 @@ export const APP_LANG_MENU = `<div class="langmenu" id="langmenu">
 export const FOOT_LINKS = {
   linkedin: 'https://www.linkedin.com/in/maryna-bortnyk/',
   github: 'https://github.com/nybormary/responsters',
-  contact: 'mailto:clapsy@mnemozoo.com', // RSP-147: visitor feedback, forwarded by Cloudflare Email Routing
 };
 
 /**
  * Site footer (RSP-137, RSP-139): a real contentinfo landmark, outside <main>. First row: map, about, LinkedIn and
  * GitHub (external: an arrow and a screen-reader note), bug or feedback (mail; screen readers also hear "email"), security.txt. Second row:
- * © years Mnemozoo and the credits line. copy: "© 2026 Mnemozoo", built by the page build (the year is build time).
+ * © years Mnemozoo and the credits line. copy: "© 2026 Mnemozoo", built by the page build (the year is build time). pageUrl: this page's production address
+ * for the mail body (none on the 404 page: a click fills in the address actually open, util.js contactOnClick).
  */
-export function siteFooter(lang, site, copy) {
+export function siteFooter(lang, site, copy, pageUrl) {
   const home = homeUrl(lang);
+  const subject = `Mnemozoo: ${site.contact}`;
   const ext = (id, label) =>
     `<li><a href="${FOOT_LINKS[id]}" data-testid="foot-${id}">${label}${EXTERNAL}<span class="sr-only foot-ext"> (${esc(site.ext)})</span></a></li>`;
   return `<footer class="site-footer" data-testid="site-footer">
@@ -116,7 +117,7 @@ export function siteFooter(lang, site, copy) {
         <li><a href="${home}#about" data-testid="foot-about">${esc(site.about)}</a></li>
         ${ext('linkedin', 'LinkedIn')}
         ${ext('github', 'GitHub')}
-        <li><a href="${FOOT_LINKS.contact}" data-testid="foot-contact"><span class="foot-contact-text">${esc(site.contact)}</span><span class="sr-only foot-mail"> (${esc(site.mail)})</span></a></li>
+        <li><a href="${esc(contactHref(subject, site.page, pageUrl))}" data-subject="${esc(subject)}" data-page="${esc(site.page)}" data-testid="foot-contact"><span class="foot-contact-text">${esc(site.contact)}</span><span class="sr-only foot-mail"> (${esc(site.mail)})</span></a></li>
         <li><a href="/.well-known/security.txt" data-testid="foot-security">security.txt</a></li>
       </ul>
       <p class="foot-note"><span data-testid="foot-copy">${esc(copy)}</span><span data-testid="foot-credits">${esc(site.foot)}</span></p>
