@@ -32,6 +32,10 @@ import { cls, art } from '../site/js/util.js';
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const SITE = path.join(ROOT, 'site');
 const DIST = path.join(ROOT, 'dist');
+// Footer copyright (RSP-139): the first year, and the build year once it's later: "© 2026", then "© 2026–2027".
+const FIRST_YEAR = 2026;
+const BUILD_YEAR = new Date().getFullYear();
+const COPY = `© ${BUILD_YEAR > FIRST_YEAR ? `${FIRST_YEAR}–${BUILD_YEAR}` : FIRST_YEAR} Mnemozoo`;
 const ORIGIN = 'https://mnemozoo.com'; // canonical and hreflang links always name production
 const LANGS = Object.keys(LOCALES);
 // The app template (RSP-138): written per language, never served as is.
@@ -254,7 +258,7 @@ function creaturePage(lang, tx, d) {
           </div>
         </article>
       </main>
-      ${siteFooter(tx.site)}
+      ${siteFooter(lang, tx.site, COPY)}
     </div>
   </body>
 </html>
@@ -374,14 +378,10 @@ function homePage(lang, tx) {
         <div class="home-author" data-testid="home-about">
           <h2>${esc(h.aboutTitle)}</h2>
           <p>${esc(h.aboutText)}</p>
-          <p class="home-links">
-            <a href="https://github.com/nybormary/responsters">GitHub</a>
-            <a href="https://www.linkedin.com/in/maryna-bortnyk/">LinkedIn</a>
-          </p>
         </div>
       </section>
     </main>
-    ${siteFooter(tx.site)}
+    ${siteFooter(lang, tx.site, COPY)}
     </div>
   </body>
 </html>
@@ -422,7 +422,7 @@ function notFoundPage(lang, tx) {
       </div>
       <div class="not-found-card"><div class="card cf-static" data-testid="card-404">${cardBody(d, tx.cards[404].line, tx.cards[404].art)}</div></div>
     </main>
-    ${siteFooter(tx.site)}
+    ${siteFooter(lang, tx.site, COPY)}
     </div>
   </body>
 </html>
@@ -444,7 +444,7 @@ function appPage(lang, tx) {
     ],
     // RSP-155: the same site header and footer as on every page; in the header, the app's own JS language menu.
     ['<!-- build: site header -->', siteHeader(lang, tx.site, APP_LANG_MENU)],
-    ['<!-- build: site footer -->', siteFooter(tx.site)],
+    ['<!-- build: site footer -->', siteFooter(lang, tx.site, COPY)],
     ['<!-- build: analytics -->', BEACON],
   ];
   return fills.reduce((html, [from, to]) => {

@@ -52,14 +52,19 @@ function renderSite() {
   for (const [id, hash, text] of [
     ['nav-map', '#map', site.map],
     ['nav-about', '#about', site.about],
+    ['foot-map', '#map', site.map],
+    ['foot-about', '#about', site.about],
   ]) {
     const a = document.querySelector(`[data-testid="${id}"]`);
     if (!a) continue;
     a.href = home + hash;
     a.textContent = text;
   }
-  const note = document.querySelector('.site-footer > span');
-  if (note) note.textContent = site.foot;
+  const set = (sel, text) => document.querySelectorAll(sel).forEach((el) => (el.textContent = text));
+  set('.foot-contact-text', site.contact);
+  set('.foot-mail', ` (${site.mail})`);
+  set('[data-testid="foot-credits"]', site.foot);
+  set('.foot-ext', ` (${site.ext})`);
 }
 
 export function renderChrome() {

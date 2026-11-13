@@ -432,7 +432,10 @@ export default {
     nav: 'Меню сайту',
     map: 'Мапа',
     about: 'Про проект',
-    foot: 'Mnemozoo · оригінальні персонажі й тексти; назви статусів за реєстром IANA.',
+    foot: 'Оригінальні персонажі й тексти; назви статусів за реєстром IANA.',
+    contact: 'Баг? Відгук?', // footer mail link (RSP-139, RSP-147)
+    mail: 'електронна пошта', // screen-reader note after the footer mail link
+    ext: 'зовнішній сайт', // screen-reader note after LinkedIn and GitHub in the footer
   },
   // Головна сторінка /<lang>/ (RSP-156).
   notFound: {

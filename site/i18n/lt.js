@@ -432,7 +432,10 @@ export default {
     nav: 'Svetainės meniu',
     map: 'Žemėlapis',
     about: 'Apie projektą',
-    foot: 'Mnemozoo · originalūs personažai ir tekstai; būsenų pavadinimai pagal IANA registrą.',
+    foot: 'Originalūs personažai ir tekstai; būsenų pavadinimai pagal IANA registrą.',
+    contact: 'Klaida? Atsiliepimas?', // footer mail link (RSP-139, RSP-147)
+    mail: 'el. paštas', // screen-reader note after the footer mail link
+    ext: 'išorinė svetainė', // screen-reader note after LinkedIn and GitHub in the footer
   },
   // Pagrindinis puslapis /<lang>/ (RSP-156).
   notFound: {

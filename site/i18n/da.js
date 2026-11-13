@@ -429,7 +429,10 @@ export default {
     nav: 'Sidemenu',
     map: 'Kort',
     about: 'Om projektet',
-    foot: 'Mnemozoo · originale figurer og tekster; statusnavne fra IANA-registret.',
+    foot: 'Originale figurer og tekster; statusnavne fra IANA-registret.',
+    contact: 'Fejl? Feedback?', // footer mail link (RSP-139, RSP-147)
+    mail: 'e-mail', // screen-reader note after the footer mail link
+    ext: 'ekstern side', // screen-reader note after LinkedIn and GitHub in the footer
   },
   // Forside /<lang>/ (RSP-156).
   notFound: {

@@ -39,6 +39,8 @@ export const TID = {
   siteFooter: 'site-footer',
   navMap: 'nav-map',
   navAbout: 'nav-about',
+  // Footer links and note (RSP-139)
+  foot: (id: 'map' | 'about' | 'linkedin' | 'github' | 'contact' | 'security' | 'copy' | 'credits') => `foot-${id}`,
 
   // Home page /<lang>/ (RSP-156): glossary terms home page, hero, zoo map, enclosure, pavilion, about
   homePage: 'home-page',
