@@ -433,10 +433,39 @@ export default {
     map: 'Map',
     about: 'About the project',
     foot: 'Original characters and copy; status names from the IANA registry.',
+    news: "What's new", // footer and "How to use" link to the What's new page (RSP-145)
     contact: 'Bug? Feedback?', // footer mail link (RSP-139, RSP-147)
     mail: 'email', // screen-reader note after the footer mail link
     page: 'Page', // first line of the feedback mail: "Page: <address>"
     ext: 'external site', // screen-reader note after LinkedIn and GitHub in the footer
+  },
+  // "What's new" page /<lang>/news/ (RSP-145): page texts; entries in the order of data/news.js, items in the
+  // order of its kinds. Plain language, what the visitor gets, no ticket numbers.
+  news: {
+    title: "What's new · Mnemozoo",
+    h1: "What's new",
+    lead: 'What changed on Mnemozoo, newest first.',
+    kinds: { new: 'New', improved: 'Improved', fixed: 'Fixed' },
+    entries: {
+      'footer-news': {
+        title: 'Footer and news',
+        line: 'Every page now ends with the same footer, and this page tells you what changed.',
+        items: [
+          '“Bug? Feedback?” in the footer opens an email with the page address already filled in.',
+          'This “What’s new” page, in every language of the site.',
+          'LinkedIn and GitHub moved to the footer, on every page.',
+        ],
+      },
+      visitors: {
+        title: 'Visitors',
+        line: 'The site opens in your language every time and is faster on a phone.',
+        items: [
+          'A link without a language opens the page in the language you picked last time.',
+          'The first screen shows up sooner on phones.',
+          'Visits are counted without cookies and without tracking you across sites.',
+        ],
+      },
+    },
   },
   // Home page /<lang>/ (RSP-156). Numbers come from site/data, so they stay true when cards or pairs are added.
   // Page for a missing address (RSP-148): /<lang>/404.html, served by Netlify with status 404.
@@ -449,10 +478,10 @@ export default {
   home: {
     title: 'Mnemozoo: tech zoo for your memory',
     description:
-      'Original creatures for HTTP status codes: a card for every code, practice and traps with look-alike codes. Six languages.',
+      'Original creatures for HTTP status codes: a card for every code, practice and traps with look-alike codes. In every language of the site.',
     kicker: 'IT memo zoo',
     h1: 'Get the response before you even ask',
-    lead: 'Original creatures for the HTTP status codes you meet every day in the browser, logs and console. A card, practice, traps with look-alike codes. Six languages.',
+    lead: 'Original creatures for the HTTP status codes you meet every day in the browser, logs and console. A card, practice, traps with look-alike codes. In every language of the site.',
     mapTitle: 'Zoo map',
     httpSign: 'Wild animals · open', // zone sign with its status (RSP-170)
     httpName: 'HTTP status codes',

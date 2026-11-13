@@ -433,10 +433,39 @@ export default {
     map: 'Žemėlapis',
     about: 'Apie projektą',
     foot: 'Originalūs personažai ir tekstai; būsenų pavadinimai pagal IANA registrą.',
+    news: 'Kas naujo', // footer and "How to use" link to the What's new page (RSP-145)
     contact: 'Klaida? Atsiliepimas?', // footer mail link (RSP-139, RSP-147)
     mail: 'el. paštas', // screen-reader note after the footer mail link
     page: 'Puslapis', // first line of the feedback mail: "Puslapis: <address>"
     ext: 'išorinė svetainė', // screen-reader note after LinkedIn and GitHub in the footer
+  },
+  // "What's new" page /<lang>/news/ (RSP-145): page texts; entries in the order of data/news.js, items in the
+  // order of its kinds. Plain language, what the visitor gets, no ticket numbers.
+  news: {
+    title: 'Kas naujo · Mnemozoo',
+    h1: 'Kas naujo',
+    lead: 'Kas pasikeitė Mnemozoo, naujausi viršuje.',
+    kinds: { new: 'Nauja', improved: 'Patobulinta', fixed: 'Ištaisyta' },
+    entries: {
+      'footer-news': {
+        title: 'Poraštė ir naujienos',
+        line: 'Dabar kiekvienas puslapis baigiasi ta pačia porašte, o šis puslapis pasakoja, kas pasikeitė.',
+        items: [
+          '„Klaida? Atsiliepimas?“ poraštėje atidaro laišką su jau įrašytu puslapio adresu.',
+          'Šis puslapis „Kas naujo“ visomis svetainės kalbomis.',
+          'LinkedIn ir GitHub dabar yra poraštėje kiekviename puslapyje.',
+        ],
+      },
+      visitors: {
+        title: 'Lankytojai',
+        line: 'Svetainė kaskart atsidaro jūsų kalba ir telefone veikia greičiau.',
+        items: [
+          'Nuoroda be kalbos atidaro puslapį ta kalba, kurią pasirinkote paskutinį kartą.',
+          'Pirmasis ekranas telefone pasirodo greičiau.',
+          'Apsilankymai skaičiuojami be slapukų ir be jūsų sekimo kitose svetainėse.',
+        ],
+      },
+    },
   },
   // Pagrindinis puslapis /<lang>/ (RSP-156).
   notFound: {
@@ -448,10 +477,10 @@ export default {
   home: {
     title: 'Mnemozoo: technologijų zoologijos sodas tavo atminčiai',
     description:
-      'Originalūs padarai HTTP būsenos kodams: kortelė kiekvienam kodui, treniruotė ir spąstai su panašiais kodais. Šešios kalbos.',
+      'Originalūs padarai HTTP būsenos kodams: kortelė kiekvienam kodui, treniruotė ir spąstai su panašiais kodais. Visomis svetainės kalbomis.',
     kicker: 'IT memo zoo',
     h1: 'Gauk atsakymą dar prieš klausimą',
-    lead: 'Originalūs padarai HTTP būsenos kodams, kuriuos kasdien sutinki naršyklėje, žurnaluose ir konsolėje. Kortelė, treniruotė, spąstai su panašiais kodais. Šešios kalbos.',
+    lead: 'Originalūs padarai HTTP būsenos kodams, kuriuos kasdien sutinki naršyklėje, žurnaluose ir konsolėje. Kortelė, treniruotė, spąstai su panašiais kodais. Visomis svetainės kalbomis.',
     mapTitle: 'Zoologijos sodo žemėlapis',
     httpSign: 'Laukiniai gyvūnai · atidaryta', // zone sign with its status (RSP-170)
     httpName: 'HTTP būsenos kodai',

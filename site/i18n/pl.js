@@ -433,10 +433,39 @@ export default {
     map: 'Mapa',
     about: 'O projekcie',
     foot: 'Oryginalne postacie i teksty; nazwy statusów według rejestru IANA.',
+    news: 'Co nowego', // footer and "How to use" link to the What's new page (RSP-145)
     contact: 'Błąd? Opinia?', // footer mail link (RSP-139, RSP-147)
     mail: 'e-mail', // screen-reader note after the footer mail link
     page: 'Strona', // first line of the feedback mail: "Strona: <address>"
     ext: 'strona zewnętrzna', // screen-reader note after LinkedIn and GitHub in the footer
+  },
+  // "What's new" page /<lang>/news/ (RSP-145): page texts; entries in the order of data/news.js, items in the
+  // order of its kinds. Plain language, what the visitor gets, no ticket numbers.
+  news: {
+    title: 'Co nowego · Mnemozoo',
+    h1: 'Co nowego',
+    lead: 'Co się zmieniło w Mnemozoo, od najnowszych.',
+    kinds: { new: 'Nowe', improved: 'Ulepszone', fixed: 'Naprawione' },
+    entries: {
+      'footer-news': {
+        title: 'Stopka i nowości',
+        line: 'Każda strona kończy się teraz tą samą stopką, a ta strona mówi, co się zmieniło.',
+        items: [
+          '„Błąd? Opinia?” w stopce otwiera e-mail z już wpisanym adresem strony.',
+          'Ta strona „Co nowego” we wszystkich językach strony.',
+          'LinkedIn i GitHub są teraz w stopce na każdej stronie.',
+        ],
+      },
+      visitors: {
+        title: 'Odwiedzający',
+        line: 'Strona za każdym razem otwiera się w Twoim języku i działa szybciej na telefonie.',
+        items: [
+          'Link bez języka otwiera stronę w języku, który wybrano ostatnio.',
+          'Pierwszy ekran pojawia się szybciej na telefonie.',
+          'Wizyty są liczone bez plików cookie i bez śledzenia Cię na innych stronach.',
+        ],
+      },
+    },
   },
   // Strona główna /<lang>/ (RSP-156).
   notFound: {
@@ -448,10 +477,10 @@ export default {
   home: {
     title: 'Mnemozoo: techniczne zoo dla twojej pamięci',
     description:
-      'Oryginalne stworki dla kodów statusu HTTP: karta każdego kodu, trening i pułapki z podobnymi kodami. Sześć języków.',
+      'Oryginalne stworki dla kodów statusu HTTP: karta każdego kodu, trening i pułapki z podobnymi kodami. We wszystkich językach strony.',
     kicker: 'IT memo zoo',
     h1: 'Otrzymaj odpowiedź, zanim w ogóle zapytasz',
-    lead: 'Oryginalne stworki dla kodów statusu HTTP, które spotykasz codziennie w przeglądarce, logach i konsoli. Karta, trening, pułapki z podobnymi kodami. Sześć języków.',
+    lead: 'Oryginalne stworki dla kodów statusu HTTP, które spotykasz codziennie w przeglądarce, logach i konsoli. Karta, trening, pułapki z podobnymi kodami. We wszystkich językach strony.',
     mapTitle: 'Mapa zoo',
     httpSign: 'Dzikie zwierzęta · otwarte', // zone sign with its status (RSP-170)
     httpName: 'Kody statusu HTTP',
