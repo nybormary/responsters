@@ -435,6 +435,7 @@ export default {
     foot: 'Original characters and copy; status names from the IANA registry.',
     contact: 'Bug? Feedback?', // footer mail link (RSP-139, RSP-147)
     mail: 'email', // screen-reader note after the footer mail link
+    page: 'Page', // first line of the feedback mail: "Page: <address>"
     ext: 'external site', // screen-reader note after LinkedIn and GitHub in the footer
   },
   // Home page /<lang>/ (RSP-156). Numbers come from site/data, so they stay true when cards or pairs are added.

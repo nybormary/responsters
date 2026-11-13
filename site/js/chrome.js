@@ -2,7 +2,7 @@
 // Practice mode cards)
 // is redrawn in the current language and state.
 import { state, t, tx, LANGS, LANG_NAMES } from './state.js';
-import { $ } from './util.js';
+import { $, contactHref, contactOnClick } from './util.js';
 import { MODES } from './modes.js';
 import { GLOBE, CHEVRON, CHECK } from './icons.js';
 import { homeUrl } from './render.js';
@@ -62,6 +62,12 @@ function renderSite() {
   }
   const set = (sel, text) => document.querySelectorAll(sel).forEach((el) => (el.textContent = text));
   set('.foot-contact-text', site.contact);
+  const mail = document.querySelector('[data-testid="foot-contact"]');
+  if (mail instanceof HTMLAnchorElement) {
+    mail.dataset.subject = `Mnemozoo: ${site.contact}`;
+    mail.dataset.page = site.page;
+    mail.href = contactHref(mail.dataset.subject, site.page, location.href);
+  }
   set('.foot-mail', ` (${site.mail})`);
   set('[data-testid="foot-credits"]', site.foot);
   set('.foot-ext', ` (${site.ext})`);
@@ -144,3 +150,6 @@ export function langKeys(e) {
     langClose();
   }
 }
+
+// The footer mail link carries the address actually open (RSP-139): the app's tab and language at the moment of the click.
+document.addEventListener('click', contactOnClick);
