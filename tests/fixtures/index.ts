@@ -39,7 +39,7 @@ import { NotFoundPage } from './pages/not-found-page';
 import { Axe } from './pages/axe';
 import { Network } from './pages/network';
 import { Preloads } from './pages/preloads';
-import { D } from '../../site/data/cards.js';
+import { D } from '../../site/data/http/cards.js';
 
 // What the site keeps in localStorage (site/js/store.js adds the prefix "httpon." to every key).
 export type Seed = {

@@ -1,8 +1,8 @@
 // Pure markup for a card and its links (RSP-90): no DOM and no app state, so the app in the browser
 // and the page build (scripts/build-pages.mjs) make the same HTML from the same data.
-import { CLS, clsSym } from '../data/classes.js';
-import { BY } from '../data/cards.js';
-import { TOOLS, REF, MORE } from '../data/links.js';
+import { CLS, clsSym } from '../data/http/classes.js';
+import { BY } from '../data/http/cards.js';
+import { TOOLS, REF, MORE } from '../data/http/links.js';
 import { cls, art } from './util.js';
 import { GLOBE, CHEVRON, CHECK } from './icons.js';
 

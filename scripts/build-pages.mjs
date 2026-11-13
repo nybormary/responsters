@@ -11,9 +11,9 @@
 import { cp, rm, mkdir, writeFile, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { D, BY } from '../site/data/cards.js';
-import { CLS } from '../site/data/classes.js';
-import { CONF, PAIRS } from '../site/data/traps.js';
+import { D, BY } from '../site/data/http/cards.js';
+import { CLS } from '../site/data/http/classes.js';
+import { CONF, PAIRS } from '../site/data/http/traps.js';
 import { LOCALES, LANG_NAMES } from '../site/i18n/index.js';
 import en from '../site/i18n/en.js';
 import { fill } from '../site/i18n/fill.js';
@@ -102,7 +102,7 @@ const firstScreenFonts = (type, lang, code) =>
 
 /**
  * Module preloads (RSP-188): every module the page's entry script imports, at any depth, so they all start with
- * the HTML instead of one import level at a time (app.js → chrome.js → render.js → data/links.js). Read from the
+ * the HTML instead of one import level at a time (app.js → chrome.js → render.js → data/http/links.js). Read from the
  * import statements, so a new import is preloaded without touching this file. The entry script itself is already
  * in the HTML (<script type="module" src>).
  */

@@ -315,7 +315,7 @@ export default {
       'Після повідомлення про таймаут натисни «Повторити» → операція запускається знову, і фільтри чи дані не треба вводити заново.',
     ],
   },
-  // Traps: title, rule and the situations to sort, in the order of data/traps.js (the answers live there).
+  // Traps: title, rule and the situations to sort, in the order of data/http/traps.js (the answers live there).
   traps: {
     '401-403': {
       title: 'Whoowl чи Nopelican?',
@@ -474,6 +474,6 @@ export default {
     aboutTitle: 'Про проект',
     aboutText: 'Незалежний QA-проект Maryna Bortnyk.',
   },
-  // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
+  // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: вкладка Network', 'Firefox: Edit and Resend', 'Postman: як надіслати запит'],
 };

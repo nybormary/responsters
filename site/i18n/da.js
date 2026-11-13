@@ -312,7 +312,7 @@ export default {
       'Efter timeout-beskeden, tryk på Prøv igen → operationen starter igen uden at du skal indtaste filtre eller data igen.',
     ],
   },
-  // Traps: title, rule and the situations to sort, in the order of data/traps.js (the answers live there).
+  // Traps: title, rule and the situations to sort, in the order of data/http/traps.js (the answers live there).
   traps: {
     '401-403': {
       title: 'Whoowl eller Nopelican?',
@@ -471,6 +471,6 @@ export default {
     aboutTitle: 'Om projektet',
     aboutText: 'Et selvstændigt QA-projekt af Maryna Bortnyk.',
   },
-  // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
+  // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network-panelet', 'Firefox: Edit and Resend', 'Postman: send en forespørgsel'],
 };

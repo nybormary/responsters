@@ -315,7 +315,7 @@ export default {
       'Po timeout pranešimo paspausk „Bandyti dar kartą“ → operacija prasideda iš naujo nereikalaujant iš naujo įvesti filtrų ar duomenų.',
     ],
   },
-  // Traps: title, rule and the situations to sort, in the order of data/traps.js (the answers live there).
+  // Traps: title, rule and the situations to sort, in the order of data/http/traps.js (the answers live there).
   traps: {
     '401-403': {
       title: 'Whoowl ar Nopelican?',
@@ -474,6 +474,6 @@ export default {
     aboutTitle: 'Apie projektą',
     aboutText: 'Nepriklausomas Marynos Bortnyk QA projektas.',
   },
-  // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
+  // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network skydelis', 'Firefox: Edit and Resend', 'Postman: užklausos siuntimas'],
 };

@@ -315,7 +315,7 @@ export default {
       'After the timeout message, press Retry → the operation starts again without re-entering filters or data.',
     ],
   },
-  // Traps: title, rule and the situations to sort, in the order of data/traps.js (the answers live there).
+  // Traps: title, rule and the situations to sort, in the order of data/http/traps.js (the answers live there).
   traps: {
     '401-403': {
       title: 'Whoowl or Nopelican?',
@@ -475,6 +475,6 @@ export default {
     aboutTitle: 'About the project',
     aboutText: 'An independent QA project by Maryna Bortnyk.',
   },
-  // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
+  // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: the Network panel', 'Firefox: Edit and Resend', 'Postman: send a request'],
 };

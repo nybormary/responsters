@@ -1,6 +1,6 @@
 // Traps view: confusable pairs with their rule and situation drills.
-import { BY } from '../data/cards.js';
-import { PAIRS } from '../data/traps.js';
+import { BY } from '../data/http/cards.js';
+import { PAIRS } from '../data/http/traps.js';
 import { tx } from './state.js';
 import { $ } from './util.js';
 import { renderCard } from './card.js';

@@ -312,7 +312,7 @@ export default {
       'Pärast timeout-teadet vajuta „Proovi uuesti“ → toiming algab uuesti ilma filtreid või andmeid uuesti sisestamata.',
     ],
   },
-  // Traps: title, rule and the situations to sort, in the order of data/traps.js (the answers live there).
+  // Traps: title, rule and the situations to sort, in the order of data/http/traps.js (the answers live there).
   traps: {
     '401-403': {
       title: 'Whoowl või Nopelican?',
@@ -471,6 +471,6 @@ export default {
     aboutTitle: 'Projektist',
     aboutText: 'Maryna Bortnyki sõltumatu QA-projekt.',
   },
-  // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
+  // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network paneel', 'Firefox: Edit and Resend', 'Postman: päringu saatmine'],
 };

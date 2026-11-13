@@ -315,7 +315,7 @@ export default {
       'Po komunikacie o timeoucie naciśnij „Spróbuj ponownie” → operacja startuje od nowa bez ponownego wpisywania filtrów czy danych.',
     ],
   },
-  // Traps: title, rule and the situations to sort, in the order of data/traps.js (the answers live there).
+  // Traps: title, rule and the situations to sort, in the order of data/http/traps.js (the answers live there).
   traps: {
     '401-403': {
       title: 'Whoowl czy Nopelican?',
@@ -474,6 +474,6 @@ export default {
     aboutTitle: 'O projekcie',
     aboutText: 'Niezależny projekt QA Maryny Bortnyk.',
   },
-  // "Tools and Read more": labels for data/links.js TOOLS, in the same order.
+  // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: panel Network', 'Firefox: Edit and Resend', 'Postman: wysyłanie żądania'],
 };
