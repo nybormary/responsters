@@ -435,7 +435,6 @@ export default {
     foot: 'Оригінальні персонажі й тексти; назви статусів за реєстром IANA.',
     contact: 'Баг? Відгук?', // footer mail link (RSP-139, RSP-147)
     mail: 'електронна пошта', // screen-reader note after the footer mail link
-    page: 'Сторінка', // first line of the feedback mail: "Сторінка: <address>"
     ext: 'зовнішній сайт', // screen-reader note after LinkedIn and GitHub in the footer
   },
   // Головна сторінка /<lang>/ (RSP-156).

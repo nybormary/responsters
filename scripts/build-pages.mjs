@@ -258,7 +258,7 @@ function creaturePage(lang, tx, d) {
           </div>
         </article>
       </main>
-      ${siteFooter(lang, tx.site, COPY, `${ORIGIN}${creatureUrl(lang, c)}`)}
+      ${siteFooter(lang, tx.site, COPY)}
     </div>
   </body>
 </html>
@@ -381,7 +381,7 @@ function homePage(lang, tx) {
         </div>
       </section>
     </main>
-    ${siteFooter(lang, tx.site, COPY, `${ORIGIN}${homeUrl(lang)}`)}
+    ${siteFooter(lang, tx.site, COPY)}
     </div>
   </body>
 </html>
@@ -444,7 +444,7 @@ function appPage(lang, tx) {
     ],
     // RSP-155: the same site header and footer as on every page; in the header, the app's own JS language menu.
     ['<!-- build: site header -->', siteHeader(lang, tx.site, APP_LANG_MENU)],
-    ['<!-- build: site footer -->', siteFooter(lang, tx.site, COPY, `${ORIGIN}${appUrl(lang)}`)],
+    ['<!-- build: site footer -->', siteFooter(lang, tx.site, COPY)],
     ['<!-- build: analytics -->', BEACON],
   ];
   return fills.reduce((html, [from, to]) => {

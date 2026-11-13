@@ -435,7 +435,6 @@ export default {
     foot: 'Oryginalne postacie i teksty; nazwy statusów według rejestru IANA.',
     contact: 'Błąd? Opinia?', // footer mail link (RSP-139, RSP-147)
     mail: 'e-mail', // screen-reader note after the footer mail link
-    page: 'Strona', // first line of the feedback mail: "Strona: <address>"
     ext: 'strona zewnętrzna', // screen-reader note after LinkedIn and GitHub in the footer
   },
   // Strona główna /<lang>/ (RSP-156).
