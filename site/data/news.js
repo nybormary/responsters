@@ -5,7 +5,7 @@
 // news.entries.<id>: what the change brings the visitor, in everyday words — not how it works ("the Collection page
 // is now much faster", not "modulepreloads"); no ticket numbers. Tone set by Maryna, 2026-11-13.
 export const NEWS = [
-  { id: 'footer-news', date: '2026-11', kinds: ['new', 'new', 'improved'] },
+  { id: 'footer-news', date: '2026-11-13', kinds: ['new', 'new', 'improved'] },
   { id: 'visitors', date: '2026-11-12', kinds: ['improved', 'improved', 'new'] },
 ];
 
