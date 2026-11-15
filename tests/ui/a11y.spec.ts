@@ -127,9 +127,9 @@ test(
 // ── 7f9907fe ────────────────────────────────────────────────────────────────────────────────────
 
 test(
-  'Card page, home page and 404 page pass axe, light and dark theme @T7f9907fe',
+  'Card page, home page, "What\'s new" and 404 page pass axe, light and dark theme @T7f9907fe',
   { tag: [TAG.a11y] },
-  async ({ cardPage, homePage, notFoundPage, axe, lang }) => {
+  async ({ page, cardPage, homePage, notFoundPage, axe, lang }) => {
     for (const theme of THEMES) {
       await test.step(`${theme}: card page`, async () => {
         await axe.theme(theme);
@@ -139,6 +139,10 @@ test(
       await test.step(`${theme}: home page`, async () => {
         await homePage.open(lang);
         await axe.expectNoViolations(`${theme}, home page`);
+      });
+      await test.step(`${theme}: "What's new" page (RSP-145)`, async () => {
+        await page.goto(`/${lang}/news/`);
+        await axe.expectNoViolations(`${theme}, What's new`);
       });
       await test.step(`${theme}: 404 page`, async () => {
         await notFoundPage.open(`/${lang}/no-such-page`);

@@ -31,12 +31,16 @@ export class SiteChrome {
   get langButton(): Locator {
     return this.header.getByTestId(TID.langButton);
   }
-  /** The footer's note: the first child, the text before the security.txt link. */
+  /** The footer's credits line (RSP-139: the second row, after © years Mnemozoo). */
   get footerNote(): Locator {
-    return this.footer.locator(':scope > span');
+    return this.footer.getByTestId(TID.foot('credits'));
   }
   get securityLink(): Locator {
-    return this.footer.getByRole('link', { name: 'security.txt' });
+    return this.footer.getByTestId(TID.foot('security'));
+  }
+  /** A footer link or text by its id (RSP-139). */
+  foot(id: Parameters<typeof TID.foot>[0]): Locator {
+    return this.footer.getByTestId(TID.foot(id));
   }
 
   /** Landmarks of the whole page. */

@@ -86,11 +86,9 @@
   font-weight: 700;
   text-underline-offset: 3px;
 }
+/* Site footer (RSP-139): a row of links, then © and the credits line. On phones the links go into two columns:
+   bigger tap targets, and they don't crowd at 130–150 % text. */
 .site-footer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 8px 16px;
   margin-top: 56px;
   padding-top: 20px;
   border-top: 1.5px solid var(--line);
@@ -99,6 +97,39 @@
 }
 .site-footer a {
   color: var(--muted);
+}
+.foot-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+}
+.foot-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 24px;
+}
+.ext-icon {
+  width: 0.9em;
+  height: 0.9em;
+  flex: none;
+}
+.foot-note {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 16px;
+  margin: 0;
+}
+@media (min-width: 600px) {
+  .foot-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+  }
 }
 
 /* Page for a missing address (RSP-148): text and the 404 creature card side by side, stacked on phones. */

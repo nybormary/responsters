@@ -14,6 +14,7 @@ import path from 'node:path';
 import { D, BY } from '../site/data/http/cards.js';
 import { CLS } from '../site/data/http/classes.js';
 import { CONF, PAIRS } from '../site/data/http/traps.js';
+import { NEWS } from '../site/data/news.js';
 import { LOCALES, LANG_NAMES } from '../site/i18n/index.js';
 import en from '../site/i18n/en.js';
 import { fill } from '../site/i18n/fill.js';
@@ -32,6 +33,10 @@ import { cls, art } from '../site/js/util.js';
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const SITE = path.join(ROOT, 'site');
 const DIST = path.join(ROOT, 'dist');
+// Footer copyright (RSP-139): the first year, and the build year once it's later: "© 2026", then "© 2026–2027".
+const FIRST_YEAR = 2026;
+const BUILD_YEAR = new Date().getFullYear();
+const COPY = `© ${BUILD_YEAR > FIRST_YEAR ? `${FIRST_YEAR}–${BUILD_YEAR}` : FIRST_YEAR} Mnemozoo`;
 const ORIGIN = 'https://mnemozoo.com'; // canonical and hreflang links always name production
 const LANGS = Object.keys(LOCALES);
 // The app template (RSP-138): written per language, never served as is.
@@ -67,6 +72,7 @@ const PAGE_FONTS = [
 ];
 // The app before its script: the site header and footer, and the rubric name "Responsters".
 const APP_FONTS = ['atkinson latin 400', 'atkinson latin 700', 'bitter latin 800'];
+const NEWS_FONTS = ['atkinson latin 400', 'atkinson latin 700', 'bitter latin 700', 'bitter latin 800'];
 const ATKINSON_EXT = ['atkinson latin-ext 400', 'atkinson latin-ext 700']; // ą ę ł ś ž ė ų … in body text (pl, lt)
 const FIRST_SCREEN_FONTS = {
   home: {
@@ -84,6 +90,12 @@ const FIRST_SCREEN_FONTS = {
     pl: [...PAGE_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 800'],
     lt: [...PAGE_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 800'],
   },
+  // "What's new" (RSP-145): no codes (no JetBrains Mono); headings in Bitter 800 (h1) and 700 (entries).
+  news: {
+    uk: [...NEWS_FONTS, 'bitter cyrillic 700', 'bitter cyrillic 800'],
+    pl: [...NEWS_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 700'],
+    lt: [...NEWS_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 700'],
+  },
   'not-found': {
     uk: [...PAGE_FONTS, 'bitter cyrillic 800'],
     pl: [...PAGE_FONTS, ...ATKINSON_EXT],
@@ -96,7 +108,7 @@ const CARD_FONTS = { et: { 503: ['atkinson latin-ext 400'] } };
 // Every page type × language not listed above uses its type's common set.
 const firstScreenFonts = (type, lang, code) =>
   [
-    ...(FIRST_SCREEN_FONTS[type][lang] || (type === 'app' ? APP_FONTS : PAGE_FONTS)),
+    ...(FIRST_SCREEN_FONTS[type][lang] || { app: APP_FONTS, news: NEWS_FONTS }[type] || PAGE_FONTS),
     ...((type === 'creature' && CARD_FONTS[lang]?.[code]) || []),
   ].map(fontFile);
 
@@ -146,6 +158,7 @@ const STYLES = {
   creature: ['fonts', 'base', 'site', 'card', 'detail'],
   home: ['fonts', 'base', 'site', 'home'],
   'not-found': ['fonts', 'base', 'site', 'card'],
+  news: ['fonts', 'base', 'site', 'news'],
 };
 const styles = (type) => `<link rel="stylesheet" href="/css/page-${type}.css" />`;
 // WebSite structured data on every home page (RSP-156 AC17): Google shows the site name "Mnemozoo" above the URL
@@ -178,6 +191,8 @@ const BEACON = `<script data-analytics="cloudflare">
 const appUrl = (lang) => (lang ? `/${lang}` : '') + '/http/';
 /** Path of the home page; the language-less one is the site root: homeOrRoot('uk') → '/uk/', homeOrRoot(null) → '/'. */
 const homeOrRoot = (lang) => (lang ? homeUrl(lang) : '/');
+/** Path of the "What's new" page (RSP-145), e.g. newsUrl('uk') → '/uk/news/'; newsUrl(null) → '/news/'. */
+const newsUrl = (lang) => (lang ? `/${lang}` : '') + '/news/';
 /** Path of a creature page, e.g. creatureUrl('uk', 401) → '/uk/http/401/'. */
 const creatureUrl = (lang, c) => `${appUrl(lang)}${c}/`;
 
@@ -254,7 +269,7 @@ function creaturePage(lang, tx, d) {
           </div>
         </article>
       </main>
-      ${siteFooter(tx.site)}
+      ${siteFooter(lang, tx.site, COPY, `${ORIGIN}${creatureUrl(lang, c)}`)}
     </div>
   </body>
 </html>
@@ -374,14 +389,72 @@ function homePage(lang, tx) {
         <div class="home-author" data-testid="home-about">
           <h2>${esc(h.aboutTitle)}</h2>
           <p>${esc(h.aboutText)}</p>
-          <p class="home-links">
-            <a href="https://github.com/nybormary/responsters">GitHub</a>
-            <a href="https://www.linkedin.com/in/maryna-bortnyk/">LinkedIn</a>
-          </p>
         </div>
       </section>
     </main>
-    ${siteFooter(tx.site)}
+    ${siteFooter(lang, tx.site, COPY, `${ORIGIN}${homeUrl(lang)}`)}
+    </div>
+  </body>
+</html>
+`;
+}
+
+/**
+ * "What's new" page (RSP-145), one per language: release notes for visitors, newest first (data/news.js). An entry's
+ * date is a month until the release day ('2026-11' → "November 2026"), then a day; formatted in the page language.
+ */
+function newsPage(lang, tx) {
+  const n = tx.news;
+  const date = (d) => {
+    const [y, m, day] = d.split('-').map(Number);
+    const opts = day ? { day: 'numeric', month: 'long', year: 'numeric' } : { month: 'long', year: 'numeric' };
+    return new Intl.DateTimeFormat(lang, { ...opts, timeZone: 'UTC' }).format(new Date(Date.UTC(y, m - 1, day || 1)));
+  };
+  const entries = NEWS.map((e) => {
+    const t = n.entries[e.id];
+    const items = t.items
+      .map(
+        (text, i) =>
+          `<li><span class="news-kind news-kind-${e.kinds[i]}">${esc(n.kinds[e.kinds[i]])}</span>${esc(text)}</li>`,
+      )
+      .join('\n              ');
+    return `<li class="news-entry" data-testid="news-entry-${e.id}">
+            <time class="news-date" datetime="${e.date}">${esc(date(e.date))}</time>
+            <div>
+              <h2>${esc(t.title)}</h2>
+              <p>${esc(t.line)}</p>
+              <ul class="news-items">
+              ${items}
+              </ul>
+            </div>
+          </li>`;
+  }).join('\n          ');
+  return `<!doctype html>
+<html lang="${lang}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    ${BEACON}
+    <title>${esc(n.title)}</title>
+    <meta name="description" content="${esc(n.lead)}" />
+    <link rel="canonical" href="${ORIGIN}${newsUrl(lang)}" />
+    ${alternates(newsUrl)}
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    ${styles('news')}
+    ${preloads('news', lang)}
+    <script type="module" src="/js/site.js"></script>
+  </head>
+  <body>
+    <div class="wrap">
+    ${siteHeader(lang, tx.site, langMenu(lang, newsUrl, LANG_NAMES, tx.ui.lang))}
+    <main class="news" data-testid="news-page">
+      <h1>${esc(n.h1)}</h1>
+      <p class="news-lead">${esc(n.lead)}</p>
+      <ol class="news-list" role="list">
+          ${entries}
+      </ol>
+    </main>
+    ${siteFooter(lang, tx.site, COPY, `${ORIGIN}${newsUrl(lang)}`)}
     </div>
   </body>
 </html>
@@ -422,7 +495,7 @@ function notFoundPage(lang, tx) {
       </div>
       <div class="not-found-card"><div class="card cf-static" data-testid="card-404">${cardBody(d, tx.cards[404].line, tx.cards[404].art)}</div></div>
     </main>
-    ${siteFooter(tx.site)}
+    ${siteFooter(lang, tx.site, COPY)}
     </div>
   </body>
 </html>
@@ -444,7 +517,7 @@ function appPage(lang, tx) {
     ],
     // RSP-155: the same site header and footer as on every page; in the header, the app's own JS language menu.
     ['<!-- build: site header -->', siteHeader(lang, tx.site, APP_LANG_MENU)],
-    ['<!-- build: site footer -->', siteFooter(tx.site)],
+    ['<!-- build: site footer -->', siteFooter(lang, tx.site, COPY, `${ORIGIN}${appUrl(lang)}`)],
     ['<!-- build: analytics -->', BEACON],
   ];
   return fills.reduce((html, [from, to]) => {
@@ -510,9 +583,9 @@ function redirects() {
   return `# Generated by scripts/build-pages.mjs (RSP-138, RSP-148, RSP-183): never edit dist/, change the build.\n${rules.join('\n')}\n`;
 }
 
-/** sitemap.xml: the home page, the app and every creature page in every language, each with its hreflang alternates. */
+/** sitemap.xml: the home page, the app, "What's new" and every creature page in every language, each with its hreflang alternates. */
 function sitemap(today) {
-  const groups = [homeOrRoot, appUrl].concat(D.map((d) => (l) => creatureUrl(l, d.c)));
+  const groups = [homeOrRoot, appUrl, newsUrl].concat(D.map((d) => (l) => creatureUrl(l, d.c)));
   const alt = (url) =>
     LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${ORIGIN}${url(l)}" />`)
       .concat(`    <xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}${url(null)}" />`)
@@ -595,18 +668,20 @@ async function build() {
     await writeFile(path.join(DIST, lang, '404.html'), notFoundPage(lang, tx));
     if (lang === 'en') await writeFile(path.join(DIST, '404.html'), notFoundPage(lang, tx)); // Netlify's default
     await page(appUrl(lang), appPage(lang, tx));
+    await page(newsUrl(lang), newsPage(lang, tx));
     for (const d of D) {
       await page(creatureUrl(lang, d.c), creaturePage(lang, tx, d));
       pages++;
     }
   }
-  for (const rest of [appUrl(null)].concat(D.map((d) => creatureUrl(null, d.c)))) await page(rest, chooserPage(rest));
+  for (const rest of [appUrl(null), newsUrl(null)].concat(D.map((d) => creatureUrl(null, d.c))))
+    await page(rest, chooserPage(rest));
   await page('/', chooserPage('/'));
   await writeFile(path.join(DIST, '_redirects'), redirects());
   await writeFile(path.join(DIST, 'sitemap.xml'), sitemap(new Date().toISOString().slice(0, 10)));
   await checkBeacons();
   console.log(
-    `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards), chooser pages, _redirects → dist/`,
+    `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${LANGS.length} news pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards), chooser pages, _redirects → dist/`,
   );
 }
 

@@ -4,13 +4,14 @@
 // itself, so a CSS, text or import change that the build's lists don't follow fails here, naming the files.
 import { test, expect, TAG, CARD_CODES, SCREENS, type Lang } from '../fixtures';
 
-/** The four page types in one language: home, the HTTP rubric, a random card page, the 404 page. */
+/** The page types in one language: home, the HTTP rubric, a random card page, "What's new" (RSP-145), the 404 page. */
 const pagesOf = (lang: Lang) => {
   const code = CARD_CODES[Math.floor(Math.random() * CARD_CODES.length)];
   return [
     { name: 'home', path: `/${lang}/` },
     { name: 'HTTP rubric', path: `/${lang}/http/` },
     { name: `card page ${code}`, path: `/${lang}/http/${code}/` },
+    { name: "What's new", path: `/${lang}/news/` },
     // A missing address shows this file (with status 404 on Netlify; a local run shows the English one, dist/404.html).
     { name: '404 page', path: `/${lang}/no-such-page/` },
   ];
