@@ -1,6 +1,7 @@
 // Page build (RSP-90, URL scheme RSP-138, home page RSP-156): copies site/ to dist/ and writes, per language,
-// the home page at /<lang>/, the app at /<lang>/http/ and one static page per creature at /<lang>/http/<code>/. Language-less URLs
-// (/, /http/, /http/<code>/) go to the visitor's language through small chooser pages at those paths (the same
+// the home page at /<lang>/, the app at /<lang>/http/, one static page per creature at /<lang>/http/<code>/ and one per
+// git card at /<lang>/git/<id>/ (RSP-199). Language-less URLs
+// (/, /http/, /http/<code>/, /git/<id>/) go to the visitor's language through small chooser pages at those paths (the same
 // file on Netlify and in a local run); no server-side language redirect (RSP-183).
 // Netlify runs the build before every deploy (netlify.toml) and publishes dist/.
 // Texts and data come from the same files the app uses (site/data, site/i18n, site/js/render.js),
@@ -15,6 +16,9 @@ import { D, BY } from '../site/data/http/cards.js';
 import { CLS } from '../site/data/http/classes.js';
 import { CONF, PAIRS } from '../site/data/http/traps.js';
 import { NEWS } from '../site/data/news.js';
+import { GIT, EGG } from '../site/data/git/cards.js';
+import { GROUPS } from '../site/data/git/groups.js';
+import { gitCardBody, gitMain, gitSide } from '../site/js/gitcard.js';
 import { LOCALES, LANG_NAMES } from '../site/i18n/index.js';
 import en from '../site/i18n/en.js';
 import { fill } from '../site/i18n/fill.js';
@@ -159,6 +163,7 @@ const STYLES = {
   home: ['fonts', 'base', 'site', 'home'],
   'not-found': ['fonts', 'base', 'site', 'card'],
   news: ['fonts', 'base', 'site', 'news'],
+  git: ['fonts', 'base', 'site', 'card', 'detail', 'git'],
 };
 const styles = (type) => `<link rel="stylesheet" href="/css/page-${type}.css" />`;
 // WebSite structured data on every home page (RSP-156 AC17): Google shows the site name "Mnemozoo" above the URL
@@ -195,6 +200,24 @@ const homeOrRoot = (lang) => (lang ? homeUrl(lang) : '/');
 const newsUrl = (lang) => (lang ? `/${lang}` : '') + '/news/';
 /** Path of a creature page, e.g. creatureUrl('uk', 401) → '/uk/http/401/'. */
 const creatureUrl = (lang, c) => `${appUrl(lang)}${c}/`;
+/** Path of the git rubric (the advent wall, RSP-195), e.g. gitHome('uk') → '/uk/git/'. */
+const gitHome = (lang) => (lang ? `/${lang}` : '') + '/git/';
+/** Path of a git card page, e.g. gitUrl('uk', 'stash') → '/uk/git/stash/'; gitUrl(null, 'stash') → '/git/stash/'. */
+const gitUrl = (lang, id) => `${gitHome(lang)}${id}/`;
+
+// Git card pages are hidden from search until their advent day (RSP-199 AC3, AC4 decided 2026-11-15): the build
+// compares each card's day with the build date (Copenhagen time). A day already reached → indexed and in the
+// sitemap; a later day → noindex, not in the sitemap. So the November deploy hides all 24, every December deploy
+// opens the days reached so far, and the first deploy in January opens all. BUILD_DATE=YYYY-MM-DD pins the date
+// (tests, a rebuild of an old state).
+const ADVENT_YEAR = 2026;
+const BUILD_DATE =
+  process.env.BUILD_DATE || new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Copenhagen' }).format(new Date());
+if (!/^\d{4}-\d{2}-\d{2}$/.test(BUILD_DATE)) throw new Error(`build-pages: BUILD_DATE=${BUILD_DATE} is not YYYY-MM-DD`);
+/** The group colour for the page's --cls accent (Новосілля has none yet, RSP-200). */
+const gitColourVar = (g) => GROUPS[g.group].c || 'var(--line)';
+/** True when the card's advent day has been reached on the build date. */
+const gitOpen = (g) => BUILD_DATE >= `${ADVENT_YEAR}-12-${String(g.day).padStart(2, '0')}`;
 
 /**
  * hreflang links of one page in every language. x-default names the language-less URL,
@@ -270,6 +293,59 @@ function creaturePage(lang, tx, d) {
         </article>
       </main>
       ${siteFooter(lang, tx.site, COPY, `${ORIGIN}${creatureUrl(lang, c)}`)}
+    </div>
+  </body>
+</html>
+`;
+}
+
+/** One git card page in one language (RSP-199): the HTTP card page layout with the git card and its sections. */
+function gitPage(lang, tx, g) {
+  const ui = tx.git.ui;
+  const t = tx.git.cards[g.id] || {};
+  const title = t.title ? `${g.name}: ${t.title}` : g.name;
+  const description = (t.does?.text || '').replace(/`/g, '');
+  const menu = langMenu(lang, (l) => gitUrl(l, g.id), LANG_NAMES, tx.ui.lang);
+  const back = `<a class="back" href="${gitHome(lang)}">← ${esc(ui.back)}</a>`;
+
+  return `<!doctype html>
+<html lang="${lang}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    ${BEACON}${gitOpen(g) ? '' : '\n    <meta name="robots" content="noindex" />'}
+    <title>${esc(title)} · Mnemozoo</title>${description ? `\n    <meta name="description" content="${esc(description)}" />` : ''}
+    <link rel="canonical" href="${ORIGIN}${gitUrl(lang, g.id)}" />
+    ${alternates((l) => gitUrl(l, g.id))}
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    ${styles('git')}
+    ${preloads('creature', lang)}
+    <script type="module" src="/js/site.js"></script>
+  </head>
+  <body>
+    <div class="wrap" id="top">
+      ${siteHeader(lang, tx.site, menu)}
+      <main class="page git-page" data-testid="git-card-page">
+        <a class="page-back" href="${gitHome(lang)}">← ${esc(ui.back)}</a>
+        <article class="sheet" style="--cls: ${gitColourVar(g)}">
+          <div class="in page-grid">
+            <h1 class="sr">${esc(title)}</h1>
+            <div class="page-card"><div class="card cf-static git${g.danger ? ' danger' : ''}">${gitCardBody(g, tx)}</div></div>
+            <div class="page-main">
+              ${gitMain(g, tx)}
+            </div>
+            <aside class="page-side">
+              ${gitSide(g, tx, (id) => gitUrl(lang, id))}
+            </aside>
+          </div>
+          <div class="page-bottom">
+            ${back}
+            <a class="back" href="#top">↑ ${esc(tx.ui.top)}</a>
+          </div>
+        </article>
+      </main>
+      ${siteFooter(lang, tx.site, COPY, `${ORIGIN}${gitUrl(lang, g.id)}`)}
     </div>
   </body>
 </html>
@@ -583,9 +659,14 @@ function redirects() {
   return `# Generated by scripts/build-pages.mjs (RSP-138, RSP-148, RSP-183): never edit dist/, change the build.\n${rules.join('\n')}\n`;
 }
 
-/** sitemap.xml: the home page, the app, "What's new" and every creature page in every language, each with its hreflang alternates. */
+/**
+ * sitemap.xml: the home page, the app, "What's new", every creature page and every git card page whose advent day
+ * has come (gitOpen, RSP-199) in every language, each with its hreflang alternates.
+ */
 function sitemap(today) {
-  const groups = [homeOrRoot, appUrl, newsUrl].concat(D.map((d) => (l) => creatureUrl(l, d.c)));
+  const groups = [homeOrRoot, appUrl, newsUrl]
+    .concat(D.map((d) => (l) => creatureUrl(l, d.c)))
+    .concat(GIT.filter(gitOpen).map((g) => (l) => gitUrl(l, g.id)));
   const alt = (url) =>
     LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${ORIGIN}${url(l)}" />`)
       .concat(`    <xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}${url(null)}" />`)
@@ -631,11 +712,13 @@ async function checkBeacons() {
     `${l}/404.html`,
     `${appUrl(l).slice(1)}index.html`,
     ...D.map((d) => `${creatureUrl(l, d.c).slice(1)}index.html`),
+    ...GIT.map((g) => `${gitUrl(l, g.id).slice(1)}index.html`),
   ]).concat('404.html');
   const choosers = [
     'index.html',
     `${appUrl(null).slice(1)}index.html`,
     ...D.map((d) => `${creatureUrl(null, d.c).slice(1)}index.html`),
+    ...GIT.map((g) => `${gitUrl(null, g.id).slice(1)}index.html`),
   ];
   for (const file of stay)
     if ((await count(file)) !== 1)
@@ -661,7 +744,16 @@ async function build() {
           throw new Error(`build-pages: preload of a missing file ${f} (${type}, ${lang})`);
         });
 
-  let pages = 0;
+  // A git card picture (or the placeholder egg) that isn't in site/ would be a broken image on its page: stop instead.
+  for (const src of new Set(
+    GIT.map((g) => g.art || EGG.src).concat(GIT.flatMap((g) => (g.vigs || []).filter(Boolean))),
+  ))
+    await readFile(path.join(DIST, src)).catch(() => {
+      throw new Error(`build-pages: git card picture ${src} is missing in site/`);
+    });
+
+  let pages = 0,
+    gitPages = 0;
   for (const lang of LANGS) {
     const tx = lang === 'en' ? en : fill((await LOCALES[lang]()).default, en, '', lang);
     await page(homeUrl(lang), homePage(lang, tx));
@@ -673,15 +765,21 @@ async function build() {
       await page(creatureUrl(lang, d.c), creaturePage(lang, tx, d));
       pages++;
     }
+    for (const g of GIT) {
+      await page(gitUrl(lang, g.id), gitPage(lang, tx, g));
+      gitPages++;
+    }
   }
-  for (const rest of [appUrl(null), newsUrl(null)].concat(D.map((d) => creatureUrl(null, d.c))))
+  for (const rest of [appUrl(null), newsUrl(null)]
+    .concat(D.map((d) => creatureUrl(null, d.c)))
+    .concat(GIT.map((g) => gitUrl(null, g.id))))
     await page(rest, chooserPage(rest));
   await page('/', chooserPage('/'));
   await writeFile(path.join(DIST, '_redirects'), redirects());
   await writeFile(path.join(DIST, 'sitemap.xml'), sitemap(new Date().toISOString().slice(0, 10)));
   await checkBeacons();
   console.log(
-    `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${LANGS.length} news pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards), chooser pages, _redirects → dist/`,
+    `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${LANGS.length} news pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards) + ${gitPages} git card pages (${GIT.filter(gitOpen).length} of ${GIT.length} cards open on ${BUILD_DATE}), chooser pages, _redirects → dist/`,
   );
 }
 

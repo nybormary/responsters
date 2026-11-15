@@ -3,12 +3,11 @@
 import { CLS, clsSym } from '../data/http/classes.js';
 import { BY } from '../data/http/cards.js';
 import { TOOLS, REF, MORE } from '../data/http/links.js';
-import { cls, art, contactHref } from './util.js';
+import { cls, art, contactHref, esc } from './util.js';
 import { GLOBE, CHEVRON, CHECK, EXTERNAL } from './icons.js';
 
-// Text for HTML: & < > " become entities.
-export const esc = (s) =>
-  String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// esc lives in util.js (shared with the git card markup, js/gitcard.js); re-exported for the page build.
+export { esc };
 
 // Inner parts of one card: art, code badge + status name, then name, move and the card line.
 // Only phrasing elements (span, img) so the markup is valid inside a <button>.

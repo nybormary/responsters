@@ -509,4 +509,22 @@ export default {
   },
   // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: panel Network', 'Firefox: Edit and Resend', 'Postman: wysyłanie żądania'],
+  // Git rubric (RSP-199, RSP-200): labels of the git card page, the household names of the git groups (data/git/groups.js),
+  // and the card texts git.cards.<id> (scene title, caption, "$" line, page sections), added card by card with RSP-200.
+  git: {
+    ui: {
+      back: 'Do kalendarza adwentowego',
+      does: 'Co robi',
+      tip: 'Wskazówka',
+      opts: 'Opcje',
+      careful: 'Uwaga',
+      conf: 'Często mylone z',
+      help: 'W git help',
+      // c = the help command, already as HTML (<code>git help -a</code>)
+      helpFrom: (c) => `sekcja w ${c}`,
+      danger: 'Niebezpieczne polecenie',
+    },
+    groups: { start: 'Przeprowadzka', home: 'W domu', visit: 'Wizyta', archive: 'Archiwum rodzinne', post: 'Poczta' },
+    cards: {},
+  },
 };
