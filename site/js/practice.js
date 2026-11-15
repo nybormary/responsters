@@ -1,10 +1,10 @@
 // Practice view: pick a code (missed codes come back more often), build the options, show the round and score the answer.
-import { D, BY } from '../data/cards.js';
-import { CONF } from '../data/traps.js';
+import { D, BY } from '../data/http/cards.js';
+import { CONF } from '../data/http/traps.js';
 import { store } from './store.js';
 import { state, t, tx } from './state.js';
 import { $, cls, art } from './util.js';
-import { clsSym } from '../data/classes.js';
+import { clsSym } from '../data/http/classes.js';
 
 // Weighted random pick; never the same code twice in a row.
 function pick() {

@@ -1,6 +1,6 @@
 // Collection view: progress bar, class filter chips and the card grid, grouped by status class.
-import { CLS, clsSym } from '../data/classes.js';
-import { D } from '../data/cards.js';
+import { CLS, clsSym } from '../data/http/classes.js';
+import { D } from '../data/http/cards.js';
 import { state, t, tx, isKnown } from './state.js';
 import { $, cls } from './util.js';
 import { renderCard } from './card.js';
