@@ -1,10 +1,44 @@
 // The Cloudflare Web Analytics beacon on a page (RSP-175): the loader the build puts in every page a visitor stays on,
 // and the beacon tag it adds on mnemozoo.com. Requests to the beacon are always blocked in tests (../analytics.ts).
-import type { Browser, BrowserContext, Page, ViewportSize } from '@playwright/test';
+import {
+  test,
+  type APIResponse,
+  type Browser,
+  type BrowserContext,
+  type Page,
+  type Route,
+  type ViewportSize,
+} from '@playwright/test';
 import { ANALYTICS_HOSTS, blockAnalytics } from '../analytics';
 
 /** The production domain: the only host the loader adds the beacon on. */
 export const PRODUCTION_HOST = 'mnemozoo.com';
+
+/**
+ * Resource types the beacon checks don't need on the mnemozoo.com copy of a page. They are not fetched, so far fewer
+ * requests go through the Node proxy below and can meet a connection reset (RSP-204: 115 requests per test run → 55).
+ */
+const NOT_NEEDED = new Set(['image', 'font', 'stylesheet', 'media']);
+
+/** Connection-level errors (never an HTTP status, never an assertion) that get one more try (RSP-204). */
+const CONNECTION_ERROR = /ECONNRESET|ECONNREFUSED|ECONNABORTED|socket hang up/;
+
+/**
+ * Fetches `url` for a routed request; after a connection-level error tries once more and records it, so a reset
+ * is handled visibly: an annotation in the report and a line in the run log. Any other error fails as before.
+ */
+async function fetchOnceMore(route: Route, url: string): Promise<APIResponse> {
+  try {
+    return await route.fetch({ url, maxRedirects: 0 });
+  } catch (e) {
+    const message = (e instanceof Error ? e.message : String(e)).split('\n')[0];
+    if (!CONNECTION_ERROR.test(message)) throw e;
+    const description = `${new URL(url).pathname}: ${message}; tried once more`;
+    test.info().annotations.push({ type: 'connection retry (RSP-204)', description });
+    console.warn(`connection retry (RSP-204) ${description}`);
+    return route.fetch({ url, maxRedirects: 0 });
+  }
+}
 
 /** A beacon tag the loader added: its script address and its data-cf-beacon settings. */
 export type BeaconTag = { src: string; settings: string | null };
@@ -49,7 +83,8 @@ export class AnalyticsBeacon {
   /**
    * A fresh page where https://mnemozoo.com/… is answered with the same path from `baseURL`, so the loader sees
    * the production domain while production itself is never asked (on a production run `baseURL` is production).
-   * Requests to the beacon are blocked, as on every test page. Close its context when done.
+   * Requests to the beacon are blocked, as on every test page; images, fonts and styles are not fetched (NOT_NEEDED),
+   * and a connection reset gets one visible retry (fetchOnceMore). Close its context when done.
    */
   static async asProduction(
     browser: Browser,
@@ -61,9 +96,9 @@ export class AnalyticsBeacon {
     await blockAnalytics(page);
     const origin = new URL(baseURL).origin;
     await page.route(`https://${PRODUCTION_HOST}/**`, async (route) => {
+      if (NOT_NEEDED.has(route.request().resourceType())) return route.abort('blockedbyclient');
       const u = new URL(route.request().url());
-      const response = await route.fetch({ url: `${origin}${u.pathname}${u.search}`, maxRedirects: 0 });
-      await route.fulfill({ response });
+      await route.fulfill({ response: await fetchOnceMore(route, `${origin}${u.pathname}${u.search}`) });
     });
     return { page, beacon: new AnalyticsBeacon(page), requests: new BeaconRequests(page), context };
   }
