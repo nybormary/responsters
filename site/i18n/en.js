@@ -520,9 +520,10 @@ export default {
       opts: 'Options',
       careful: 'Careful',
       conf: 'Often confused with',
-      help: 'In git help',
-      // c = the help command, already as HTML (<code>git help -a</code>)
-      helpFrom: (c) => `section in ${c}`,
+      // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
+      help: (c) => `In ${c}`,
+      // before `git help <command>`, the command's own manual
+      more: 'details',
       danger: 'Dangerous command',
     },
     groups: { start: 'Moving in', home: 'At home', visit: 'Visit', archive: 'Family archive', post: 'Post' },

@@ -519,9 +519,10 @@ export default {
       opts: 'Opcje',
       careful: 'Uwaga',
       conf: 'Często mylone z',
-      help: 'W git help',
-      // c = the help command, already as HTML (<code>git help -a</code>)
-      helpFrom: (c) => `sekcja w ${c}`,
+      // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
+      help: (c) => `W ${c}`,
+      // before `git help <command>`, the command's own manual
+      more: 'szczegóły',
       danger: 'Niebezpieczne polecenie',
     },
     groups: { start: 'Przeprowadzka', home: 'W domu', visit: 'Wizyta', archive: 'Archiwum rodzinne', post: 'Poczta' },

@@ -74,7 +74,9 @@ export function gitMain(g, tx) {
 }
 
 /**
- * The side column: "Often confused with" (commands only; a command with its own card links to it) and "In git help".
+ * The side column: "Often confused with" (commands only; a command with its own card links to it) and "In git help":
+ * the heading names the list that shows the section (`git help`, `git help -a`, `git help --user-interfaces`), then
+ * the section, then the command's own manual (`git help stash`; review batch, RSP-199 comment 10486).
  * href(id) = the URL of another git card page in the same language.
  */
 export function gitSide(g, tx, href) {
@@ -96,7 +98,7 @@ export function gitSide(g, tx, href) {
               <div class="mini">${conf}</div>
               `
       : ''
-  }<h2>${esc(ui.help)}</h2>
+  }<h2>${ui.help(cmd)}</h2>
               <p class="g-help" data-testid="git-help">${esc(h.section)}</p>
-              <p class="g-help-from">${ui.helpFrom(cmd)}</p>`;
+              <p class="g-help-from">${esc(ui.more)}: <code>git help ${esc(g.id)}</code></p>`;
 }

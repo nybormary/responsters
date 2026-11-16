@@ -516,9 +516,10 @@ export default {
       opts: 'Valikud',
       careful: 'Ettevaatust',
       conf: 'Sageli aetakse segi',
-      help: 'git helpis',
-      // c = the help command, already as HTML (<code>git help -a</code>)
-      helpFrom: (c) => `jaotis: ${c}`,
+      // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
+      help: (c) => `Loendis ${c}`,
+      // before `git help <command>`, the command's own manual
+      more: 'täpsemalt',
       danger: 'Ohtlik käsk',
     },
     groups: { start: 'Sissekolimine', home: 'Kodus', visit: 'Külaskäik', archive: 'Pere arhiiv', post: 'Post' },

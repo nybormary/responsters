@@ -519,9 +519,10 @@ export default {
       opts: 'Параметри',
       careful: 'Обережно',
       conf: 'Часто плутають з',
-      help: 'У git help',
-      // c = the help command, already as HTML (<code>git help -a</code>)
-      helpFrom: (c) => `розділ у ${c}`,
+      // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
+      help: (c) => `У ${c}`,
+      // before `git help <command>`, the command's own manual
+      more: 'докладно',
       danger: 'Небезпечна команда',
     },
     groups: { start: 'Новосілля', home: 'Вдома', visit: 'Візит', archive: 'Родинний архів', post: 'Пошта' },

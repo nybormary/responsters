@@ -519,9 +519,10 @@ export default {
       opts: 'Parinktys',
       careful: 'Atsargiai',
       conf: 'Dažnai painiojama su',
-      help: 'git help sąraše',
-      // c = the help command, already as HTML (<code>git help -a</code>)
-      helpFrom: (c) => `skyrius iš ${c}`,
+      // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
+      help: (c) => `${c} sąraše`,
+      // before `git help <command>`, the command's own manual
+      more: 'išsamiau',
       danger: 'Pavojinga komanda',
     },
     groups: { start: 'Įkurtuvės', home: 'Namuose', visit: 'Vizitas', archive: 'Šeimos archyvas', post: 'Paštas' },

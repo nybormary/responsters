@@ -516,9 +516,10 @@ export default {
       opts: 'Tilvalg',
       careful: 'Pas på',
       conf: 'Forveksles ofte med',
-      help: 'I git help',
-      // c = the help command, already as HTML (<code>git help -a</code>)
-      helpFrom: (c) => `afsnit i ${c}`,
+      // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
+      help: (c) => `I ${c}`,
+      // before `git help <command>`, the command's own manual
+      more: 'detaljer',
       danger: 'Farlig kommando',
     },
     groups: { start: 'Indflytning', home: 'Hjemme', visit: 'Besøg', archive: 'Familiearkivet', post: 'Posten' },
