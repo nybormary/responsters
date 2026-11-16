@@ -203,7 +203,16 @@ export { expect };
 /** Every status code with a card, in the site's order: for tests that pick a card page at random. */
 export const CARD_CODES: number[] = D.map((d: { c: number }) => d.c);
 /** The 24 git cards (RSP-117 schema) and the placeholder picture of a card not drawn yet (RSP-199). */
-export type GitCard = { id: string; name: string; group: string; day: number; danger?: boolean; art?: string };
+export type GitCard = {
+  id: string;
+  name: string;
+  group: string;
+  day: number;
+  danger?: boolean;
+  art?: string;
+  conf?: string[];
+  links?: { u: string; label: Record<string, string>; mark?: string }[];
+};
 export const GIT_CARDS: GitCard[] = GIT;
 export const GIT_EGG: { src: string; alt: string } = EGG;
 export { buildOn } from './build';

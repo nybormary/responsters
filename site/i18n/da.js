@@ -521,8 +521,185 @@ export default {
       // before `git help <command>`, the command's own manual
       more: 'detaljer',
       danger: 'Farlig kommando',
+      // heading of the outside links on a git card page
+      links: 'Læs mere',
     },
-    groups: { start: 'Indflytning', home: 'Hjemme', visit: 'Besøg', archive: 'Familiearkivet', post: 'Posten' },
-    cards: {},
+    groups: { start: 'Indflytning', home: 'Hjemme', visit: 'Besøg', archive: 'Loftet', post: 'Posten' },
+    cards: {
+      clone: {
+        title: 'Møbleret lejlighed',
+        art: 'En person med kufferter, den ene med et pæreklistermærke, står ved en vidt åben dør. Inde i lejligheden står de tidligere lejeres lænestol allerede med et ringbind med gamle regninger på, og på væggen hænger et portræt af to ens killinger. Ved døren et nyt navneskilt; det gamle er ved at falde af.',
+        line: 'Her har boet nogen, nu er det mig.',
+        move: '$ git clone --depth 1 <url>',
+        hint: 'kun den seneste tilstand, uden gammel historik',
+        does: {
+          text: 'Kopierer et fjernrepository til en ny mappe: hele historikken og grenene (som `origin/…`), og skifter til hovedgrenen. git husker adressen som `origin`, så `git fetch`, `git pull` og `git push` virker bagefter.',
+          meta: 'Du flytter ind i en møbleret lejelejlighed: alt, hvad de tidligere lejere efterlod, er der stadig, selv ringbindet med gamle regninger.',
+        },
+        tip: 'Findes projektet ikke nogen steder endnu? Så ikke clone, men `git init`: den opretter et tomt repository i den aktuelle mappe. Og fork er ikke en git-kommando, men en knap på GitHub: en kopi af en andens repository på din konto, som du så kloner.',
+        opts: [
+          {
+            cmd: 'git clone <url> <mappe>',
+            text: '— kopierer til en mappe med dit navn i stedet for repositoryets.',
+            meta: 'Du vælger selv, hvad der skal stå på døren til den nye lejlighed.',
+          },
+          {
+            cmd: 'git clone -b <gren> <url>',
+            text: '— (`--branch`) skifter straks til den angivne gren i stedet for hovedgrenen.',
+            meta: 'Du går direkte ind i det rum, du skal bruge.',
+          },
+          {
+            cmd: 'git clone --depth 1 <url>',
+            text: '— kun den seneste commit og kun én gren; hurtigt, men uden historik.',
+            meta: 'En møbleret lejlighed, men uden ringbindet med gamle regninger.',
+          },
+        ],
+      },
+      status: {
+        title: 'Tre bunker',
+        art: 'På væggen et portræt af en kat med lup. En person ser roligt på tre bunker tøj: en sok, et ærme og et håndklæde stikker op af kurven på hjul, brugt tøj ligger på gulvet, og ved siden af ligger en sammenfoldet ny skjorte med et stort prismærke.',
+        line: 'Hvad har vi her? Lad os tjekke.',
+        move: '$ git status -s',
+        hint: 'samme overblik, én linje pr. ting',
+        does: {
+          text: 'Viser tilstanden i arbejdsmappen og indekset: hvilke ændringer der allerede er klar til commit (staged), hvilke der er ændret, men ikke klargjort endnu, og hvilke filer git ikke følger (untracked). Ændrer ingenting.',
+          meta: 'Du sorterer tingene i tre bunker og ser, hvad der er hvor.',
+        },
+        tip: 'Kør den før hver `git add` og `git commit`: så kommer der ikke noget overflødigt med i committen.',
+        opts: [
+          {
+            cmd: 'git status -s',
+            text: '— (`--short`) én linje pr. fil; venstre kolonne er indekset, højre arbejdsmappen (`M` ændret, `A` tilføjet, `??` untracked).',
+            meta: 'Samme overblik, én linje pr. ting.',
+          },
+          {
+            cmd: 'git status --ignored',
+            text: '— viser også de filer, som `.gitignore` skjuler.',
+            meta: 'Du kigger også der, hvor du normalt ikke kigger.',
+          },
+        ],
+      },
+      add: {
+        title: 'I kurven',
+        art: 'På væggen et portræt af en kat, der sover i en kurv. En person lægger et blåt bundt ting i kurven på hjul, hvor der allerede ligger en sok, et ærme og et håndklæde; en sweater og en sok ligger stadig på gulvet, ikke tilføjet.',
+        line: 'Ryd op på dit værelse, tak.',
+        move: '$ git add -p',
+        hint: 'tilføj en del af ændringerne, stykke for stykke',
+        does: {
+          text: 'Tilføjer filens aktuelle tilstand til indekset (staged): præcis det kommer med i næste commit. En ny fil begynder git at følge efter `git add`.',
+          meta: 'Du lægger ting i kurven for senere at pakke dem i en kasse.',
+        },
+        tip: 'Har du ændret filen efter `git add`? Tilføj den igen: indekset har tilstanden fra det øjeblik, du tilføjede den. Og efter en merge-konflikt er det netop `git add <fil>`, der markerer filen som løst.',
+        opts: [
+          {
+            cmd: 'git add <fil>',
+            text: '— tilføjer én fil (eller mappe).',
+            meta: 'Én ting i kurven.',
+          },
+          {
+            cmd: 'git add .',
+            text: '— alle ændringer i den aktuelle mappe og nedad, også nye og slettede filer.',
+            meta: 'Du fejer alt i rummet ned i kurven.',
+          },
+          {
+            cmd: 'git add -p',
+            text: '— (`--patch`) viser ændringerne i stykker (hunks) og spørger til hvert; nye (untracked) filer tilbydes ikke.',
+            meta: 'Du går bunken igennem og lægger kun det nødvendige i kurven.',
+          },
+        ],
+      },
+      commit: {
+        title: 'Mærket kasse',
+        art: 'Et loft. En stak kasser, hver med et billedmærke: nederst et juletræ, ovenover en julekugle. En person sætter et mærke med et lille hus på den nye gule kasse øverst. Ved siden af står en tom kurv på hjul, og et gammelt portræt af et egern med en kogle står lænet op ad stakken.',
+        line: 'Hvad er der i kassen?',
+        move: '$ git commit -m "…"',
+        hint: 'beskeden med det samme, uden editor',
+        does: {
+          text: 'Gemmer indholdet af indekset som en ny commit i historikken for den aktuelle gren: med forfatter, dato og besked. Arbejdsmappen ændres ikke; committen forbliver lokal, indtil du laver `git push`.',
+          meta: 'Du pakker ting i en kasse, mærker den og bærer den op på loftet.',
+        },
+        tip: 'Én commit, én tanke; skriv »hvorfor« i beskeden, ikke kun »hvad«.',
+        opts: [
+          {
+            cmd: 'git commit -m "…"',
+            text: '— beskeden fra kommandolinjen, uden editor.',
+            meta: 'Mærk kassen.',
+          },
+          {
+            cmd: 'git commit -a',
+            text: '— tilføjer først selv ændringerne i fulgte filer (ændrede og slettede), men ikke nye filer. Skrives som regel sammen med beskeden: `git commit -am "…"`.',
+            meta: 'Det kendte op på loftet, det nye bliver.',
+          },
+          {
+            cmd: 'git commit --amend',
+            text: '— erstatter den seneste commit med en ny (med det aktuelle indeks og/eller en ny besked). Gør det ikke med en commit, der allerede er sendt med `git push`.',
+            meta: 'Du skifter mærket på kassen fra loftet, før den bliver sendt.',
+          },
+        ],
+      },
+      log: {
+        title: 'Familiealbum',
+        art: 'Et opslået familiealbum med grønt omslag. Fire fotos, ældste først: et lille hus med et træ, en skildpadde, to mennesker side om side, havet og solen; under hvert en ulæselig billedtekst og en dato, fra 09.11.1996 til 15.07.2007.',
+        line: 'Vil I se albummet?',
+        move: '$ git log --oneline',
+        hint: 'én linje pr. commit',
+        does: {
+          text: 'Viser commit-historikken for den aktuelle gren, nyeste først: hash, forfatter, dato, besked.',
+          meta: 'Du blader albummet igennem fra det sidste foto og bagud.',
+        },
+        tip: 'En lang liste åbner i en pager: `q` for at afslutte, `/` for at søge.',
+        opts: [
+          {
+            cmd: 'git log --oneline',
+            text: '— forkortet hash og første linje af beskeden.',
+            meta: 'Kun billedteksterne under fotoene.',
+          },
+          {
+            cmd: 'git log --graph',
+            text: '— tegner grene og merges med streger.',
+            meta: 'Et stamtræ i stedet for en bunke fotos.',
+          },
+          {
+            cmd: 'git log -p',
+            text: '— viser ændringerne i hver commit.',
+            meta: 'Under hvert foto: hvad der præcis ændrede sig.',
+          },
+          {
+            cmd: 'git log -- <fil>',
+            text: '— kun de commits, der ændrede denne fil.',
+            meta: 'Alle fotos af én person.',
+          },
+        ],
+      },
+      diff: {
+        title: 'Find forskellene',
+        art: 'En person i en stue holder lejlighedens plantegning og sammenligner den med det, vedkommende ser. På tegningen er der et rundt bord, men i stuen er kun omridset tilbage på gulvet; på tegningen står standerlampen ved lænestolen, i stuen i den anden ende; den gamle lænestol er den samme. På væggen et portræt af en kamæleon, der holder et foto af sig selv i en anden farve, med et ikke-lig-med-tegn imellem.',
+        line: 'Find tre forskelle',
+        move: '$ git diff --staged',
+        hint: 'præcis det, der kommer med i næste commit',
+        does: {
+          text: 'Viser linje for linje, hvad der er ændret: `-` en fjernet linje, `+` en tilføjet. Uden tilvalg sammenligner den arbejdsmappen med indekset, altså de ændringer, der endnu ikke er tilføjet med `git add`; nye (untracked) filer vises ikke.',
+          meta: 'Du sammenligner »før« og »efter« ned til mindste detalje.',
+        },
+        tip: 'Efter `git add` er en almindelig `git diff` tom, men ændringerne er ikke væk: de ligger nu i indekset, og `git diff --staged` viser dem.',
+        opts: [
+          {
+            cmd: 'git diff --staged',
+            text: '— (`--cached`) indekset mod den seneste commit, altså det, der kommer med i næste commit.',
+            meta: 'Du kigger i kurven, før du bærer den op på loftet.',
+          },
+          {
+            cmd: 'git diff HEAD',
+            text: '— alle ændringer i forhold til den seneste commit, tilføjede og ikke-tilføjede.',
+            meta: 'Du sammenligner hele stuen med det seneste foto i albummet.',
+          },
+          {
+            cmd: 'git diff --stat',
+            text: '— kun hvilke filer der er ændret, og hvor mange linjer.',
+            meta: 'En liste over forskelle uden detaljer.',
+          },
+        ],
+      },
+    },
   },
 };

@@ -21,6 +21,12 @@
   flex-direction: column;
   gap: 3px;
 }
+/* The group name sits in the middle between the badge and the dashed line: the space above it is the 3px gap plus
+   half of what the 33px name box leaves around the text, so the panel's own top margin is the same 3px (RSP-200
+   review: it was 8px, 16px below the name against 10px above). */
+.card.git .cf-panel {
+  margin-top: 3px;
+}
 /* The command is one line, as typed in a terminal: it scales down to fit instead of wrapping. */
 .card.git .cf-code {
   width: 100%;
@@ -165,4 +171,33 @@
 }
 .git-page .page-side .g-help-from code {
   font-size: 13px;
+}
+
+/* Brand mark before an outside link (RSP-200): the owner's black file on light pages, the white one on dark. */
+.git-page .links .mk {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  vertical-align: -2px;
+}
+.git-page .links .mk-dark {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .git-page .links .mk-light {
+    display: none;
+  }
+  :root:not([data-theme='light']) .git-page .links .mk-dark {
+    display: inline;
+  }
+}
+:root[data-theme='dark'] .git-page .links .mk-light {
+  display: none;
+}
+:root[data-theme='dark'] .git-page .links .mk-dark {
+  display: inline;
+}
+/* In the side column the tip is a section of its own (RSP-200 review): the same space above it as above a heading. */
+.git-page .page-side .g-tip {
+  margin-top: 18px;
 }

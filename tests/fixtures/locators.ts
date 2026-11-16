@@ -31,6 +31,15 @@ export const TID = {
   gitHelpTitle: 'git-help-title',
   gitHelp: 'git-help',
   gitHelpMore: 'git-help-more',
+  gitTitle: 'git-title',
+  gitLine: 'git-line',
+  gitMove: 'git-move',
+  gitHint: 'git-hint',
+  gitDoes: 'git-does',
+  gitMeta: 'git-meta',
+  gitOpt: 'git-opt',
+  gitTip: 'git-tip',
+  gitLinks: 'git-links',
 
   // Practice (RSP-162): the answers of the current question and the feedback after an answer
   answer: (code: number) => `answer-${code}`,

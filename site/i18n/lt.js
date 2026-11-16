@@ -524,8 +524,185 @@ export default {
       // before `git help <command>`, the command's own manual
       more: 'išsamiau',
       danger: 'Pavojinga komanda',
+      // heading of the outside links on a git card page
+      links: 'Skaityti daugiau',
     },
-    groups: { start: 'Įkurtuvės', home: 'Namuose', visit: 'Vizitas', archive: 'Šeimos archyvas', post: 'Paštas' },
-    cards: {},
+    groups: { start: 'Įkurtuvės', home: 'Namuose', visit: 'Vizitas', archive: 'Palėpė', post: 'Paštas' },
+    cards: {
+      clone: {
+        title: 'Butas su baldais',
+        art: 'Žmogus su lagaminais, ant vieno lipdukas su lempute, stovi prie plačiai atvertų durų. Bute jau stovi ankstesnių nuomininkų fotelis, ant jo segtuvas su senomis sąskaitomis, o ant sienos kabo dviejų vienodų kačiukų portretas. Prie durų nauja lentelė su vardu, o senoji krenta.',
+        line: 'Čia kažkas gyveno, o dabar gyvensiu aš.',
+        move: '$ git clone --depth 1 <url>',
+        hint: 'tik paskutinė būsena, be senos istorijos',
+        does: {
+          text: 'Nukopijuoja nuotolinę saugyklą į naują aplanką: visą istoriją ir šakas (kaip `origin/…`), ir persijungia į pagrindinę šaką. git įsimena adresą vardu `origin`, todėl vėliau veikia `git fetch`, `git pull` ir `git push`.',
+          meta: 'Įsikrauštai į nuomojamą butą su baldais: viskas, ką paliko ankstesni nuomininkai, vietoje, net segtuvas su senomis sąskaitomis.',
+        },
+        tip: 'Projekto dar niekur nėra? Tada ne clone, o `git init`: ji sukuria tuščią saugyklą dabartiniame aplanke. O fork – ne git komanda, o mygtukas GitHub: svetimos saugyklos kopija tavo paskyroje, kurią paskui klonuoji.',
+        opts: [
+          {
+            cmd: 'git clone <url> <aplankas>',
+            text: '— kopijuoja į aplanką tavo pasirinktu pavadinimu, o ne saugyklos pavadinimu.',
+            meta: 'Pats renkiesi, ką užrašyti ant naujo buto durų.',
+          },
+          {
+            cmd: 'git clone -b <šaka> <url>',
+            text: '— (`--branch`) iškart persijungia į nurodytą šaką vietoj pagrindinės.',
+            meta: 'Įeini iškart į reikiamą kambarį.',
+          },
+          {
+            cmd: 'git clone --depth 1 <url>',
+            text: '— tik paskutinis commit ir tik viena šaka; greitai, bet be istorijos.',
+            meta: 'Butas su baldais, bet be segtuvo su senomis sąskaitomis.',
+          },
+        ],
+      },
+      status: {
+        title: 'Trys krūvelės',
+        art: 'Ant sienos katino su didinamuoju stiklu portretas. Žmogus ramiai žiūri į tris drabužių krūveles: iš krepšio su ratukais kyšo kojinė, rankovė ir rankšluostis, ant grindų guli dėvėti drabužiai, o šalia sulankstyti nauji marškiniai su didele parduotuvės etikete.',
+        line: 'Ką čia turime? Patikrinkime.',
+        move: '$ git status -s',
+        hint: 'ta pati apžvalga, viena eilutė vienam daiktui',
+        does: {
+          text: 'Rodo darbinio aplanko ir indekso būseną: kurie pakeitimai jau paruošti commit (staged), kurie pakeisti, bet dar neparuošti, ir kurių failų git neseka (untracked). Nieko nekeičia.',
+          meta: 'Išdėlioji daiktus į tris krūveles ir žiūri, kas kur.',
+        },
+        tip: 'Paleisk prieš kiekvieną `git add` ir `git commit`: taip į commit nepateks nieko nereikalingo.',
+        opts: [
+          {
+            cmd: 'git status -s',
+            text: '— (`--short`) viena eilutė vienam failui; kairysis stulpelis – indeksas, dešinysis – darbinis aplankas (`M` pakeistas, `A` pridėtas, `??` untracked).',
+            meta: 'Ta pati apžvalga, viena eilutė vienam daiktui.',
+          },
+          {
+            cmd: 'git status --ignored',
+            text: '— rodo ir failus, kuriuos slepia `.gitignore`.',
+            meta: 'Pažvelgi ir ten, kur paprastai nežiūri.',
+          },
+        ],
+      },
+      add: {
+        title: 'Į krepšį',
+        art: 'Ant sienos portretas katino, miegančio krepšyje. Žmogus deda mėlyną daiktų gniužulą į krepšį su ratukais, kuriame jau guli kojinė, rankovė ir rankšluostis; ant grindų dar guli megztinis ir kojinė, nepridėti.',
+        line: 'Susitvarkyk kambarį, prašau.',
+        move: '$ git add -p',
+        hint: 'pridėti dalį pakeitimų, gabalą po gabalo',
+        does: {
+          text: 'Prideda dabartinę failo būseną į indeksą (staged): būtent tai pateks į kitą commit. Naują failą po `git add` git pradeda sekti.',
+          meta: 'Dedi daiktus į krepšį, kad paskui supakuotum į dėžę.',
+        },
+        tip: 'Pakeitei failą po `git add`? Pridėk dar kartą: indekse yra būsena, kokia buvo pridedant. O po suliejimo konflikto būtent `git add <failas>` pažymi failą kaip išspręstą.',
+        opts: [
+          {
+            cmd: 'git add <failas>',
+            text: '— prideda vieną failą (arba aplanką).',
+            meta: 'Vienas daiktas į krepšį.',
+          },
+          {
+            cmd: 'git add .',
+            text: '— visi pakeitimai dabartiniame aplanke ir žemiau, kartu su naujais ir ištrintais failais.',
+            meta: 'Sužeri į krepšį viską iš kambario.',
+          },
+          {
+            cmd: 'git add -p',
+            text: '— (`--patch`) rodo pakeitimus gabalais (hunks) ir klausia apie kiekvieną; naujų (untracked) failų nesiūlo.',
+            meta: 'Perrenki krūvą ir į krepšį dedi tik tai, ko reikia.',
+          },
+        ],
+      },
+      commit: {
+        title: 'Užrašyta dėžė',
+        art: 'Palėpė. Dėžių krūva, ant kiekvienos lipdukas su piešinėliu: apačioje eglutė, aukščiau eglutės žaisliukas. Žmogus klijuoja lipduką su nameliu ant naujos geltonos dėžės viršuje. Šalia stovi tuščias krepšys su ratukais, o prie krūvos atremtas senas voverės su kankorėžiu portretas.',
+        line: 'Kas toje dėžėje?',
+        move: '$ git commit -m "…"',
+        hint: 'aprašas iškart, be redaktoriaus',
+        does: {
+          text: 'Išsaugo indekso turinį kaip naują commit dabartinės šakos istorijoje: su autoriumi, data ir aprašu. Darbinis aplankas nesikeičia; commit lieka vietinis, kol nepadarai `git push`.',
+          meta: 'Supakuoji daiktus į dėžę, užrašai ją ir neši į palėpę.',
+        },
+        tip: 'Vienas commit – viena mintis; apraše rašyk „kodėl“, o ne tik „ką“.',
+        opts: [
+          {
+            cmd: 'git commit -m "…"',
+            text: '— aprašas iš komandinės eilutės, be redaktoriaus.',
+            meta: 'Užrašyk dėžę.',
+          },
+          {
+            cmd: 'git commit -a',
+            text: '— pirmiausia pats prideda pakeitimus sekamuose failuose (pakeistuose ir ištrintuose), bet ne naujus failus. Paprastai rašoma kartu su aprašu: `git commit -am "…"`.',
+            meta: 'Pažįstama – į palėpę, nauja lieka.',
+          },
+          {
+            cmd: 'git commit --amend',
+            text: '— pakeičia paskutinį commit nauju (su dabartiniu indeksu ir (arba) nauju aprašu). Nedaryk to su commit, kuris jau išsiųstas per `git push`.',
+            meta: 'Perklijuoji lipduką ant dėžės iš palėpės, kol jos dar neišsiuntė.',
+          },
+        ],
+      },
+      log: {
+        title: 'Šeimos albumas',
+        art: 'Atverstas šeimos albumas žaliu viršeliu. Keturios nuotraukos nuo seniausios: namelis su medžiu, vėžlys, du žmonės greta, jūra ir saulė; po kiekviena neįskaitomas parašas ir data, nuo 09.11.1996 iki 15.07.2007.',
+        line: 'Ar norite pažiūrėti albumą?',
+        move: '$ git log --oneline',
+        hint: 'viena eilutė vienam commit',
+        does: {
+          text: 'Rodo dabartinės šakos commit istoriją nuo naujausio: hash, autorius, data, aprašas.',
+          meta: 'Verti albumą nuo paskutinės nuotraukos atgal.',
+        },
+        tip: 'Ilgas sąrašas atsidaro puslapiuoklėje (pager): `q` – išeiti, `/` – paieška.',
+        opts: [
+          {
+            cmd: 'git log --oneline',
+            text: '— sutrumpintas hash ir pirma aprašo eilutė.',
+            meta: 'Tik parašai po nuotraukomis.',
+          },
+          {
+            cmd: 'git log --graph',
+            text: '— linijomis piešia šakas ir suliejimus.',
+            meta: 'Giminės medis vietoj nuotraukų krūvos.',
+          },
+          {
+            cmd: 'git log -p',
+            text: '— rodo kiekvieno commit pakeitimus.',
+            meta: 'Po kiekviena nuotrauka – kas tiksliai pasikeitė.',
+          },
+          {
+            cmd: 'git log -- <failas>',
+            text: '— tik commit, kurie keitė šį failą.',
+            meta: 'Visos vieno žmogaus nuotraukos.',
+          },
+        ],
+      },
+      diff: {
+        title: 'Rask skirtumus',
+        art: 'Žmogus kambaryje laiko buto planą ir lygina jį su tuo, ką mato. Plane yra apvalus stalas, o kambaryje iš jo liko tik kontūras ant grindų; plane toršeras stovi prie fotelio, o kambaryje – kitame gale; senas fotelis tas pats. Ant sienos portretas chameleono, kuris laiko savo nuotrauką, kur jis kitos spalvos, o tarp jų ženklas „nelygu“.',
+        line: 'Rask tris skirtumus',
+        move: '$ git diff --staged',
+        hint: 'kas tiksliai pateks į kitą commit',
+        does: {
+          text: 'Rodo eilutė po eilutės, kas pasikeitė: `-` – pašalinta eilutė, `+` – pridėta. Be parinkčių lygina darbinį aplanką su indeksu, t. y. rodo pakeitimus, dar nepridėtus per `git add`; naujų (untracked) failų nerodo.',
+          meta: 'Lygini „kaip buvo“ ir „kaip yra“ iki mažiausios smulkmenos.',
+        },
+        tip: 'Po `git add` paprastas `git diff` tuščias, bet pakeitimai niekur nedingo: jie jau indekse, juos rodo `git diff --staged`.',
+        opts: [
+          {
+            cmd: 'git diff --staged',
+            text: '— (`--cached`) indeksas palyginti su paskutiniu commit, t. y. tai, kas pateks į kitą commit.',
+            meta: 'Pažvelgi į krepšį, prieš nešdamas jį į palėpę.',
+          },
+          {
+            cmd: 'git diff HEAD',
+            text: '— visi pakeitimai palyginti su paskutiniu commit, pridėti ir nepridėti.',
+            meta: 'Lygini visą kambarį su paskutine albumo nuotrauka.',
+          },
+          {
+            cmd: 'git diff --stat',
+            text: '— tik kurie failai pakeisti ir kiek eilučių.',
+            meta: 'Skirtumų sąrašas be smulkmenų.',
+          },
+        ],
+      },
+    },
   },
 };

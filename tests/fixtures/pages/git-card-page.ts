@@ -65,6 +65,45 @@ export class GitCardPage {
     return this.root.locator('.page-main').getByRole('heading', { level: 2 });
   }
 
+  /** Card texts (RSP-200): scene title, caption, the "$" line and its hint. */
+  get title(): Locator {
+    return this.root.getByTestId(TID.gitTitle);
+  }
+  get caption(): Locator {
+    return this.root.getByTestId(TID.gitLine);
+  }
+  get move(): Locator {
+    return this.root.getByTestId(TID.gitMove);
+  }
+  get hint(): Locator {
+    return this.root.getByTestId(TID.gitHint);
+  }
+
+  /** "What it does": the technical text, then the one metaphor sentence (grey). */
+  get does(): Locator {
+    return this.root.getByTestId(TID.gitDoes);
+  }
+
+  /** The grey metaphor sentence inside a section or an option. */
+  metaOf(section: Locator): Locator {
+    return section.getByTestId(TID.gitMeta);
+  }
+
+  /** "Options": one item per option (command + text + metaphor). */
+  get options(): Locator {
+    return this.root.getByTestId(TID.gitOpt);
+  }
+
+  /** The tip, in the side column (moved there in the RSP-200 review). */
+  get tip(): Locator {
+    return this.root.getByTestId(TID.gitTip);
+  }
+
+  /** "Read more": outside links (only cards with links). */
+  get links(): Locator {
+    return this.root.getByTestId(TID.gitLinks);
+  }
+
   /** "Often confused with": the commands (absent while the card has none). */
   get confused(): Locator {
     return this.root.getByTestId(TID.gitConf);

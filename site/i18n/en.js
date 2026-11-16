@@ -525,8 +525,185 @@ export default {
       // before `git help <command>`, the command's own manual
       more: 'details',
       danger: 'Dangerous command',
+      // heading of the outside links on a git card page
+      links: 'Read more',
     },
-    groups: { start: 'Moving in', home: 'At home', visit: 'Visit', archive: 'Family archive', post: 'Post' },
-    cards: {},
+    groups: { start: 'Moving in', home: 'At home', visit: 'Visit', archive: 'Attic', post: 'Post' },
+    cards: {
+      clone: {
+        title: 'Furnished flat',
+        art: "A person with suitcases, one with a light-bulb sticker, stands at a wide-open door. Inside, the previous tenants' armchair is already there with a binder of old bills on it, and a portrait of two identical kittens hangs on the wall. By the door, a new name plate; the old one is falling off.",
+        line: "Someone lived here; now it's my turn.",
+        move: '$ git clone --depth 1 <url>',
+        hint: 'only the latest state, no old history',
+        does: {
+          text: 'Copies a remote repository into a new folder: all the history and branches (as `origin/…`), and switches to the main branch. git remembers the address as `origin`, so `git fetch`, `git pull` and `git push` work later.',
+          meta: 'You move into a furnished rented flat: whatever the previous tenants left is still there, even the binder of old bills.',
+        },
+        tip: "No project anywhere yet? Then not clone but `git init`: it creates an empty repository in the current folder. And fork is not a git command but a button on GitHub: a copy of someone else's repository in your account, which you then clone.",
+        opts: [
+          {
+            cmd: 'git clone <url> <folder>',
+            text: "— copies into a folder with your name instead of the repository's name.",
+            meta: 'You choose what to write on the door of the new flat.',
+          },
+          {
+            cmd: 'git clone -b <branch> <url>',
+            text: '— (`--branch`) switches straight to that branch instead of the main one.',
+            meta: 'You walk straight into the room you need.',
+          },
+          {
+            cmd: 'git clone --depth 1 <url>',
+            text: '— only the last commit and only one branch; fast, but no history.',
+            meta: 'A furnished flat, but without the binder of old bills.',
+          },
+        ],
+      },
+      status: {
+        title: 'Three piles',
+        art: 'A portrait of a cat with a magnifying glass on the wall. A person calmly looks at three piles of clothes: a sock, a sleeve and a towel stick out of the basket on wheels, worn clothes lie on the floor, and next to them lies a folded new shirt with a big shop tag.',
+        line: "What have we got here? Let's check.",
+        move: '$ git status -s',
+        hint: 'the same overview, one line per thing',
+        does: {
+          text: "Shows the state of the working folder and the index: which changes are already prepared for the commit (staged), which are changed but not prepared yet, and which files git doesn't track (untracked). Changes nothing.",
+          meta: "You sort things into three piles and look at what's where.",
+        },
+        tip: 'Run it before every `git add` and `git commit`: that way nothing extra gets into the commit.',
+        opts: [
+          {
+            cmd: 'git status -s',
+            text: '— (`--short`) one line per file; the left column is the index, the right one the working folder (`M` modified, `A` added, `??` untracked).',
+            meta: 'The same overview, one line per thing.',
+          },
+          {
+            cmd: 'git status --ignored',
+            text: '— also shows the files that `.gitignore` hides.',
+            meta: "You look where you usually don't.",
+          },
+        ],
+      },
+      add: {
+        title: 'Into the basket',
+        art: 'A portrait of a cat asleep in a basket on the wall. A person puts a blue bundle of things into the basket on wheels, which already holds a sock, a sleeve and a towel; a sweater and a sock still lie on the floor, not added.',
+        line: 'Tidy up your room, please.',
+        move: '$ git add -p',
+        hint: 'add part of the changes, piece by piece',
+        does: {
+          text: 'Adds the current state of a file to the index (staged): exactly this goes into the next commit. After `git add`, git starts tracking a new file.',
+          meta: 'You put things in the basket to pack them into a box later.',
+        },
+        tip: 'Changed the file after `git add`? Add it again: the index holds the state from the moment you added it. And after a merge conflict, `git add <file>` is what marks the file as resolved.',
+        opts: [
+          {
+            cmd: 'git add <file>',
+            text: '— adds one file (or folder).',
+            meta: 'One thing into the basket.',
+          },
+          {
+            cmd: 'git add .',
+            text: '— all changes in the current folder and below, including new and deleted files.',
+            meta: 'You sweep everything in the room into the basket.',
+          },
+          {
+            cmd: 'git add -p',
+            text: "— (`--patch`) shows the changes in pieces (hunks) and asks about each one; doesn't offer new (untracked) files.",
+            meta: 'You go through the pile and put only what you need in the basket.',
+          },
+        ],
+      },
+      commit: {
+        title: 'Labelled box',
+        art: 'An attic. A stack of boxes, each with a picture label: a fir tree at the bottom, a Christmas bauble above. A person sticks a label with a little house on the new yellow box on top. An empty basket on wheels stands nearby; an old portrait of a squirrel holding a pine cone leans against the stack.',
+        line: "What's in the box?",
+        move: '$ git commit -m "…"',
+        hint: 'the message right away, no editor',
+        does: {
+          text: "Saves the contents of the index as a new commit in the history of the current branch, with author, date and message. The working folder doesn't change; the commit stays local until you `git push`.",
+          meta: 'You pack things into a box, label it and carry it up to the attic.',
+        },
+        tip: 'One commit, one idea; in the message write “why”, not only “what”.',
+        opts: [
+          {
+            cmd: 'git commit -m "…"',
+            text: '— the message from the command line, no editor.',
+            meta: 'Label the box.',
+          },
+          {
+            cmd: 'git commit -a',
+            text: '— first adds the changes in tracked files by itself (modified and deleted), but not new files. Usually written together with the message: `git commit -am "…"`.',
+            meta: 'The familiar goes to the attic, the new stays.',
+          },
+          {
+            cmd: 'git commit --amend',
+            text: "— replaces the last commit with a new one (with the current index and/or a new message). Don't do it with a commit you've already sent with `git push`.",
+            meta: "You relabel the box from the attic before it's sent.",
+          },
+        ],
+      },
+      log: {
+        title: 'Family album',
+        art: 'An open family album with a green cover. Four photos, oldest first: a little house with a tree, a turtle, two people side by side, the sea and the sun; under each an unreadable caption and a date, from 09.11.1996 to 15.07.2007.',
+        line: 'Would you like to see the album?',
+        move: '$ git log --oneline',
+        hint: 'one line per commit',
+        does: {
+          text: 'Shows the commit history of the current branch, newest first: hash, author, date, message.',
+          meta: 'You leaf through the album from the last photo back.',
+        },
+        tip: 'A long list opens in a pager: `q` to quit, `/` to search.',
+        opts: [
+          {
+            cmd: 'git log --oneline',
+            text: '— short hash and the first line of the message.',
+            meta: 'Only the captions under the photos.',
+          },
+          {
+            cmd: 'git log --graph',
+            text: '— draws branches and merges with lines.',
+            meta: 'A family tree instead of a pile of photos.',
+          },
+          {
+            cmd: 'git log -p',
+            text: '— shows the changes of each commit.',
+            meta: 'Under every photo: what exactly changed.',
+          },
+          {
+            cmd: 'git log -- <file>',
+            text: '— only the commits that changed this file.',
+            meta: 'All the photos of one person.',
+          },
+        ],
+      },
+      diff: {
+        title: 'Spot the difference',
+        art: 'A person in a room holds the floor plan of the flat and compares it with what they see. The plan has a round table, but in the room only its outline is left on the floor; on the plan the floor lamp is next to the armchair, in the room it is at the other end; the old armchair is the same. On the wall, a portrait of a chameleon holding a photo of itself in another colour, with a not-equal sign between them.',
+        line: 'Spot three differences',
+        move: '$ git diff --staged',
+        hint: 'exactly what goes into the next commit',
+        does: {
+          text: "Shows line by line what changed: `-` a removed line, `+` an added one. Without options it compares the working folder with the index, i.e. shows the changes not yet added with `git add`; it doesn't show new (untracked) files.",
+          meta: 'You compare “before” and “after” down to the smallest detail.',
+        },
+        tip: "After `git add`, a plain `git diff` is empty, but the changes haven't gone anywhere: they're in the index now, and `git diff --staged` shows them.",
+        opts: [
+          {
+            cmd: 'git diff --staged',
+            text: '— (`--cached`) the index against the last commit, i.e. what goes into the next commit.',
+            meta: 'You look into the basket before carrying it up to the attic.',
+          },
+          {
+            cmd: 'git diff HEAD',
+            text: '— all changes against the last commit, added and not.',
+            meta: 'You compare the whole room with the latest photo in the album.',
+          },
+          {
+            cmd: 'git diff --stat',
+            text: '— only which files changed and how many lines.',
+            meta: 'A list of differences without the details.',
+          },
+        ],
+      },
+    },
   },
 };
