@@ -30,7 +30,7 @@ export function gitCardBody(g, tx) {
     ? `<span class="cf-move"><span>${esc(t.move)}</span>${t.hint ? `<span class="g-hint">${esc(t.hint)}</span>` : ''}</span>`
     : '';
   return `<span class="cf-art">${danger}<img src="${pic.src}" alt="${esc(pic.alt)}" data-testid="card-art"></span>
-  <span class="cf-status"><span class="cf-code" style="background:${groupColour(g)}" data-testid="git-command">${badge(g.name)}</span><span class="cf-name">${esc(tx.git.groups[g.group])}</span></span>
+  <span class="cf-status"><span class="cf-code" style="background:${groupColour(g)}" data-testid="git-command">${badge(g.name)}</span><span class="cf-name" data-testid="git-group">${esc(tx.git.groups[g.group])}</span></span>
   <span class="cf-panel">${t.title ? `<span class="cf-creature">${esc(t.title)}</span>` : ''}${move}${
     t.line ? `<span class="cf-line">${esc(t.line)}</span>` : ''
   }</span>`;
@@ -95,10 +95,10 @@ export function gitSide(g, tx, href) {
   return `${
     conf
       ? `<h2>${esc(ui.conf)}</h2>
-              <div class="mini">${conf}</div>
+              <div class="mini" data-testid="git-conf">${conf}</div>
               `
       : ''
-  }<h2>${ui.help(cmd)}</h2>
+  }<h2 data-testid="git-help-title">${ui.help(cmd)}</h2>
               <p class="g-help" data-testid="git-help">${esc(h.section)}</p>
-              <p class="g-help-from">${esc(ui.more)}: <code>git help ${esc(g.id)}</code></p>`;
+              <p class="g-help-from" data-testid="git-help-more">${esc(ui.more)}: <code>git help ${esc(g.id)}</code></p>`;
 }

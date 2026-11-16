@@ -36,7 +36,8 @@ import { cls, art } from '../site/js/util.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const SITE = path.join(ROOT, 'site');
-const DIST = path.join(ROOT, 'dist');
+// BUILD_OUT=<folder> writes the build elsewhere (the noindex test builds several dates without touching dist/, RSP-199).
+const DIST = process.env.BUILD_OUT ? path.resolve(process.env.BUILD_OUT) : path.join(ROOT, 'dist');
 // Footer copyright (RSP-139): the first year, and the build year once it's later: "© 2026", then "© 2026–2027".
 const FIRST_YEAR = 2026;
 const BUILD_YEAR = new Date().getFullYear();
@@ -331,7 +332,7 @@ function gitPage(lang, tx, g) {
         <article class="sheet" style="--cls: ${gitColourVar(g)}">
           <div class="in page-grid">
             <h1 class="sr">${esc(title)}</h1>
-            <div class="page-card"><div class="card cf-static git${g.danger ? ' danger' : ''}">${gitCardBody(g, tx)}</div></div>
+            <div class="page-card"><div class="card cf-static git${g.danger ? ' danger' : ''}" data-testid="git-card">${gitCardBody(g, tx)}</div></div>
             <div class="page-main">
               ${gitMain(g, tx)}
             </div>
