@@ -60,14 +60,14 @@ Pick the right word before you write a ticket, a test title, an i18n key, a CSS 
 | 34 | what to test | Card page section: short test cases, steps → expected result (RSP-11). | `qa[c]`, `#m-qa`, `ui.qa` | — | test ideas, checklist |
 | 35 | tools and read more | Card page section: RFC, MDN, extra links and general tools. | `cardLinks(c)`, `REF`, `MORE`, `TOOLS`, `#m-links`, `ui.links` | — | references, links |
 
-## Git only (planned, RSP-115)
+## Git only (RSP-115; card pages since RSP-199)
 
 The git rubric is not on the site yet; terms follow `claude/git-cards-concept.md` (project doc) and change with it. UK words are from the concept; other languages come with the rubric. "Slot" says which shared card slot the term fills (RSP-117).
 
 | # | Term | UK | Definition | Slot | Don't use |
 |---|------|----|------------|------|-----------|
-| 36 | command | команда | The full command as typed, e.g. `git stash`, shown as one line under the picture. Never a bare `stash` or `-i`. | code badge | verb, keyword |
-| 37 | git group | група (Візит, Вдома, Переїзд, Пошта, Рятуйте!) | The git groups by danger level, named after the household world. | class | category |
+| 36 | command | команда | The full command as typed, e.g. `git stash`, shown as one line under the picture. Never a bare `stash` or `-i`. Test id `git-command`. | code badge | verb, keyword |
+| 37 | git group | група (Новосілля, Вдома, Візит, Родинний архів, Пошта) | The official `git help` grouping of the command with a household name (`site/data/git/groups.js`); the badge colour. Danger is a separate mark (#79), not a group. Test id `git-group`. | class | category, danger level |
 | 38 | scene title | назва сцени | The name of the picture's situation, e.g. "Guests at the door". | creature name | — |
 | 39 | household caption | побутовий підпис | One line in the picture's language: things, cupboard, boxes — no files or commits. | card line | description |
 | 40 | `$` line | рядок `$` | One command with a short plain explanation on the card front; `$` means "type this". | move | prompt, ★ line |
@@ -75,8 +75,13 @@ The git rubric is not on the site yet; terms follow `claude/git-cards-concept.md
 | 42 | bridge line | місток | One line that translates the metaphor back to git. | — | — |
 | 43 | parameter | параметр | An option of the command (`-u`, `--staged`), always with its full command and an explanation. | — | flag, switch (in texts) |
 | 44 | vignette | віньєтка | A small picture of the same scene with one change, only where a parameter changes the meaning or creates danger. | — | illustration (that is the main picture) |
-| 45 | danger box | блок небезпеки | A "!" section: what happens without the safe option, with its own vignette. | — | warning |
+| 45 | danger box | блок небезпеки | The "Careful" section of a danger card's page: what happens without the safe option, optionally with its own vignette. Test id `git-careful`. | — | warning |
 | 46 | tip | порада | An optional real-life advice on the card page. | — | hint (hint is Practice) |
+| 77 | git card page | сторінка git-картки | `/<lang>/git/<id>/` (RSP-199): the git card, then what it does, options, careful, often confused with, in git help. Hidden from search engines until its advent day. Test id `git-card-page` (the card itself `git-card`). | card page | — |
+| 78 | placeholder egg | яйце-заглушка | The picture of a git card whose scene isn't drawn yet: a big egg with Maryna's handwritten note (`EGG`, `/img/git/egg.svg`). Test id `card-art`. | card picture | placeholder image |
+| 79 | danger mark | позначка небезпеки | The brick-red frame and the "!" on the picture of a danger card (restore, reset, rebase, push); `danger: true` in the data. Test id `git-danger`. | — | danger group |
+| 80 | in git help | у git help | The side-column block: which `git help` list shows the command (`git help`, `git help -a`, `git help --user-interfaces`), its section there, and the command's own manual (`git help <command>`). Test ids `git-help-title`, `git-help`, `git-help-more`. | — | category |
+| 81 | often confused with | часто плутають з | The commands people mix up with this one, as buttons (a command with its own card links to it): `conf` in the data. Test id `git-conf`. | traps | similar commands |
 
 ## Practice and Traps (shared)
 

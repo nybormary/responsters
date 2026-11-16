@@ -33,6 +33,7 @@ import { resolveTarget } from '../targets';
 import { App } from './pages/app';
 import { LanguageMenu } from './pages/language-menu';
 import { CardPage } from './pages/card-page';
+import { GitCardPage } from './pages/git-card-page';
 import { HomePage } from './pages/home-page';
 import { SiteChrome } from './pages/site-chrome';
 import { NotFoundPage } from './pages/not-found-page';
@@ -40,6 +41,7 @@ import { Axe } from './pages/axe';
 import { Network } from './pages/network';
 import { Preloads } from './pages/preloads';
 import { D } from '../../site/data/http/cards.js';
+import { GIT, EGG } from '../../site/data/git/cards.js';
 
 // What the site keeps in localStorage (site/js/store.js adds the prefix "httpon." to every key).
 export type Seed = {
@@ -66,6 +68,7 @@ type Fixtures = {
   app: App;
   langMenu: LanguageMenu;
   cardPage: CardPage;
+  gitCardPage: GitCardPage;
   homePage: HomePage;
   site: SiteChrome;
   notFoundPage: NotFoundPage;
@@ -172,6 +175,9 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   cardPage: async ({ page }, use) => {
     await use(new CardPage(page));
   },
+  gitCardPage: async ({ page }, use) => {
+    await use(new GitCardPage(page));
+  },
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));
   },
@@ -196,6 +202,12 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
 export { expect };
 /** Every status code with a card, in the site's order: for tests that pick a card page at random. */
 export const CARD_CODES: number[] = D.map((d: { c: number }) => d.c);
+/** The 24 git cards (RSP-117 schema) and the placeholder picture of a card not drawn yet (RSP-199). */
+export type GitCard = { id: string; name: string; group: string; day: number; danger?: boolean; art?: string };
+export const GIT_CARDS: GitCard[] = GIT;
+export const GIT_EGG: { src: string; alt: string } = EGG;
+export { buildOn } from './build';
+
 export { TAG } from './tags';
 export { TID, type View } from './locators';
 export { SCREENS, SCREEN_NAMES, type ScreenName } from './screens';

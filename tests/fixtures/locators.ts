@@ -20,6 +20,18 @@ export const TID = {
   cardArt: 'card-art',
   cardPage: 'card-page',
 
+  // Git card page /<lang>/git/<id>/ (RSP-199): the card, its parts and the side column
+  gitCardPage: 'git-card-page',
+  gitCard: 'git-card',
+  gitCommand: 'git-command',
+  gitGroup: 'git-group',
+  gitDanger: 'git-danger',
+  gitCareful: 'git-careful',
+  gitConf: 'git-conf',
+  gitHelpTitle: 'git-help-title',
+  gitHelp: 'git-help',
+  gitHelpMore: 'git-help-more',
+
   // Practice (RSP-162): the answers of the current question and the feedback after an answer
   answer: (code: number) => `answer-${code}`,
   anyAnswer: '[data-testid^="answer-"]',

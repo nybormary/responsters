@@ -1,6 +1,9 @@
 // Small helpers used everywhere.
 export const $ = (id) => document.getElementById(id); // element by id
 export const cls = (c) => Math.floor(c / 100); // 404 → 4 (status class)
+// Text for HTML: & < > " become entities.
+export const esc = (s) =>
+  String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 export const art = (c) => `/img/${c}-art.jpg`; // creature art without the card text (absolute: pages live at /<lang>/http/…)
 
 // Footer mail link (RSP-139, RSP-147): the subject in the page language and, when known, the page the visitor writes

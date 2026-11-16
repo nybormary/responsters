@@ -29,7 +29,7 @@ language is a text in `i18n/<lang>.js`.
 | card line | `cards.<code>.line` | household caption, written by Maryna (text) |
 | picture description (alt) | `cards.<code>.art` | text |
 | card page sections | meaning, where you meet it, what to test, tools and read more | what it does + tip, options, careful, often confused with, "у git help: …" |
-| look-alikes | trap pairs: `traps.js` | command pairs (later) |
+| look-alikes | trap pairs: `traps.js` | `conf`: commands often confused with it (`cards.js`) |
 
 The `$` prompt is git-only: on an HTTP card it would suggest that a code or a move is a command to run. That's why
 the front line has a kind (`RUBRICS.<rubric>.front`).
@@ -40,6 +40,25 @@ the front line has a kind (`RUBRICS.<rubric>.front`).
 `danger` (the brick-red danger mark: restore, reset, rebase, push). The danger mark is a flag, not a group, because
 it appears in several groups. `scripts/check-locales.mjs` checks the git data: days 1–24 once each, unique ids, known
 groups, never two danger marks on neighbouring days.
+
+Optional per card: `help` (where `git help` lists a command outside its short list: `{ list: '-a', section }`; the
+others show their group's section), `art` (the picture; without it the placeholder egg `EGG`), `vigs` (pictures for the
+options, only where drawn), `conf`. The build stops when a picture it names is missing in `site/`.
+
+## Git card page (RSP-199)
+
+`/<lang>/git/<id>/`, built by `scripts/build-pages.mjs` with the markup of `site/js/gitcard.js` and the styles of
+`site/css/git.css`, in the HTTP card page layout: the card | what it does + tip, options, careful (danger cards) |
+often confused with, in git help. A section shows only when its texts exist, so a card builds before its texts.
+
+Texts per card, `git.cards.<id>` in every `site/i18n/<lang>.js` (RSP-200; added for all languages together, the build
+reads the keys from `en.js`): `title`, `line` (caption), `move` + `hint` (the `$` line), `art` (picture description),
+`does: { text, meta }`, `tip`, `opts: [{ cmd, text, meta, vig? }]`, `careful: [paragraphs, the first in bold]`.
+`text` is the technical explanation, `meta` the one sentence with the household metaphor; `` `code` `` marks commands.
+
+Search engines see a card page from its advent day on: the build compares `day` with the build date (Copenhagen
+time; `BUILD_DATE=YYYY-MM-DD` pins it). Days not reached yet: `noindex`, not in `sitemap.xml`. So each deploy in
+December opens the days reached by then, the first deploy in January all 24.
 
 ## Adding a rubric
 

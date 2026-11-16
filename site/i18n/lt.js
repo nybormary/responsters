@@ -509,4 +509,23 @@ export default {
   },
   // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network skydelis', 'Firefox: Edit and Resend', 'Postman: užklausos siuntimas'],
+  // Git rubric (RSP-199, RSP-200): labels of the git card page, the household names of the git groups (data/git/groups.js),
+  // and the card texts git.cards.<id> (scene title, caption, "$" line, page sections), added card by card with RSP-200.
+  git: {
+    ui: {
+      back: 'Į advento kalendorių',
+      does: 'Ką daro',
+      tip: 'Patarimas',
+      opts: 'Parinktys',
+      careful: 'Atsargiai',
+      conf: 'Dažnai painiojama su',
+      // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
+      help: (c) => `${c} sąraše`,
+      // before `git help <command>`, the command's own manual
+      more: 'išsamiau',
+      danger: 'Pavojinga komanda',
+    },
+    groups: { start: 'Įkurtuvės', home: 'Namuose', visit: 'Vizitas', archive: 'Šeimos archyvas', post: 'Paštas' },
+    cards: {},
+  },
 };
