@@ -337,7 +337,7 @@ function gitPage(lang, tx, g) {
               ${gitMain(g, tx)}
             </div>
             <aside class="page-side">
-              ${gitSide(g, tx, (id) => gitUrl(lang, id))}
+              ${gitSide(g, tx, (id) => gitUrl(lang, id), lang)}
             </aside>
           </div>
           <div class="page-bottom">
