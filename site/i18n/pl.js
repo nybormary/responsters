@@ -524,8 +524,185 @@ export default {
       // before `git help <command>`, the command's own manual
       more: 'szczegóły',
       danger: 'Niebezpieczne polecenie',
+      // heading of the outside links on a git card page
+      links: 'Więcej',
     },
-    groups: { start: 'Przeprowadzka', home: 'W domu', visit: 'Wizyta', archive: 'Archiwum rodzinne', post: 'Poczta' },
-    cards: {},
+    groups: { start: 'Przeprowadzka', home: 'W domu', visit: 'Wizyta', archive: 'Strych', post: 'Poczta' },
+    cards: {
+      clone: {
+        title: 'Mieszkanie z meblami',
+        art: 'Osoba z walizkami, na jednej naklejka z żarówką, stoi przed szeroko otwartymi drzwiami. W mieszkaniu stoi już fotel poprzednich lokatorów, na nim segregator ze starymi rachunkami, a na ścianie wisi portret dwóch identycznych kociąt. Przy drzwiach nowa tabliczka z nazwiskiem, a stara odpada.',
+        line: 'Ktoś tu mieszkał, a teraz ja.',
+        move: '$ git clone --depth 1 <url>',
+        hint: 'tylko ostatni stan, bez dawnej historii',
+        does: {
+          text: 'Kopiuje zdalne repozytorium do nowego katalogu: całą historię i gałęzie (jako `origin/…`), i przełącza na gałąź główną. git zapamiętuje adres pod nazwą `origin`, dlatego potem działają `git fetch`, `git pull` i `git push`.',
+          meta: 'Wprowadzasz się do wynajętego mieszkania z meblami: wszystko, co zostawili poprzedni lokatorzy, jest na miejscu, nawet segregator ze starymi rachunkami.',
+        },
+        tip: 'Projektu jeszcze nigdzie nie ma? Wtedy nie clone, tylko `git init`: tworzy puste repozytorium w bieżącym katalogu. A fork to nie polecenie git, tylko przycisk na GitHubie: kopia cudzego repozytorium na twoim koncie, którą potem klonujesz.',
+        opts: [
+          {
+            cmd: 'git clone <url> <katalog>',
+            text: '— kopiuje do katalogu o twojej nazwie zamiast nazwy repozytorium.',
+            meta: 'Ty wybierasz, co napisać na drzwiach nowego mieszkania.',
+          },
+          {
+            cmd: 'git clone -b <gałąź> <url>',
+            text: '— (`--branch`) od razu przełącza na wskazaną gałąź zamiast głównej.',
+            meta: 'Wchodzisz od razu do potrzebnego pokoju.',
+          },
+          {
+            cmd: 'git clone --depth 1 <url>',
+            text: '— tylko ostatni commit i tylko jedna gałąź; szybko, ale bez historii.',
+            meta: 'Mieszkanie z meblami, ale bez segregatora starych rachunków.',
+          },
+        ],
+      },
+      status: {
+        title: 'Trzy kupki',
+        art: 'Na ścianie portret kota z lupą. Osoba spokojnie przygląda się trzem kupkom ubrań: z kosza na kółkach wystają skarpetka, rękaw i ręcznik, na podłodze leżą noszone rzeczy, a obok złożona nowa koszula z dużą metką ze sklepu.',
+        line: 'Co tu mamy? Sprawdźmy.',
+        move: '$ git status -s',
+        hint: 'ten sam przegląd, jedna linijka na rzecz',
+        does: {
+          text: 'Pokazuje stan katalogu roboczego i indeksu: które zmiany są już przygotowane do commita (staged), które są zmienione, ale jeszcze nieprzygotowane, i których plików git nie śledzi (untracked). Niczego nie zmienia.',
+          meta: 'Rozkładasz rzeczy na trzy kupki i patrzysz, co gdzie jest.',
+        },
+        tip: 'Uruchamiaj przed każdym `git add` i `git commit`: wtedy do commita nie trafi nic zbędnego.',
+        opts: [
+          {
+            cmd: 'git status -s',
+            text: '— (`--short`) jedna linijka na plik; lewa kolumna to indeks, prawa to katalog roboczy (`M` zmieniony, `A` dodany, `??` untracked).',
+            meta: 'Ten sam przegląd, jedna linijka na rzecz.',
+          },
+          {
+            cmd: 'git status --ignored',
+            text: '— pokazuje też pliki, które ukrywa `.gitignore`.',
+            meta: 'Zaglądasz tam, gdzie zwykle nie patrzysz.',
+          },
+        ],
+      },
+      add: {
+        title: 'Do kosza',
+        art: 'Na ścianie portret kota śpiącego w koszyku. Osoba wkłada niebieski kłębek rzeczy do kosza na kółkach, w którym leżą już skarpetka, rękaw i ręcznik; na podłodze wciąż leżą sweter i skarpetka, jeszcze niedodane.',
+        line: 'Posprzątaj w pokoju, proszę.',
+        move: '$ git add -p',
+        hint: 'dodać część zmian, kawałek po kawałku',
+        does: {
+          text: 'Dodaje bieżący stan pliku do indeksu (staged): właśnie to trafi do następnego commita. Nowy plik po `git add` git zaczyna śledzić.',
+          meta: 'Wkładasz rzeczy do kosza, żeby potem spakować je do pudła.',
+        },
+        tip: 'Plik zmienił się po `git add`? Dodaj go jeszcze raz: w indeksie leży stan z chwili dodania. A po konflikcie scalania właśnie `git add <plik>` oznacza plik jako rozwiązany.',
+        opts: [
+          {
+            cmd: 'git add <plik>',
+            text: '— dodaje jeden plik (albo katalog).',
+            meta: 'Jedna rzecz do kosza.',
+          },
+          {
+            cmd: 'git add .',
+            text: '— wszystkie zmiany w bieżącym katalogu i niżej, razem z nowymi i usuniętymi plikami.',
+            meta: 'Zgarniasz do kosza wszystko z pokoju.',
+          },
+          {
+            cmd: 'git add -p',
+            text: '— (`--patch`) pokazuje zmiany kawałkami (hunks) i pyta o każdy; nowych (untracked) plików nie proponuje.',
+            meta: 'Przebierasz kupkę i wkładasz do kosza tylko to, co potrzebne.',
+          },
+        ],
+      },
+      commit: {
+        title: 'Podpisane pudło',
+        art: 'Strych. Stos pudeł, na każdym naklejka z obrazkiem: na dole choinka, wyżej bombka. Osoba przykleja naklejkę z domkiem na nowe żółte pudło na górze. Obok stoi pusty kosz na kółkach, a o stos oparty jest stary portret wiewiórki z szyszką.',
+        line: 'Co jest w tym pudle?',
+        move: '$ git commit -m "…"',
+        hint: 'opis od razu, bez edytora',
+        does: {
+          text: 'Zapisuje zawartość indeksu jako nowy commit w historii bieżącej gałęzi: z autorem, datą i opisem. Katalog roboczy się nie zmienia; commit zostaje lokalny, dopóki nie zrobisz `git push`.',
+          meta: 'Pakujesz rzeczy do pudła, podpisujesz je i zanosisz na strych.',
+        },
+        tip: 'Jeden commit — jedna myśl; w opisie pisz „po co”, a nie tylko „co”.',
+        opts: [
+          {
+            cmd: 'git commit -m "…"',
+            text: '— opis z wiersza poleceń, bez edytora.',
+            meta: 'Podpisz pudło.',
+          },
+          {
+            cmd: 'git commit -a',
+            text: '— najpierw sam dodaje zmiany w śledzonych plikach (zmienionych i usuniętych); nowych plików nie. Zwykle pisze się razem z opisem: `git commit -am "…"`.',
+            meta: 'Znane na strych, nowe zostaje.',
+          },
+          {
+            cmd: 'git commit --amend',
+            text: '— zastępuje ostatni commit nowym (z bieżącym indeksem i/lub nowym opisem). Nie rób tego z commitem, który już wysłano przez `git push`.',
+            meta: 'Przeklejasz naklejkę na pudle ze strychu, zanim zostanie wysłane.',
+          },
+        ],
+      },
+      log: {
+        title: 'Album rodzinny',
+        art: 'Otwarty album rodzinny w zielonej okładce. Cztery zdjęcia od najstarszego: domek z drzewem, żółw, dwoje ludzi obok siebie, morze i słońce; pod każdym nieczytelny podpis i data, od 09.11.1996 do 15.07.2007.',
+        line: 'Chcecie obejrzeć album?',
+        move: '$ git log --oneline',
+        hint: 'jedna linijka na commit',
+        does: {
+          text: 'Pokazuje historię commitów bieżącej gałęzi od najnowszego: hash, autor, data, opis.',
+          meta: 'Przeglądasz album od ostatniego zdjęcia wstecz.',
+        },
+        tip: 'Długa lista otwiera się w pagerze: `q` — wyjście, `/` — szukanie.',
+        opts: [
+          {
+            cmd: 'git log --oneline',
+            text: '— skrócony hash i pierwsza linijka opisu.',
+            meta: 'Tylko podpisy pod zdjęciami.',
+          },
+          {
+            cmd: 'git log --graph',
+            text: '— rysuje liniami gałęzie i scalenia.',
+            meta: 'Drzewo genealogiczne zamiast stosu zdjęć.',
+          },
+          {
+            cmd: 'git log -p',
+            text: '— pokazuje zmiany każdego commita.',
+            meta: 'Pod każdym zdjęciem — co dokładnie się zmieniło.',
+          },
+          {
+            cmd: 'git log -- <plik>',
+            text: '— tylko commity, które zmieniały ten plik.',
+            meta: 'Wszystkie zdjęcia jednej osoby.',
+          },
+        ],
+      },
+      diff: {
+        title: 'Znajdź różnice',
+        art: 'Osoba w pokoju trzyma plan mieszkania i porównuje go z tym, co widzi. Na planie jest okrągły stół, a w pokoju został po nim tylko kontur na podłodze; na planie lampa stojąca jest przy fotelu, a w pokoju w drugim końcu; stary fotel jest ten sam. Na ścianie portret kameleona, który trzyma swoje zdjęcie w innym kolorze, a między nimi znak „nie równa się”.',
+        line: 'Znajdź trzy różnice',
+        move: '$ git diff --staged',
+        hint: 'dokładnie to, co trafi do następnego commita',
+        does: {
+          text: 'Pokazuje linijka po linijce, co się zmieniło: `-` usunięta linijka, `+` dodana. Bez opcji porównuje katalog roboczy z indeksem, czyli pokazuje zmiany jeszcze niedodane przez `git add`; nowych (untracked) plików nie pokazuje.',
+          meta: 'Porównujesz „jak było” i „jak jest” do najmniejszego szczegółu.',
+        },
+        tip: 'Po `git add` zwykły `git diff` jest pusty, ale zmiany nigdzie nie zniknęły: są już w indeksie, pokazuje je `git diff --staged`.',
+        opts: [
+          {
+            cmd: 'git diff --staged',
+            text: '— (`--cached`) indeks względem ostatniego commita, czyli to, co trafi do następnego commita.',
+            meta: 'Zaglądasz do kosza, zanim zaniesiesz go na strych.',
+          },
+          {
+            cmd: 'git diff HEAD',
+            text: '— wszystkie zmiany względem ostatniego commita, dodane i niedodane.',
+            meta: 'Porównujesz cały pokój z ostatnim zdjęciem w albumie.',
+          },
+          {
+            cmd: 'git diff --stat',
+            text: '— tylko które pliki się zmieniły i ile linijek.',
+            meta: 'Lista różnic bez szczegółów.',
+          },
+        ],
+      },
+    },
   },
 };

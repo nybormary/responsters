@@ -28,7 +28,7 @@ language is a text in `i18n/<lang>.js`.
 | front line | kind `move`: the move as a pill, **no `$`** (`m`) | kind `command`: `$ …` + short explanation (texts; may differ from the name, e.g. `$ git status -s`) |
 | card line | `cards.<code>.line` | household caption, written by Maryna (text) |
 | picture description (alt) | `cards.<code>.art` | text |
-| card page sections | meaning, where you meet it, what to test, tools and read more | what it does + tip, options, careful, often confused with, "у git help: …" |
+| card page sections | meaning, where you meet it, what to test, tools and read more | what it does, options, careful, often confused with, "у git help: …", tip, read more |
 | look-alikes | trap pairs: `traps.js` | `conf`: commands often confused with it (`cards.js`) |
 
 The `$` prompt is git-only: on an HTTP card it would suggest that a code or a move is a command to run. That's why
@@ -43,13 +43,14 @@ groups, never two danger marks on neighbouring days.
 
 Optional per card: `help` (where `git help` lists a command outside its short list: `{ list: '-a', section }`; the
 others show their group's section), `art` (the picture; without it the placeholder egg `EGG`), `vigs` (pictures for the
-options, only where drawn), `conf`. The build stops when a picture it names is missing in `site/`.
+options, only where drawn), `conf`, `links` ("Read more": `u`, `label` per language with English as the fallback,
+optional `mark: 'github'` = GitHub's own logo file, unchanged, `site/img/brand/`). The build stops when a picture it names is missing in `site/`.
 
 ## Git card page (RSP-199)
 
 `/<lang>/git/<id>/`, built by `scripts/build-pages.mjs` with the markup of `site/js/gitcard.js` and the styles of
-`site/css/git.css`, in the HTTP card page layout: the card | what it does + tip, options, careful (danger cards) |
-often confused with, in git help. A section shows only when its texts exist, so a card builds before its texts.
+`site/css/git.css`, in the HTTP card page layout: the card | what it does, options, careful (danger cards) |
+often confused with, in git help, tip, read more (the tip moved to the side column in the RSP-200 review). A section shows only when its texts exist, so a card builds before its texts.
 
 Texts per card, `git.cards.<id>` in every `site/i18n/<lang>.js` (RSP-200; added for all languages together, the build
 reads the keys from `en.js`): `title`, `line` (caption), `move` + `hint` (the `$` line), `art` (picture description),

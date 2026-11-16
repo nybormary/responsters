@@ -1,6 +1,6 @@
 // Git card pages /<lang>/git/<id>/ (RSP-199). testomat.io folder "Git cards", suite "Git card pages (RSP-199)".
 // Manual only: cc96d414 ("In git help" names the right list, section and manual).
-// 2b281d82 covers its step 2 (a card without texts) for now; step 1 (a card with texts) comes with RSP-200 batch 1.
+// 2b281d82: step 1 (a card with texts, RSP-200 batch 1) and step 2 (a card without texts, while there are any).
 import { test, expect, TAG, GIT_CARDS, GIT_EGG, LANGS, buildOn, type GitCard } from '../fixtures';
 
 const pick = <T>(list: T[]): T => list[Math.floor(Math.random() * list.length)];
@@ -113,24 +113,73 @@ test(
 
 // ── 2b281d82 ────────────────────────────────────────────────────────────────────────────────────
 
+/** Texts mark commands with backticks; the page shows them as <code>, so the visible text has no backticks. */
+const visible = (s: string) => s.replace(/`/g, '');
+
+type CardTexts = {
+  title: string;
+  line: string;
+  move: string;
+  hint: string;
+  does: { text: string; meta: string };
+  tip?: string;
+  opts?: { cmd: string; text: string; meta: string }[];
+};
+
 test(
   'A git card page shows only the sections that have texts @T2b281d82',
   { tag: [TAG.git] },
   async ({ gitCardPage, lang, texts }) => {
-    const cards = texts.git.cards as Record<string, unknown>;
-    const bare = GIT_CARDS.filter((g) => !cards[g.id] && !('conf' in g));
-    test.skip(
-      bare.length === 0,
-      'RSP-200: every card has texts now, so step 2 (a card without texts) has nothing to check',
-    );
-    const g = pick(bare);
+    const cards = texts.git.cards as Record<string, CardTexts | undefined>;
 
-    await test.step(`${g.name} (no texts yet): no empty sections, the card and "In git help" only`, async () => {
+    const g = pick(GIT_CARDS.filter((x) => cards[x.id]));
+    const t = cards[g.id] as CardTexts;
+    await test.step(`${g.name} (with texts): card texts, What it does, tip, Options, Often confused with`, async () => {
       await gitCardPage.open(lang, g.id);
+      await expect(gitCardPage.title).toHaveText(t.title);
+      await expect(gitCardPage.caption).toHaveText(t.line);
+      await expect(gitCardPage.move).toHaveText(t.move);
+      await expect(gitCardPage.hint).toHaveText(t.hint);
+      await expect(gitCardPage.does).toContainText(visible(t.does.text));
+      await expect(gitCardPage.metaOf(gitCardPage.does)).toHaveText(visible(t.does.meta));
+      if (t.tip) await expect(gitCardPage.tip).toHaveText(`${texts.git.ui.tip}. ${visible(t.tip)}`);
+      const opts = t.opts ?? [];
+      await expect(gitCardPage.options).toHaveCount(opts.length);
+      for (const [i, o] of opts.entries()) {
+        const item = gitCardPage.options.nth(i);
+        await expect(item).toContainText(o.cmd);
+        await expect(item).toContainText(visible(o.text));
+        await expect(gitCardPage.metaOf(item)).toHaveText(visible(o.meta));
+      }
+      for (const name of g.conf ?? []) {
+        const own = GIT_CARDS.find((x) => x.name === name);
+        const chip = gitCardPage.confused.getByText(name, { exact: true });
+        await expect(chip).toBeVisible();
+        if (own)
+          await expect(gitCardPage.confused.getByRole('link', { name })).toHaveAttribute(
+            'href',
+            `/${lang}/git/${own.id}/`,
+          );
+        else await expect(gitCardPage.confused.getByRole('link', { name })).toHaveCount(0);
+      }
+      for (const l of g.links ?? []) {
+        const a = gitCardPage.links.getByRole('link', { name: new RegExp(l.label[lang] ?? l.label.en) });
+        await expect(a).toHaveAttribute('href', l.u);
+      }
+      await expect(gitCardPage.root).not.toContainText('undefined');
+    });
+
+    const bare = GIT_CARDS.filter((x) => !cards[x.id] && !x.conf);
+    if (bare.length === 0) return; // RSP-200: once every card has texts, step 2 has nothing to check
+    const b = pick(bare);
+    await test.step(`${b.name} (no texts yet): no empty sections, the card and "In git help" only`, async () => {
+      await gitCardPage.open(lang, b.id);
       await expect(gitCardPage.command).toBeVisible();
       await expect(gitCardPage.mainHeadings).toHaveCount(0);
       await expect(gitCardPage.careful).toHaveCount(0);
       await expect(gitCardPage.confused).toHaveCount(0);
+      await expect(gitCardPage.tip).toHaveCount(0);
+      await expect(gitCardPage.links).toHaveCount(0);
       await expect(gitCardPage.helpSection).toBeVisible();
       await expect(gitCardPage.root).not.toContainText('undefined');
     });

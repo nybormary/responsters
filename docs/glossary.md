@@ -67,7 +67,7 @@ The git rubric is not on the site yet; terms follow `claude/git-cards-concept.md
 | # | Term | UK | Definition | Slot | Don't use |
 |---|------|----|------------|------|-----------|
 | 36 | command | команда | The full command as typed, e.g. `git stash`, shown as one line under the picture. Never a bare `stash` or `-i`. Test id `git-command`. | code badge | verb, keyword |
-| 37 | git group | група (Новосілля, Вдома, Візит, Родинний архів, Пошта) | The official `git help` grouping of the command with a household name (`site/data/git/groups.js`); the badge colour. Danger is a separate mark (#79), not a group. Test id `git-group`. | class | category, danger level |
+| 37 | git group | група (Новосілля, Вдома, Візит, Горище, Пошта) | The official `git help` grouping of the command with a household name (`site/data/git/groups.js`); the badge colour. Danger is a separate mark (#79), not a group. Test id `git-group`. | class | category, danger level |
 | 38 | scene title | назва сцени | The name of the picture's situation, e.g. "Guests at the door". | creature name | — |
 | 39 | household caption | побутовий підпис | One line in the picture's language: things, cupboard, boxes — no files or commits. | card line | description |
 | 40 | `$` line | рядок `$` | One command with a short plain explanation on the card front; `$` means "type this". | move | prompt, ★ line |

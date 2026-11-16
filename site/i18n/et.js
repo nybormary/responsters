@@ -521,8 +521,185 @@ export default {
       // before `git help <command>`, the command's own manual
       more: 'täpsemalt',
       danger: 'Ohtlik käsk',
+      // heading of the outside links on a git card page
+      links: 'Loe lisaks',
     },
-    groups: { start: 'Sissekolimine', home: 'Kodus', visit: 'Külaskäik', archive: 'Pere arhiiv', post: 'Post' },
-    cards: {},
+    groups: { start: 'Sissekolimine', home: 'Kodus', visit: 'Külaskäik', archive: 'Pööning', post: 'Post' },
+    cards: {
+      clone: {
+        title: 'Möbleeritud korter',
+        art: 'Kohvritega inimene, ühel kohvril lambipirni kleebis, seisab pärani avatud ukse ees. Korteris on juba eelmiste üürnike tugitool, sellel vanade arvetega kaust, ja seinal ripub kahe ühesuguse kassipoja portree. Ukse kõrval uus nimesilt, vana kukub maha.',
+        line: 'Keegi elas siin, nüüd olen mina.',
+        move: '$ git clone --depth 1 <url>',
+        hint: 'ainult viimane seis, ilma vana ajaloota',
+        does: {
+          text: 'Kopeerib kaughoidla uude kausta: kogu ajaloo ja harud (kui `origin/…`) ning lülitub põhiharule. git jätab aadressi meelde nimega `origin`, nii et hiljem töötavad `git fetch`, `git pull` ja `git push`.',
+          meta: 'Kolid möbleeritud üürikorterisse: kõik, mis eelmised üürnikud maha jätsid, on alles, isegi vanade arvetega kaust.',
+        },
+        tip: 'Projekti pole veel kuskil? Siis mitte clone, vaid `git init`: see loob praegusesse kausta tühja hoidla. Ja fork pole git-käsk, vaid nupp GitHubis: kellegi teise hoidla koopia sinu kontol, mille sa siis kloonid.',
+        opts: [
+          {
+            cmd: 'git clone <url> <kaust>',
+            text: '— kopeerib sinu valitud nimega kausta, mitte hoidla nimega.',
+            meta: 'Ise valid, mis uue korteri uksele kirjutada.',
+          },
+          {
+            cmd: 'git clone -b <haru> <url>',
+            text: '— (`--branch`) lülitub kohe antud harule, mitte põhiharule.',
+            meta: 'Lähed kohe sellesse tuppa, mida vaja.',
+          },
+          {
+            cmd: 'git clone --depth 1 <url>',
+            text: '— ainult viimane commit ja ainult üks haru; kiire, aga ajalugu pole.',
+            meta: 'Möbleeritud korter, aga ilma vanade arvete kaustata.',
+          },
+        ],
+      },
+      status: {
+        title: 'Kolm hunnikut',
+        art: 'Seinal luubiga kassi portree. Inimene vaatab rahulikult kolme riidehunnikut: rataste peal korvist paistavad välja sokk, varrukas ja käterätik, põrandal on kantud riided ja nende kõrval kokkuvolditud uus särk suure poesildiga.',
+        line: 'Mis meil siin on? Vaatame järele.',
+        move: '$ git status -s',
+        hint: 'sama ülevaade, üks rida asja kohta',
+        does: {
+          text: 'Näitab töökausta ja indeksi seisu: millised muudatused on juba commitiks ette valmistatud (staged), millised on muudetud, aga veel ette valmistamata, ja milliseid faile git ei jälgi (untracked). Midagi ei muuda.',
+          meta: 'Laotad asjad kolme hunnikusse ja vaatad, mis kus on.',
+        },
+        tip: 'Käivita see enne igat käsku `git add` ja `git commit`: nii ei satu commiti midagi üleliigset.',
+        opts: [
+          {
+            cmd: 'git status -s',
+            text: '— (`--short`) üks rida faili kohta; vasak veerg on indeks, parem töökaust (`M` muudetud, `A` lisatud, `??` untracked).',
+            meta: 'Sama ülevaade, üks rida asja kohta.',
+          },
+          {
+            cmd: 'git status --ignored',
+            text: '— näitab ka faile, mida `.gitignore` peidab.',
+            meta: 'Vaatad ka sinna, kuhu tavaliselt ei vaata.',
+          },
+        ],
+      },
+      add: {
+        title: 'Korvi',
+        art: 'Seinal portree kassist, kes magab korvis. Inimene paneb sinise asjade kimbu rataste peal korvi, kus on juba sokk, varrukas ja käterätik; põrandal on veel kampsun ja sokk, mida pole lisatud.',
+        line: 'Korista palun oma tuba ära.',
+        move: '$ git add -p',
+        hint: 'lisa osa muudatustest, tükk tüki haaval',
+        does: {
+          text: 'Lisab faili praeguse seisu indeksisse (staged): just see läheb järgmisse commiti. Uut faili hakkab git pärast käsku `git add` jälgima.',
+          meta: 'Paned asjad korvi, et need hiljem kasti pakkida.',
+        },
+        tip: 'Muutsid faili pärast käsku `git add`? Lisa see uuesti: indeksis on seis lisamise hetkest. Ja pärast ühendamiskonflikti märgib just `git add <fail>` faili lahendatuks.',
+        opts: [
+          {
+            cmd: 'git add <fail>',
+            text: '— lisab ühe faili (või kausta).',
+            meta: 'Üks asi korvi.',
+          },
+          {
+            cmd: 'git add .',
+            text: '— kõik muudatused praeguses kaustas ja allpool, ka uued ja kustutatud failid.',
+            meta: 'Pühid kõik toast korvi.',
+          },
+          {
+            cmd: 'git add -p',
+            text: '— (`--patch`) näitab muudatusi tükkidena (hunks) ja küsib iga kohta; uusi (untracked) faile ei paku.',
+            meta: 'Sorteerid hunniku läbi ja paned korvi ainult vajaliku.',
+          },
+        ],
+      },
+      commit: {
+        title: 'Sildiga kast',
+        art: 'Pööning. Kastide virn, igal pildiga silt: all kuusk, selle peal jõulukuul. Inimene kleebib majakesega sildi uuele kollasele kastile virna otsas. Kõrval on tühi rataste peal korv ja virna vastu on toetatud vana portree käbiga oravast.',
+        line: 'Mis selles kastis on?',
+        move: '$ git commit -m "…"',
+        hint: 'sõnum kohe, ilma redaktorita',
+        does: {
+          text: 'Salvestab indeksi sisu uue commitina praeguse haru ajalukku: autori, kuupäeva ja sõnumiga. Töökaust ei muutu; commit jääb kohalikuks, kuni teed `git push`.',
+          meta: 'Pakid asjad kasti, paned sildi peale ja viid pööningule.',
+        },
+        tip: 'Üks commit, üks mõte; kirjuta sõnumisse „miks“, mitte ainult „mis“.',
+        opts: [
+          {
+            cmd: 'git commit -m "…"',
+            text: '— sõnum käsurealt, ilma redaktorita.',
+            meta: 'Pane kastile silt.',
+          },
+          {
+            cmd: 'git commit -a',
+            text: '— lisab kõigepealt ise jälgitavate failide muudatused (muudetud ja kustutatud), aga mitte uusi faile. Tavaliselt kirjutatakse koos sõnumiga: `git commit -am "…"`.',
+            meta: 'Tuttav pööningule, uus jääb.',
+          },
+          {
+            cmd: 'git commit --amend',
+            text: '— asendab viimase commiti uuega (praeguse indeksi ja/või uue sõnumiga). Ära tee seda commitiga, mis on juba käsuga `git push` ära saadetud.',
+            meta: 'Vahetad pööningult toodud kasti sildi, enne kui see ära saadetakse.',
+          },
+        ],
+      },
+      log: {
+        title: 'Perealbum',
+        art: 'Lahtine rohelises kaanes perealbum. Neli fotot vanimast alates: majake puuga, kilpkonn, kaks inimest kõrvuti, meri ja päike; iga foto all loetamatu allkiri ja kuupäev, 09.11.1996 kuni 15.07.2007.',
+        line: 'Kas soovite albumit vaadata?',
+        move: '$ git log --oneline',
+        hint: 'üks rida commiti kohta',
+        does: {
+          text: 'Näitab praeguse haru commitide ajalugu, uusim eespool: räsi, autor, kuupäev, sõnum.',
+          meta: 'Lehitsed albumit viimasest fotost tagasi.',
+        },
+        tip: 'Pikk nimekiri avaneb lehitsejas (pager): `q` väljub, `/` otsib.',
+        opts: [
+          {
+            cmd: 'git log --oneline',
+            text: '— lühendatud räsi ja sõnumi esimene rida.',
+            meta: 'Ainult allkirjad fotode all.',
+          },
+          {
+            cmd: 'git log --graph',
+            text: '— joonistab joontega harud ja ühendamised.',
+            meta: 'Sugupuu fotohunniku asemel.',
+          },
+          {
+            cmd: 'git log -p',
+            text: '— näitab iga commiti muudatusi.',
+            meta: 'Iga foto all: mis täpselt muutus.',
+          },
+          {
+            cmd: 'git log -- <fail>',
+            text: '— ainult commitid, mis seda faili muutsid.',
+            meta: 'Kõik ühe inimese fotod.',
+          },
+        ],
+      },
+      diff: {
+        title: 'Leia erinevused',
+        art: 'Inimene toas hoiab korteri plaani ja võrdleb seda sellega, mida näeb. Plaanil on ümmargune laud, aga toas on sellest järel ainult kontuur põrandal; plaanil on põrandalamp tugitooli kõrval, toas aga teises otsas; vana tugitool on sama. Seinal portree kameeleonist, kes hoiab oma fotot, kus ta on teist värvi, ja nende vahel märk „ei võrdu“.',
+        line: 'Leia kolm erinevust',
+        move: '$ git diff --staged',
+        hint: 'täpselt see, mis läheb järgmisse commiti',
+        does: {
+          text: 'Näitab rida-realt, mis muutus: `-` eemaldatud rida, `+` lisatud. Ilma valikuteta võrdleb töökausta indeksiga ehk näitab muudatusi, mida pole veel käsuga `git add` lisatud; uusi (untracked) faile ei näita.',
+          meta: 'Võrdled „enne“ ja „pärast“ viimase pisiasjani.',
+        },
+        tip: 'Pärast käsku `git add` on tavaline `git diff` tühi, aga muudatused pole kuhugi kadunud: need on nüüd indeksis ja `git diff --staged` näitab neid.',
+        opts: [
+          {
+            cmd: 'git diff --staged',
+            text: '— (`--cached`) indeks võrreldes viimase commitiga ehk see, mis läheb järgmisse commiti.',
+            meta: 'Vaatad korvi, enne kui selle pööningule viid.',
+          },
+          {
+            cmd: 'git diff HEAD',
+            text: '— kõik muudatused võrreldes viimase commitiga, lisatud ja lisamata.',
+            meta: 'Võrdled kogu tuba albumi viimase fotoga.',
+          },
+          {
+            cmd: 'git diff --stat',
+            text: '— ainult millised failid muutusid ja mitu rida.',
+            meta: 'Erinevuste loend ilma üksikasjadeta.',
+          },
+        ],
+      },
+    },
   },
 };
