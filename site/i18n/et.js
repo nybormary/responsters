@@ -536,7 +536,8 @@ export default {
       lead: (date, n) =>
         `${n} git-käsku, iga päev üks luuk. Esimene luuk: ${date}. Vahele jäänud päevi saab hiljem avada.`,
       today: 'täna',
-      missed: 'vahele jäänud',
+      // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
+      missed: 'ootab',
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
       todayHint: 'Ava tänane luuk',
       locked: (n, date) => `Päev ${n}, avaneb: ${date}`,

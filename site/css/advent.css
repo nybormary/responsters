@@ -92,6 +92,11 @@
   position: absolute;
   top: 6px;
   left: 6px;
+  max-width: calc(100% - 12px); /* never over the door's edge, whatever the language */
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   padding: 3px 6px;
   border-radius: 4px;
   font: 700 11px/1 var(--mono);

@@ -538,7 +538,8 @@ export default {
       lead: (date, n) =>
         `${n} git komandų, po vieną langelį per dieną nuo ${date} Praleistas dienas galima atidaryti vėliau.`,
       today: 'šiandien',
-      missed: 'praleista',
+      // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
+      missed: 'pamiršot?',
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
       todayHint: 'Atidaryk šiandienos langelį',
       locked: (n, date) => `${n} diena, atsidarys ${date}`,

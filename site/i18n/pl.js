@@ -538,7 +538,8 @@ export default {
       lead: (date, n) =>
         `${n} poleceń gita, jedne drzwiczki dziennie od ${date}. Pominięte dni można otworzyć później.`,
       today: 'dziś',
-      missed: 'pominięte',
+      // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
+      missed: 'otwórz',
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
       todayHint: 'Otwórz dzisiejsze drzwiczki',
       locked: (n, date) => `Dzień ${n}, otwiera się ${date}`,

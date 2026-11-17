@@ -537,7 +537,8 @@ export default {
       // n = the number of advent days (25 since 2026-11-17)
       lead: (date, n) => `${n} команд git, одні дверцята на день, від ${date}. Пропущені дні можна відкрити пізніше.`,
       today: 'сьогодні',
-      missed: 'пропущено',
+      // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
+      missed: 'забули?',
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
       todayHint: 'Відкрий сьогоднішні дверцята',
       locked: (n, date) => `День ${n}, відкриється ${date}`,

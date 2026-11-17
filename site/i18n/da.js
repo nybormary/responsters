@@ -535,7 +535,8 @@ export default {
       lead: (date, n) =>
         `${n} git-kommandoer, én låge om dagen fra ${date}. Dage, du er gået glip af, kan åbnes senere.`,
       today: 'i dag',
-      missed: 'sprunget over',
+      // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
+      missed: 'glemt?',
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
       todayHint: 'Åbn dagens låge',
       locked: (n, date) => `Dag ${n}, åbner ${date}`,
