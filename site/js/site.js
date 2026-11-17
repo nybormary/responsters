@@ -1,9 +1,10 @@
 // Shared script of the pages built by scripts/build-pages.mjs (RSP-156, RSP-155, RSP-148): the home page, the card
-// pages and the 404 page.
+// pages, the advent wall and the 404 page.
 // The language menu there is a <details> with plain links (works without JS); a click on a
 // language also saves it, like the switcher in the app, so the next language-less visit uses it (RSP-138).
 import { saveLang, followSavedLanguage, langFromPath, syncCookie } from './lang.js';
 import { contactOnClick } from './util.js';
+import './advent.js'; // the advent wall and the home page's Git enclosure, by the visitor's date (RSP-195)
 
 // Old links to the app (/#collection, /#practice, /#traps) now land on the home page /<lang>/ with the same hash
 // (dist/_redirects, chooser page at /): send them on to the app /<lang>/http/ (RSP-138, RSP-156).

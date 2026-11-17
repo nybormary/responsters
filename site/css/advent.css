@@ -1,0 +1,271 @@
+/* The advent wall /<lang>/git/ (RSP-195): 24 paper-covered doors, from the prototype on the canvas "Git cards —
+   pilot" (artboard Advent). The doors keep the git card palette (paper, ink, group colours) in both themes, like
+   the git cards themselves; the page around them follows the site theme. */
+.advent-page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px 0 48px;
+}
+.advent-page h1 {
+  margin: 0;
+  font: 800 clamp(30px, 6vw, 44px) / 1.1 var(--display);
+}
+.advent-lead {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 17px;
+  line-height: 1.45;
+}
+.advent-page .sr {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.wall {
+  --paper: #fbf3e2;
+  --door-ink: #2b211a;
+  --frame: #4a3a2e;
+  --danger: #c4473a;
+  margin: 8px 0 0;
+  padding: 28px 20px;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px 10px;
+  background: #e9dfcb radial-gradient(rgb(43 33 26 / 10%) 1px, transparent 1.5px) 0 0 / 9px 9px;
+  border: 2.5px solid var(--door-ink);
+  border-radius: 18px;
+}
+@media (min-width: 760px) {
+  .wall {
+    grid-template-columns: repeat(5, 1fr); /* 25 doors: 5 × 5 */
+    padding: 36px 32px;
+  }
+}
+.slot {
+  transform: rotate(var(--tilt, 0deg));
+}
+
+.door {
+  position: relative;
+  display: flex;
+  aspect-ratio: 4 / 5;
+  box-sizing: border-box;
+  border: 7px solid var(--frame);
+  border-radius: 6px;
+  box-shadow: 3px 4px 0 rgb(43 33 26 / 35%);
+  color: var(--door-ink);
+  text-decoration: none;
+  overflow: hidden;
+  background: var(--paper);
+}
+.door:focus-visible {
+  outline: 4px solid #3e9c93;
+  outline-offset: 4px;
+}
+
+/* Paper side: the number; a flag "today" / "missed"; the padlock only on a locked door. */
+.door-paper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper) repeating-linear-gradient(135deg, rgb(43 33 26 / 6%) 0 2px, transparent 2px 9px);
+}
+.door-num {
+  font: 800 clamp(36px, 7vw, 54px) / 1 var(--display);
+}
+.door-lock {
+  display: none;
+  margin-top: 6px;
+}
+.door-flag:empty {
+  display: none;
+}
+.door-flag {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  max-width: calc(100% - 12px); /* never over the door's edge, whatever the language */
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font: 700 11px/1 var(--mono);
+  letter-spacing: 0.04em;
+  background: #2e7a72;
+  color: #fff;
+}
+.door.missed .door-flag {
+  background: var(--paper);
+  color: var(--door-ink);
+  border: 1.5px dashed var(--door-ink);
+}
+.door.today {
+  outline: 4px solid #3e9c93;
+  outline-offset: 4px;
+}
+
+.door.locked {
+  border-color: #8c7f72;
+  box-shadow: none;
+  cursor: not-allowed;
+  color: #5e554c;
+}
+.door.locked .door-paper {
+  background: #d9d2c3;
+}
+.door.locked .door-num {
+  opacity: 0.75;
+}
+.door.locked .door-lock {
+  display: block;
+}
+
+/* Inside: the picture, then the day, the command and the group colour. Danger only now (frame + "!"). */
+.door-inside {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.door.open .door-paper {
+  display: none;
+}
+.door.open .door-inside {
+  display: flex;
+}
+.door-pic {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-bottom: 2px solid var(--door-ink);
+}
+.door-pic img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.door-cap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 7px;
+  min-width: 0;
+}
+.door-dn {
+  font: 800 16px/1 var(--display);
+}
+.door-cmd {
+  font: 700 12px/1.2 var(--mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.door-warn {
+  display: none;
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  font: 800 30px/1 var(--display);
+  color: var(--danger);
+  transform: rotate(8deg);
+  text-shadow: 0 0 3px var(--paper);
+}
+.door.open.danger {
+  border-color: var(--danger);
+}
+.door.open.danger .door-warn {
+  display: block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .door.open .door-inside {
+    animation: door-reveal 0.25s ease-out;
+  }
+}
+@keyframes door-reveal {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+/* Phone (prototype AdventPhone, 2026-11-17): today's door big above the wall; the wall 4 in a row with smaller
+   numbers, flags and padlocks, the command only on the big door. From 760px the wall is 5 × 5 and there is no copy. */
+.today-slot,
+.door-hint {
+  display: none;
+}
+@media (max-width: 759px) {
+  .today-slot {
+    display: block;
+    margin: 6px 0 4px;
+  }
+  .wall {
+    padding: 16px 12px;
+    border-radius: 14px;
+  }
+  .wall .door {
+    border-width: 4px;
+  }
+  .wall .door-num {
+    font-size: 22px;
+  }
+  .wall .door-flag {
+    top: 3px;
+    left: 3px;
+    padding: 2px 3px;
+    font-size: 8px;
+  }
+  .wall .door-lock {
+    width: 14px;
+    height: 14px;
+  }
+  .wall .door-cap {
+    padding: 2px 4px;
+  }
+  .wall .door-dn {
+    font-size: 12px;
+  }
+  .wall .door-cmd,
+  .wall .door-warn {
+    display: none;
+  }
+}
+.door-big {
+  aspect-ratio: 16 / 10;
+}
+.door-big .door-num {
+  font-size: 84px;
+}
+.door-big .door-hint {
+  display: block;
+  margin-top: 4px;
+  font: 700 14px var(--body, inherit);
+}
+.door-big .door-cap {
+  padding: 6px 10px;
+}
+.door-big .door-dn {
+  font-size: 20px;
+}
+.door-big .door-cmd {
+  font-size: 15px;
+}
+@media (max-width: 759px) {
+  .wall .door.open.danger .door-warn {
+    display: block;
+    font-size: 18px;
+    right: 4px;
+  }
+}

@@ -484,7 +484,11 @@ export default {
     httpText: (n, first, last) =>
       `${n} ${n === 1 ? 'væsen' : 'væsner'} fra ${first} til ${last}. Et kort for hver kode, træning i fire tilstande, fælder med koder, som folk forveksler.`,
     enter: 'Mød beboerne →',
-    gitSign: 'Kæledyr · åbner 1. december', // announcement sign; the Git date stays on purpose
+    // announcement sign (RSP-195): the date is the advent start (ADVENT_START), in the page language
+    gitSign: (date) => `Kæledyr · åbner ${date}`,
+    // from the advent start: the Git enclosure is open and links to the advent wall
+    gitOpenSign: 'Kæledyr · åbent',
+    gitEnter: 'Åbn julekalenderen →',
     gitText: 'Git-kommandoer som scener fra hverdagen. Vi åbner med en julekalender: et nyt kort hver dag.',
     pavilionSign: 'Temapavillon', // singular: the sign hangs on the pavilion itself
     pairsName: 'Arter, der ligner hinanden',
@@ -523,6 +527,22 @@ export default {
       danger: 'Farlig kommando',
       // heading of the outside links on a git card page
       links: 'Læs mere',
+    },
+    // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
+    wall: {
+      title: 'Git-julekalender',
+      // n = the number of advent days (25 since 2026-11-17)
+      lead: (date, n) =>
+        `${n} git-kommandoer, én låge om dagen fra ${date}. Dage, du er gået glip af, kan åbnes senere.`,
+      today: 'i dag',
+      // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
+      missed: 'glemt?',
+      // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
+      todayHint: 'Åbn dagens låge',
+      locked: (n, date) => `Dag ${n}, åbner ${date}`,
+      paper: (n) => `Dag ${n}, åbn lågen`,
+      open: (n, cmd) => `Dag ${n}: ${cmd}, åbn kortet`,
+      revealed: (n, cmd) => `Dag ${n}: ${cmd}. Tryk igen for at åbne kortet.`,
     },
     groups: { start: 'Indflytning', home: 'Hjemme', visit: 'Besøg', archive: 'Loftet', post: 'Posten' },
     cards: {

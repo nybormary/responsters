@@ -484,7 +484,12 @@ export default {
     httpText: (n, first, last) =>
       `${n} ${n === 1 ? 'olend' : 'olendit'} vahemikus ${first}–${last}. Kaart iga koodi kohta, harjutamine neljas režiimis, lõksud koodidega, mida aetakse segi.`,
     enter: 'Tutvu elanikega →',
-    gitSign: 'Lemmikloomad · avatakse 1. detsembril', // announcement sign; the Git date stays on purpose
+    // announcement sign (RSP-195): the date is the advent start (ADVENT_START), in the page language
+    gitSign: (date) =>
+      `Lemmikloomad · avatakse ${date.replace(/(\S+)$/, (m) => ({ november: 'novembril', detsember: 'detsembril' })[m] || m)}`,
+    // from the advent start: the Git enclosure is open and links to the advent wall
+    gitOpenSign: 'Lemmikloomad · avatud',
+    gitEnter: 'Ava jõulukalender →',
     gitText: 'Git-käsud igapäevaste stseenidena. Avame jõulukalendriga: iga päev uus kaart.',
     pavilionSign: 'Teemapaviljon', // singular: the sign hangs on the pavilion itself
     pairsName: 'Sarnased liigid',
@@ -523,6 +528,22 @@ export default {
       danger: 'Ohtlik käsk',
       // heading of the outside links on a git card page
       links: 'Loe lisaks',
+    },
+    // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
+    wall: {
+      title: 'Git-jõulukalender',
+      // n = the number of advent days (25 since 2026-11-17)
+      lead: (date, n) =>
+        `${n} git-käsku, iga päev üks luuk. Esimene luuk: ${date}. Vahele jäänud päevi saab hiljem avada.`,
+      today: 'täna',
+      // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
+      missed: 'ootab',
+      // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
+      todayHint: 'Ava tänane luuk',
+      locked: (n, date) => `Päev ${n}, avaneb: ${date}`,
+      paper: (n) => `Päev ${n}, ava luuk`,
+      open: (n, cmd) => `Päev ${n}: ${cmd}, ava kaart`,
+      revealed: (n, cmd) => `Päev ${n}: ${cmd}. Vajuta uuesti, et kaart avada.`,
     },
     groups: { start: 'Sissekolimine', home: 'Kodus', visit: 'Külaskäik', archive: 'Pööning', post: 'Post' },
     cards: {

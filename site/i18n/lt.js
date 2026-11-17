@@ -487,7 +487,11 @@ export default {
     httpText: (n, first, last) =>
       `${n} ${plural(n, { one: 'padaras', few: 'padarai', many: 'padaro', other: 'padarų' })} nuo ${first} iki ${last}. Kortelė kiekvienam kodui, treniruotė keturiais režimais, spąstai su kodais, kuriuos painioja.`,
     enter: 'Susipažink su gyventojais →',
-    gitSign: 'Naminiai gyvūnai · atidaroma gruodžio 1 d.', // announcement sign; the Git date stays on purpose
+    // announcement sign (RSP-195): the date is the advent start (ADVENT_START), in the page language
+    gitSign: (date) => `Naminiai gyvūnai · atidaroma ${date}`,
+    // from the advent start: the Git enclosure is open and links to the advent wall
+    gitOpenSign: 'Naminiai gyvūnai · atidaryta',
+    gitEnter: 'Atidaryti advento kalendorių →',
     gitText: 'Git komandos kaip buitinės scenos. Pradedame advento kalendoriumi: kasdien nauja kortelė.',
     pavilionSign: 'Teminis paviljonas', // singular: the sign hangs on the pavilion itself
     pairsName: 'Panašios rūšys',
@@ -526,6 +530,22 @@ export default {
       danger: 'Pavojinga komanda',
       // heading of the outside links on a git card page
       links: 'Skaityti daugiau',
+    },
+    // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
+    wall: {
+      title: 'Git advento kalendorius',
+      // n = the number of advent days (25 since 2026-11-17)
+      lead: (date, n) =>
+        `${n} git komandų, po vieną langelį per dieną nuo ${date} Praleistas dienas galima atidaryti vėliau.`,
+      today: 'šiandien',
+      // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
+      missed: 'pamiršot?',
+      // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
+      todayHint: 'Atidaryk šiandienos langelį',
+      locked: (n, date) => `${n} diena, atsidarys ${date}`,
+      paper: (n) => `${n} diena, atidaryti langelį`,
+      open: (n, cmd) => `${n} diena: ${cmd}, atidaryti kortelę`,
+      revealed: (n, cmd) => `${n} diena: ${cmd}. Paspausk dar kartą, kad atidarytum kortelę.`,
     },
     groups: { start: 'Įkurtuvės', home: 'Namuose', visit: 'Vizitas', archive: 'Palėpė', post: 'Paštas' },
     cards: {

@@ -1,7 +1,10 @@
-// The 24 git cards (RSP-117), in advent order (RSP-146). The order is a learning path (Maryna, 2026-11-16): week 1 moving
-// in and the first box (clone … diff), week 2 the rooms (ignore, restore, stash, branches), week 3 the post (fetch …
-// cherry-pick), week 4 archive and detective work (reset … tag). id = URL slug (/<lang>/git/<id>/), name = the badge label
-// (English in every language), group = key of groups.js, day = advent day (1–24),
+// The git cards (RSP-117), in advent order (RSP-146). The order is a learning path (Maryna, 2026-11-16): a new flat and
+// the first box (init … diff), then moving in (.gitignore, clone), the rooms (restore, stash, branches), the post
+// (fetch … cherry-pick), archive and detective work (reset … tag). 2026-11-17 (Maryna): init is day 1 (a newly built
+// flat), clone day 8 (a furnished rented one), so the advent has 25 days; the advent is how cards open in the season,
+// not a limit of the collection. id = URL slug (/<lang>/git/<id>/), name = the badge label
+// (English in every language), group = key of groups.js, day = advent day (1, 2, … with no gaps); a card added after
+// the season has no day: it is not on the wall and opens together with the last advent day's next day,
 // danger = the brick-red danger mark (restore, reset --hard, rebase, push --force),
 // help = where `git help` lists a command that is NOT in its short list (the others: their group's section, groups.js):
 // list = which help prints it ('-a' → `git help -a`, '--user-interfaces' → `git help --user-interfaces`), section = the
@@ -13,28 +16,8 @@
 // Texts (scene title, caption, "$" line and its explanation, page sections, picture description) are in i18n/<lang>.js under
 // git.cards.<id> (RSP-200); pictures: RSP-191 … RSP-194.
 export const GIT = [
-  {
-    id: 'clone',
-    name: 'git clone',
-    group: 'start',
-    day: 1,
-    art: '/img/git/clone.svg',
-    conf: ['git init', 'git pull'],
-    links: [
-      {
-        u: 'https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo',
-        label: {
-          en: 'GitHub Docs: Fork a repository',
-          uk: 'GitHub Docs: як зробити fork',
-          pl: 'GitHub Docs: jak zrobić fork',
-          da: 'GitHub Docs: sådan laver du en fork',
-          lt: 'GitHub Docs: kaip padaryti fork',
-          et: 'GitHub Docs: kuidas teha forki',
-        },
-        mark: 'github',
-      },
-    ],
-  },
+  // a newly built flat: nothing in it yet (Maryna, 2026-11-17); texts and picture to come
+  { id: 'init', name: 'git init', group: 'start', day: 1, conf: ['git clone'] },
   { id: 'status', name: 'git status', group: 'visit', day: 2, art: '/img/git/status.svg', conf: ['git diff'] },
   { id: 'add', name: 'git add', group: 'home', day: 3, art: '/img/git/add.svg', conf: ['git commit'] },
   {
@@ -54,51 +37,80 @@ export const GIT = [
     day: 7,
     help: { list: '--user-interfaces', section: 'User-facing repository, command and file interfaces' },
   }, // a file, not a command: no "git" in front
-  { id: 'restore', name: 'git restore', group: 'home', day: 8, danger: true },
-  { id: 'stash', name: 'git stash', group: 'home', day: 9, help: { list: '-a', section: 'Main Porcelain Commands' } },
-  { id: 'branch', name: 'git branch', group: 'archive', day: 10 },
-  { id: 'switch', name: 'git switch', group: 'archive', day: 11 },
-  { id: 'merge', name: 'git merge', group: 'archive', day: 12 },
-  { id: 'fetch', name: 'git fetch', group: 'post', day: 13 },
-  { id: 'pull', name: 'git pull', group: 'post', day: 14 },
-  { id: 'push', name: 'git push', group: 'post', day: 15, danger: true },
-  { id: 'show', name: 'git show', group: 'visit', day: 16 },
+  {
+    id: 'clone',
+    name: 'git clone',
+    group: 'start',
+    day: 8,
+    art: '/img/git/clone.svg',
+    conf: ['git init', 'git pull'],
+    links: [
+      {
+        u: 'https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo',
+        label: {
+          en: 'GitHub Docs: Fork a repository',
+          uk: 'GitHub Docs: як зробити fork',
+          pl: 'GitHub Docs: jak zrobić fork',
+          da: 'GitHub Docs: sådan laver du en fork',
+          lt: 'GitHub Docs: kaip padaryti fork',
+          et: 'GitHub Docs: kuidas teha forki',
+        },
+        mark: 'github',
+      },
+    ],
+  },
+  { id: 'restore', name: 'git restore', group: 'home', day: 9, danger: true },
+  { id: 'stash', name: 'git stash', group: 'home', day: 10, help: { list: '-a', section: 'Main Porcelain Commands' } },
+  { id: 'branch', name: 'git branch', group: 'archive', day: 11 },
+  { id: 'switch', name: 'git switch', group: 'archive', day: 12 },
+  { id: 'merge', name: 'git merge', group: 'archive', day: 13 },
+  { id: 'fetch', name: 'git fetch', group: 'post', day: 14 },
+  { id: 'pull', name: 'git pull', group: 'post', day: 15 },
+  { id: 'push', name: 'git push', group: 'post', day: 16, danger: true },
+  { id: 'show', name: 'git show', group: 'visit', day: 17 },
   {
     id: 'revert',
     name: 'git revert',
     group: 'archive',
-    day: 17,
+    day: 18,
     help: { list: '-a', section: 'Main Porcelain Commands' },
   },
   {
     id: 'cherry-pick',
     name: 'git cherry-pick',
     group: 'archive',
-    day: 18,
+    day: 19,
     help: { list: '-a', section: 'Main Porcelain Commands' },
   },
-  { id: 'reset', name: 'git reset', group: 'archive', day: 19, danger: true },
+  { id: 'reset', name: 'git reset', group: 'archive', day: 20, danger: true },
   {
     id: 'reflog',
     name: 'git reflog',
     group: 'visit',
-    day: 20,
+    day: 21,
     help: { list: '-a', section: 'Ancillary Commands / Manipulators' },
   },
-  { id: 'rebase', name: 'git rebase', group: 'archive', day: 21, danger: true },
+  { id: 'rebase', name: 'git rebase', group: 'archive', day: 22, danger: true },
   {
     id: 'blame',
     name: 'git blame',
     group: 'visit',
-    day: 22,
+    day: 23,
     help: { list: '-a', section: 'Ancillary Commands / Interrogators' },
   },
-  { id: 'bisect', name: 'git bisect', group: 'visit', day: 23 },
-  { id: 'tag', name: 'git tag', group: 'archive', day: 24 },
+  { id: 'bisect', name: 'git bisect', group: 'visit', day: 24 },
+  { id: 'tag', name: 'git tag', group: 'archive', day: 25 },
 ];
 
 // The placeholder picture for a card whose art isn't drawn yet (RSP-199): a big egg with Maryna's handwritten note
 // "This time I couldn't stop Claude from drawing", English in every language (the note is part of the picture).
+// The advent wall (RSP-195): the advent days in the order the doors hang (25 → 5 × 5 on a wide screen), scattered like on a real advent calendar, and a
+// small tilt per door (degrees) so the wall looks hand-hung. From the prototype on the canvas (artboard Advent).
+export const WALL = [17, 3, 22, 9, 1, 14, 6, 25, 20, 11, 24, 4, 15, 8, 19, 2, 12, 23, 7, 16, 10, 5, 21, 13, 18];
+export const TILT = [
+  -2, 1.5, -1, 2, -1.5, 1, 0.5, -2, 1.5, -0.5, 2, -1, -2, 1.5, -1, 2, -1.5, 1, 0.5, -2, 1.5, -0.5, 2, -1, 1,
+];
+
 export const EGG = {
   src: '/img/git/egg.svg',
   alt: "A big egg wobbling on the floor, with a handwritten note on its shell: This time I couldn't stop Claude from drawing",

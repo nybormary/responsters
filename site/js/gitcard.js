@@ -30,7 +30,7 @@ export function gitCardBody(g, tx) {
     ? `<span class="cf-move"><span data-testid="git-move">${esc(t.move)}</span>${t.hint ? `<span class="g-hint" data-testid="git-hint">${esc(t.hint)}</span>` : ''}</span>`
     : '';
   return `<span class="cf-art">${danger}<img src="${pic.src}" alt="${esc(pic.alt)}" data-testid="card-art"></span>
-  <span class="cf-status"><span class="cf-code" style="background:${groupColour(g)}" data-testid="git-command">${badge(g.name)}</span><span class="cf-name" data-testid="git-group">${esc(tx.git.groups[g.group])}</span></span>
+  <span class="cf-status"><span class="cf-name" data-testid="git-group">${esc(tx.git.groups[g.group])}</span><span class="cf-code" style="background:${groupColour(g)}" data-testid="git-command">${badge(g.name)}</span></span>
   <span class="cf-panel">${t.title ? `<span class="cf-creature" data-testid="git-title">${esc(t.title)}</span>` : ''}${move}${
     t.line ? `<span class="cf-line" data-testid="git-line">${esc(t.line)}</span>` : ''
   }</span>`;

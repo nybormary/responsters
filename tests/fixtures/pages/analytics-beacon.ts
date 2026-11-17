@@ -10,6 +10,7 @@ import {
   type ViewportSize,
 } from '@playwright/test';
 import { ANALYTICS_HOSTS, blockAnalytics } from '../analytics';
+import { resolveTarget } from '../../targets';
 
 /** The production domain: the only host the loader adds the beacon on. */
 export const PRODUCTION_HOST = 'mnemozoo.com';
@@ -20,19 +21,29 @@ export const PRODUCTION_HOST = 'mnemozoo.com';
  */
 const NOT_NEEDED = new Set(['image', 'font', 'stylesheet', 'media']);
 
-/** Connection-level errors (never an HTTP status, never an assertion) that get one more try (RSP-204). */
-const CONNECTION_ERROR = /ECONNRESET|ECONNREFUSED|ECONNABORTED|socket hang up/;
+/**
+ * Connection-level errors (never an HTTP status, never an assertion) that get one more try (RSP-204). ETIMEDOUT was
+ * added after PR #55 (job 134079285751): the preview stopped answering on /data/http/classes.js.
+ */
+const CONNECTION_ERROR = /ECONNRESET|ECONNREFUSED|ECONNABORTED|ETIMEDOUT|socket hang up/;
 
 /**
- * Fetches `url` for a routed request; after a connection-level error tries once more and records it, so a reset
- * is handled visibly: an annotation in the report and a line in the run log. Any other error fails as before.
+ * Only deploy previews get that try: the link between the GitHub runner and a Netlify preview is the known weak spot.
+ * On production a connection error is a real signal (visitors can't reach the site either), so it fails at once.
+ */
+const RETRY_CONNECTION = resolveTarget(process.env).name === 'preview';
+
+/**
+ * Fetches `url` for a routed request; on a preview, after a connection-level error tries once more and records it,
+ * so a reset is handled visibly: an annotation in the report and a line in the run log. Any other error fails as
+ * before.
  */
 async function fetchOnceMore(route: Route, url: string): Promise<APIResponse> {
   try {
     return await route.fetch({ url, maxRedirects: 0 });
   } catch (e) {
     const message = (e instanceof Error ? e.message : String(e)).split('\n')[0];
-    if (!CONNECTION_ERROR.test(message)) throw e;
+    if (!RETRY_CONNECTION || !CONNECTION_ERROR.test(message)) throw e;
     const description = `${new URL(url).pathname}: ${message}; tried once more`;
     test.info().annotations.push({ type: 'connection retry (RSP-204)', description });
     console.warn(`connection retry (RSP-204) ${description}`);
