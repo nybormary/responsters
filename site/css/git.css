@@ -40,9 +40,10 @@
   white-space: nowrap;
   font-size: min(19px, calc((100cqi - 34px) / 9.4));
 }
+/* "git" is lighter than the command by weight only. It was also dimmed (opacity 0.75), which left it at 3.7:1 on
+   the blue group colour, below WCAG AA 4.5:1 (RSP-199, found by the automated case 4354a333). */
 .card.git .g-git {
   font-weight: 600;
-  opacity: 0.75;
 }
 .card.git .cf-line {
   order: 2;
