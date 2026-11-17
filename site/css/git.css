@@ -149,6 +149,7 @@
 /* "Often confused with": the commands only; a command without a card of its own is a plain chip. */
 .git-page .mini code {
   background: none;
+  color: inherit; /* the chip's own text colour: the pill colour above is for code on light paper (dark theme, RSP-199) */
   padding: 0;
 }
 .git-page .mini span {
