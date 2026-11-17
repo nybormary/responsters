@@ -147,6 +147,11 @@ export class HomePage {
     });
   }
 
+  /** The open Git enclosure's link to the advent wall (RSP-195); none while the enclosure is an announcement. */
+  get gitLink(): Locator {
+    return this.root.getByTestId(TID.enclosureGitLink);
+  }
+
   /** Signs (RSP-170): the kicker above the h1 and the signs of the HTTP and Git enclosures and of the pavilion. */
   get kicker(): Locator {
     return this.root.getByTestId(TID.homeKicker);

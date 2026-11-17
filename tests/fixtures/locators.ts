@@ -64,11 +64,21 @@ export const TID = {
   foot: (id: 'map' | 'about' | 'news' | 'linkedin' | 'github' | 'contact' | 'security' | 'copy' | 'credits') =>
     `foot-${id}`,
 
+  // Advent wall /<lang>/git/ (RSP-195; glossary advent wall, door): the doors, the flag on a paper door, the big copy
+  // of today's door on a phone, the live region that announces an opened door
+  adventPage: 'advent-page',
+  adventWall: 'advent-wall',
+  adventDoor: 'advent-door',
+  doorFlag: 'door-flag',
+  adventToday: 'advent-today',
+  adventLive: 'advent-live',
+
   // Home page /<lang>/ (RSP-156): glossary terms home page, hero, zoo map, enclosure, pavilion, about
   homePage: 'home-page',
   homeHero: 'home-hero',
   zooMap: 'zoo-map',
   enclosure: (rubric: 'http' | 'git') => `enclosure-${rubric}`,
+  enclosureGitLink: 'enclosure-git-link', // the open Git enclosure's link to the advent wall (RSP-195)
   pavilionTraps: 'pavilion-traps',
   homeAbout: 'home-about',
   heroCard: (code: number) => `hero-card-${code}`, // one creature in the hero (RSP-172)
