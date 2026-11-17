@@ -21,18 +21,17 @@
   flex-direction: column;
   gap: 3px;
 }
-/* The group name sits in the middle between the badge and the dashed line: the space above it is the 3px gap plus
-   half of what the 33px name box leaves around the text, so the panel's own top margin is the same 3px (RSP-200
-   review: it was 8px, 16px below the name against 10px above). */
+/* Order (RSP-195 review): picture, group name, command badge, dashed line. The 33px name box centres the group between
+   the picture and the badge (the badge pulls up by the 3px gap, so it is about 7px on both sides); the badge keeps the same 8px to the dashed line as on the HTTP card. */
 .card.git .cf-panel {
-  margin-top: 3px;
+  margin-top: 8px;
 }
 /* The command is one line, as typed in a terminal: it scales down to fit instead of wrapping. */
 .card.git .cf-code {
   width: 100%;
   height: auto;
   min-height: 44px;
-  margin-top: 8px;
+  margin-top: -3px;
   padding: 10px 12px;
   box-sizing: border-box;
   border-radius: 10px;
