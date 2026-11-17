@@ -16,7 +16,7 @@ import { D, BY } from '../site/data/http/cards.js';
 import { CLS } from '../site/data/http/classes.js';
 import { CONF, PAIRS } from '../site/data/http/traps.js';
 import { NEWS } from '../site/data/news.js';
-import { GIT, EGG } from '../site/data/git/cards.js';
+import { GIT, EGG, WALL, TILT } from '../site/data/git/cards.js';
 import { GROUPS } from '../site/data/git/groups.js';
 import { gitCardBody, gitMain, gitSide } from '../site/js/gitcard.js';
 import { LOCALES, LANG_NAMES } from '../site/i18n/index.js';
@@ -32,7 +32,7 @@ import {
   siteFooter,
   APP_LANG_MENU,
 } from '../site/js/render.js';
-import { cls, art } from '../site/js/util.js';
+import { cls, art, addDays, dayMonth } from '../site/js/util.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const SITE = path.join(ROOT, 'site');
@@ -165,6 +165,7 @@ const STYLES = {
   'not-found': ['fonts', 'base', 'site', 'card'],
   news: ['fonts', 'base', 'site', 'news'],
   git: ['fonts', 'base', 'site', 'card', 'detail', 'git'],
+  wall: ['fonts', 'base', 'site', 'advent'],
 };
 const styles = (type) => `<link rel="stylesheet" href="/css/page-${type}.css" />`;
 // WebSite structured data on every home page (RSP-156 AC17): Google shows the site name "Mnemozoo" above the URL
@@ -208,17 +209,31 @@ const gitUrl = (lang, id) => `${gitHome(lang)}${id}/`;
 
 // Git card pages are hidden from search until their advent day (RSP-199 AC3, AC4 decided 2026-11-15): the build
 // compares each card's day with the build date (Copenhagen time). A day already reached → indexed and in the
-// sitemap; a later day → noindex, not in the sitemap. So the November deploy hides all 24, every December deploy
-// opens the days reached so far, and the first deploy in January opens all. BUILD_DATE=YYYY-MM-DD pins the date
-// (tests, a rebuild of an old state).
-const ADVENT_YEAR = 2026;
+// sitemap; a later day → noindex, not in the sitemap. BUILD_DATE=YYYY-MM-DD pins the date (tests, a rebuild of an old
+// state).
+// The advent start is a setting (RSP-196 comment 10499, decided 2026-11-16): ADVENT_START=YYYY-MM-DD is day 1, day N
+// opens N−1 days later. Default 1 December 2026; Netlify deploy previews build with 1 November (netlify.toml), so the
+// wall can be clicked through before the season. The build only writes the state on its own date (the fallback
+// without JS and what search engines see); in the browser the wall and the home page's Git enclosure decide by the
+// visitor's own date (js/advent.js), so no deploy is needed on the day a door opens.
 const BUILD_DATE =
   process.env.BUILD_DATE || new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Copenhagen' }).format(new Date());
-if (!/^\d{4}-\d{2}-\d{2}$/.test(BUILD_DATE)) throw new Error(`build-pages: BUILD_DATE=${BUILD_DATE} is not YYYY-MM-DD`);
-/** The group colour for the page's --cls accent (Новосілля has none yet, RSP-200). */
+const ADVENT_START = process.env.ADVENT_START || '2026-12-01';
+for (const [name, value] of [
+  ['BUILD_DATE', BUILD_DATE],
+  ['ADVENT_START', ADVENT_START],
+])
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) throw new Error(`build-pages: ${name}=${value} is not YYYY-MM-DD`);
+/** The advent days (25 since init joined on 2026-11-17); cards added after the season have no day. */
+const ADVENT_DAYS = GIT.filter((g) => g.day).length;
+/** The date a card opens: adventDay(1) is ADVENT_START; a card without a day opens the day after the advent. */
+const adventDay = (day) => addDays(ADVENT_START, (day ?? ADVENT_DAYS + 1) - 1);
+/** True when the advent has started on the build date (the wall is indexed, the home enclosure is open). */
+const adventStarted = BUILD_DATE >= ADVENT_START;
+/** The group colour for the page's --cls accent. */
 const gitColourVar = (g) => GROUPS[g.group].c || 'var(--line)';
 /** True when the card's advent day has been reached on the build date. */
-const gitOpen = (g) => BUILD_DATE >= `${ADVENT_YEAR}-12-${String(g.day).padStart(2, '0')}`;
+const gitOpen = (g) => BUILD_DATE >= adventDay(g.day);
 
 /**
  * hreflang links of one page in every language. x-default names the language-less URL,
@@ -353,6 +368,84 @@ function gitPage(lang, tx, g) {
 `;
 }
 
+// The padlock on a door that can't be opened yet (decoration: the door's label says it).
+const LOCK = `<svg class="door-lock" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
+
+/**
+ * One door of the advent wall (RSP-195). Three states: locked (its day hasn't come: no link, a padlock), paper (can
+ * be opened: the number on paper), open (paper torn: picture, command, group colour; the danger frame and "!" only
+ * now). The build writes the state on its own date; js/advent.js repaints by the visitor's date and handles the two
+ * clicks (1st tears the paper, 2nd follows the link to the card page). Without JS a paper door is a plain link to
+ * the card page. The labels for every state travel in data-* so the script needs no language file.
+ */
+function wallDoor(lang, tx, g, tilt) {
+  const w = tx.git.wall;
+  const date = adventDay(g.day);
+  const when = dayMonth(lang, date);
+  const locked = BUILD_DATE < date;
+  const pic = g.art || EGG.src;
+  const labels = {
+    locked: w.locked(g.day, when),
+    paper: w.paper(g.day),
+    open: w.open(g.day, g.name) + (g.danger ? `, ${tx.git.ui.danger}` : ''),
+    revealed: w.revealed(g.day, g.name),
+  };
+  const data = Object.entries(labels)
+    .map(([k, v]) => `data-label-${k}="${esc(v)}"`)
+    .join(' ');
+  return `<li class="slot" style="--tilt: ${tilt}deg">
+            <a class="door ${locked ? 'locked' : 'paper'}"${locked ? ' aria-disabled="true"' : ` href="${gitUrl(lang, g.id)}"`} aria-label="${esc(locked ? labels.locked : labels.paper)}" data-testid="advent-door" data-day="${g.day}" data-date="${date}" data-href="${gitUrl(lang, g.id)}"${g.danger ? ' data-danger=""' : ''} ${data}>
+              <span class="door-paper" aria-hidden="true"><span class="door-flag" data-testid="door-flag"></span><span class="door-num">${g.day}</span>${LOCK}<span class="door-hint">${esc(w.todayHint)}</span></span>
+              <span class="door-inside" aria-hidden="true"><span class="door-pic"><img src="${pic}" alt="" loading="lazy" width="640" height="573" /><span class="door-warn">!</span></span><span class="door-cap" style="background: ${gitColourVar(g)}"><span class="door-dn">${g.day}</span><span class="door-cmd">${esc(g.name)}</span></span></span>
+            </a>
+          </li>`;
+}
+
+/**
+ * The advent wall /<lang>/git/ (RSP-195): a paper-covered door per advent day, scattered. Indexed from the advent start.
+ * On a phone, js/advent.js also puts a big copy of today's door above the wall (.today-slot, prototype AdventPhone).
+ */
+function gitWallPage(lang, tx) {
+  const w = tx.git.wall;
+  const byDay = new Map(GIT.map((g) => [g.day, g]));
+  const doors = WALL.map((day, i) => wallDoor(lang, tx, byDay.get(day), TILT[i])).join('\n          ');
+  const lead = w.lead(dayMonth(lang, ADVENT_START), ADVENT_DAYS);
+  const menu = langMenu(lang, gitHome, LANG_NAMES, tx.ui.lang);
+  return `<!doctype html>
+<html lang="${lang}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    ${BEACON}${adventStarted ? '' : '\n    <meta name="robots" content="noindex" />'}
+    <title>${esc(w.title)} · Mnemozoo</title>
+    <meta name="description" content="${esc(lead)}" />
+    <link rel="canonical" href="${ORIGIN}${gitHome(lang)}" />
+    ${alternates(gitHome)}
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    ${styles('wall')}
+    ${preloads('home', lang)}
+    <script type="module" src="/js/site.js"></script>
+  </head>
+  <body>
+    <div class="wrap" id="top">
+      ${siteHeader(lang, tx.site, menu)}
+      <main class="advent-page" data-testid="advent-page">
+        <h1>${esc(w.title)}</h1>
+        <p class="advent-lead">${esc(lead)}</p>
+        <div class="today-slot" data-testid="advent-today-slot"></div>
+        <ul class="wall" data-testid="advent-wall" data-flag-today="${esc(w.today)}" data-flag-missed="${esc(w.missed)}">
+          ${doors}
+        </ul>
+        <p class="sr" aria-live="polite" data-testid="advent-live"></p>
+      </main>
+      ${siteFooter(lang, tx.site, COPY, `${ORIGIN}${gitHome(lang)}`)}
+    </div>
+  </body>
+</html>
+`;
+}
+
 /** The creatures in the hero of the home page (RSP-156 AC2): one from each status class, so all five colours show. */
 const HERO = [102, 201, 304, 418, 502];
 
@@ -367,6 +460,31 @@ const STEP_ART = [
 ];
 
 /** Home page /<lang>/ (RSP-156): what the zoo is, what is open and who builds it. Texts: i18n `home`, `site`. */
+/**
+ * The Git enclosure on the home page (RSP-195, decided 2026-11-16): before the advent start an announcement with the
+ * start date in the page language; from the start an open enclosure that leads to the advent wall. The build writes
+ * the state on its own date; js/advent.js swaps in the open one (kept in a <template>) once the visitor's date reaches
+ * data-advent-start, so the enclosure opens on the day without a deploy.
+ */
+function gitEnclosure(lang, h) {
+  const open = `<a href="${gitHome(lang)}" data-testid="enclosure-git-link">
+              <span class="enclosure-top"><span class="sign sign-open" data-testid="sign-git">${esc(h.gitOpenSign)}</span></span>
+              <span class="enclosure-name">Git</span>
+              <span>${esc(h.gitText)}</span>
+              <span class="enclosure-go">${esc(h.gitEnter)}</span>
+            </a>`;
+  if (adventStarted)
+    return `<li class="enclosure" style="--stripe: var(--c4)" data-testid="enclosure-git" data-advent-start="${ADVENT_START}">
+            ${open}
+          </li>`;
+  return `<li class="enclosure enclosure-soon" style="--stripe: var(--c4)" data-testid="enclosure-git" data-advent-start="${ADVENT_START}">
+            <span class="enclosure-top"><span class="sign sign-notice" data-testid="sign-git">${esc(h.gitSign(dayMonth(lang, ADVENT_START)))}</span></span>
+            <span class="enclosure-name">Git</span>
+            <span>${esc(h.gitText)}</span>
+            <template>${open}</template>
+          </li>`;
+}
+
 function homePage(lang, tx) {
   const h = tx.home;
   const app = appUrl(lang);
@@ -431,11 +549,7 @@ function homePage(lang, tx) {
               <span class="enclosure-go">${esc(h.enter)}</span>
             </a>
           </li>
-          <li class="enclosure enclosure-soon" style="--stripe: var(--c4)" data-testid="enclosure-git">
-            <span class="enclosure-top"><span class="sign sign-notice" data-testid="sign-git">${esc(h.gitSign)}</span></span>
-            <span class="enclosure-name">Git</span>
-            <span>${esc(h.gitText)}</span>
-          </li>
+          ${gitEnclosure(lang, h)}
         </ul>
         <div class="pavilions">
           <ul class="pavilion-list">
@@ -667,6 +781,7 @@ function redirects() {
 function sitemap(today) {
   const groups = [homeOrRoot, appUrl, newsUrl]
     .concat(D.map((d) => (l) => creatureUrl(l, d.c)))
+    .concat(adventStarted ? [gitHome] : [])
     .concat(GIT.filter(gitOpen).map((g) => (l) => gitUrl(l, g.id)));
   const alt = (url) =>
     LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${ORIGIN}${url(l)}" />`)
@@ -713,12 +828,14 @@ async function checkBeacons() {
     `${l}/404.html`,
     `${appUrl(l).slice(1)}index.html`,
     ...D.map((d) => `${creatureUrl(l, d.c).slice(1)}index.html`),
+    `${gitHome(l).slice(1)}index.html`,
     ...GIT.map((g) => `${gitUrl(l, g.id).slice(1)}index.html`),
   ]).concat('404.html');
   const choosers = [
     'index.html',
     `${appUrl(null).slice(1)}index.html`,
     ...D.map((d) => `${creatureUrl(null, d.c).slice(1)}index.html`),
+    `${gitHome(null).slice(1)}index.html`,
     ...GIT.map((g) => `${gitUrl(null, g.id).slice(1)}index.html`),
   ];
   for (const file of stay)
@@ -766,12 +883,13 @@ async function build() {
       await page(creatureUrl(lang, d.c), creaturePage(lang, tx, d));
       pages++;
     }
+    await page(gitHome(lang), gitWallPage(lang, tx));
     for (const g of GIT) {
       await page(gitUrl(lang, g.id), gitPage(lang, tx, g));
       gitPages++;
     }
   }
-  for (const rest of [appUrl(null), newsUrl(null)]
+  for (const rest of [appUrl(null), newsUrl(null), gitHome(null)]
     .concat(D.map((d) => creatureUrl(null, d.c)))
     .concat(GIT.map((g) => gitUrl(null, g.id))))
     await page(rest, chooserPage(rest));
@@ -780,7 +898,7 @@ async function build() {
   await writeFile(path.join(DIST, 'sitemap.xml'), sitemap(new Date().toISOString().slice(0, 10)));
   await checkBeacons();
   console.log(
-    `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${LANGS.length} news pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards) + ${gitPages} git card pages (${GIT.filter(gitOpen).length} of ${GIT.length} cards open on ${BUILD_DATE}), chooser pages, _redirects → dist/`,
+    `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${LANGS.length} news pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards) + ${gitPages} git card pages (${GIT.filter(gitOpen).length} of ${GIT.length} cards open on ${BUILD_DATE}, advent start ${ADVENT_START}, ${ADVENT_DAYS} days) + the advent wall, chooser pages, _redirects → dist/`,
   );
 }
 

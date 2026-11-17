@@ -6,6 +6,23 @@ export const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 export const art = (c) => `/img/${c}-art.jpg`; // creature art without the card text (absolute: pages live at /<lang>/http/…)
 
+// Calendar days as YYYY-MM-DD strings (RSP-195, RSP-196): the advent start, a door's day, the visitor's today. Strings
+// compare in date order, and there is no time of day to go wrong with time zones.
+/** The day `n` days after `iso`: addDays('2026-12-01', 23) → '2026-12-24'. */
+export const addDays = (iso, n) => new Date(Date.parse(`${iso}T00:00:00Z`) + n * 864e5).toISOString().slice(0, 10);
+/** Today in the visitor's own time zone (the advent opens by the visitor's date, not the server's). */
+export function localToday(now = new Date()) {
+  const two = (n) => String(n).padStart(2, '0');
+  return `${now.getFullYear()}-${two(now.getMonth() + 1)}-${two(now.getDate())}`;
+}
+// English dates in the British order ("1 December"), like the rest of the English texts.
+const DATE_LOCALE = { en: 'en-GB' };
+/** Day and month in the page language: dayMonth('uk', '2026-12-01') → '1 грудня', 'lt' → 'gruodžio 1 d.'. */
+export const dayMonth = (lang, iso) =>
+  new Intl.DateTimeFormat(DATE_LOCALE[lang] || lang, { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(
+    new Date(`${iso}T00:00:00Z`),
+  );
+
 // Footer mail link (RSP-139, RSP-147): the subject in the page language and, when known, the page the visitor writes
 // from, so a bug report says where the bug is. The build writes the address it knows; a click puts in the address
 // actually open (the app's tab, a missing page's path). No form, no service: the visitor's own mail program.

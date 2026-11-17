@@ -15,10 +15,14 @@ export class Build {
   }
 }
 
-/** Build the site as on `date` (YYYY-MM-DD, Copenhagen) into `out`. Rejects with the build's error when it stops. */
-export async function buildOn(date: string, out: string): Promise<Build> {
+/**
+ * Build the site as on `date` (YYYY-MM-DD, Copenhagen) into `out`, with the advent starting on `start` (ADVENT_START,
+ * RSP-195; the production default unless a test says otherwise, so a test's dates don't depend on how the run was
+ * started). Rejects with the build's error when it stops.
+ */
+export async function buildOn(date: string, out: string, start = '2026-12-01'): Promise<Build> {
   await run(process.execPath, ['scripts/build-pages.mjs'], {
-    env: { ...process.env, BUILD_DATE: date, BUILD_OUT: out },
+    env: { ...process.env, BUILD_DATE: date, BUILD_OUT: out, ADVENT_START: start },
   });
   return new Build(out);
 }

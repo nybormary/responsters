@@ -82,6 +82,9 @@ The git rubric is not on the site yet; terms follow `claude/git-cards-concept.md
 | 79 | danger mark | позначка небезпеки | The brick-red frame and the "!" on the picture of a danger card (restore, reset, rebase, push); `danger: true` in the data. Test id `git-danger`. | — | danger group |
 | 80 | in git help | у git help | The side-column block: which `git help` list shows the command (`git help`, `git help -a`, `git help --user-interfaces`), its section there, and the command's own manual (`git help <command>`). Test ids `git-help-title`, `git-help`, `git-help-more`. | — | category |
 | 81 | often confused with | часто плутають з | The commands people mix up with this one, as buttons (a command with its own card links to it): `conf` in the data. Test id `git-conf`. | traps | similar commands |
+| 82 | advent wall | адвент-календар (стіна) | `/<lang>/git/` (RSP-195): a paper-covered door per advent day (25), scattered (`WALL`, `TILT` in `cards.js`). Test ids `advent-page`, `advent-wall`, `advent-live` (what a screen reader hears when a door opens). | — | calendar page |
+| 83 | door | дверцята | One day on the advent wall. States: **locked** (its day hasn't come: grey, padlock, no link), **paper** (can be opened: the number; flag **today** or **missed**), **open** (paper torn: picture, day, command, group colour; danger mark only now). 1st click opens the paper, 2nd goes to the card page. Test ids `advent-door`, `door-flag`. | — | window, tile |
+| 84 | advent start | старт адвенту | `ADVENT_START` (YYYY-MM-DD, build setting; default 2026-12-01, deploy previews 2026-11-01): day 1 of the advent, day N opens N−1 days later. The build writes the state on its own date; in the browser the wall and the home page's Git enclosure follow the visitor's date. | — | launch date |
 
 ## Practice and Traps (shared)
 

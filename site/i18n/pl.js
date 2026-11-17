@@ -487,7 +487,11 @@ export default {
     httpText: (n, first, last) =>
       `${n} ${plural(n, { one: 'stworek', few: 'stworki', many: 'stworków', other: 'stworka' })} od ${first} do ${last}. Karta każdego kodu, trening w czterech trybach, pułapki z kodami, które się mylą.`,
     enter: 'Poznaj mieszkańców →',
-    gitSign: 'Zwierzęta domowe · otwarcie 1 grudnia', // announcement sign; the Git date stays on purpose
+    // announcement sign (RSP-195): the date is the advent start (ADVENT_START), in the page language
+    gitSign: (date) => `Zwierzęta domowe · otwarcie ${date}`,
+    // from the advent start: the Git enclosure is open and links to the advent wall
+    gitOpenSign: 'Zwierzęta domowe · otwarte',
+    gitEnter: 'Otwórz kalendarz adwentowy →',
     gitText: 'Polecenia gita jako scenki z codzienności. Zaczynamy od kalendarza adwentowego: codziennie nowa karta.',
     pavilionSign: 'Pawilon tematyczny', // singular: the sign hangs on the pavilion itself
     pairsName: 'Podobne gatunki',
@@ -526,6 +530,21 @@ export default {
       danger: 'Niebezpieczne polecenie',
       // heading of the outside links on a git card page
       links: 'Więcej',
+    },
+    // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
+    wall: {
+      title: 'Kalendarz adwentowy gita',
+      // n = the number of advent days (25 since 2026-11-17)
+      lead: (date, n) =>
+        `${n} poleceń gita, jedne drzwiczki dziennie od ${date}. Pominięte dni można otworzyć później.`,
+      today: 'dziś',
+      missed: 'pominięte',
+      // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
+      todayHint: 'Otwórz dzisiejsze drzwiczki',
+      locked: (n, date) => `Dzień ${n}, otwiera się ${date}`,
+      paper: (n) => `Dzień ${n}, otwórz drzwiczki`,
+      open: (n, cmd) => `Dzień ${n}: ${cmd}, otwórz kartę`,
+      revealed: (n, cmd) => `Dzień ${n}: ${cmd}. Naciśnij jeszcze raz, aby otworzyć kartę.`,
     },
     groups: { start: 'Przeprowadzka', home: 'W domu', visit: 'Wizyta', archive: 'Strych', post: 'Poczta' },
     cards: {

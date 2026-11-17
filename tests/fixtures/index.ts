@@ -202,7 +202,7 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
 export { expect };
 /** Every status code with a card, in the site's order: for tests that pick a card page at random. */
 export const CARD_CODES: number[] = D.map((d: { c: number }) => d.c);
-/** The 24 git cards (RSP-117 schema) and the placeholder picture of a card not drawn yet (RSP-199). */
+/** The git cards (RSP-117 schema; 25 advent days since 2026-11-17) and the placeholder picture of a card not drawn yet (RSP-199). */
 export type GitCard = {
   id: string;
   name: string;
@@ -242,6 +242,8 @@ export {
 export { markOf, boxes, controlBorderContrasts, type Mark, type BorderContrast } from './pages/answer-marks';
 export { focusRingsByTab, type FocusRing } from './pages/focus';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';
+// Dates in the page language, as the build writes them (RSP-195): dayMonth('uk', '2026-12-01') → '1 грудня'.
+export { dayMonth } from '../../site/js/util.js';
 // Analytics beacon (RSP-175).
 export { AnalyticsBeacon, BeaconRequests, PRODUCTION_HOST, type BeaconTag } from './pages/analytics-beacon';
 export { ANALYTICS_HOSTS } from './analytics';

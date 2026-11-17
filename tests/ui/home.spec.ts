@@ -12,6 +12,7 @@ import {
   resolveColor,
   textContrast,
   insideParent,
+  dayMonth,
 } from '../fixtures';
 
 // ── 38210569 ────────────────────────────────────────────────────────────────────────────────────
@@ -151,16 +152,23 @@ test(
   'Home page signs: kicker, open zone, announcement and pavilion, with the status in words @T73d1e2d9',
   { tag: [TAG.home] },
   async ({ homePage, lang, texts, page }) => {
+    // The Git enclosure is an announcement until the advent start and open from it (RSP-195): which one is due
+    // depends on the build's ADVENT_START (deploy previews start earlier) and the browser's date, so read both.
+    let git: readonly [string, string, 'open' | 'notice'] = ['Git enclosure', '', 'notice'];
+    await test.step(`open /${lang}/`, async () => {
+      await homePage.open(lang);
+      const start = await homePage.adventStart();
+      git =
+        (await homePage.browserToday()) >= start
+          ? ['Git enclosure (advent started)', texts.home.gitOpenSign, 'open']
+          : ['Git enclosure (announcement)', texts.home.gitSign(dayMonth(lang, start)), 'notice'];
+    });
     const signs = [
       ['kicker', homePage.kicker, texts.home.kicker, 'open'],
       ['HTTP enclosure', homePage.sign('http'), texts.home.httpSign, 'open'],
-      ['Git enclosure', homePage.sign('git'), texts.home.gitSign, 'notice'],
+      [git[0], homePage.sign('git'), git[1], git[2]],
       ['pavilion', homePage.sign('pavilion'), texts.home.pavilionSign, 'plain'],
     ] as const;
-
-    await test.step(`open /${lang}/`, async () => {
-      await homePage.open(lang);
-    });
 
     for (const theme of ['light', 'dark'] as const) {
       await test.step(`${theme}: texts from the locale, colours from the tokens, normal case, readable`, async () => {

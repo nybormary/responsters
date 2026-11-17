@@ -12,3 +12,9 @@
 # [[redirects]] here, so the old ones moved there, first: the old Netlify address → https://mnemozoo.com keeping the
 # path (RSP-136; only that exact host, deploy previews are not redirected) and /security.txt →
 # /.well-known/security.txt (RSP-137, RFC 9116).
+
+# The advent start (RSP-196 comment 10499): production builds with the default in scripts/build-pages.mjs (1 December
+# 2026); deploy previews start the advent on 1 November, so the wall and the home page's Git enclosure can be tested
+# before the season (deploy previews are not indexed).
+[context.deploy-preview.environment]
+  ADVENT_START = "2026-11-01"

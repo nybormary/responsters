@@ -132,6 +132,21 @@ export class HomePage {
     return this.page.locator(`head link[rel="alternate"][hreflang="${hreflang}"]`);
   }
 
+  /** The advent start the build wrote on the Git enclosure (RSP-195): YYYY-MM-DD. */
+  async adventStart(): Promise<string> {
+    const start = await this.root.getByTestId(TID.enclosure('git')).getAttribute('data-advent-start');
+    if (!start) throw new Error('the Git enclosure has no data-advent-start');
+    return start;
+  }
+
+  /** Today in the browser's time zone, as the page's own script sees it (YYYY-MM-DD). */
+  async browserToday(): Promise<string> {
+    return this.page.evaluate(() => {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    });
+  }
+
   /** Signs (RSP-170): the kicker above the h1 and the signs of the HTTP and Git enclosures and of the pavilion. */
   get kicker(): Locator {
     return this.root.getByTestId(TID.homeKicker);

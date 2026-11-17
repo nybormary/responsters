@@ -487,7 +487,11 @@ export default {
     httpText: (n, first, last) =>
       `${n} ${plural(n, { one: 'істота', few: 'істоти', many: 'істот', other: 'істоти' })} від ${first} до ${last}. Картка кожного коду, практика у чотирьох режимах, пастки з кодами, які плутають.`,
     enter: 'Познайомитися з мешканцями →',
-    gitSign: 'Домашні улюбленці · відкриваємось 1 грудня', // announcement sign; the Git date stays on purpose
+    // announcement sign (RSP-195): the date is the advent start (ADVENT_START), in the page language
+    gitSign: (date) => `Домашні улюбленці · відкриваємось ${date}`,
+    // from the advent start: the Git enclosure is open and links to the advent wall
+    gitOpenSign: 'Домашні улюбленці · відкрито',
+    gitEnter: 'Відкрити адвент-календар →',
     gitText: 'Команди git як побутові сценки. Відкриваємось адвент-календарем: щодня нова картка.',
     pavilionSign: 'Тематичний павільйон', // singular: the sign hangs on the pavilion itself
     pairsName: 'Схожі види',
@@ -526,6 +530,20 @@ export default {
       danger: 'Небезпечна команда',
       // heading of the outside links on a git card page
       links: 'Докладніше',
+    },
+    // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
+    wall: {
+      title: 'Адвент-календар git',
+      // n = the number of advent days (25 since 2026-11-17)
+      lead: (date, n) => `${n} команд git, одні дверцята на день, від ${date}. Пропущені дні можна відкрити пізніше.`,
+      today: 'сьогодні',
+      missed: 'пропущено',
+      // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
+      todayHint: 'Відкрий сьогоднішні дверцята',
+      locked: (n, date) => `День ${n}, відкриється ${date}`,
+      paper: (n) => `День ${n}, відкрити дверцята`,
+      open: (n, cmd) => `День ${n}: ${cmd}, відкрити картку`,
+      revealed: (n, cmd) => `День ${n}: ${cmd}. Натисни ще раз, щоб відкрити картку.`,
     },
     groups: { start: 'Новосілля', home: 'Вдома', visit: 'Візит', archive: 'Горище', post: 'Пошта' },
     cards: {

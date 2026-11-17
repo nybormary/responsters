@@ -488,7 +488,11 @@ export default {
     httpText: (n, first, last) =>
       `${n} creatures from ${first} to ${last}. A card for every code, practice in four modes, traps with codes people mix up.`,
     enter: 'Meet the residents →',
-    gitSign: 'Pets · opening 1 December', // announcement sign; the Git date stays on purpose
+    // announcement sign (RSP-195): the date is the advent start (ADVENT_START), in the page language
+    gitSign: (date) => `Pets · opening ${date}`,
+    // from the advent start: the Git enclosure is open and links to the advent wall
+    gitOpenSign: 'Pets · open',
+    gitEnter: 'Open the advent calendar →',
     gitText: 'Git commands as everyday scenes. Opening with an advent calendar: a new card every day.',
     pavilionSign: 'Themed pavilion', // singular: the sign hangs on the pavilion itself
     pairsName: 'Look-alike species',
@@ -527,6 +531,20 @@ export default {
       danger: 'Dangerous command',
       // heading of the outside links on a git card page
       links: 'Read more',
+    },
+    // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
+    wall: {
+      title: 'Git advent calendar',
+      // n = the number of advent days (25 since 2026-11-17)
+      lead: (date, n) => `${n} git commands, one door a day from ${date}. Missed days can be opened later.`,
+      today: 'today',
+      missed: 'missed',
+      // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
+      todayHint: "Open today's door",
+      locked: (n, date) => `Day ${n}, opens ${date}`,
+      paper: (n) => `Day ${n}, open the door`,
+      open: (n, cmd) => `Day ${n}: ${cmd}, open the card`,
+      revealed: (n, cmd) => `Day ${n}: ${cmd}. Press again to open the card.`,
     },
     groups: { start: 'Moving in', home: 'At home', visit: 'Visit', archive: 'Attic', post: 'Post' },
     cards: {

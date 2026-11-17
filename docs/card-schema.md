@@ -36,9 +36,9 @@ the front line has a kind (`RUBRICS.<rubric>.front`).
 
 ## Git-only data
 
-`site/data/git/cards.js`, one entry per card in advent order: `id`, `name`, `group`, `day` (advent day 1–24),
+`site/data/git/cards.js`, one entry per card in advent order: `id`, `name`, `group`, `day` (advent day 1, 2, … with no gaps; 25 days since init joined on 2026-11-17; a card added after the season has no day and opens the day after the advent),
 `danger` (the brick-red danger mark: restore, reset, rebase, push). The danger mark is a flag, not a group, because
-it appears in several groups. `scripts/check-locales.mjs` checks the git data: days 1–24 once each, unique ids, known
+it appears in several groups. `scripts/check-locales.mjs` checks the git data: advent days 1, 2, … once each, the wall (`WALL`, `TILT`) hangs every advent day once, unique ids, known
 groups, never two danger marks on neighbouring days.
 
 Optional per card: `help` (where `git help` lists a command outside its short list: `{ list: '-a', section }`; the
@@ -59,10 +59,18 @@ reads the keys from `en.js`): `title`, `line` (caption), `move` + `hint` (the `$
 
 Search engines see a card page from its advent day on: the build compares `day` with the build date (Copenhagen
 time; `BUILD_DATE=YYYY-MM-DD` pins it). Days not reached yet: `noindex`, not in `sitemap.xml`. So each deploy in
-December opens the days reached by then, the first deploy in January all 24.
+December opens the days reached by then, the first deploy after the advent all of them.
 
 ## Adding a rubric
 
 1. Add it to `site/data/rubrics.js` with its own path and its own storage prefix.
 2. Put its data in `site/data/<rubric>/` and its texts under its own key in every `site/i18n/<lang>.js`.
 3. Fill the shared slots; add rubric-only fields to its own data, not to the shared slots.
+
+## Advent wall and start (RSP-195)
+
+`/<lang>/git/` shows one door per advent day (25: 5 × 5 on a wide screen; on a phone 4 in a row with today's door big above) in the order of `WALL` (with `TILT`, both in `cards.js`). Day N opens `ADVENT_START`
++ (N−1) days; `ADVENT_START` is a build setting (default `2026-12-01`, deploy previews `2026-11-01` in `netlify.toml`).
+The build writes each door's state and the home page's Git enclosure as on the build date (`BUILD_DATE`): that is
+what search engines and visitors without JS get, and it decides `noindex` and the sitemap. `site/js/advent.js`
+repaints both by the visitor's own date, so nothing needs a deploy on the day a door opens.
