@@ -376,7 +376,9 @@ const LOCK = `<svg class="door-lock" aria-hidden="true" width="22" height="22" v
  * be opened: the number on paper), open (paper torn: picture, command, group colour; the danger frame and "!" only
  * now). The build writes the state on its own date; js/advent.js repaints by the visitor's date and handles the two
  * clicks (1st tears the paper, 2nd follows the link to the card page). Without JS a paper door is a plain link to
- * the card page. The labels for every state travel in data-* so the script needs no language file.
+ * the card page. The labels for every state travel in data-* so the script needs no language file. role="link" keeps
+ * the door a link for assistive tech while it has no href (locked): an <a> without href is a generic element, and
+ * aria-label / aria-disabled are not allowed on it (RSP-198, axe aria-prohibited-attr).
  */
 function wallDoor(lang, tx, g, tilt) {
   const w = tx.git.wall;
@@ -394,7 +396,7 @@ function wallDoor(lang, tx, g, tilt) {
     .map(([k, v]) => `data-label-${k}="${esc(v)}"`)
     .join(' ');
   return `<li class="slot" style="--tilt: ${tilt}deg">
-            <a class="door ${locked ? 'locked' : 'paper'}"${locked ? ' aria-disabled="true"' : ` href="${gitUrl(lang, g.id)}"`} aria-label="${esc(locked ? labels.locked : labels.paper)}" data-testid="advent-door" data-day="${g.day}" data-date="${date}" data-href="${gitUrl(lang, g.id)}"${g.danger ? ' data-danger=""' : ''} ${data}>
+            <a class="door ${locked ? 'locked' : 'paper'}" role="link"${locked ? ' aria-disabled="true"' : ` href="${gitUrl(lang, g.id)}"`} aria-label="${esc(locked ? labels.locked : labels.paper)}" data-testid="advent-door" data-day="${g.day}" data-date="${date}" data-href="${gitUrl(lang, g.id)}"${g.danger ? ' data-danger=""' : ''} ${data}>
               <span class="door-paper" aria-hidden="true"><span class="door-flag" data-testid="door-flag"></span><span class="door-num">${g.day}</span>${LOCK}<span class="door-hint">${esc(w.todayHint)}</span></span>
               <span class="door-inside" aria-hidden="true"><span class="door-pic"><img src="${pic}" alt="" loading="lazy" width="640" height="573" /><span class="door-warn">!</span></span><span class="door-cap" style="background: ${gitColourVar(g)}"><span class="door-dn">${g.day}</span><span class="door-cmd">${esc(g.name)}</span></span></span>
             </a>
