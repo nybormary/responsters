@@ -542,6 +542,8 @@ export default {
       missed: 'forgot?',
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
       todayHint: "Open today's door",
+      // the legend above the wall (RSP-208): its name for screen readers; the group names come from git.groups
+      legend: 'Groups',
       locked: (n, date) => `Day ${n}, opens ${date}`,
       paper: (n) => `Day ${n}, open the door`,
       open: (n, cmd) => `Day ${n}: ${cmd}, open the card`,
