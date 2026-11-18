@@ -540,6 +540,7 @@ export default {
       missed: 'ootab',
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
       todayHint: 'Ava tänane luuk',
+      legend: 'Rühmad',
       locked: (n, date) => `Päev ${n}, avaneb: ${date}`,
       paper: (n) => `Päev ${n}, ava luuk`,
       open: (n, cmd) => `Päev ${n}: ${cmd}, ava kaart`,

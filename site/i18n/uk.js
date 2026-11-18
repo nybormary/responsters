@@ -541,6 +541,7 @@ export default {
       missed: 'забули?',
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
       todayHint: 'Відкрий сьогоднішні дверцята',
+      legend: 'Групи',
       locked: (n, date) => `День ${n}, відкриється ${date}`,
       paper: (n) => `День ${n}, відкрити дверцята`,
       open: (n, cmd) => `День ${n}: ${cmd}, відкрити картку`,

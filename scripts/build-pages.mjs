@@ -18,7 +18,7 @@ import { CONF, PAIRS } from '../site/data/http/traps.js';
 import { NEWS } from '../site/data/news.js';
 import { GIT, EGG, WALL, TILT } from '../site/data/git/cards.js';
 import { GROUPS } from '../site/data/git/groups.js';
-import { gitCardBody, gitMain, gitSide } from '../site/js/gitcard.js';
+import { gitCardBody, gitMain, gitSide, groupIcon } from '../site/js/gitcard.js';
 import { LOCALES, LANG_NAMES } from '../site/i18n/index.js';
 import en from '../site/i18n/en.js';
 import { fill } from '../site/i18n/fill.js';
@@ -371,6 +371,22 @@ function gitPage(lang, tx, g) {
 // The padlock on a door that can't be opened yet (decoration: the door's label says it).
 const LOCK = `<svg class="door-lock" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
 
+/** The command on an open door (RSP-208): "git " in its own span, hidden on phones; ".gitignore" stays whole. */
+const doorCmd = (name) =>
+  name.startsWith('git ') ? `<span class="door-git">git </span>${esc(name.slice(4))}` : esc(name);
+
+/**
+ * The legend above the wall (RSP-208, moved up by Maryna on review): each group's icon on its colour and its name, so the groups can be told apart
+ * without colour. Order of git help, as in data/git/groups.js.
+ */
+const wallLegend = (tx) =>
+  `<ul class="wall-legend" aria-label="${esc(tx.git.wall.legend)}" data-testid="advent-legend">${Object.entries(GROUPS)
+    .map(
+      ([k, gr]) =>
+        `<li data-testid="advent-legend-item"><span class="legend-chip" style="background: ${gr.c}">${groupIcon(k, 'legend-gi')}</span>${esc(tx.git.groups[k])}</li>`,
+    )
+    .join('')}</ul>`;
+
 /**
  * One door of the advent wall (RSP-195). Three states: locked (its day hasn't come: no link, a padlock), paper (can
  * be opened: the number on paper), open (paper torn: picture, command, group colour; the danger frame and "!" only
@@ -398,7 +414,7 @@ function wallDoor(lang, tx, g, tilt) {
   return `<li class="slot" style="--tilt: ${tilt}deg">
             <a class="door ${locked ? 'locked' : 'paper'}" role="link"${locked ? ' aria-disabled="true"' : ` href="${gitUrl(lang, g.id)}"`} aria-label="${esc(locked ? labels.locked : labels.paper)}" data-testid="advent-door" data-day="${g.day}" data-date="${date}" data-href="${gitUrl(lang, g.id)}"${g.danger ? ' data-danger=""' : ''} ${data}>
               <span class="door-paper" aria-hidden="true"><span class="door-flag" data-testid="door-flag"></span><span class="door-num">${g.day}</span>${LOCK}<span class="door-hint">${esc(w.todayHint)}</span></span>
-              <span class="door-inside" aria-hidden="true"><span class="door-pic"><img src="${pic}" alt="" loading="lazy" width="640" height="573" /><span class="door-warn">!</span></span><span class="door-cap" style="background: ${gitColourVar(g)}"><span class="door-dn">${g.day}</span><span class="door-cmd">${esc(g.name)}</span></span></span>
+              <span class="door-inside" aria-hidden="true"><span class="door-pic"><img src="${pic}" alt="" loading="lazy" width="640" height="573" /><span class="door-warn">!</span></span><span class="door-cap" style="background: ${gitColourVar(g)}"><span class="door-dn">${g.day}</span>${groupIcon(g.group, 'door-gi')}<span class="door-cmd">${doorCmd(g.name)}</span></span></span>
             </a>
           </li>`;
 }
@@ -435,6 +451,7 @@ function gitWallPage(lang, tx) {
       <main class="advent-page" data-testid="advent-page">
         <h1>${esc(w.title)}</h1>
         <p class="advent-lead">${esc(lead)}</p>
+        ${wallLegend(tx)}
         <div class="today-slot" data-testid="advent-today-slot"></div>
         <ul class="wall" data-testid="advent-wall" data-flag-today="${esc(w.today)}" data-flag-missed="${esc(w.missed)}">
           ${doors}

@@ -12,6 +12,23 @@ export const inline = (s) => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>');
 /** Badge colour: the group's colour; Новосілля has none yet (RSP-200), so the card's pill colour stands in. */
 export const groupColour = (g) => GROUPS[g.group].c || 'var(--cf-pill)';
 
+/**
+ * Group icons (RSP-208, decided 2026-11-18): the group must not be told by colour only (WCAG 1.4.1). Line icons in the
+ * ink colour on the group colour: Новосілля key, Вдома cup, Візит eye (not a magnifier: a visit with a magnifier reads
+ * as suspicion), Горище ladder, Пошта envelope. Decoration: the group is named in text where it matters.
+ */
+const ICON_PATHS = {
+  start: '<circle cx="7" cy="12" r="4"/><path d="M11 12h10M17 12v3M20 12v2"/>',
+  home: '<path d="M5 9h11v7a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M9 3c-1 1 1 2 0 3M12.5 3c-1 1 1 2 0 3"/>',
+  visit: '<path d="M2 12c3-5 7-7 10-7s7 2 10 7c-3 5-7 7-10 7s-7-2-10-7z"/><circle cx="12" cy="12" r="3"/>',
+  archive: '<path d="M7 2l-2 20M17 2l2 20M6.6 6h10.8M6.2 10.5h11.6M5.7 15h12.6M5.3 19.5h13.4"/>',
+  post: '<rect x="2.5" y="5" width="19" height="14" rx="1.5"/><path d="M3 6l9 7 9-7"/>',
+};
+
+/** The icon of a git group as inline SVG, hidden from assistive tech; `cls` = the class for its size and place. */
+export const groupIcon = (group, cls) =>
+  `<svg class="${cls}" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-testid="group-icon" data-group="${group}">${ICON_PATHS[group]}</svg>`;
+
 /** Where git help lists the command: its own entry (outside the short list) or its group's section. */
 export const helpOf = (g) => g.help || { list: '', section: GROUPS[g.group].help };
 
@@ -30,7 +47,7 @@ export function gitCardBody(g, tx) {
     ? `<span class="cf-move"><span data-testid="git-move">${esc(t.move)}</span>${t.hint ? `<span class="g-hint" data-testid="git-hint">${esc(t.hint)}</span>` : ''}</span>`
     : '';
   return `<span class="cf-art">${danger}<img src="${pic.src}" alt="${esc(pic.alt)}" data-testid="card-art"></span>
-  <span class="cf-status"><span class="cf-name" data-testid="git-group">${esc(tx.git.groups[g.group])}</span><span class="cf-code" style="background:${groupColour(g)}" data-testid="git-command">${badge(g.name)}</span></span>
+  <span class="cf-status"><span class="cf-name" data-testid="git-group">${groupIcon(g.group, 'g-gi')}${esc(tx.git.groups[g.group])}</span><span class="cf-code" style="background:${groupColour(g)}" data-testid="git-command">${badge(g.name)}</span></span>
   <span class="cf-panel">${t.title ? `<span class="cf-creature" data-testid="git-title">${esc(t.title)}</span>` : ''}${move}${
     t.line ? `<span class="cf-line" data-testid="git-line">${esc(t.line)}</span>` : ''
   }</span>`;

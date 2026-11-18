@@ -542,6 +542,7 @@ export default {
       missed: 'otwórz',
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
       todayHint: 'Otwórz dzisiejsze drzwiczki',
+      legend: 'Grupy',
       locked: (n, date) => `Dzień ${n}, otwiera się ${date}`,
       paper: (n) => `Dzień ${n}, otwórz drzwiczki`,
       open: (n, cmd) => `Dzień ${n}: ${cmd}, otwórz kartę`,

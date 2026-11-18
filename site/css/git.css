@@ -26,6 +26,13 @@
 .card.git .cf-panel {
   margin-top: 8px;
 }
+/* Group icon before the group name (RSP-208): the group is not told by the badge colour only. */
+.card.git .g-gi {
+  flex: none;
+  width: 1.15em;
+  height: 1.15em;
+  margin-right: 0.35em;
+}
 /* The command is one line, as typed in a terminal: it scales down to fit instead of wrapping. */
 .card.git .cf-code {
   width: 100%;
