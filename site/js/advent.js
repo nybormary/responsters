@@ -1,8 +1,17 @@
 // The advent by the visitor's own date (RSP-195, decided 2026-11-16): the build writes the wall and the home page's
 // Git enclosure as they are on the build date (the fallback without JS); here they are repainted by today in the
 // visitor's time zone, so a door or the enclosure opens on its day without a deploy. ADVENT_START reaches the page
-// as data-date on every door and data-advent-start on the enclosure. Opened doors are not remembered yet: RSP-196.
+// as data-date on every door and data-advent-start on the enclosure.
+// Opened doors are remembered in this browser (RSP-196): localStorage "gitty.opened" = the card ids, not the day
+// numbers, so a later change of the advent order keeps what a visitor opened. A remembered door opens again only
+// once its day has come; without storage (private mode, blocked) the wall works and just forgets.
 import { localToday } from './util.js';
+import { storeFor } from './store.js';
+import { RUBRICS } from '../data/rubrics.js';
+
+const store = storeFor(RUBRICS.git.store);
+/** The card id of a door, from its card page address /<lang>/git/<id>/. */
+const idOf = (door) => door.dataset.href.split('/').filter(Boolean).pop();
 
 /** Paints one door for `today`: locked (its day hasn't come), or paper with a "today" / "missed" flag. */
 function paint(door, today, flags) {
@@ -52,8 +61,12 @@ function setUpWall(wall) {
   const today = localToday();
   const flags = { today: wall.dataset.flagToday, missed: wall.dataset.flagMissed };
   const live = document.querySelector('[data-testid="advent-live"]');
-  for (const door of wall.querySelectorAll('[data-testid="advent-door"]')) paint(door, today, flags);
-  todayCopy(wall, today);
+  const opened = new Set(store.get('opened', []));
+  for (const door of wall.querySelectorAll('[data-testid="advent-door"]')) {
+    paint(door, today, flags);
+    if (door.classList.contains('paper') && opened.has(idOf(door))) reveal(door, null); // no announcement on load
+  }
+  todayCopy(wall, today); // after the restore: the big copy shows today's door as it is
   const page = wall.closest('main') ?? document;
   page.addEventListener('click', (e) => {
     const door = e.target instanceof Element ? e.target.closest('.door') : null;
@@ -63,6 +76,8 @@ function setUpWall(wall) {
     // the door and its big copy on a phone open together; the reveal is announced once
     for (const twin of page.querySelectorAll(`.door[data-day="${door.dataset.day}"]`)) reveal(twin, null);
     if (live) live.textContent = door.dataset.labelRevealed;
+    opened.add(idOf(door));
+    store.set('opened', [...opened]);
   });
 }
 
