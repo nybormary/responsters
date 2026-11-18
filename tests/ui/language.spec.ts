@@ -76,14 +76,14 @@ test(
   async ({ app, langMenu, page }) => {
     await app.open();
 
-    await test.step('pick each language in turn', async () => {
-      for (const lang of LANGS) {
+    for (const lang of LANGS) {
+      await test.step(`pick ${langName(lang)} (${lang})`, async () => {
         await langMenu.pick(lang);
         await expect(langMenu.list).toBeHidden();
         await expectLanguage(app, lang);
         await expect(langMenu.button).toBeFocused();
-      }
-    });
+      });
+    }
 
     await test.step('pick Polski and reload', async () => {
       await langMenu.pick('pl');
@@ -94,16 +94,7 @@ test(
   },
 );
 
-test('Language menu: a click outside closes it @Tfeda8226', { tag: [TAG.language] }, async ({ app, langMenu }) => {
-  await app.open();
-  await langMenu.open();
-  await expect(langMenu.list).toBeVisible();
-
-  await app.clickOutside();
-  await expect(langMenu.list).toBeHidden();
-  await expectLanguage(app, 'en');
-});
-
+// The click outside: fb783e1f checks it in the app and on generated pages (RSP-207 removed the copy here).
 // ── 641973be: Language menu with the keyboard (RSP-109) ─────────────────────────────────────────
 
 test('Language menu with the keyboard @T641973be', { tag: [TAG.language] }, async ({ app, langMenu, page }) => {

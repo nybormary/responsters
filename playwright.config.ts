@@ -31,7 +31,8 @@ export default defineConfig<Options>({
   // TESTOMATIO_TITLE and TESTOMATIO_ENV (both default to the target, tests/targets.ts).
   // Results land on the cases whose @T… id is in the test title.
   reporter: [
-    ['list'],
+    // printSteps: every test.step is printed, also for green tests, so the log shows what was checked (RSP-207).
+    ['list', { printSteps: true }],
     ['html', { open: 'never' }],
     // On CI also a JSON summary, read by scripts/ci-alert.mjs for the Slack alert (RSP-179).
     ...(process.env.CI ? [['json', { outputFile: 'ci-results.json' }] as const] : []),

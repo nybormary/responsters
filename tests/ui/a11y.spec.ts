@@ -366,13 +366,15 @@ test(
       await test.step(`${theme} theme`, async () => {
         await page.emulateMedia({ colorScheme: theme });
         for (const [name, open] of pages) {
-          await open();
-          const rings = await focusRingsByTab(page);
-          expect(rings.length, `${name}: Tab reaches links and buttons`).toBeGreaterThan(5);
-          const weak = rings
-            .filter((r) => r.style === 'none' || r.style === 'auto' || r.width < 2 || r.ratio < 3)
-            .map((r) => `${r.element}: ${r.style} ${r.width}px, ${r.ratio}:1`);
-          expect(weak, `${name}: focus outlines that are missing, thin or low contrast`).toEqual([]);
+          await test.step(name, async () => {
+            await open();
+            const rings = await focusRingsByTab(page);
+            expect(rings.length, `${name}: Tab reaches links and buttons`).toBeGreaterThan(5);
+            const weak = rings
+              .filter((r) => r.style === 'none' || r.style === 'auto' || r.width < 2 || r.ratio < 3)
+              .map((r) => `${r.element}: ${r.style} ${r.width}px, ${r.ratio}:1`);
+            expect(weak, `${name}: focus outlines that are missing, thin or low contrast`).toEqual([]);
+          });
         }
       });
     }
