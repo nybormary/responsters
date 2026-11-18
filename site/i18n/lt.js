@@ -542,6 +542,7 @@ export default {
       missed: 'pamiršot?',
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
       todayHint: 'Atidaryk šiandienos langelį',
+      legend: 'Grupės',
       locked: (n, date) => `${n} diena, atsidarys ${date}`,
       paper: (n) => `${n} diena, atidaryti langelį`,
       open: (n, cmd) => `${n} diena: ${cmd}, atidaryti kortelę`,

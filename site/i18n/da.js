@@ -539,6 +539,7 @@ export default {
       missed: 'glemt?',
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
       todayHint: 'Åbn dagens låge',
+      legend: 'Grupper',
       locked: (n, date) => `Dag ${n}, åbner ${date}`,
       paper: (n) => `Dag ${n}, åbn lågen`,
       open: (n, cmd) => `Dag ${n}: ${cmd}, åbn kortet`,
