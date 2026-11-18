@@ -155,12 +155,13 @@
   height: 100%;
   object-fit: cover;
 }
-/* Caption strip (RSP-208): line 1 = day on the left, group icon on the right; line 2 = the command, centred. The
-   command wraps (at its space or hyphen, never mid-word) instead of being cut: "git cherry-pick" on a narrow wall. */
+/* Caption strip (RSP-208): line 1 = day on the left, group icon on the right; line 2 = the command, centred
+   (Maryna, 2026-11-18). The command wraps (at its space or hyphen, never mid-word) instead of being cut:
+   "git cherry-pick" on a narrow wall. */
 .door-cap {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: baseline; /* the icon's bottom on the day number's baseline */
   gap: 2px 6px;
   padding: 5px 7px;
   min-width: 0;
@@ -170,8 +171,8 @@
 }
 .door-gi {
   flex: none;
-  width: 20px;
-  height: 20px;
+  width: auto;
+  height: 12px; /* the capital height of the day number (16px) */
   margin-left: auto;
   color: var(--door-ink);
 }
@@ -251,8 +252,8 @@
     font-size: 12px;
   }
   .wall .door-gi {
-    width: 14px;
-    height: 14px;
+    height: 0.75em; /* the number's capital height; em, so it grows with enlarged text */
+    font-size: 12px;
   }
   /* The command without "git " on a phone (RSP-208): every name fits a third of a 360px wall, even with enlarged text. */
   .wall .door-cmd {
@@ -284,8 +285,7 @@
   font-size: 15px;
 }
 .door-big .door-gi {
-  width: 26px;
-  height: 26px;
+  height: 15px;
 }
 @media (max-width: 759px) {
   .wall .door.open.danger .door-warn {
@@ -312,11 +312,14 @@
 }
 .legend-chip {
   display: inline-flex;
-  padding: 3px;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 20px;
   border-radius: 4px;
   color: #2b211a;
 }
 .legend-gi {
-  width: 18px;
-  height: 18px;
+  width: auto;
+  height: 12px;
 }

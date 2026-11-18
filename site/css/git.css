@@ -27,11 +27,14 @@
   margin-top: 8px;
 }
 /* Group icon before the group name (RSP-208): the group is not told by the badge colour only. */
+/* The icon stands on the text's baseline and is as high as the capital letters (RSP-208 polish): the icon and the
+   group name share one line inside .g-lab, so the flex box of .cf-name keeps centring the pair. */
 .card.git .g-gi {
-  flex: none;
-  width: 1.15em;
-  height: 1.15em;
-  margin-right: 0.35em;
+  display: inline;
+  width: auto;
+  height: 0.72em;
+  margin-right: 0.4em;
+  vertical-align: baseline;
 }
 /* The command is one line, as typed in a terminal: it scales down to fit instead of wrapping. */
 .card.git .cf-code {
