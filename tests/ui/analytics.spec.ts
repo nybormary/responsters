@@ -18,7 +18,7 @@ const pagesOf = (lang: Lang) => {
 // ── 0bb00e39 ────────────────────────────────────────────────────────────────────────────────────
 
 test(
-  'The analytics beacon loads once per page, only on mnemozoo.com, and sets no cookies @T0bb00e39',
+  'The analytics beacon loads once per page (home, rubric, a random card page, 404), only on mnemozoo.com, and sets no cookies @T0bb00e39',
   { tag: [TAG.privacy] },
   async ({ page, browser, baseURL, lang }) => {
     const paths = pagesOf(lang);
@@ -26,7 +26,7 @@ test(
     const here = new AnalyticsBeacon(page);
     const hereRequests = new BeaconRequests(page);
 
-    await test.step(`On the address under test${onProduction ? ' (production: the beacon loads)' : ''}`, async () => {
+    await test.step(`On the address under test${onProduction ? ' (production: the beacon loads)' : ''}: ${paths.join(', ')}`, async () => {
       for (const path of paths) {
         const before = hereRequests.urls.length;
         await page.goto(path);
@@ -39,7 +39,7 @@ test(
 
     const prod = await AnalyticsBeacon.asProduction(browser, baseURL!, page.viewportSize());
     try {
-      await test.step('The same pages as on mnemozoo.com: one beacon each, blocked', async () => {
+      await test.step(`The same pages as on mnemozoo.com: one beacon each, blocked: ${paths.join(', ')}`, async () => {
         for (const path of paths) {
           const before = prod.requests.urls.length;
           await prod.page.goto(`https://${PRODUCTION_HOST}${path}`);

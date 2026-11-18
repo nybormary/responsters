@@ -17,6 +17,8 @@ Run the Playwright UI tests against the right copy of the site and record the re
 
 By default every test gets a **random site language** (`uk`, `en`, `pl`, `da`, `lt`, `et`) and a **random screen size** (`desktop-1280`, `tablet-600`, `edge-599`, `phone-375`). The report shows both for each test. Variants 5–7 pin them.
 
+**What a test checked is always visible (RSP-207).** The console prints every step, also for green tests (`printSteps` in `playwright.config.ts`). The first step of every test names its language and screen and where they came from, e.g. `lang pl (random) · screen phone-375 (random)`. A test that loops over items has one named step per item (or one step that lists them), and a test that picks something at random says so in its title ("a random card") and names the pick in a step.
+
 The site address and the testomat.io environment come from the target in `tests/targets.ts`; you never type a URL or `Target:…` by hand.
 
 ## Pick your run

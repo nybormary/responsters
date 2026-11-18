@@ -108,7 +108,7 @@ test(
       await homePage.open(lang);
     });
 
-    await test.step('five figures: the picture with its art text as alt, the code as caption (and not in the alt)', async () => {
+    await test.step(`five figures (${HERO.join(', ')}): the picture with its art text as alt, the code as caption (and not in the alt)`, async () => {
       for (const code of HERO) {
         await expect(homePage.heroCard(code)).toHaveRole('figure');
         await expect(homePage.heroPicture(code)).toHaveAttribute('alt', texts.cards[code].art);

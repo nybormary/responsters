@@ -61,6 +61,7 @@ export type Options = {
 };
 
 type Fixtures = {
+  runInfo: void;
   noAnalytics: void;
   localAssets: void;
   screenName: ScreenName;
@@ -85,6 +86,26 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   randomLang: [true, { option: true }],
   screenPreset: ['random', { option: true }],
   realAssets: [false, { option: true }],
+
+  // The first step of every test names its language and screen and where they came from (RSP-207, Maryna 2026-11-18:
+  // a test must show what it checked). With printSteps (playwright.config.ts) it is in the CI log, in the HTML report
+  // and in testomat.io, not only in the annotations.
+  runInfo: [
+    async ({ lang, seed, randomLang, screenName, screenPreset }, use) => {
+      const langFrom = seed.lang
+        ? 'set by the test'
+        : !randomLang
+          ? 'browser language'
+          : process.env.TEST_LANG
+            ? 'TEST_LANG'
+            : 'random';
+      const screenFrom =
+        screenPreset !== 'random' ? 'set by the test' : process.env.TEST_SCREEN ? 'TEST_SCREEN' : 'random';
+      await test.step(`lang ${lang} (${langFrom}) · screen ${screenName} (${screenFrom})`, async () => {});
+      await use();
+    },
+    { auto: true },
+  ],
 
   // Every test page: requests to the analytics beacon fail at once, so no test run counts as a visit (RSP-175).
   noAnalytics: [

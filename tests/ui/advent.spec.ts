@@ -54,10 +54,11 @@ test.describe("Advent doors by the visitor's date, on day 9 of the advent", () =
   );
 
   test(
-    'Advent doors are locked, today or missed by the visitor\'s date: an earlier day is paper with the "missed" flag @T9a003ab9',
+    'Advent doors are locked, today or missed by the visitor\'s date: a random earlier day is paper with the "missed" flag @T9a003ab9',
     { tag: [TAG.git] },
     async ({ adventWall, lang, texts }) => {
       const g = pick(days(1, TODAY - 1));
+      await test.step(`picked: door ${g.day} (${g.name}), wall on day ${TODAY}`, async () => {});
       await adventWall.openOnDay(lang, TODAY);
       const door = adventWall.door(g.day);
       await expect(door, 'paper, flagged missed').toHaveClass(/\bmissed\b/);
@@ -70,7 +71,7 @@ test.describe("Advent doors by the visitor's date, on day 9 of the advent", () =
   );
 
   test(
-    "Advent doors are locked, today or missed by the visitor's date: a later day is locked, says when it opens and can't be opened @T9a003ab9",
+    "Advent doors are locked, today or missed by the visitor's date: a random later day is locked, says when it opens and can't be opened @T9a003ab9",
     { tag: [TAG.git] },
     async ({ adventWall, lang, texts, page }) => {
       const g = pick(days(TODAY + 1, ADVENT_DAYS));
@@ -100,7 +101,7 @@ test.describe("Advent doors by the visitor's date, on day 9 of the advent", () =
 // ── 8e6bff44 ────────────────────────────────────────────────────────────────────────────────────
 
 test(
-  'An advent door opens in two clicks; a dangerous command shows its mark only after opening @T8e6bff44',
+  'An advent door opens in two clicks; a dangerous command shows its mark only after opening (a random door of each kind) @T8e6bff44',
   { tag: [TAG.git] },
   async ({ adventWall, gitCardPage, lang, texts, page }) => {
     const TODAY = 10;
@@ -217,7 +218,7 @@ test.describe('Advent wall builds with a pinned date', () => {
         ['2026-11-30', false],
         ['2026-12-01', true],
       ] as const) {
-        await test.step(`build on ${date}: the wall ${started ? 'indexed and in the sitemap' : 'noindex, not in the sitemap'}`, async () => {
+        await test.step(`build on ${date}: the wall ${started ? 'indexed and in the sitemap' : 'noindex, not in the sitemap'} in ${LANGS.join(', ')}`, async () => {
           const build = await buildOn(date, testInfo.outputPath(`build-${date}`), '2026-12-01');
           const sitemap = await build.file('sitemap.xml');
           for (const lang of LANGS) {

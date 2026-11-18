@@ -10,7 +10,7 @@ const plain = (s: string | null) => (s ?? '').replace(/ /g, ' ').trim();
 // ── aefc6e30 ────────────────────────────────────────────────────────────────────────────────────
 
 test(
-  'Every git card page opens in every language with its command, group and picture @Taefc6e30',
+  'Every git card page opens in a random site language with its command, group and picture @Taefc6e30',
   { tag: [TAG.git] },
   async ({ gitCardPage, page, lang, texts }) => {
     const problems: string[] = [];
@@ -55,6 +55,14 @@ test.describe('Builds with a pinned date', () => {
         await test.step(`build on ${date}: open days indexed and in the sitemap, the rest noindex`, async () => {
           const build = await buildOn(date, testInfo.outputPath(`build-${date}`));
           const sitemap = await build.file('sitemap.xml');
+          // The cards by name in the report (RSP-207): which are open on this date and which stay hidden.
+          const names = (open: boolean) =>
+            GIT_CARDS.filter((g) => opensBy(g, date) === open)
+              .map((g) => g.id)
+              .join(', ') || 'none';
+          await test.step(`indexed, in the sitemap: ${names(true)}`, async () => {});
+          await test.step(`noindex, not in the sitemap: ${names(false)}`, async () => {});
+          await test.step(`checked in ${LANGS.join(', ')}`, async () => {});
           for (const lang of LANGS)
             for (const g of GIT_CARDS) {
               const url = `/${lang}/git/${g.id}/`;
@@ -87,7 +95,7 @@ test.describe('Builds with a pinned date', () => {
 // ── 756d2279 ────────────────────────────────────────────────────────────────────────────────────
 
 test(
-  "A dangerous git command's card shows the danger mark @T756d2279",
+  "A random dangerous git command's card shows the danger mark, a random other card doesn't @T756d2279",
   { tag: [TAG.git] },
   async ({ gitCardPage, lang, texts }) => {
     const danger = pick(GIT_CARDS.filter((g) => g.danger));
@@ -127,7 +135,7 @@ type CardTexts = {
 };
 
 test(
-  'A git card page shows only the sections that have texts @T2b281d82',
+  'A git card page shows only the sections that have texts: a random card with texts and a random card without @T2b281d82',
   { tag: [TAG.git] },
   async ({ gitCardPage, lang, texts }) => {
     const cards = texts.git.cards as Record<string, CardTexts | undefined>;
@@ -147,14 +155,14 @@ test(
       await expect(gitCardPage.options).toHaveCount(opts.length);
       for (const [i, o] of opts.entries()) {
         const item = gitCardPage.options.nth(i);
-        await expect(item).toContainText(o.cmd);
-        await expect(item).toContainText(visible(o.text));
-        await expect(gitCardPage.metaOf(item)).toHaveText(visible(o.meta));
+        await expect(item, `option ${o.cmd}`).toContainText(o.cmd);
+        await expect(item, `option ${o.cmd}: text`).toContainText(visible(o.text));
+        await expect(gitCardPage.metaOf(item), `option ${o.cmd}: metaphor`).toHaveText(visible(o.meta));
       }
       for (const name of g.conf ?? []) {
         const own = GIT_CARDS.find((x) => x.name === name);
         const chip = gitCardPage.confused.getByText(name, { exact: true });
-        await expect(chip).toBeVisible();
+        await expect(chip, `often confused with: ${name}`).toBeVisible();
         if (own)
           await expect(gitCardPage.confused.getByRole('link', { name })).toHaveAttribute(
             'href',
@@ -164,7 +172,7 @@ test(
       }
       for (const l of g.links ?? []) {
         const a = gitCardPage.links.getByRole('link', { name: new RegExp(l.label[lang] ?? l.label.en) });
-        await expect(a).toHaveAttribute('href', l.u);
+        await expect(a, `read more: ${l.u}`).toHaveAttribute('href', l.u);
       }
       await expect(gitCardPage.root).not.toContainText('undefined');
     });
@@ -192,7 +200,7 @@ test(
 // locked door and an open door are all on screen.
 
 test(
-  'Every text on a git card page and the advent wall has enough contrast in the light and the dark theme @T4354a333',
+  'Every text on a random git card page and the advent wall has enough contrast in the light and the dark theme @T4354a333',
   { tag: [TAG.git] },
   async ({ gitCardPage, adventWall, axe, lang }) => {
     const g = pick(GIT_CARDS.filter((x) => x.conf?.length && x.day <= 10));

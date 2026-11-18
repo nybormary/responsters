@@ -20,7 +20,7 @@ const pagesOf = (lang: Lang) => {
 // ── 26163b27 ────────────────────────────────────────────────────────────────────────────────────
 
 test(
-  'Each page preloads exactly the fonts its first screen shows before the script @T26163b27',
+  "Each page type (home, rubric, a random card page, What's new, 404) preloads exactly the fonts its first screen shows before the script @T26163b27",
   { tag: [TAG.performance] },
   async ({ page, browser, preloads, network, lang }) => {
     for (const p of pagesOf(lang)) {
@@ -68,7 +68,7 @@ test(
 // ── fd60d2a5 ────────────────────────────────────────────────────────────────────────────────────
 
 test(
-  'Each page modulepreloads exactly the scripts it loads @Tfd60d2a5',
+  "Each page type (home, rubric, a random card page, What's new, 404) modulepreloads exactly the scripts it loads @Tfd60d2a5",
   { tag: [TAG.performance] },
   async ({ page, preloads, lang }) => {
     for (const p of pagesOf(lang)) {
