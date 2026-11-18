@@ -10,5 +10,18 @@ export type AxeException = {
   why: string;
 };
 
-// Empty since the Own look release: the language button's name now contains its visible text (RSP-169).
-export const AXE_EXCEPTIONS: AxeException[] = [];
+// The language button's name contains its visible text since the Own look release (RSP-169).
+export const AXE_EXCEPTIONS: AxeException[] = [
+  {
+    rule: 'label-content-name-mismatch',
+    testId: TID.adventDoor,
+    ticket: 'RSP-198',
+    why: 'A paper door shows "forgot?"/"today" and its number; its name "Day 3, open the door" has neither in that order. New wording comes with the wall texts review.',
+  },
+  {
+    rule: 'label-content-name-mismatch',
+    testId: TID.adventToday,
+    ticket: 'RSP-198',
+    why: "The big copy of today's door (phones) also shows the hint; same wording question as the wall doors.",
+  },
+];

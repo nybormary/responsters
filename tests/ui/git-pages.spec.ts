@@ -1,7 +1,7 @@
 // Git card pages /<lang>/git/<id>/ (RSP-199). testomat.io folder "Git cards", suite "Git card pages (RSP-199)".
 // Manual only: cc96d414 ("In git help" names the right list, section and manual).
 // 2b281d82: step 1 (a card with texts, RSP-200 batch 1) and step 2 (a card without texts, while there are any).
-import { test, expect, TAG, GIT_CARDS, GIT_EGG, LANGS, buildOn, type GitCard } from '../fixtures';
+import { test, expect, TAG, GIT_CARDS, GIT_EGG, LANGS, THEMES, buildOn, type GitCard } from '../fixtures';
 
 const pick = <T>(list: T[]): T => list[Math.floor(Math.random() * list.length)];
 /** The badge text as a visitor reads it: the no-break space after "git" counts as a space. */
@@ -183,5 +183,32 @@ test(
       await expect(gitCardPage.helpSection).toBeVisible();
       await expect(gitCardPage.root).not.toContainText('undefined');
     });
+  },
+);
+
+// ── 4354a333 ────────────────────────────────────────────────────────────────────────────────────
+// Found on PR #55 (2026-11-17): dark text on dark chips in the dark theme. axe's color-contrast rule (WCAG AA) measures
+// every visible text; the wall is checked on advent day 10 with one door opened, so paper doors with both flags, a
+// locked door and an open door are all on screen.
+
+test(
+  'Every text on a git card page and the advent wall has enough contrast in the light and the dark theme @T4354a333',
+  { tag: [TAG.git] },
+  async ({ gitCardPage, adventWall, axe, lang }) => {
+    const g = pick(GIT_CARDS.filter((x) => x.conf?.length && x.day <= 10));
+    for (const theme of THEMES) {
+      await test.step(`${theme}: ${g.name} card page (chips, code pills, tip, Read more)`, async () => {
+        await axe.theme(theme);
+        await gitCardPage.open(lang, g.id);
+        await axe.expectNoViolations(`${theme}, git card page ${g.name}`);
+      });
+      await test.step(`${theme}: the advent wall on day 10, door ${g.day} opened`, async () => {
+        await adventWall.openOnDay(lang, 10);
+        await adventWall.door(g.day).click();
+        await expect(adventWall.door(g.day)).toHaveClass(/\bopen\b/);
+        await adventWall.settled(g.day);
+        await axe.expectNoViolations(`${theme}, advent wall`);
+      });
+    }
   },
 );

@@ -35,6 +35,7 @@ import { LanguageMenu } from './pages/language-menu';
 import { CardPage } from './pages/card-page';
 import { GitCardPage } from './pages/git-card-page';
 import { HomePage } from './pages/home-page';
+import { AdventWall } from './pages/advent-wall';
 import { SiteChrome } from './pages/site-chrome';
 import { NotFoundPage } from './pages/not-found-page';
 import { Axe } from './pages/axe';
@@ -70,6 +71,7 @@ type Fixtures = {
   cardPage: CardPage;
   gitCardPage: GitCardPage;
   homePage: HomePage;
+  adventWall: AdventWall;
   site: SiteChrome;
   notFoundPage: NotFoundPage;
   axe: Axe;
@@ -181,6 +183,9 @@ export const test = base.extend<Options & Omit<Fixtures, keyof Options>>({
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));
   },
+  adventWall: async ({ page }, use) => {
+    await use(new AdventWall(page));
+  },
   site: async ({ page }, use) => {
     await use(new SiteChrome(page));
   },
@@ -215,6 +220,8 @@ export type GitCard = {
 };
 export const GIT_CARDS: GitCard[] = GIT;
 export const GIT_EGG: { src: string; alt: string } = EGG;
+/** Days of the advent: the cards that have a day (cards added after the season have none). */
+export const ADVENT_DAYS: number = GIT.filter((g: { day?: number }) => g.day).length;
 export { buildOn } from './build';
 
 export { TAG } from './tags';
@@ -224,6 +231,7 @@ export { VIEWS, type App } from './pages/app';
 export type { LanguageMenu } from './pages/language-menu';
 export type { CardPage } from './pages/card-page';
 export { ORIGIN, type HomePage } from './pages/home-page';
+export type { AdventWall } from './pages/advent-wall';
 export type { SiteChrome } from './pages/site-chrome';
 export type { NotFoundPage } from './pages/not-found-page';
 export { THEMES, type Axe, type Theme } from './pages/axe';
@@ -243,7 +251,7 @@ export { markOf, boxes, controlBorderContrasts, type Mark, type BorderContrast }
 export { focusRingsByTab, type FocusRing } from './pages/focus';
 export { textsFor, langName, LANGS, type Lang, type Texts } from './texts';
 // Dates in the page language, as the build writes them (RSP-195): dayMonth('uk', '2026-12-01') → '1 грудня'.
-export { dayMonth } from '../../site/js/util.js';
+export { dayMonth, addDays } from '../../site/js/util.js';
 // Analytics beacon (RSP-175).
 export { AnalyticsBeacon, BeaconRequests, PRODUCTION_HOST, type BeaconTag } from './pages/analytics-beacon';
 export { ANALYTICS_HOSTS } from './analytics';

@@ -4,6 +4,7 @@ import { execFile } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
+import type { Page } from '@playwright/test';
 
 const run = promisify(execFile);
 
@@ -12,6 +13,18 @@ export class Build {
   constructor(readonly out: string) {}
   file(rel: string): Promise<string> {
     return readFile(path.join(this.out, rel), 'utf8');
+  }
+  /**
+   * Answer the browser's request for page `urlPath` (e.g. '/uk/') with this build's copy of it; everything else (JS,
+   * CSS, pictures) still comes from the site under test. So a test can see a page as a pinned date built it, with
+   * the browser clock where it wants.
+   */
+  async serve(page: Page, urlPath: string): Promise<void> {
+    const body = await this.file(`${urlPath.replace(/^\//, '')}index.html`);
+    await page.route(
+      (url) => url.pathname === urlPath,
+      (route) => route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body }),
+    );
   }
 }
 

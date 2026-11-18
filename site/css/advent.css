@@ -200,8 +200,9 @@
   }
 }
 
-/* Phone (prototype AdventPhone, 2026-11-17): today's door big above the wall; the wall 4 in a row with smaller
-   numbers, flags and padlocks, the command only on the big door. From 760px the wall is 5 × 5 and there is no copy. */
+/* Phone (prototype AdventPhone, 2026-11-17): today's door big above the wall; the wall 3 in a row with smaller
+   numbers, flags and padlocks, the command only on the big door. From 760px the wall is 5 × 5 and there is no copy.
+   3, not 4: on a 360px phone with enlarged text 4 in a row cut the flags "today" / "missed" (2026-11-18). */
 .today-slot,
 .door-hint {
   display: none;
@@ -212,6 +213,7 @@
     margin: 6px 0 4px;
   }
   .wall {
+    grid-template-columns: repeat(3, 1fr);
     padding: 16px 12px;
     border-radius: 14px;
   }
@@ -219,7 +221,7 @@
     border-width: 4px;
   }
   .wall .door-num {
-    font-size: 22px;
+    font-size: 28px;
   }
   .wall .door-flag {
     top: 3px;
