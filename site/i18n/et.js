@@ -450,6 +450,15 @@ export default {
     lead: 'Mis Mnemozoos muutus, uuemad eespool.',
     kinds: { new: 'Uus', improved: 'Täiustatud', fixed: 'Parandatud' },
     entries: {
+      'advent-preview': {
+        title: 'Git kolib sisse',
+        line: 'Git Mnemozoos: alates 1. detsembrist iga päev uus käsk, mida selgitab kodune stseen.',
+        items: [
+          'Advendisein: 25 ust, esimene avaneb 1. detsembril.',
+          'Git-käskude rühmadel on ikoonid, mitte ainult värv.',
+          'Keeleta aadressid avavad kohe ingliskeelse lehe ja pakuvad vahetada sinu keelele.',
+        ],
+      },
       'footer-news': {
         title: 'Jalus ja uudised',
         line: 'Nüüd on lihtne meile kirjutada ja näha, mis saidil muutus.',

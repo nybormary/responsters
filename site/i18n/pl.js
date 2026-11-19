@@ -453,6 +453,15 @@ export default {
     lead: 'Co się zmieniło w Mnemozoo, od najnowszych.',
     kinds: { new: 'Nowe', improved: 'Ulepszone', fixed: 'Naprawione' },
     entries: {
+      'advent-preview': {
+        title: 'Git się wprowadza',
+        line: 'Git w Mnemozoo: od 1 grudnia codziennie nowe polecenie wyjaśnione domową scenką.',
+        items: [
+          'Ściana adwentowa: 25 drzwiczek, pierwsze otwierają się 1 grudnia.',
+          'Grupy poleceń git mają ikony, nie tylko kolor.',
+          'Adresy bez języka od razu otwierają stronę po angielsku z propozycją przejścia na Twój język.',
+        ],
+      },
       'footer-news': {
         title: 'Stopka i nowości',
         line: 'Teraz łatwo do nas napisać i sprawdzić, co zmieniło się na stronie.',

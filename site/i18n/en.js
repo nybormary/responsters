@@ -454,6 +454,15 @@ export default {
     lead: 'What changed on Mnemozoo, newest first.',
     kinds: { new: 'New', improved: 'Improved', fixed: 'Fixed' },
     entries: {
+      'advent-preview': {
+        title: 'Git moves in',
+        line: 'Git at Mnemozoo: from 1 December, a new command every day, explained with a household scene.',
+        items: [
+          'An advent wall: 25 doors, the first one opens on 1 December.',
+          'Groups of git commands are marked with icons, not only colour.',
+          'Addresses without a language open the English page right away, with an offer to switch to yours.',
+        ],
+      },
       'footer-news': {
         title: 'Footer and news',
         line: "It's now easy to reach us and to see what has changed on the site.",
