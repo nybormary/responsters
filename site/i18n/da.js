@@ -562,6 +562,25 @@ export default {
     },
     groups: { start: 'Indflytning', home: 'Hjemme', visit: 'Besøg', archive: 'Loftet', post: 'Posten' },
     cards: {
+      // Pictures ready (RSP-191, RSP-192): only their text for now; the other card texts come with RSP-200.
+      init: {
+        art: 'En grå kat står på tærsklen til en vidt åben dør og er den første, der sætter poten ind i den tomme lejlighed: ingen møbler, kun en tom ramme på væggen. Bag den en person med kufferter, den ene med et pære-klistermærke. Ved døren et enkelt nyt navneskilt.',
+      },
+      gitignore: {
+        art: 'På væggen et portræt af en kat, der sidder med ryggen til sin skål med fisk. En person står ved det åbne køleskab, klør sig i nakken og undrer sig over, hvor ketchuppen er, mens ketchupflasken står lige foran dem på den midterste hylde. På køleskabsdøren hænger en liste under en magnet.',
+      },
+      restore: {
+        art: 'På væggen et portræt af en kanin, der har gnavet i en hjemmesko. Mor holder et foto af den ryddelige hylde op, "som det var", og fejer resolut et halvlagt puslespil fra gulvet op i fejebakken, så brikkerne flyver. I døråbningen skriger et barn med armene oppe. Til højre ser hylden allerede ud som på fotoet: pæne kasser, blandt dem æsken til puslespillet.',
+      },
+      stash: {
+        art: 'På væggen et portræt af en hamster med fyldte kinder. Mens det ringer på døren, stopper en person på tæer hurtigt en sweater og et garnnøgle ind i det øverste skab, hvis låge står åben mod os; på den midterste hylde står ens krus.',
+      },
+      branch: {
+        art: 'På væggen et portræt af en papegøje på en pind. To åbne døre side om side fører ind til to ens rum med samme lænestol og vindue; en løber på gulvet deler sig til begge døre. Ved den venstre dør et gammelt navneskilt; en person sætter et nyt gult navneskilt op ved den højre dør.',
+      },
+      switch: {
+        art: 'På væggen et portræt af en papegøje: af to pinde sidder den på den øverste, den nederste er tom. To åbne døre side om side fører ind til to ens rum; en løber på gulvet deler sig til begge døre; den højre dør er gul. En person går med lange skridt fra den venstre dør ind i det højre rum, fodspor på løberen fører fra venstre gren til højre.',
+      },
       clone: {
         title: 'Møbleret lejlighed',
         art: 'En person med kufferter, den ene med et pæreklistermærke, står ved en vidt åben dør. Inde i lejligheden står de tidligere lejeres lænestol allerede med et ringbind med gamle regninger på, og på væggen hænger et portræt af to ens killinger. Ved døren et nyt navneskilt; det gamle er ved at falde af.',

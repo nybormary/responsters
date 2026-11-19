@@ -563,6 +563,25 @@ export default {
     },
     groups: { start: 'Sissekolimine', home: 'Kodus', visit: 'Külaskäik', archive: 'Pööning', post: 'Post' },
     cards: {
+      // Pictures ready (RSP-191, RSP-192): only their text for now; the other card texts come with RSP-200.
+      init: {
+        art: 'Hall kass seisab pärani avatud ukse lävel ja astub esimesena käpaga tühja korterisse: mööblit pole, seinal ainult tühi raam. Tema taga inimene kohvritega, ühel neist lambipirni kleeps. Ukse kõrval üks uus nimesilt.',
+      },
+      gitignore: {
+        art: 'Seinal on portree kassist, kes istub selg oma kalakausi poole. Inimene seisab avatud külmkapi ees, sügab kukalt ja mõtleb, kus ketšup on, kuigi ketšupipudel seisab otse tema ees keskmisel riiulil. Külmkapi uksel ripub magneti all nimekiri.',
+      },
+      restore: {
+        art: 'Seinal on portree jänesest, kes on sussi närinud. Ema hoiab üleval fotot korras riiulist, „nagu oli“, ja pühib otsustavalt pooleli pusle põrandalt kühvlisse, tükid lendavad kühvlisse. Toa uksel karjub laps, käed üleval. Paremal näeb riiul juba välja nagu fotol: korralikud karbid, nende seas puslekarp.',
+      },
+      stash: {
+        art: 'Seinal on portree täis põskedega hamstrist. Kui uksekell heliseb, toppib inimene kikivarvul kiiruga kampsuni ja lõngakera ülemisse kappi, mille uks on meie poole lahti; keskmisel riiulil seisavad ühesugused kruusid.',
+      },
+      branch: {
+        art: 'Seinal on portree papagoist õrrel. Kaks kõrvuti avatud ust viivad kahte ühesugusesse tuppa, kus on sama tugitool ja aken; põrandal olev vaip hargneb mõlema ukse juurde. Vasaku ukse kõrval on vana nimesilt; inimene paneb parema ukse kõrvale uut kollast nimesilti.',
+      },
+      switch: {
+        art: 'Seinal on portree papagoist: kahest õrrest istub ta ülemisel, alumine on tühi. Kaks kõrvuti avatud ust viivad kahte ühesugusesse tuppa; põrandal olev vaip hargneb mõlema ukse juurde; parem uks on kollane. Inimene astub pika sammuga vasaku ukse juurest paremasse tuppa, jäljed vaibal viivad vasakult harult paremale.',
+      },
       clone: {
         title: 'Möbleeritud korter',
         art: 'Kohvritega inimene, ühel kohvril lambipirni kleebis, seisab pärani avatud ukse ees. Korteris on juba eelmiste üürnike tugitool, sellel vanade arvetega kaust, ja seinal ripub kahe ühesuguse kassipoja portree. Ukse kõrval uus nimesilt, vana kukub maha.',
