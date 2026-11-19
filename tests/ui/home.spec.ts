@@ -206,24 +206,33 @@ test.describe('language-less /', () => {
   test.use({ randomLang: false });
 
   // ── dbd1834c ──────────────────────────────────────────────────────────────────────────────────
+  // RSP-216: / is the English home page itself (no redirect); a saved language shows as the hint.
 
   test.describe('with a saved language', () => {
     test.use({ seed: { lang: 'da' } }); // the browser stays en-US (playwright.config.ts)
 
     test(
-      'Language-less / opens the home page in the saved language @Tdbd1834c',
+      'Language-less / is the English home page with a hint to the saved language @Tdbd1834c',
       { tag: [TAG.home] },
-      async ({ homePage, page }) => {
-        await homePage.openLanguageless('/');
-        await expect(page).toHaveURL(/\/da\/$/); // no ?via=lang left in the address
-        await expect(homePage.root).toBeVisible();
-        await expect(homePage.html).toHaveAttribute('lang', 'da');
+      async ({ homePage, site, page }) => {
+        await test.step('/ stays at /, in English', async () => {
+          await homePage.openLanguageless('/');
+          await expect(page).toHaveURL(/^https?:\/\/[^/]+\/$/);
+          await expect(homePage.root).toBeVisible();
+          await expect(homePage.html).toHaveAttribute('lang', 'en');
+        });
+        await test.step('the hint offers Dansk and leads to /da/', async () => {
+          await site.expectLangHint('da', '/');
+          await site.langHintOpen.click();
+          await expect(page).toHaveURL(/\/da\/$/);
+          await expect(homePage.html).toHaveAttribute('lang', 'da');
+        });
       },
     );
   });
 
   // ── cefb4fde ──────────────────────────────────────────────────────────────────────────────────
-  // Nothing saved: the browser language decides; one the site doesn't have falls back to English.
+  // Nothing saved: the browser language decides the hint; one the site doesn't have gets no hint.
   // One test per browser language, so each runs in its own fresh context.
   const BROWSER_CASES: { locale: string; expected: Lang }[] = [
     { locale: 'pl-PL', expected: 'pl' },
@@ -235,13 +244,14 @@ test.describe('language-less /', () => {
       test.use({ locale });
 
       test(
-        `Language-less / opens the home page in the browser language, English as fallback: ${locale} → ${expected} @Tcefb4fde`,
+        `Language-less / is the English home page with a hint to the browser language, none for English: ${locale} → ${expected} @Tcefb4fde`,
         { tag: [TAG.home] },
-        async ({ homePage, page }) => {
+        async ({ homePage, site, page }) => {
           await homePage.openLanguageless('/');
-          await expect(page).toHaveURL(new RegExp(`/${expected}/$`));
+          await expect(page).toHaveURL(/^https?:\/\/[^/]+\/$/);
           await expect(homePage.root).toBeVisible();
-          await expect(homePage.html).toHaveAttribute('lang', expected);
+          await expect(homePage.html).toHaveAttribute('lang', 'en');
+          await site.expectLangHint(expected, '/');
         },
       );
     });
@@ -254,17 +264,17 @@ test.describe('language-less /', () => {
     { tag: [TAG.home] },
     async ({ homePage, app, page }) => {
       for (const view of ['traps', 'practice', 'collection'] as const) {
-        await test.step(`/#${view} → /en/http/#${view}, ${view} open`, async () => {
+        await test.step(`/#${view} → /http/#${view} (the English app, RSP-216), ${view} open`, async () => {
           await homePage.openLanguageless(`/#${view}`);
-          await expect(page).toHaveURL(new RegExp(`/en/http/#${view}$`));
+          await expect(page).toHaveURL(new RegExp(`^https?://[^/]+/http/#${view}$`));
           await app.ready();
           await expect(app.view(view)).toBeVisible();
         });
       }
 
-      await test.step('/#about is a home page section: it stays on /en/#about', async () => {
+      await test.step('/#about is a home page section: it stays on /#about', async () => {
         await homePage.openLanguageless('/#about');
-        await expect(page).toHaveURL(/\/en\/#about$/);
+        await expect(page).toHaveURL(/^https?:\/\/[^/]+\/#about$/);
         await expect(homePage.about).toBeInViewport();
       });
     },

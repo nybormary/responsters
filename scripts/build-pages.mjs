@@ -1,8 +1,8 @@
 // Page build (RSP-90, URL scheme RSP-138, home page RSP-156): copies site/ to dist/ and writes, per language,
 // the home page at /<lang>/, the app at /<lang>/http/, one static page per creature at /<lang>/http/<code>/ and one per
-// git card at /<lang>/git/<id>/ (RSP-199). Language-less URLs
-// (/, /http/, /http/<code>/, /git/<id>/) go to the visitor's language through small chooser pages at those paths (the same
-// file on Netlify and in a local run); no server-side language redirect (RSP-183).
+// git card at /<lang>/git/<id>/ (RSP-199). Language-less URLs (/, /http/, /http/<code>/, /git/<id>/) show the English
+// page itself, with a hint to open the visitor's language (RSP-216): no redirect at all, so nothing flashes. The same
+// file on Netlify and in a local run; no server-side language redirect (RSP-183).
 // Netlify runs the build before every deploy (netlify.toml) and publishes dist/.
 // Texts and data come from the same files the app uses (site/data, site/i18n, site/js/render.js),
 // so a text changed for the app changes on the pages too.
@@ -737,43 +737,27 @@ function appPage(lang, tx) {
 }
 
 /**
- * Chooser page at a language-less path. Locally it answers every visitor (npx serve dist knows no redirects);
- * on Netlify only the visitors whose first browser language isn't one of ours (see redirects()).
- * It sends the visitor on to `/<lang><rest>` with the same hash; without JavaScript it lists the languages.
- * / leads to the home page /<lang>/; old links like /#traps go on from there to /<lang>/http/#traps (js/site.js).
+ * The page at a language-less path (RSP-216): the English page itself, marked `data-bare` on <html>, with the
+ * language hint's texts in every language (js/lang-hint.js shows the visitor's one; the pages load no locale file).
+ * Canonical and hreflang stay the English page's: canonical /en/…, x-default = this language-less address.
+ * Replaces the chooser pages, whose redirect ran after the page was parsed, so a bare language list flashed first.
  */
-function chooserPage(rest) {
-  const links = LANGS.map(
-    (l) => `<li><a href="/${l}${rest}" lang="${l}" hreflang="${l}">${LANG_NAMES[l][0]}</a></li>`,
-  ).join('');
-  return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex" />
-    <title>Mnemozoo</title>
-    <script type="module">
-      import { pickLang } from '/js/lang.js';
-      location.replace('/' + pickLang() + ${JSON.stringify(rest)} + location.search + location.hash);
-    </script>
-  </head>
-  <body>
-    <main>
-      <ul>${links}</ul>
-    </main>
-  </body>
-</html>
-`;
+function barePage(enHtml, hints) {
+  const json = JSON.stringify(hints).replace(/</g, '\\u003c');
+  if (!enHtml.includes('<html lang="en"') || !enHtml.includes('</body>'))
+    throw new Error('build-pages: an English page has no <html lang="en"> or </body> for its language-less copy');
+  return enHtml
+    .replace('<html lang="en"', '<html lang="en" data-bare')
+    .replace('</body>', `<script type="application/json" id="lang-hint-texts">${json}</script>\n  </body>`);
 }
 
 /**
- * dist/_redirects (RSP-138, RSP-183). Language-less URLs (/, /http/, /http/<code>/) are NOT redirected here: the chooser
- * page at the same path picks the language in the browser (pickLang: saved choice, nf_lang cookie, the whole browser
- * list, then English), on Netlify the same as in a local run.
+ * dist/_redirects (RSP-138, RSP-183). Language-less URLs (/, /http/, /http/<code>/) are NOT redirected here: they show
+ * the English page with a hint to the visitor's language (RSP-216; until then a chooser page redirected in the browser),
+ * on Netlify the same as in a local run.
  * Why not Netlify's `Language=` rules (used until RSP-183): Netlify's edge answers two requests for the same URL with
  * the same Accept-Language that arrive together with ONE redirect, whatever their nf_lang cookie (deploy preview
- * #40, 2026-11-11: 6 wrong answers of 20). A chooser page is the same file for everyone, so that can't go wrong.
+ * #40, 2026-11-11: 6 wrong answers of 20). A language-less page is the same file for everyone, so that can't go wrong.
  * The same goes for a missing address without a language: Netlify's default dist/404.html, in English (Maryna: in
  * every unknown case, English). A missing address with a language gets the 404 page in that language (RSP-148).
  */
@@ -836,7 +820,8 @@ async function writeStyles() {
 }
 
 /**
- * RSP-175 AC4: every page a visitor stays on has the analytics beacon exactly once, a chooser page none.
+ * RSP-175 AC4: every page a visitor stays on has the analytics beacon exactly once, the English copies at the
+ * language-less paths too (RSP-216: they are pages, no longer chooser pages).
  * Counted in the written files, so a template change that drops or doubles it stops the build.
  */
 async function checkBeacons() {
@@ -850,18 +835,17 @@ async function checkBeacons() {
     `${gitHome(l).slice(1)}index.html`,
     ...GIT.map((g) => `${gitUrl(l, g.id).slice(1)}index.html`),
   ]).concat('404.html');
-  const choosers = [
+  const bare = [
     'index.html',
     `${appUrl(null).slice(1)}index.html`,
+    `${newsUrl(null).slice(1)}index.html`,
     ...D.map((d) => `${creatureUrl(null, d.c).slice(1)}index.html`),
     `${gitHome(null).slice(1)}index.html`,
     ...GIT.map((g) => `${gitUrl(null, g.id).slice(1)}index.html`),
   ];
-  for (const file of stay)
+  for (const file of stay.concat(bare))
     if ((await count(file)) !== 1)
       throw new Error(`build-pages: ${file} has the analytics beacon ${await count(file)} times, not once`);
-  for (const file of choosers)
-    if ((await count(file)) !== 0) throw new Error(`build-pages: chooser page ${file} has the analytics beacon`);
 }
 
 async function build() {
@@ -891,8 +875,10 @@ async function build() {
 
   let pages = 0,
     gitPages = 0;
+  const hints = {};
   for (const lang of LANGS) {
     const tx = lang === 'en' ? en : fill((await LOCALES[lang]()).default, en, '', lang);
+    hints[lang] = tx.site.langHint;
     await page(homeUrl(lang), homePage(lang, tx));
     await writeFile(path.join(DIST, lang, '404.html'), notFoundPage(lang, tx));
     if (lang === 'en') await writeFile(path.join(DIST, '404.html'), notFoundPage(lang, tx)); // Netlify's default
@@ -908,16 +894,15 @@ async function build() {
       gitPages++;
     }
   }
-  for (const rest of [appUrl(null), newsUrl(null), gitHome(null)]
+  for (const rest of ['/', appUrl(null), newsUrl(null), gitHome(null)]
     .concat(D.map((d) => creatureUrl(null, d.c)))
     .concat(GIT.map((g) => gitUrl(null, g.id))))
-    await page(rest, chooserPage(rest));
-  await page('/', chooserPage('/'));
+    await page(rest, barePage(await readFile(path.join(DIST, 'en', rest, 'index.html'), 'utf8'), hints));
   await writeFile(path.join(DIST, '_redirects'), redirects());
   await writeFile(path.join(DIST, 'sitemap.xml'), sitemap(new Date().toISOString().slice(0, 10)));
   await checkBeacons();
   console.log(
-    `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${LANGS.length} news pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards) + ${gitPages} git card pages (${GIT.filter(gitOpen).length} of ${GIT.length} cards open on ${BUILD_DATE}, advent start ${ADVENT_START}, ${ADVENT_DAYS} days) + the advent wall, chooser pages, _redirects → dist/`,
+    `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${LANGS.length} news pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards) + ${gitPages} git card pages (${GIT.filter(gitOpen).length} of ${GIT.length} cards open on ${BUILD_DATE}, advent start ${ADVENT_START}, ${ADVENT_DAYS} days) + the advent wall, the English pages at the language-less paths, _redirects → dist/`,
   );
 }
 

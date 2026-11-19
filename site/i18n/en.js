@@ -430,6 +430,13 @@ export default {
   // Site header and footer (RSP-156, RSP-155): the same on every page of the zoo.
   site: {
     nav: 'Site menu',
+    // the hint on the language-less pages (RSP-216), shown in the visitor's language; en is never shown
+    langHint: {
+      label: 'Site language',
+      text: 'Mnemozoo is also in English.',
+      open: 'Open',
+      close: 'Close',
+    },
     map: 'Map',
     about: 'About the project',
     foot: 'Original characters and copy; status names from the IANA registry.',

@@ -430,6 +430,12 @@ export default {
   // Nagłówek i stopka strony (RSP-156): takie same na każdej stronie zoo.
   site: {
     nav: 'Menu strony',
+    langHint: {
+      label: 'Język strony',
+      text: 'Mnemozoo jest też w języku polskim.',
+      open: 'Otwórz',
+      close: 'Zamknij',
+    },
     map: 'Mapa',
     about: 'O projekcie',
     foot: 'Oryginalne postacie i teksty; nazwy statusów według rejestru IANA.',

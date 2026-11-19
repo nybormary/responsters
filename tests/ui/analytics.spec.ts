@@ -1,7 +1,7 @@
 // Analytics beacon (RSP-175). testomat.io folder "Privacy", suite "Analytics beacon (RSP-175)".
 // Cloudflare Web Analytics: the build puts one loader in every page a visitor stays on; it adds the beacon only on
 // mnemozoo.com. Requests to the beacon are blocked in every test (fixtures/analytics.ts): nothing reaches Cloudflare.
-// AC4 (the loader exactly once in every generated page, none on chooser pages) is checked by the build itself.
+// AC4 (the loader exactly once in every generated page, the language-less English pages too) is checked by the build itself.
 import { test, expect, TAG, AnalyticsBeacon, BeaconRequests, PRODUCTION_HOST, type Lang } from '../fixtures';
 
 const BEACON_SRC = 'https://static.cloudflareinsights.com/beacon.min.js';
@@ -59,12 +59,12 @@ test(
         ).toEqual([]);
       });
 
-      await test.step('mnemozoo.com/ → /<lang>/: one beacon request for the visit', async () => {
+      await test.step('mnemozoo.com/ is the English home page itself (RSP-216): one beacon request', async () => {
         const before = prod.requests.urls.length;
         await prod.page.goto(`https://${PRODUCTION_HOST}/`);
-        await prod.page.waitForURL(/\/[a-z]{2}\/$/);
         await prod.page.waitForLoadState('networkidle');
-        expect(prod.requests.urls.length - before, 'beacon requests: the chooser page sends none').toBe(1);
+        expect(new URL(prod.page.url()).pathname, 'no redirect from /').toBe('/');
+        expect(prod.requests.urls.length - before, 'beacon requests for the visit').toBe(1);
       });
 
       await test.step('No cookie from the beacon, no consent banner', async () => {

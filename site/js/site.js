@@ -4,16 +4,19 @@
 // language also saves it, like the switcher in the app, so the next language-less visit uses it (RSP-138).
 import { saveLang, followSavedLanguage, langFromPath, syncCookie } from './lang.js';
 import { contactOnClick } from './util.js';
+import { showLangHint } from './lang-hint.js';
 import './advent.js'; // the advent wall and the home page's Git enclosure, by the visitor's date (RSP-195)
 
 // Old links to the app (/#collection, /#practice, /#traps) now land on the home page /<lang>/ with the same hash
 // (dist/_redirects, chooser page at /): send them on to the app /<lang>/http/ (RSP-138, RSP-156).
 const OLD_APP_HASHES = ['#collection', '#practice', '#traps'];
 
+// The language-less root / is the English home page (RSP-216): /#traps goes on to the language-less /http/#traps.
 function followOldAppLink() {
   const lang = langFromPath();
-  if (!lang || location.pathname !== `/${lang}/` || !OLD_APP_HASHES.includes(location.hash)) return;
-  location.replace(`/${lang}/http/${location.hash}`);
+  const home = lang ? `/${lang}/` : '/';
+  if (location.pathname !== home || !OLD_APP_HASHES.includes(location.hash)) return;
+  location.replace(`${home}http/${location.hash}`);
 }
 
 // Page for a missing address (RSP-148): the build links the language menu to the home pages (works without JS).
@@ -33,6 +36,7 @@ keepAddressInLangMenu();
 // next language-less visit is redirected by Netlify straight to it (found by Copilot code review, PR #30).
 syncCookie();
 if (!followSavedLanguage()) followOldAppLink();
+showLangHint();
 
 // The language menu is a <details>, which never closes by itself (RSP-181): close it on a click outside it and
 // on Escape (focus back on its button), like the menu in the app. The click itself still does its job.

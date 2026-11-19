@@ -1,6 +1,6 @@
 // Language: browser language, language menu (mouse and keyboard).
 // testomat.io folder "Language", suite "Language menu and locales". Tickets: RSP-97, RSP-109.
-import { test, expect, TAG, LANGS, textsFor, langName, type Lang, type App } from '../fixtures';
+import { test, expect, TAG, LANGS, textsFor, langName, type Lang, type App, type SiteChrome } from '../fixtures';
 
 // These tests check how the language is chosen, so no random language is saved before they start.
 test.use({ randomLang: false });
@@ -15,7 +15,8 @@ async function expectLanguage(app: App, lang: Lang) {
   await expect(app.tab('traps')).toHaveText(tabs[2]);
 }
 
-// ── c727f8eb: Browser language picks the site language (RSP-97) ────────────────────────────────
+// ── c727f8eb: Browser language picks the site language (RSP-97; RSP-216: as a hint, no redirect) ────────────────
+// The language-less /http/ is the English app; the hint offers the visitor's language and leads to /<lang>/http/.
 // One test per browser language, so each runs in its own fresh context with nothing saved.
 const BROWSER_CASES: { locale: string; expected: Lang }[] = [
   { locale: 'pl-PL', expected: 'pl' },
@@ -23,8 +24,18 @@ const BROWSER_CASES: { locale: string; expected: Lang }[] = [
   { locale: 'et-EE', expected: 'et' },
   { locale: 'lt-LT', expected: 'lt' },
   { locale: 'uk-UA', expected: 'uk' },
-  { locale: 'ru-RU', expected: 'en' }, // unsupported → English, never Ukrainian
+  { locale: 'ru-RU', expected: 'en' }, // unsupported → no hint (English), never Ukrainian
 ];
+
+/** /http/ opens the English app at its own address, and the hint offers `lang` (none for English); its button leads there. */
+async function expectHintTo(app: App, site: SiteChrome, lang: Lang) {
+  await app.openLanguageless('practice');
+  await expect(app.html).toHaveAttribute('lang', 'en');
+  await site.expectLangHint(lang, '/http/#practice');
+  if (lang === 'en') return;
+  await site.langHintOpen.click();
+  await expectLanguage(app, lang);
+}
 
 for (const { locale, expected } of BROWSER_CASES) {
   test.describe(`browser language ${locale}`, () => {
@@ -33,9 +44,8 @@ for (const { locale, expected } of BROWSER_CASES) {
     test(
       `Browser language picks the site language: ${locale} → ${expected} @Tc727f8eb`,
       { tag: [TAG.language] },
-      async ({ app }) => {
-        await app.openLanguageless();
-        await expectLanguage(app, expected);
+      async ({ app, site }) => {
+        await expectHintTo(app, site, expected);
       },
     );
   });
@@ -47,9 +57,8 @@ test.describe('browser language vs. saved choice', () => {
   test(
     'Browser language picks the site language: a language picked in the menu wins @Tc727f8eb',
     { tag: [TAG.language] },
-    async ({ app }) => {
-      await app.openLanguageless();
-      await expectLanguage(app, 'da');
+    async ({ app, site }) => {
+      await expectHintTo(app, site, 'da');
     },
   );
 });

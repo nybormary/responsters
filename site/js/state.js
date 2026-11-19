@@ -1,7 +1,7 @@
 // The app's shared state. Every module reads and changes it through this one object,
 // e.g. state.lang = 'en'. Saved parts (lang, weight, streak, howtoSeen) come from localStorage.
 import { store } from './store.js';
-import { langFromPath, pickLang, followSavedLanguage } from './lang.js';
+import { langFromPath, followSavedLanguage } from './lang.js';
 import { LOCALES, LANG_NAMES } from '../i18n/index.js';
 import en from '../i18n/en.js';
 import { fill } from '../i18n/fill.js';
@@ -9,14 +9,14 @@ import { fill } from '../i18n/fill.js';
 export { LANG_NAMES };
 export const LANGS = Object.keys(LOCALES); // what the language menu lists (only complete locales)
 
-// Which language to show (RSP-97, RSP-138): the language in the URL (/uk/http/) wins; on a language-less
-// path the saved choice, then the browser language (lang.js). Opening a URL never saves a choice:
+// Which language to show (RSP-97, RSP-138): the language in the URL (/uk/http/); a language-less path (/http/) is the
+// English page, with a hint to the visitor's language (RSP-216, lang-hint.js). Opening a URL never saves a choice:
 // only the switcher does.
 // After a Netlify language redirect a language saved before RSP-138 wins (lang.js); the page then reloads there.
 followSavedLanguage();
 
 export const state = {
-  lang: langFromPath() || pickLang(), // a key of LOCALES: 'uk' | 'en' | …
+  lang: langFromPath() || 'en', // a key of LOCALES: 'uk' | 'en' | …
   view: 'collection', // 'collection' | 'practice' | 'traps'
   filter: 0, // Collection class filter: 0 = all, 1–5 = 1xx–5xx
   mode: 'art', // Practice: 'art' (picture → code) | 'code' (code → creature) | 'nerd' (meaning → code, text only) | 'hard' (code → status name)

@@ -430,6 +430,12 @@ export default {
   // Svetainės antraštė ir poraštė (RSP-156): tokios pačios visuose zoologijos sodo puslapiuose.
   site: {
     nav: 'Svetainės meniu',
+    langHint: {
+      label: 'Svetainės kalba',
+      text: 'Mnemozoo yra ir lietuviškai.',
+      open: 'Atidaryti',
+      close: 'Uždaryti',
+    },
     map: 'Žemėlapis',
     about: 'Apie projektą',
     foot: 'Originalūs personažai ir tekstai; būsenų pavadinimai pagal IANA registrą.',

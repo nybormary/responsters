@@ -5,6 +5,7 @@ import { $ } from './util.js';
 import { state, loadLang } from './state.js';
 import { langFromPath, saveLang, syncCookie } from './lang.js';
 import { renderChrome, langOpen, langClose, langKeys } from './chrome.js';
+import { showLangHint, hideLangHint } from './lang-hint.js';
 import { renderCollection } from './collection.js';
 import { newRound, nextRound, renderPractice, answer, showHint } from './practice.js';
 import { renderTraps, scAnswer } from './traps.js';
@@ -94,8 +95,11 @@ $('langmenu').addEventListener('focusout', (e) => {
 // (/uk/http/#practice → /pl/http/#practice): no reload and no new history entry, so Back still moves
 // between tabs. Back can land on an entry written before the change (/uk/http/): the path follows the
 // current language again, the language stays as picked.
+// The language-less /http/ is the English page (RSP-216): it keeps its address until the language changes.
 function syncPath() {
-  if (langFromPath() !== state.lang) history.replaceState(history.state, '', `/${state.lang}/http/${location.hash}`);
+  if ((langFromPath() || 'en') === state.lang) return;
+  history.replaceState(history.state, '', `/${state.lang}/http/${location.hash}`);
+  hideLangHint();
 }
 
 // Tabs live in the URL hash (RSP-114): #collection, #practice, #traps. A tab click writes the hash, so reload,
@@ -121,3 +125,4 @@ window.addEventListener('popstate', onNavigate);
 syncCookie();
 state.view = viewFromHash();
 render();
+showLangHint();
