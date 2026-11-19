@@ -453,6 +453,15 @@ export default {
     lead: 'Kas pasikeitė Mnemozoo, naujausi viršuje.',
     kinds: { new: 'Nauja', improved: 'Patobulinta', fixed: 'Ištaisyta' },
     entries: {
+      'advent-preview': {
+        title: 'Git įsikelia',
+        line: 'Git Mnemozoo: nuo gruodžio 1 d. kasdien nauja komanda, paaiškinta buitine scenele.',
+        items: [
+          'Advento siena: 25 durelės, pirmosios atsidaro gruodžio 1 d.',
+          'Git komandų grupės pažymėtos piktogramomis, ne tik spalva.',
+          'Adresai be kalbos iškart atveria anglišką puslapį ir pasiūlo pereiti į jūsų kalbą.',
+        ],
+      },
       'footer-news': {
         title: 'Poraštė ir naujienos',
         line: 'Dabar lengva mums parašyti ir sužinoti, kas pasikeitė svetainėje.',

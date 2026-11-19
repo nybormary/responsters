@@ -37,19 +37,29 @@
   line-height: 1.6;
 }
 .news-items {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 10px;
   margin: 0 0 12px;
   padding: 0;
   list-style: none;
   line-height: 1.6;
 }
+/* Chips in their own column, all as wide as the widest one; each item's text in the column next to them, so a
+   wrapped line starts under the text, not under the chip (Maryna, 2026-11-19). */
 .news-items li {
-  margin: 0 0 6px;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
 }
-/* The kind is a word, not only a colour (WCAG 1.4.1): New / Improved / Fixed. */
+/* The kind is a word, not only a colour (WCAG 1.4.1): New / Improved / Fixed. line-height 1 and one more pixel on top
+   centre the capitals in the chip (with the line height of the list the word sat high, Maryna 2026-11-19). */
 .news-kind {
-  display: inline-block;
-  margin-right: 8px;
-  padding: 0 8px;
+  align-self: start;
+  margin-top: 3px;
+  padding: 4px 8px 3px;
+  line-height: 1;
+  text-align: center;
   border: 1.5px solid currentColor;
   border-radius: 999px;
   font-size: 13px;
