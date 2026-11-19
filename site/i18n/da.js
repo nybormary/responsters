@@ -450,6 +450,15 @@ export default {
     lead: 'Hvad der er ændret på Mnemozoo, nyeste først.',
     kinds: { new: 'Nyt', improved: 'Forbedret', fixed: 'Rettet' },
     entries: {
+      'advent-preview': {
+        title: 'Git flytter ind',
+        line: 'Git i Mnemozoo: fra 1. december en ny kommando hver dag, forklaret med en scene fra hjemmet.',
+        items: [
+          'Julekalender-væg: 25 låger, den første åbner 1. december.',
+          'Grupper af git-kommandoer har ikoner, ikke kun farve.',
+          'Adresser uden sprog åbner straks den engelske side med et tilbud om at skifte til dit sprog.',
+        ],
+      },
       'footer-news': {
         title: 'Sidefod og nyheder',
         line: 'Nu er det let at skrive til os og se, hvad der er ændret på siden.',
