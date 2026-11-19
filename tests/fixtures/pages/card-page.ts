@@ -17,7 +17,7 @@ export class CardPage {
     await this.page.goto(`/${lang}/http/${code}/`);
   }
 
-  /** Open the language-less card page /http/<code>/: the site sends the browser on to its language (RSP-138). */
+  /** Open the language-less card page /http/<code>/: the English page at that address (RSP-216). */
   async openLanguageless(code: number) {
     await this.page.goto(`/http/${code}/`);
   }

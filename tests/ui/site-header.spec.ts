@@ -121,7 +121,7 @@ test.describe('a card page, nothing saved', () => {
   test(
     'The language menu on a card page opens the same card in the other language and saves the choice @Te8a26193',
     { tag: [TAG.navigation] },
-    async ({ cardPage, langMenu, page }) => {
+    async ({ cardPage, langMenu, site, page }) => {
       await test.step('/en/http/404/: pick Polski', async () => {
         await cardPage.open('en', 404);
         await langMenu.pick('pl');
@@ -129,8 +129,12 @@ test.describe('a card page, nothing saved', () => {
         await expect(cardPage.html).toHaveAttribute('lang', 'pl');
       });
 
-      await test.step('the language-less /http/404/ opens it in Polish', async () => {
+      await test.step('the language-less /http/404/ is the English card; its hint offers Polski (RSP-216)', async () => {
         await cardPage.openLanguageless(404);
+        await expect(page).toHaveURL(/:\d+\/http\/404\/$/);
+        await expect(cardPage.html).toHaveAttribute('lang', 'en');
+        await site.expectLangHint('pl', '/http/404/');
+        await site.langHintOpen.click();
         await expect(page).toHaveURL(/\/pl\/http\/404\/$/);
         await expect(cardPage.html).toHaveAttribute('lang', 'pl');
       });

@@ -427,6 +427,12 @@ export default {
   // Sidehoved og sidefod (RSP-156): de samme på alle sider i zooen.
   site: {
     nav: 'Sidemenu',
+    langHint: {
+      label: 'Sidens sprog',
+      text: 'Mnemozoo findes også på dansk.',
+      open: 'Åbn',
+      close: 'Luk',
+    },
     map: 'Kort',
     about: 'Om projektet',
     foot: 'Originale figurer og tekster; statusnavne fra IANA-registret.',

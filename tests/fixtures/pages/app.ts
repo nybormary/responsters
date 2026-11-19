@@ -34,13 +34,13 @@ export class App {
   }
 
   /**
-   * Open the app by its language-less URL /http/ (only for tests of choosing the language). The site sends the
-   * browser on to /<lang>/http/ (RSP-138) through the chooser page at /http/, on Netlify and locally alike (RSP-183):
-   * the saved language, then the browser language decides, else English.
+   * Open the app by its language-less URL /http/ (only for tests of choosing the language). Since RSP-216 that is the
+   * English app itself, at the same address, with a hint to the visitor's language (no redirect).
    */
   async openLanguageless(view?: View | string) {
     await this.page.goto(view ? `/http/#${view}` : '/http/');
-    await expect(this.page).toHaveURL(/\/[a-z]{2}\/http\/(#.*)?$/);
+    await expect(this.page).toHaveURL(/\/http\/(#.*)?$/);
+    await expect(this.page).not.toHaveURL(/\/[a-z]{2}\/http\//);
     await this.ready();
   }
 

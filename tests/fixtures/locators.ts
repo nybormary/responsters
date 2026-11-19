@@ -58,6 +58,10 @@ export const TID = {
   siteLogo: 'site-logo',
   enclosureHeader: 'enclosure-header', // the app's own header inside <main> (RSP-155)
   siteFooter: 'site-footer',
+  // Language hint on the language-less pages (RSP-216)
+  langHint: 'lang-hint',
+  langHintOpen: 'lang-hint-open',
+  langHintClose: 'lang-hint-close',
   navMap: 'nav-map',
   navAbout: 'nav-about',
   // Footer links and note (RSP-139)

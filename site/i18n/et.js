@@ -427,6 +427,12 @@ export default {
   // Saidi päis ja jalus (RSP-156): samad loomaaia igal lehel.
   site: {
     nav: 'Saidi menüü',
+    langHint: {
+      label: 'Saidi keel',
+      text: 'Mnemozoo on ka eesti keeles.',
+      open: 'Ava',
+      close: 'Sulge',
+    },
     map: 'Kaart',
     about: 'Projektist',
     foot: 'Originaalsed tegelased ja tekstid; olekute nimed IANA registri järgi.',

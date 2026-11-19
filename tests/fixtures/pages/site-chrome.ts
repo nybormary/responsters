@@ -1,7 +1,9 @@
 // The site header and footer (RSP-156, RSP-155): the same on the home page, the app and every card page.
 // Landmarks are found by role on purpose: the role is what is checked.
 import type { Page, Locator } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { TID } from '../locators';
+import { textsFor, type Lang } from '../texts';
 
 export class SiteChrome {
   readonly page: Page;
@@ -12,6 +14,35 @@ export class SiteChrome {
     this.page = page;
     this.header = page.getByTestId(TID.siteHeader);
     this.footer = page.getByTestId(TID.siteFooter);
+  }
+
+  /** The hint on a language-less page that offers the visitor's language (RSP-216). */
+  get langHint(): Locator {
+    return this.page.getByTestId(TID.langHint);
+  }
+  get langHintOpen(): Locator {
+    return this.langHint.getByTestId(TID.langHintOpen);
+  }
+  get langHintClose(): Locator {
+    return this.langHint.getByTestId(TID.langHintClose);
+  }
+
+  /**
+   * The language hint offers `lang` for the language-less address `at` (path + query + hash): its text, button and
+   * close label in that language, the button leading to /<lang><at>. For 'en' there is no hint at all.
+   */
+  async expectLangHint(lang: Lang, at: string) {
+    if (lang === 'en') {
+      await expect(this.langHint, 'no language hint for English').toHaveCount(0);
+      return;
+    }
+    const t = (await textsFor(lang)).site.langHint;
+    await expect(this.langHint).toBeVisible();
+    await expect(this.langHint).toHaveAttribute('lang', lang);
+    await expect(this.langHint).toContainText(t.text);
+    await expect(this.langHintOpen).toHaveText(t.open);
+    await expect(this.langHintOpen).toHaveAttribute('href', `/${lang}${at}`);
+    await expect(this.langHintClose).toHaveAccessibleName(t.close);
   }
 
   get logo(): Locator {
