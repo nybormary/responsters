@@ -217,7 +217,7 @@ test.describe('language-less /', () => {
       async ({ homePage, site, page }) => {
         await test.step('/ stays at /, in English', async () => {
           await homePage.openLanguageless('/');
-          await expect(page).toHaveURL(/:\d+\/$/);
+          await expect(page).toHaveURL(/^https?:\/\/[^/]+\/$/);
           await expect(homePage.root).toBeVisible();
           await expect(homePage.html).toHaveAttribute('lang', 'en');
         });
@@ -248,7 +248,7 @@ test.describe('language-less /', () => {
         { tag: [TAG.home] },
         async ({ homePage, site, page }) => {
           await homePage.openLanguageless('/');
-          await expect(page).toHaveURL(/:\d+\/$/);
+          await expect(page).toHaveURL(/^https?:\/\/[^/]+\/$/);
           await expect(homePage.root).toBeVisible();
           await expect(homePage.html).toHaveAttribute('lang', 'en');
           await site.expectLangHint(expected, '/');
@@ -266,7 +266,7 @@ test.describe('language-less /', () => {
       for (const view of ['traps', 'practice', 'collection'] as const) {
         await test.step(`/#${view} → /http/#${view} (the English app, RSP-216), ${view} open`, async () => {
           await homePage.openLanguageless(`/#${view}`);
-          await expect(page).toHaveURL(new RegExp(`:\\d+/http/#${view}$`));
+          await expect(page).toHaveURL(new RegExp(`^https?://[^/]+/http/#${view}$`));
           await app.ready();
           await expect(app.view(view)).toBeVisible();
         });
@@ -274,7 +274,7 @@ test.describe('language-less /', () => {
 
       await test.step('/#about is a home page section: it stays on /#about', async () => {
         await homePage.openLanguageless('/#about');
-        await expect(page).toHaveURL(/:\d+\/#about$/);
+        await expect(page).toHaveURL(/^https?:\/\/[^/]+\/#about$/);
         await expect(homePage.about).toBeInViewport();
       });
     },

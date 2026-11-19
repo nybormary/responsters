@@ -131,7 +131,7 @@ test.describe('a card page, nothing saved', () => {
 
       await test.step('the language-less /http/404/ is the English card; its hint offers Polski (RSP-216)', async () => {
         await cardPage.openLanguageless(404);
-        await expect(page).toHaveURL(/:\d+\/http\/404\/$/);
+        await expect(page).toHaveURL(/^https?:\/\/[^/]+\/http\/404\/$/);
         await expect(cardPage.html).toHaveAttribute('lang', 'en');
         await site.expectLangHint('pl', '/http/404/');
         await site.langHintOpen.click();
