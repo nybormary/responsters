@@ -567,6 +567,25 @@ export default {
     },
     groups: { start: 'Moving in', home: 'At home', visit: 'Visit', archive: 'Attic', post: 'Post' },
     cards: {
+      // Pictures ready (RSP-191, RSP-192): only their text for now; the other card texts come with RSP-200.
+      init: {
+        art: 'A grey cat stands on the threshold of a wide-open door and is the first to step into the empty flat: no furniture, only an empty frame on the wall. Behind it, a person with suitcases, one with a light-bulb sticker. By the door, a single new nameplate.',
+      },
+      gitignore: {
+        art: 'On the wall, a portrait of a cat sitting with its back to its bowl of fish. A person stands at the open fridge, scratching their head and wondering where the ketchup is, while the ketchup bottle stands right in front of them on the middle shelf. A list hangs on the fridge door under a magnet.',
+      },
+      restore: {
+        art: 'On the wall, a portrait of a rabbit that has chewed a slipper. Mum holds up a photo of the tidy shelf, "as it was", and firmly sweeps a half-done puzzle off the floor into a dustpan, the pieces flying in. A child in the doorway screams with arms up. On the right, the shelf already looks like the photo: neat boxes, the puzzle box among them.',
+      },
+      stash: {
+        art: 'On the wall, a portrait of a hamster with stuffed cheeks. While the doorbell rings, a person on tiptoe hastily stuffs a sweater and a ball of yarn into the top cupboard, its door open towards us; identical mugs stand on the middle shelf.',
+      },
+      branch: {
+        art: 'On the wall, a portrait of a parrot on a perch. Two open doors side by side lead into two identical rooms with the same armchair and window; a runner on the floor forks to both doors. By the left door, an old nameplate; a person is putting up a new yellow nameplate by the right door.',
+      },
+      switch: {
+        art: 'On the wall, a portrait of a parrot: of two perches, it sits on the upper one, the lower one is empty. Two open doors side by side lead into two identical rooms; a runner on the floor forks to both doors; the right door is yellow. A person strides from the left door into the right room, footprints on the runner lead from the left branch to the right one.',
+      },
       clone: {
         title: 'Furnished flat',
         art: "A person with suitcases, one with a light-bulb sticker, stands at a wide-open door. Inside, the previous tenants' armchair is already there with a binder of old bills on it, and a portrait of two identical kittens hangs on the wall. By the door, a new name plate; the old one is falling off.",

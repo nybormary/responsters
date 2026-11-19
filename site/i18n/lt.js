@@ -565,6 +565,25 @@ export default {
     },
     groups: { start: 'Įkurtuvės', home: 'Namuose', visit: 'Vizitas', archive: 'Palėpė', post: 'Paštas' },
     cards: {
+      // Pictures ready (RSP-191, RSP-192): only their text for now; the other card texts come with RSP-200.
+      init: {
+        art: 'Pilka katė stovi ant plačiai atvertų durų slenksčio ir pirmoji įkelia leteną į tuščią butą: baldų nėra, ant sienos tik tuščias rėmelis. Už jos žmogus su lagaminais, ant vieno lemputės lipdukas. Prie durų viena nauja lentelė su vardu.',
+      },
+      gitignore: {
+        art: 'Ant sienos – katės portretas: ji sėdi nugara į savo dubenėlį su žuvyte. Žmogus stovi prie atviro šaldytuvo, kasosi pakaušį ir galvoja, kur kečupas, o kečupo butelis stovi tiesiai prieš jį ant vidurinės lentynos. Ant šaldytuvo durų po magnetu kabo sąrašas.',
+      },
+      restore: {
+        art: 'Ant sienos – triušio, sugraužusio šlepetę, portretas. Mama iškėlusi laiko tvarkingos lentynos nuotrauką, „kaip buvo“, ir ryžtingai šluoja nuo grindų į semtuvėlį nebaigtą dėlionę, detalės skrenda į semtuvėlį. Kambario tarpduryje vaikas iškeltomis rankomis rėkia. Dešinėje lentyna jau kaip nuotraukoje: tvarkingos dėžės, tarp jų dėlionės dėžutė.',
+      },
+      stash: {
+        art: 'Ant sienos – žiurkėno prikimštais skruostais portretas. Kol skambina į duris, žmogus ant pirštų galiukų skubiai kemša megztinį ir siūlų kamuolį į viršutinę spintelę, kurios durelės pravertos į mus; ant vidurinės lentynos stovi vienodi puodeliai.',
+      },
+      branch: {
+        art: 'Ant sienos – papūgėlės ant laktos portretas. Dvejos atviros durys greta veda į du vienodus kambarius su tokiu pačiu foteliu ir langu; takelis ant grindų išsišakoja į abejas duris. Prie kairiųjų durų sena lentelė; žmogus kabina prie dešiniųjų naują geltoną lentelę.',
+      },
+      switch: {
+        art: 'Ant sienos – papūgėlės portretas: iš dviejų laktų ji tupi ant viršutinės, apatinė tuščia. Dvejos atviros durys greta veda į du vienodus kambarius; takelis ant grindų išsišakoja į abejas duris; dešiniosios durys geltonos. Žmogus plačiu žingsniu eina nuo kairiųjų durų į dešinįjį kambarį, pėdsakai ant takelio veda iš kairiosios šakos į dešiniąją.',
+      },
       clone: {
         title: 'Butas su baldais',
         art: 'Žmogus su lagaminais, ant vieno lipdukas su lempute, stovi prie plačiai atvertų durų. Bute jau stovi ankstesnių nuomininkų fotelis, ant jo segtuvas su senomis sąskaitomis, o ant sienos kabo dviejų vienodų kačiukų portretas. Prie durų nauja lentelė su vardu, o senoji krenta.',

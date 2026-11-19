@@ -565,6 +565,25 @@ export default {
     },
     groups: { start: 'Przeprowadzka', home: 'W domu', visit: 'Wizyta', archive: 'Strych', post: 'Poczta' },
     cards: {
+      // Pictures ready (RSP-191, RSP-192): only their text for now; the other card texts come with RSP-200.
+      init: {
+        art: 'Szary kot stoi na progu szeroko otwartych drzwi i jako pierwszy stawia łapę w pustym mieszkaniu: nie ma mebli, na ścianie tylko pusta rama. Za nim człowiek z walizkami, na jednej naklejka z żarówką. Przy drzwiach jedna nowa tabliczka z nazwiskiem.',
+      },
+      gitignore: {
+        art: 'Na ścianie portret kota, który siedzi tyłem do swojej miski z rybką. Człowiek stoi przed otwartą lodówką, drapie się w głowę i zastanawia się, gdzie jest keczup, a butelka keczupu stoi tuż przed nim na środkowej półce. Na drzwiach lodówki wisi na magnesie lista.',
+      },
+      restore: {
+        art: 'Na ścianie portret królika, który pogryzł kapeć. Mama trzyma w górze zdjęcie uporządkowanej półki, „jak było”, i zdecydowanie zmiata z podłogi na szufelkę niedokończone puzzle, kawałki lecą na szufelkę. W drzwiach pokoju dziecko krzyczy z rękami w górze. Po prawej półka już wygląda jak na zdjęciu: równe pudełka, wśród nich pudełko po puzzlach.',
+      },
+      stash: {
+        art: 'Na ścianie portret chomika z wypchanymi policzkami. Gdy dzwoni dzwonek do drzwi, człowiek na palcach w pośpiechu wpycha sweter i kłębek włóczki do górnej szafki z drzwiczkami uchylonymi w naszą stronę; na środkowej półce stoją jednakowe kubki.',
+      },
+      branch: {
+        art: 'Na ścianie portret papużki na drążku. Dwoje otwartych drzwi obok siebie prowadzi do dwóch jednakowych pokoi z takim samym fotelem i oknem; chodnik na podłodze rozwidla się do obojga drzwi. Przy lewych drzwiach stara tabliczka; człowiek wiesza przy prawych nową żółtą tabliczkę.',
+      },
+      switch: {
+        art: 'Na ścianie portret papużki: z dwóch drążków siedzi na górnym, dolny jest pusty. Dwoje otwartych drzwi obok siebie prowadzi do dwóch jednakowych pokoi; chodnik na podłodze rozwidla się do obojga drzwi; prawe drzwi są żółte. Człowiek dużym krokiem przechodzi od lewych drzwi do prawego pokoju, ślady na chodniku prowadzą z lewej gałęzi na prawą.',
+      },
       clone: {
         title: 'Mieszkanie z meblami',
         art: 'Osoba z walizkami, na jednej naklejka z żarówką, stoi przed szeroko otwartymi drzwiami. W mieszkaniu stoi już fotel poprzednich lokatorów, na nim segregator ze starymi rachunkami, a na ścianie wisi portret dwóch identycznych kociąt. Przy drzwiach nowa tabliczka z nazwiskiem, a stara odpada.',

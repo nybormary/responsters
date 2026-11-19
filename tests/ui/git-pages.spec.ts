@@ -142,9 +142,10 @@ test(
   'A git card page shows only the sections that have texts: a random card with texts and a random card without @T2b281d82',
   { tag: [TAG.git] },
   async ({ gitCardPage, lang, texts }) => {
-    const cards = texts.git.cards as Record<string, CardTexts | undefined>;
+    // A card can have its picture's text (art) before its other texts (init, RSP-191): "with texts" means a title.
+    const cards = texts.git.cards as unknown as Record<string, (Partial<CardTexts> & { art?: string }) | undefined>;
 
-    const g = pick(GIT_CARDS.filter((x) => cards[x.id]));
+    const g = pick(GIT_CARDS.filter((x) => cards[x.id]?.title));
     const t = cards[g.id] as CardTexts;
     await test.step(`${g.name} (with texts): card texts, What it does, tip, Options, Often confused with`, async () => {
       await gitCardPage.open(lang, g.id);
@@ -181,7 +182,7 @@ test(
       await expect(gitCardPage.root).not.toContainText('undefined');
     });
 
-    const bare = GIT_CARDS.filter((x) => !cards[x.id] && !x.conf);
+    const bare = GIT_CARDS.filter((x) => !cards[x.id]?.title && !x.conf);
     if (bare.length === 0) return; // RSP-200: once every card has texts, step 2 has nothing to check
     const b = pick(bare);
     await test.step(`${b.name} (no texts yet): no empty sections, the card and "In git help" only`, async () => {

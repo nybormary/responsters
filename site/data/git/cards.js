@@ -17,7 +17,7 @@
 // git.cards.<id> (RSP-200); pictures: RSP-191 … RSP-194.
 export const GIT = [
   // a newly built flat: nothing in it yet (Maryna, 2026-11-17); texts and picture to come
-  { id: 'init', name: 'git init', group: 'start', day: 1, conf: ['git clone'] },
+  { id: 'init', name: 'git init', group: 'start', day: 1, art: '/img/git/init.svg', conf: ['git clone'] },
   { id: 'status', name: 'git status', group: 'visit', day: 2, art: '/img/git/status.svg', conf: ['git diff'] },
   { id: 'add', name: 'git add', group: 'home', day: 3, art: '/img/git/add.svg', conf: ['git commit'] },
   {
@@ -35,6 +35,7 @@ export const GIT = [
     name: '.gitignore',
     group: 'home',
     day: 7,
+    art: '/img/git/gitignore.svg',
     help: { list: '--user-interfaces', section: 'User-facing repository, command and file interfaces' },
   }, // a file, not a command: no "git" in front
   {
@@ -59,10 +60,17 @@ export const GIT = [
       },
     ],
   },
-  { id: 'restore', name: 'git restore', group: 'home', day: 9, danger: true },
-  { id: 'stash', name: 'git stash', group: 'home', day: 10, help: { list: '-a', section: 'Main Porcelain Commands' } },
-  { id: 'branch', name: 'git branch', group: 'archive', day: 11 },
-  { id: 'switch', name: 'git switch', group: 'archive', day: 12 },
+  { id: 'restore', name: 'git restore', group: 'home', day: 9, art: '/img/git/restore.svg', danger: true },
+  {
+    id: 'stash',
+    name: 'git stash',
+    group: 'home',
+    day: 10,
+    art: '/img/git/stash.svg',
+    help: { list: '-a', section: 'Main Porcelain Commands' },
+  },
+  { id: 'branch', name: 'git branch', group: 'archive', day: 11, art: '/img/git/branch.svg' },
+  { id: 'switch', name: 'git switch', group: 'archive', day: 12, art: '/img/git/switch.svg' },
   { id: 'merge', name: 'git merge', group: 'archive', day: 13 },
   { id: 'fetch', name: 'git fetch', group: 'post', day: 14 },
   { id: 'pull', name: 'git pull', group: 'post', day: 15 },
