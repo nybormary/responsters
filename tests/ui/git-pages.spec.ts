@@ -14,7 +14,11 @@ test(
   { tag: [TAG.git] },
   async ({ gitCardPage, page, lang, texts }) => {
     const problems: string[] = [];
-    page.on('console', (m) => m.type() === 'error' && problems.push(`console: ${m.text()}`));
+    // The analytics beacon loads only on mnemozoo.com and the tests block it on purpose (fixtures/analytics.ts), so on
+    // production each page logs one "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT" for it: not a site error.
+    page.on('console', (m) => {
+      if (m.type() === 'error' && !/cloudflareinsights/.test(m.location().url)) problems.push(`console: ${m.text()}`);
+    });
     page.on('pageerror', (e) => problems.push(`page error: ${e.message}`));
     page.on('requestfailed', (r) => {
       if (!/cloudflareinsights/.test(r.url())) problems.push(`request failed: ${r.url()}`); // analytics is blocked on purpose
