@@ -76,6 +76,27 @@ export class AdventWall {
   get live(): Locator {
     return this.root.getByTestId(TID.adventLive);
   }
+  /**
+   * The door that has keyboard focus: on the wall ('wall') or the big copy of today's door ('copy'), with its day and
+   * its focus ring as computed; null when focus is on anything else (RSP-198).
+   */
+  async focusedDoor(): Promise<{ where: 'wall' | 'copy'; day: number; outline: string; outlineWidth: number } | null> {
+    return this.page.evaluate(
+      ({ door, copy }) => {
+        const el = document.activeElement as HTMLElement | null;
+        const id = el?.dataset.testid;
+        if (!el || (id !== door && id !== copy)) return null;
+        const style = getComputedStyle(el);
+        return {
+          where: id === copy ? ('copy' as const) : ('wall' as const),
+          day: Number(el.dataset.day),
+          outline: style.outlineStyle,
+          outlineWidth: parseFloat(style.outlineWidth),
+        };
+      },
+      { door: TID.adventDoor, copy: TID.adventToday },
+    );
+  }
   /** The advent day of every door on the wall, in HTML order. */
   async days(): Promise<number[]> {
     return this.doors.evaluateAll((ds) => ds.map((d) => Number((d as HTMLElement).dataset.day)));

@@ -154,6 +154,58 @@ test(
   },
 );
 
+// ── 371af88f ────────────────────────────────────────────────────────────────────────────────────
+// RSP-198 AC1 and the agreed standards 1–3 (Jira comment 10525): the HTML lists the doors by day and CSS scatters
+// them, so Tab goes 1, 2, 3…; locked doors are not in the Tab order; on a phone the big copy of today's door is the
+// one stop for that door (its twin on the wall leaves the Tab order). Every stop shows a focus ring.
+
+test(
+  "Tab goes through the advent doors that can be opened, in day order; on a phone today's door is one stop (the big copy) @T371af88f",
+  { tag: [TAG.git] },
+  async ({ adventWall, gitCardPage, lang, page }) => {
+    const TODAY = 10;
+    await adventWall.openOnDay(lang, TODAY);
+    const phone = await adventWall.todayCopy.isVisible();
+    const expected = phone
+      ? [`copy ${TODAY}`, ...Array.from({ length: TODAY - 1 }, (_, i) => `wall ${i + 1}`)]
+      : Array.from({ length: TODAY }, (_, i) => `wall ${i + 1}`);
+    const stops: string[] = [];
+
+    await test.step(`Tab from the top of the page: ${expected.join(', ')} (${phone ? 'phone: big copy first' : 'wide screen'}); no locked door`, async () => {
+      for (let i = 0; i < 80; i++) {
+        await page.keyboard.press('Tab');
+        const door = await adventWall.focusedDoor();
+        if (!door) {
+          if (stops.length) break; // focus has left the doors
+          continue;
+        }
+        stops.push(`${door.where} ${door.day}`);
+        expect(door.outline, `focus ring on ${door.where} ${door.day}`).not.toBe('none');
+        expect(door.outlineWidth, `focus ring width on ${door.where} ${door.day}`).toBeGreaterThanOrEqual(3);
+      }
+      expect(stops).toEqual(expected);
+    });
+
+    const last = Number(expected[expected.length - 1].split(' ')[1]);
+    const card = onDay(last);
+    await test.step(`Shift+Tab back to door ${last}; Enter opens it, the page stays`, async () => {
+      await page.keyboard.press('Shift+Tab');
+      expect((await adventWall.focusedDoor())?.day).toBe(last);
+      const before = page.url();
+      await page.keyboard.press('Enter');
+      await expect(adventWall.door(last)).toHaveClass(/\bopen\b/);
+      await expect(adventWall.door(last)).toContainText(card.name.replace(/^git /, ''));
+      expect(page.url()).toBe(before);
+    });
+
+    await test.step(`Enter again: the card page of ${card.name}`, async () => {
+      await page.keyboard.press('Enter');
+      await expect(page).toHaveURL(new RegExp(`/${lang}/git/${card.id}/$`));
+      await expect(gitCardPage.root).toBeVisible();
+    });
+  },
+);
+
 // ── cd1fdd02 ────────────────────────────────────────────────────────────────────────────────────
 // The home page as a build of 30 November 2026 (advent start 1 December) wrote it: the served site may already be past
 // its own start (previews start earlier), and the page's script only ever opens the enclosure, never closes it.
