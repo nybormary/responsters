@@ -22,6 +22,11 @@ const onDay = (day: number): GitCard => {
   return g;
 };
 const days = (from: number, to: number) => GIT_CARDS.filter((g) => g.day >= from && g.day <= to);
+// An open door's name comes from its text (RSP-198): the number, the command and screen-reader words around them are
+// separate elements, so the name may get a space before ":" or "," ("Day 9 : git restore , open card"). Screen
+// readers don't say it; the words and their order are what we check.
+const escapeRe = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const nameLike = (text: string) => new RegExp(`^${escapeRe(text).replace(/\s*([:,])/g, '\\s*$1')}$`);
 
 // ── 9a003ab9 ────────────────────────────────────────────────────────────────────────────────────
 // One case, three tests: a locked, a today and a missed door give different results, so each fails on its own and the
@@ -47,7 +52,7 @@ test.describe("Advent doors by the visitor's date, on day 9 of the advent", () =
         const door = adventWall.door(TODAY);
         await expect(door, 'paper with the today highlight').toHaveClass(/\bpaper\b.*\btoday\b|\btoday\b.*\bpaper\b/);
         await expect(adventWall.flag(TODAY)).toHaveText(texts.git.wall.today);
-        await expect(door).toHaveAccessibleName(texts.git.wall.paper(TODAY));
+        await expect(door).toHaveAccessibleName(texts.git.wall.paperToday(TODAY));
         await expect(door).toHaveAttribute('href', `/${lang}/git/${g.id}/`);
       });
     },
@@ -65,7 +70,7 @@ test.describe("Advent doors by the visitor's date, on day 9 of the advent", () =
       await expect(door).toHaveClass(/\bpaper\b/);
       await expect(door, 'not today').not.toHaveClass(/\btoday\b/);
       await expect(adventWall.flag(g.day)).toHaveText(texts.git.wall.missed);
-      await expect(door).toHaveAccessibleName(texts.git.wall.paper(g.day));
+      await expect(door).toHaveAccessibleName(texts.git.wall.paperMissed(g.day));
       await expect(door).toHaveAttribute('href', `/${lang}/git/${g.id}/`);
     },
   );
@@ -114,17 +119,17 @@ test(
       const door = adventWall.door(danger.day);
       await expect(door).toHaveClass(/\bpaper\b/);
       await expect(door).not.toHaveClass(/\bdanger\b/);
-      await expect(door).toHaveAccessibleName(w.paper(danger.day));
+      await expect(door).toHaveAccessibleName(w.paperMissed(danger.day));
     });
 
-    await test.step(`${danger.name}: Enter tears the paper; now the red frame and "!", said in its name`, async () => {
+    await test.step(`${danger.name}: Enter tears the paper; now the red frame and "!", said in its name and in the announcement`, async () => {
       const door = adventWall.door(danger.day);
       await door.focus();
       await page.keyboard.press('Enter');
       await expect(door).toHaveClass(/\bopen\b/);
       await expect(door).toHaveClass(/\bdanger\b/);
-      await expect(door).toHaveAccessibleName(`${w.open(danger.day, danger.name)}, ${texts.git.ui.danger}`);
-      await expect(adventWall.live).toHaveText(w.revealed(danger.day, danger.name));
+      await expect(door).toHaveAccessibleName(nameLike(`${w.open(danger.day, danger.name)}, ${texts.git.ui.danger}`));
+      await expect(adventWall.live).toHaveText(w.revealed(danger.day, `${danger.name}, ${texts.git.ui.danger}`));
     });
 
     await test.step(`${calm.name} (day ${calm.day}): the 1st click tears the paper, the page stays`, async () => {
@@ -134,7 +139,7 @@ test(
       await expect(door).toHaveClass(/\bopen\b/);
       await expect(door).not.toHaveClass(/\bdanger\b/);
       await expect(door).toContainText(calm.name);
-      await expect(door).toHaveAccessibleName(w.open(calm.day, calm.name));
+      await expect(door).toHaveAccessibleName(nameLike(w.open(calm.day, calm.name)));
       await expect(adventWall.live).toHaveText(w.revealed(calm.day, calm.name));
       if (calm.day === TODAY && (await adventWall.todayCopy.isVisible()))
         await expect(adventWall.todayCopy, "today's big copy opens with it").toHaveClass(/\bopen\b/);

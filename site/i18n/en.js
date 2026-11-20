@@ -561,7 +561,10 @@ export default {
       // the legend above the wall (RSP-208): its name for screen readers; the group names come from git.groups
       legend: 'Groups',
       locked: (n, date) => `Day ${n}, opens ${date}`,
-      paper: (n) => `Day ${n}, open the door`,
+      // door names (RSP-198): the visible number and flag in the same order, so the name holds what the door shows
+      paperToday: (n) => `Day ${n}, today, open the door`,
+      paperMissed: (n) => `Day ${n}, forgot? Open the door`,
+      bigToday: (n) => `Day ${n}, today. Open today's door`,
       open: (n, cmd) => `Day ${n}: ${cmd}, open the card`,
       revealed: (n, cmd) => `Day ${n}: ${cmd}. Press again to open the card.`,
     },

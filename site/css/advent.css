@@ -26,11 +26,16 @@
   white-space: nowrap;
 }
 
-.wall {
+/* The door palette, also for the big copy of today's door above the wall (it sits outside .wall): without it the
+   copy had no paper, no frame and no focus ring (found with RSP-198, 2026-11-19). */
+.wall,
+.today-slot {
   --paper: #fbf3e2;
   --door-ink: #2b211a;
   --frame: #4a3a2e;
   --danger: #c4473a;
+}
+.wall {
   margin: 8px 0 0;
   padding: 28px 20px;
   list-style: none;
@@ -47,8 +52,18 @@
     padding: 36px 32px;
   }
 }
+/* Each door's scattered place (RSP-198): the HTML lists the doors by day, so Tab goes 1, 2, 3…; the build gives
+   every slot its grid cell for 3 columns (phone) and 5 (wide). */
 .slot {
+  grid-column: var(--c3);
+  grid-row: var(--r3);
   transform: rotate(var(--tilt, 0deg));
+}
+@media (min-width: 760px) {
+  .slot {
+    grid-column: var(--c5);
+    grid-row: var(--r5);
+  }
 }
 
 .door {
@@ -63,10 +78,6 @@
   text-decoration: none;
   overflow: hidden;
   background: var(--paper);
-}
-.door:focus-visible {
-  outline: 4px solid #3e9c93;
-  outline-offset: 4px;
 }
 
 /* Paper side: the number; a flag "today" / "missed"; the padlock only on a locked door. */
@@ -112,6 +123,21 @@
 .door.today {
   outline: 4px solid #3e9c93;
   outline-offset: 4px;
+}
+/* Keyboard focus (RSP-198, variant A chosen by Maryna 2026-11-19): a double ring, a white band and a dark line
+   outside it, so it looks like neither the teal "today" ring nor the door's frame. The white band is a box-shadow
+   (kept together with the door's own shadow); the line is the outline. After .door.today, so it wins on today's
+   door (its "today" flag still says it). The wall keeps its light background in both themes; the big copy sits on
+   the page, so its line takes the site's focus colour, which follows the theme. */
+.door:focus-visible {
+  outline: 3px solid var(--door-ink);
+  outline-offset: 4px;
+  box-shadow:
+    0 0 0 4px #fff,
+    3px 4px 0 rgb(43 33 26 / 35%);
+}
+.door-big:focus-visible {
+  outline-color: var(--accent);
 }
 
 .door.locked {
@@ -259,9 +285,17 @@
   .wall .door-cmd {
     font-size: 9px;
   }
-  .wall .door-git,
   .wall .door-warn {
     display: none;
+  }
+  /* hidden for the eye only (as .sr-only): the door's name still says "git restore" (RSP-198) */
+  .wall .door-git {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 .door-big {
