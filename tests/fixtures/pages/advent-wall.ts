@@ -97,6 +97,10 @@ export class AdventWall {
       { door: TID.adventDoor, copy: TID.adventToday },
     );
   }
+  /** The card ids the wall remembers as opened (localStorage "gitty.opened", RSP-196); [] when nothing is saved. */
+  async remembered(): Promise<string[]> {
+    return this.page.evaluate(() => JSON.parse(localStorage.getItem('gitty.opened') ?? '[]') as string[]);
+  }
   /** The advent day of every door on the wall, in HTML order. */
   async days(): Promise<number[]> {
     return this.doors.evaluateAll((ds) => ds.map((d) => Number((d as HTMLElement).dataset.day)));

@@ -12,6 +12,7 @@ import {
   buildOn,
   dayMonth,
   addDays,
+  AdventWall,
   type GitCard,
 } from '../fixtures';
 
@@ -202,6 +203,100 @@ test(
       await page.keyboard.press('Enter');
       await expect(page).toHaveURL(new RegExp(`/${lang}/git/${card.id}/$`));
       await expect(gitCardPage.root).toBeVisible();
+    });
+  },
+);
+
+// ── fa4b6d41 ────────────────────────────────────────────────────────────────────────────────────
+// RSP-196 AC4, AC5: opened doors are remembered in this browser (localStorage "gitty.opened", card ids), shown open at
+// once after a reload, a card page visit and in a new tab, without an announcement; a remembered door opens only
+// once its day has come; with storage blocked the wall still works and just forgets. Automated for RSP-201.
+
+test(
+  'An opened advent door stays open after a reload, a card page visit and a new tab; without storage the wall still works (a random past door) @Tfa4b6d41',
+  { tag: [TAG.git] },
+  async ({ adventWall, gitCardPage, lang, page }) => {
+    const TODAY = 10;
+    const danger = onDay(9); // restore
+    const past = pick(days(1, TODAY - 1).filter((g) => !g.danger));
+    const opened = [past, danger, onDay(TODAY)];
+    const others = days(1, TODAY - 1).filter((g) => !opened.includes(g));
+    await adventWall.openOnDay(lang, TODAY);
+
+    const looksRemembered = async (wall: typeof adventWall, where: string) => {
+      for (const g of opened) {
+        const door = wall.door(g.day);
+        await expect(door, `${where}: door ${g.day} (${g.name}) open`).toHaveClass(/\bopen\b/);
+        await expect(door, `${where}: door ${g.day} without paper`).not.toHaveClass(/\b(paper|missed)\b/);
+      }
+      await expect(wall.door(danger.day), `${where}: day ${danger.day} keeps its red frame`).toHaveClass(/\bdanger\b/);
+      await expect(wall.live, `${where}: nothing announced on load`).toHaveText('');
+      for (const g of others)
+        await expect(wall.door(g.day), `${where}: door ${g.day} still missed`).toHaveClass(/\bmissed\b/);
+      if (await wall.todayCopy.isVisible())
+        await expect(wall.todayCopy, `${where}: the big copy of today's door is open`).toHaveClass(/\bopen\b/);
+    };
+
+    await test.step(`open days ${opened.map((g) => `${g.day} (${g.name})`).join(', ')} with one click each; their card ids are saved`, async () => {
+      for (const g of opened) {
+        await adventWall.door(g.day).click();
+        await expect(adventWall.door(g.day)).toHaveClass(/\bopen\b/);
+      }
+      expect((await adventWall.remembered()).sort()).toEqual(opened.map((g) => g.id).sort());
+    });
+
+    await test.step('reload: the same doors open at once, nothing announced, the others still "missed"', async () => {
+      await page.reload();
+      await looksRemembered(adventWall, 'after reload');
+    });
+
+    await test.step(`door ${past.day} goes to its card page; Back: still open`, async () => {
+      await adventWall.door(past.day).click();
+      await expect(page).toHaveURL(new RegExp(`/${lang}/git/${past.id}/$`));
+      await expect(gitCardPage.root).toBeVisible();
+      await page.goBack();
+      await looksRemembered(adventWall, 'after Back');
+    });
+
+    await test.step('a new tab of the same browser: the same doors open', async () => {
+      const tab = await page.context().newPage();
+      await tab.clock.setFixedTime(`${addDays(await adventWall.start(), TODAY - 1)}T12:00:00`);
+      const wall = new AdventWall(tab);
+      await wall.open(lang);
+      await looksRemembered(wall, 'new tab');
+      await tab.close();
+    });
+
+    await test.step(`clock back to day 5: door ${danger.day} is locked again (a remembered door waits for its day)`, async () => {
+      const date = addDays(await adventWall.start(), 4);
+      await page.clock.setFixedTime(`${date}T12:00:00`);
+      await page.reload();
+      await expect(adventWall.door(danger.day)).toHaveClass(/\blocked\b/);
+      await expect(adventWall.door(danger.day)).not.toHaveClass(/\bopen\b/);
+    });
+
+    await test.step('storage blocked (a new tab where localStorage throws): no page error, a door opens, nothing remembered after a reload', async () => {
+      const tab = await page.context().newPage();
+      const errors: Error[] = [];
+      tab.on('pageerror', (e) => errors.push(e));
+      await tab.addInitScript(() => {
+        Object.defineProperty(window, 'localStorage', {
+          get() {
+            throw new Error('localStorage blocked (test)');
+          },
+        });
+      });
+      await tab.clock.setFixedTime(`${addDays(await adventWall.start(), TODAY - 1)}T12:00:00`);
+      const wall = new AdventWall(tab);
+      await wall.open(lang);
+      const g = others[0];
+      await expect(wall.door(g.day), 'nothing restored without storage').toHaveClass(/\bpaper\b/);
+      await wall.door(g.day).click();
+      await expect(wall.door(g.day)).toHaveClass(/\bopen\b/);
+      await tab.reload();
+      await expect(wall.door(g.day), 'forgotten after a reload').toHaveClass(/\bpaper\b/);
+      expect(errors.map((e) => e.message)).toEqual([]);
+      await tab.close();
     });
   },
 );

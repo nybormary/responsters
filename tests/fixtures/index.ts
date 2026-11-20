@@ -252,7 +252,7 @@ export { VIEWS, type App } from './pages/app';
 export type { LanguageMenu } from './pages/language-menu';
 export type { CardPage } from './pages/card-page';
 export { ORIGIN, type HomePage } from './pages/home-page';
-export type { AdventWall } from './pages/advent-wall';
+export { AdventWall } from './pages/advent-wall';
 export type { SiteChrome } from './pages/site-chrome';
 export type { NotFoundPage } from './pages/not-found-page';
 export { THEMES, type Axe, type Theme } from './pages/axe';
