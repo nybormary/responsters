@@ -29,7 +29,9 @@ function paint(door, today, flags) {
     door.setAttribute('href', door.dataset.href);
     door.removeAttribute('aria-disabled');
   }
-  door.setAttribute('aria-label', locked ? door.dataset.labelLocked : door.dataset.labelPaper);
+  // the name says what the paper shows (RSP-198): "Day 5, today, …" / "Day 3, forgot? …"
+  const paper = date === today ? door.dataset.labelToday : door.dataset.labelMissed;
+  door.setAttribute('aria-label', locked ? door.dataset.labelLocked : paper);
   const flag = door.querySelector('[data-testid="door-flag"]');
   if (flag) flag.textContent = date === today ? flags.today : date < today ? flags.missed : '';
 }
@@ -39,13 +41,18 @@ function reveal(door, live) {
   door.classList.remove('paper', 'today', 'missed');
   door.classList.add('open');
   door.classList.toggle('danger', 'danger' in door.dataset);
-  door.setAttribute('aria-label', door.dataset.labelOpen);
+  door.removeAttribute('aria-label'); // the name now comes from the door's text (RSP-198)
   if (live) live.textContent = door.dataset.labelRevealed;
 }
+
+/** Narrow screens, where CSS shows the big copy of today's door (the same breakpoint as css/advent.css). */
+const PHONE = window.matchMedia('(max-width: 759px)');
 
 /**
  * Phone (prototype AdventPhone, 2026-11-17): a big copy of today's door above the wall, shown by CSS on narrow
  * screens only. It is the same door: opening one opens the other. No copy before the advent or after its last day.
+ * The copy also shows the hint "Open today's door", so its paper name says that too (RSP-198). Keyboard: where the
+ * copy shows, its twin on the wall leaves the Tab order, so Tab doesn't stop twice at the same door (RSP-198).
  */
 function todayCopy(wall, today) {
   const slot = document.querySelector('[data-testid="advent-today-slot"]');
@@ -54,7 +61,11 @@ function todayCopy(wall, today) {
   const copy = /** @type {HTMLElement} */ (door.cloneNode(true));
   copy.dataset.testid = 'advent-today';
   copy.classList.add('door-big');
+  if (copy.classList.contains('paper')) copy.setAttribute('aria-label', copy.dataset.labelBig);
   slot.replaceChildren(copy);
+  const once = () => (PHONE.matches ? door.setAttribute('tabindex', '-1') : door.removeAttribute('tabindex'));
+  once();
+  PHONE.addEventListener('change', once);
 }
 
 function setUpWall(wall) {

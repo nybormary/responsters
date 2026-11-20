@@ -558,10 +558,12 @@ export default {
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
       todayHint: 'Atidaryk šiandienos langelį',
       legend: 'Grupės',
-      locked: (n, date) => `${n} diena, atsidarys ${date}`,
-      paper: (n) => `${n} diena, atidaryti langelį`,
-      open: (n, cmd) => `${n} diena: ${cmd}, atidaryti kortelę`,
-      revealed: (n, cmd) => `${n} diena: ${cmd}. Paspausk dar kartą, kad atidarytum kortelę.`,
+      locked: (n, date) => `Diena ${n}, atsidarys ${date}`,
+      paperToday: (n) => `Diena ${n}, šiandien, atidaryti langelį`,
+      paperMissed: (n) => `Diena ${n}, pamiršot? Atidaryti langelį`,
+      bigToday: (n) => `Diena ${n}, šiandien. Atidaryk šiandienos langelį`,
+      open: (n, cmd) => `Diena ${n}: ${cmd}, atidaryti kortelę`,
+      revealed: (n, cmd) => `Diena ${n}: ${cmd}. Paspausk dar kartą, kad atidarytum kortelę.`,
     },
     groups: { start: 'Įkurtuvės', home: 'Namuose', visit: 'Vizitas', archive: 'Palėpė', post: 'Paštas' },
     cards: {

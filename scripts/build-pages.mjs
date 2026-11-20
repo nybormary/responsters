@@ -395,26 +395,43 @@ const wallLegend = (tx) =>
  * the card page. The labels for every state travel in data-* so the script needs no language file. role="link" keeps
  * the door a link for assistive tech while it has no href (locked): an <a> without href is a generic element, and
  * aria-label / aria-disabled are not allowed on it (RSP-198, axe aria-prohibited-attr).
+ * A door's name holds its visible text in the same order (RSP-198, agreed 2026-11-19): the number comes before the
+ * flag in the HTML (the flag sits in the corner by CSS), so "Day 5, today, open the door" contains "5 today". The
+ * spaces between the spans matter: axe joins neighbouring spans without one ("5today"); flex items ignore them.
+ * An open door has no aria-label: its name comes from its content, the visible number and command plus the words
+ * around them as screen-reader text (the language's `open` template split at the number and the command), inside
+ * the number's and the command's spans: between flex items a name gets extra spaces ("Day 9 : git restore ,"). On a
+ * phone "git " is hidden for the eye only, so the name still says "git restore" while the door shows "restore"
+ * (RSP-198, Maryna's choice 2a, 2026-11-19; with an aria-label axe found the name didn't match the visible text).
+ * Its place on the wall: the HTML lists the doors by day (the Tab order), the scattered look comes from the grid
+ * place of WALL position i, for 5 columns (wide) and 3 (phone): --c5 / --r5 and --c3 / --r3.
  */
-function wallDoor(lang, tx, g, tilt) {
+function wallDoor(lang, tx, g, i) {
   const w = tx.git.wall;
   const date = adventDay(g.day);
   const when = dayMonth(lang, date);
   const locked = BUILD_DATE < date;
   const pic = g.art || EGG.src;
+  const danger = g.danger ? `, ${tx.git.ui.danger}` : '';
   const labels = {
     locked: w.locked(g.day, when),
-    paper: w.paper(g.day),
-    open: w.open(g.day, g.name) + (g.danger ? `, ${tx.git.ui.danger}` : ''),
-    revealed: w.revealed(g.day, g.name),
+    today: w.paperToday(g.day),
+    missed: w.paperMissed(g.day),
+    big: w.bigToday(g.day),
+    revealed: w.revealed(g.day, g.name + danger),
   };
+  const paperLabel = date === BUILD_DATE ? labels.today : labels.missed;
+  const [pre, rest] = w.open('\u0001', '\u0002').split('\u0001');
+  const [mid, post] = rest.split('\u0002');
+  const sr = (t) => (t ? `<span class="sr-only">${esc(t)}</span>` : '');
+  const place = `--tilt: ${TILT[i]}deg; --c5: ${(i % 5) + 1}; --r5: ${Math.floor(i / 5) + 1}; --c3: ${(i % 3) + 1}; --r3: ${Math.floor(i / 3) + 1}`;
   const data = Object.entries(labels)
     .map(([k, v]) => `data-label-${k}="${esc(v)}"`)
     .join(' ');
-  return `<li class="slot" style="--tilt: ${tilt}deg">
-            <a class="door ${locked ? 'locked' : 'paper'}" role="link"${locked ? ' aria-disabled="true"' : ` href="${gitUrl(lang, g.id)}"`} aria-label="${esc(locked ? labels.locked : labels.paper)}" data-testid="advent-door" data-day="${g.day}" data-date="${date}" data-href="${gitUrl(lang, g.id)}"${g.danger ? ' data-danger=""' : ''} ${data}>
-              <span class="door-paper" aria-hidden="true"><span class="door-flag" data-testid="door-flag"></span><span class="door-num">${g.day}</span>${LOCK}<span class="door-hint">${esc(w.todayHint)}</span></span>
-              <span class="door-inside" aria-hidden="true"><span class="door-pic"><img src="${pic}" alt="" loading="lazy" width="640" height="573" /><span class="door-warn">!</span></span><span class="door-cap" style="background: ${gitColourVar(g)}"><span class="door-dn">${g.day}</span>${groupIcon(g.group, 'door-gi')}<span class="door-cmd">${doorCmd(g.name)}</span></span></span>
+  return `<li class="slot" style="${place}">
+            <a class="door ${locked ? 'locked' : 'paper'}" role="link"${locked ? ' aria-disabled="true"' : ` href="${gitUrl(lang, g.id)}"`} aria-label="${esc(locked ? labels.locked : paperLabel)}" data-testid="advent-door" data-day="${g.day}" data-date="${date}" data-href="${gitUrl(lang, g.id)}"${g.danger ? ' data-danger=""' : ''} ${data}>
+              <span class="door-paper" aria-hidden="true"><span class="door-num">${g.day}</span> <span class="door-flag" data-testid="door-flag"></span>${LOCK} <span class="door-hint">${esc(w.todayHint)}</span></span>
+              <span class="door-inside"><span class="door-pic"><img src="${pic}" alt="" loading="lazy" width="640" height="573" /><span class="door-warn" aria-hidden="true">!</span></span> <span class="door-cap" style="background: ${gitColourVar(g)}"><span class="door-dn">${sr(pre)}${g.day}${sr(mid)}</span> ${groupIcon(g.group, 'door-gi')} <span class="door-cmd">${doorCmd(g.name)}${sr(post + danger)}</span></span></span>
             </a>
           </li>`;
 }
@@ -426,7 +443,12 @@ function wallDoor(lang, tx, g, tilt) {
 function gitWallPage(lang, tx) {
   const w = tx.git.wall;
   const byDay = new Map(GIT.map((g) => [g.day, g]));
-  const doors = WALL.map((day, i) => wallDoor(lang, tx, byDay.get(day), TILT[i])).join('\n          ');
+  // by day (the Tab order, RSP-198); each door takes its scattered place from its position in WALL
+  const doors = [...byDay.keys()]
+    .filter((day) => WALL.includes(day))
+    .sort((a, b) => a - b)
+    .map((day) => wallDoor(lang, tx, byDay.get(day), WALL.indexOf(day)))
+    .join('\n          ');
   const lead = w.lead(dayMonth(lang, ADVENT_START), ADVENT_DAYS);
   const menu = langMenu(lang, gitHome, LANG_NAMES, tx.ui.lang);
   return `<!doctype html>
