@@ -298,8 +298,23 @@
     white-space: nowrap;
   }
 }
+/* The big copy shows the whole picture (Maryna, 2026-11-20, variant A2): its height is the picture's own ratio plus the
+   caption strip, already while it is paper, so opening it doesn't move the wall. On paper the inside keeps its place
+   but is hidden (visibility: hidden also keeps it out of the accessibility tree) and the paper covers the door. */
 .door-big {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: auto;
+}
+.door-big .door-pic {
+  flex: none;
+  aspect-ratio: 640 / 573;
+}
+.door-big.paper .door-inside {
+  display: flex;
+  visibility: hidden;
+}
+.door-big .door-paper {
+  position: absolute;
+  inset: 0;
 }
 .door-big .door-num {
   font-size: 84px;
