@@ -31,6 +31,7 @@ export const TID = {
   gitHelpTitle: 'git-help-title',
   gitHelp: 'git-help',
   gitHelpMore: 'git-help-more',
+  gitManual: 'git-manual',
   gitTitle: 'git-title',
   gitLine: 'git-line',
   gitMove: 'git-move',

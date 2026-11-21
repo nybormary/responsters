@@ -622,6 +622,7 @@ function homePage(lang, tx) {
         <div class="home-author" data-testid="home-about">
           <h2>${esc(h.aboutTitle)}</h2>
           <p>${esc(h.aboutText)}</p>
+          <p class="home-credits" data-testid="home-credits">${esc(h.gitLogo)} <a href="https://git-scm.com/community/logos">Jason Long</a>, <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a></p>
         </div>
       </section>
     </main>

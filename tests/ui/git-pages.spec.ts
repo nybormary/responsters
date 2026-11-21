@@ -145,6 +145,17 @@ test(
     // A card can have its picture's text (art) before its other texts (init, RSP-191): "with texts" means a title.
     const cards = texts.git.cards as unknown as Record<string, (Partial<CardTexts> & { art?: string }) | undefined>;
 
+    // "Read more" ends with the terminal command `git help <id>` and the manual on git-scm.com: Ukrainian where
+    // git-scm.com has it, otherwise English (Maryna, 2026-11-20).
+    const expectReadMore = async (id: string) => {
+      await expect(gitCardPage.helpMore, 'read more: git help').toHaveText(`$ git help ${id}`);
+      const page = id === 'gitignore' ? 'gitignore' : `git-${id}`;
+      const manual = gitCardPage.manual.getByRole('link', { name: texts.git.ui.manual });
+      await expect(manual, 'read more: git-scm.com').toHaveAttribute(
+        'href',
+        `https://git-scm.com/docs/${page}${lang === 'uk' ? '/uk' : ''}`,
+      );
+    };
     const g = pick(GIT_CARDS.filter((x) => cards[x.id]?.title));
     const t = cards[g.id] as CardTexts;
     await test.step(`${g.name} (with texts): card texts, What it does, tip, Options, Often confused with`, async () => {
@@ -179,6 +190,7 @@ test(
         const a = gitCardPage.links.getByRole('link', { name: new RegExp(l.label[lang] ?? l.label.en) });
         await expect(a, `read more: ${l.u}`).toHaveAttribute('href', l.u);
       }
+      await expectReadMore(g.id);
       await expect(gitCardPage.root).not.toContainText('undefined');
     });
 
@@ -192,7 +204,9 @@ test(
       await expect(gitCardPage.careful).toHaveCount(0);
       await expect(gitCardPage.confused).toHaveCount(0);
       await expect(gitCardPage.tip).toHaveCount(0);
-      await expect(gitCardPage.links).toHaveCount(0);
+      // only the "Read more" items every card has: "In git help: <section>", `$ git help <id>`, git-scm.com
+      await expect(gitCardPage.links.getByRole('listitem')).toHaveCount(3);
+      await expectReadMore(b.id);
       await expect(gitCardPage.helpSection).toBeVisible();
       await expect(gitCardPage.root).not.toContainText('undefined');
     });

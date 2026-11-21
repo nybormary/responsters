@@ -522,6 +522,7 @@ export default {
     ],
     aboutTitle: 'Om projektet',
     aboutText: 'Et selvstændigt QA-projekt af Maryna Bortnyk.',
+    gitLogo: 'Git-logo:',
   },
   // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network-panelet', 'Firefox: Edit and Resend', 'Postman: send en forespørgsel'],
@@ -538,7 +539,7 @@ export default {
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
       help: (c) => `I ${c}`,
       // before `git help <command>`, the command's own manual
-      more: 'detaljer',
+      manual: 'Dokumentation på git-scm.com (på engelsk)',
       danger: 'Farlig kommando',
       // heading of the outside links on a git card page
       links: 'Læs mere',
@@ -568,21 +569,181 @@ export default {
     cards: {
       // Pictures ready (RSP-191, RSP-192): only their text for now; the other card texts come with RSP-200.
       init: {
+        title: 'En tom lejlighed',
+        line: 'Lad os starte på en frisk.',
+        move: '$ git init -b main',
+        hint: 'et nyt repository med main som første gren',
+        does: {
+          text: 'Opretter et nyt, tomt repository i den aktuelle mappe: den skjulte mappe `.git`, hvor git gemmer hele historikken. Filerne i mappen bliver, som de er; git sporer dem ikke endnu. Der er ingen commits endnu, så `git branch` viser intet: grenen opstår med det første commit.',
+          meta: 'En ny lejlighed: væggene er der, møblerne mangler, og katten går ind først.',
+        },
+        tip: 'Ligger projektet allerede på GitHub eller et andet sted? Så ikke init, men `git clone <url>`: den opretter selv mappen og henter hele historikken.',
+        opts: [
+          {
+            cmd: 'git init',
+            text: '— et nyt repository i den aktuelle mappe. Det er sikkert at køre den igen i et eksisterende repository: intet slettes.',
+            meta: 'Du sætter et navneskilt på døren til den lejlighed, du allerede bor i.',
+          },
+          {
+            cmd: 'git init <mappe>',
+            text: '— opretter en mappe med det navn (hvis den ikke findes) og repository’et i den.',
+            meta: 'Du bygger en ny lejlighed og sætter navneskiltet op med det samme.',
+          },
+          {
+            cmd: 'git init -b main',
+            text: '— sætter navnet på den første gren; uden det bruger git 2.43 `master` og viser et tip om, hvordan man ændrer det.',
+            meta: 'Hvad det første værelse skal hedde, bestemmer du.',
+          },
+        ],
         art: 'En grå kat står på tærsklen til en vidt åben dør og er den første, der sætter poten ind i den tomme lejlighed: ingen møbler, kun en tom ramme på væggen. Bag den en person med kufferter, den ene med et pære-klistermærke. Ved døren et enkelt nyt navneskilt.',
       },
       gitignore: {
+        title: 'Ketchup lige foran næsen',
+        line: 'Mor, hvor er ketchuppen?',
+        move: '$ git check-ignore -v <fil>',
+        hint: 'hvilken regel skjuler filen',
+        does: {
+          text: 'Ikke en kommando, men en fil i repository’ets rod: en liste over mønstre (`*.log`, `node_modules/`, `.env`), som git ikke viser blandt usporede filer (untracked) og ikke tilføjer med `git add .`. Den virker kun på filer, git ikke sporer endnu; selve `.gitignore` committes, så alle har de samme regler.',
+          meta: 'Listen på køleskabsdøren: hvad man ikke skal lægge mærke til, selv om det står lige foran én.',
+        },
+        tip: 'Er filen allerede committet? `.gitignore` skjuler den ikke: først `git rm --cached <fil>` — git holder op med at spore den, og kopien på disken bliver.',
+        opts: [
+          {
+            cmd: '*.log',
+            text: '— et mønster: alle filer med den endelse i alle mapper; `/` til sidst (`build/`) betyder kun mapper.',
+            meta: 'Læg ikke mærke til nogen tom flaske, hvor den end står.',
+          },
+          {
+            cmd: '!keep.log',
+            text: '— `!` forrest henter en fil frem igen, som en regel ovenfor skjulte.',
+            meta: 'Undtagen denne her — den skal blive.',
+          },
+          {
+            cmd: 'git add -f <fil>',
+            text: '— tilføjer en fil trods `.gitignore`; derefter sporer git den.',
+            meta: 'Du lægger bevidst noget i kurven, som du normalt ikke lægger mærke til.',
+          },
+        ],
         art: 'På væggen et portræt af en kat, der sidder med ryggen til sin skål med fisk. En person står ved det åbne køleskab, klør sig i nakken og undrer sig over, hvor ketchuppen er, mens ketchupflasken står lige foran dem på den midterste hylde. På køleskabsdøren hænger en liste under en magnet.',
       },
       restore: {
+        title: 'Som på billedet',
+        line: 'Pas på, mor rydder op — vi står ikke til ansvar for følgerne',
+        move: '$ git restore --staged <fil>',
+        hint: 'ud af kurven igen, ændringerne i filen bliver',
+        does: {
+          text: 'Sætter en fil i arbejdsmappen tilbage til dens tilstand i indekset, dvs. smider ændringer væk, der ikke er tilføjet endnu. `git restore --staged <fil>` gør det modsatte: tager filen ud af indekset og lader arbejdsmappen være. Ændrer ikke commit-historikken.',
+          meta: 'Mor rydder op i værelset, så det ligner billedet: det halvfærdige forsvinder.',
+        },
+        tip: 'En sti er påkrævet: `git restore .` gendanner hele mappen. Før gjorde man det med `git checkout -- <fil>`.',
+        opts: [
+          {
+            cmd: 'git restore <fil>',
+            text: '— smider ændringer i arbejdsmappen væk, som ikke er i indekset endnu.',
+            meta: 'Det, der flød, kommer tilbage på hylden.',
+          },
+          {
+            cmd: 'git restore --staged <fil>',
+            text: '— tager filen ud af indekset (unstage); ændringerne i arbejdsmappen bliver.',
+            meta: 'Du tager en ting op af kurven, men lægger den ikke på plads.',
+          },
+          {
+            cmd: 'git restore --source <commit> <fil>',
+            text: '— henter filen fra det angivne commit, fx `HEAD~1`.',
+            meta: 'Du rydder op efter et ældre billede.',
+          },
+        ],
+        careful: [
+          'Ændringer, der smides væk, er væk for altid: de findes hverken i historikken eller i `git reflog`.',
+          'Kig i `git diff`, før du kører `git restore`. Er det synd at smide væk, så først `git stash`.',
+        ],
         art: 'På væggen et portræt af en kanin, der har gnavet i en hjemmesko. Mor holder et foto af den ryddelige hylde op, "som det var", og fejer resolut et halvlagt puslespil fra gulvet op i fejebakken, så brikkerne flyver. I døråbningen skriger et barn med armene oppe. Til højre ser hylden allerede ud som på fotoet: pæne kasser, blandt dem æsken til puslespillet.',
       },
       stash: {
+        title: 'Gæster ved døren',
+        line: 'Lige en hurtig oprydning!',
+        move: '$ git stash -u',
+        hint: 'gem også de nye filer væk',
+        does: {
+          text: 'Lægger ikke-committede ændringer i sporede filer (både i indekset og i arbejdsmappen) til side i et særskilt lager og sætter arbejdsmappen tilbage til det sidste commit. Senere kan de hentes frem igen, også på en anden gren.',
+          meta: 'Det ringer på døren: du stopper det halvfærdige ind i skabet, så værelset ser pænt ud.',
+        },
+        tip: 'Der kan være flere stashes: `git stash list` viser dem alle, `stash@{0}` er den nyeste.',
+        opts: [
+          {
+            cmd: 'git stash pop',
+            text: '— henter den sidste stash tilbage i arbejdsmappen og fjerner den fra listen; `git stash apply` henter den tilbage, men lader den blive på listen.',
+            meta: 'Gæsterne er gået — du tager sweateren ud af skabet.',
+          },
+          {
+            cmd: 'git stash -u',
+            text: '— gemmer også nye filer, som git ikke sporer endnu. Et almindeligt `git stash` lader dem blive i arbejdsmappen; filer fra `.gitignore` gemmer kun `git stash -a`.',
+            meta: 'Ind i skabet ryger også det, der endnu ikke har sin egen plads.',
+          },
+          {
+            cmd: 'git stash -m "…"',
+            text: '— en stash med en beskrivelse, så du kan finde den igen i `git stash list`.',
+            meta: 'En seddel på garnnøglet: hvad det er, og hvorfor.',
+          },
+        ],
         art: 'På væggen et portræt af en hamster med fyldte kinder. Mens det ringer på døren, stopper en person på tæer hurtigt en sweater og et garnnøgle ind i det øverste skab, hvis låge står åben mod os; på den midterste hylde står ens krus.',
       },
       branch: {
+        title: 'Et nyt navneskilt',
+        line: 'Åh, det her bliver mit værelse.',
+        move: '$ git branch -d <gren>',
+        hint: 'slet en gren, der allerede er flettet',
+        does: {
+          text: 'Uden argumenter viser den de lokale grene og markerer den aktuelle med `*`. Med et navn opretter den en ny gren på det aktuelle commit, men skifter ikke til den: det gør `git switch`.',
+          meta: 'Du sætter et navneskilt på døren til et nyt værelse, men bliver selv stående, hvor du er.',
+        },
+        tip: 'Har I oprettet en gren, men går jeres commits stadig til den gamle? `git branch` — det er kun navneskiltet. For at skifte skal I bruge `git switch <gren>`, og for at oprette og skifte på én gang `git switch -c <gren>`.',
+        opts: [
+          {
+            cmd: 'git branch -a',
+            text: '— viser også de fjerne grene (`remotes/origin/…`).',
+            meta: 'Navneskiltene på alle døre, også naboernes.',
+          },
+          {
+            cmd: 'git branch -m <nyt navn>',
+            text: '— omdøber den aktuelle gren.',
+            meta: 'Du skriver navneskiltet om.',
+          },
+          {
+            cmd: 'git branch -d <gren>',
+            text: '— sletter grenen, hvis den allerede er flettet; en ikke-flettet gren sletter kun `git branch -D <gren>`.',
+            meta: 'Du tager navneskiltet ned fra et værelse, der er tømt.',
+          },
+        ],
         art: 'På væggen et portræt af en papegøje på en pind. To åbne døre side om side fører ind til to ens rum med samme lænestol og vindue; en løber på gulvet deler sig til begge døre. Ved den venstre dør et gammelt navneskilt; en person sætter et nyt gult navneskilt op ved den højre dør.',
       },
       switch: {
+        title: 'Et nyt værelse',
+        line: 'Tid til at flytte ind i et andet værelse',
+        move: '$ git switch -c <gren>',
+        hint: 'opret en gren og gå derind med det samme',
+        does: {
+          text: 'Skifter til en anden gren: arbejdsmappen og indekset bliver som i dens sidste commit. Ikke-committede ændringer følger med; hvis de støder sammen med filer på den gren, stopper git og beder dig committe dem eller lægge dem til side (`git stash`).',
+          meta: 'Du går ad løberen ind i et andet værelse, og det, du har i hænderne, følger med.',
+        },
+        tip: '`git switch` har overtaget en del af det gamle `git checkout`, som både skifter gren og gendanner filer.',
+        opts: [
+          {
+            cmd: 'git switch -c <gren>',
+            text: '— opretter en ny gren og skifter til den med det samme.',
+            meta: 'Du sætter navneskiltet op og går ind.',
+          },
+          {
+            cmd: 'git switch -',
+            text: '— går tilbage til den forrige gren.',
+            meta: 'Tilbage til det værelse, du lige kom fra.',
+          },
+          {
+            cmd: 'git switch --detach <commit>',
+            text: '— går til et commit uden gren (detached HEAD) for at kigge; nye commits her går let tabt.',
+            meta: 'Du kigger ind i værelset fra et gammelt billede, men der skal man ikke bo.',
+          },
+        ],
         art: 'På væggen et portræt af en papegøje: af to pinde sidder den på den øverste, den nederste er tom. To åbne døre side om side fører ind til to ens rum; en løber på gulvet deler sig til begge døre; den højre dør er gul. En person går med lange skridt fra den venstre dør ind i det højre rum, fodspor på løberen fører fra venstre gren til højre.',
       },
       clone: {
@@ -604,7 +765,7 @@ export default {
           },
           {
             cmd: 'git clone -b <gren> <url>',
-            text: '— (`--branch`) skifter straks til den angivne gren i stedet for hovedgrenen.',
+            text: '— skifter straks til den angivne gren i stedet for hovedgrenen.',
             meta: 'Du går direkte ind i det rum, du skal bruge.',
           },
           {
@@ -628,7 +789,7 @@ export default {
         opts: [
           {
             cmd: 'git status -s',
-            text: '— (`--short`) én linje pr. fil; venstre kolonne er indekset, højre arbejdsmappen (`M` ændret, `A` tilføjet, `??` untracked).',
+            text: '— én linje pr. fil; venstre kolonne er indekset, højre arbejdsmappen (`M` ændret, `A` tilføjet, `??` untracked).',
             meta: 'Samme overblik, én linje pr. ting.',
           },
           {
@@ -662,7 +823,7 @@ export default {
           },
           {
             cmd: 'git add -p',
-            text: '— (`--patch`) viser ændringerne i stykker (hunks) og spørger til hvert; nye (untracked) filer tilbydes ikke.',
+            text: '— viser ændringerne i stykker (hunks) og spørger til hvert; nye (untracked) filer tilbydes ikke.',
             meta: 'Du går bunken igennem og lægger kun det nødvendige i kurven.',
           },
         ],
@@ -744,7 +905,7 @@ export default {
         opts: [
           {
             cmd: 'git diff --staged',
-            text: '— (`--cached`) indekset mod den seneste commit, altså det, der kommer med i næste commit.',
+            text: '— indekset mod den seneste commit, altså det, der kommer med i næste commit.',
             meta: 'Du kigger i kurven, før du bærer den op på loftet.',
           },
           {

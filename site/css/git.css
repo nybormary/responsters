@@ -104,7 +104,13 @@
   color: #2b211a;
   padding: 1px 7px;
   border-radius: 7px;
-  white-space: nowrap; /* a command never breaks in the middle */
+  /* A long command may wrap at its spaces on a phone (review 2026-11-20: full commands no longer fit in 320–375 px),
+     never inside a word; every line piece keeps its background and padding. */
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 .g-tip {
   margin: 10px 0 0;
@@ -171,17 +177,23 @@
   padding: 6px 14px;
   box-sizing: border-box;
 }
-.g-help {
-  margin: 0;
-  font: 700 15px/1.35 var(--mono);
-}
 .sheet .g-help-from {
   margin: 4px 0 0;
   font-size: 14px;
   color: var(--muted);
 }
-.git-page .page-side .g-help-from code {
-  font-size: 13px;
+/* "Read more" (2026-11-20): "In git help: <section>" and the command are items like the links, the same rhythm. */
+.git-page .links .g-help-item,
+.git-page .links .g-help-cmd {
+  padding: 6px 0;
+}
+.git-page .links .g-help {
+  font: 700 15px/1.35 var(--mono);
+}
+/* The prompt before a command: shown, but not copied with it. */
+.g-ps {
+  user-select: none;
+  color: #6b5a48;
 }
 
 /* Brand mark before an outside link (RSP-200): the owner's black file on light pages, the white one on dark. */
@@ -208,7 +220,11 @@
 :root[data-theme='dark'] .git-page .links .mk-dark {
   display: inline;
 }
-/* In the side column the tip is a section of its own (RSP-200 review): the same space above it as above a heading. */
+/* In the side column the tip is a section of its own (RSP-200 review): the same space above it as above a heading.
+   "Careful" opens the side column (review 2026-11-20): no space above it, a heading's space below. */
 .git-page .page-side .g-tip {
   margin-top: 18px;
+}
+.git-page .page-side .g-careful {
+  margin: 0 0 18px;
 }

@@ -7,7 +7,9 @@ import { BY_ID, EGG } from '../data/git/cards.js';
 import { esc } from './util.js';
 
 /** Text with `code` spans: escaped, then `git add` → <code>git add</code>. */
-export const inline = (s) => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+export const inline = (s) => esc(s).replace(/`([^`]+)`/g, (_, c) => `<code>${keepGit(c)}</code>`);
+/** Code may wrap at its spaces on a phone, but never right after "git": `git pull` stays one piece (2026-11-21). */
+const keepGit = (c) => c.replace(/^git /, 'git&nbsp;');
 
 /** Badge colour: the group's colour; Новосілля has none yet (RSP-200), so the card's pill colour stands in. */
 export const groupColour = (g) => GROUPS[g.group].c || 'var(--cf-pill)';
@@ -66,9 +68,8 @@ export function gitCardBody(g, tx) {
 }
 
 /**
- * The main column of a git card page: what it does, options, careful (danger cards). Each section only when
- * its texts exist. Texts: does = { text, meta }, tip, opts = [{ cmd, text, meta }], careful = [paragraphs, the first
- * in bold]; `meta` = the one sentence with the household metaphor after the technical explanation (RSP-200).
+ * The main column of a git card page: what it does, options. Each section only when its texts exist.
+ * Texts: does = { text, meta }, tip, opts = [{ cmd, text, meta }]; `meta` = the one sentence with the household metaphor after the technical explanation (RSP-200).
  * g.vigs[i] (optional) = the picture for option i, shown only where it's drawn.
  */
 export function gitMain(g, tx) {
@@ -87,26 +88,22 @@ export function gitMain(g, tx) {
               <ul class="g-opts">${t.opts
                 .map((o, i) => {
                   const vig = g.vigs?.[i] ? `<img src="${g.vigs[i]}" alt="${esc(o.vig || '')}" loading="lazy">` : '';
-                  return `<li data-testid="git-opt"><p><code>${esc(o.cmd)}</code> ${inline(o.text)}</p>${meta(o.meta)}${vig}</li>`;
+                  return `<li data-testid="git-opt"><p>${termCmd(o.cmd)} ${inline(o.text)}</p>${meta(o.meta)}${vig}</li>`;
                 })
                 .join('')}</ul>`,
-    );
-  if (g.danger && t.careful?.length)
-    out.push(
-      `<div class="g-careful" data-testid="git-careful"><h2>${esc(ui.careful)}</h2>${t.careful
-        .map((p, i) => `<p>${i ? inline(p) : `<b>${inline(p)}</b>`}</p>`)
-        .join('')}</div>`,
     );
   return out.join('\n              ');
 }
 
 /**
- * The side column: "Often confused with" (commands only; a command with its own card links to it), "In git help":
- * the heading names the list that shows the section (`git help`, `git help -a`, `git help --user-interfaces`), then
- * the section, then the command's own manual (`git help stash`; review batch, RSP-199 comment 10486); then the tip
- * (moved here from the main column to make it lighter, RSP-200 review 2026-11-16) and "Read more": outside links
- * from g.links (label per language, English when missing; mark: 'github' = GitHub's own logo file, unchanged, as
- * their brand rules allow for a link to GitHub, brand.github.com/foundations/logo).
+ * The side column: "Careful" first on danger cards (careful = [paragraphs, the first in bold]; moved here from the
+ * main column in the review of 2026-11-20, at the top so a phone shows it right after the options), then "Often
+ * confused with" (commands only; a command with its own card links to it); then the tip (moved here from the main
+ * column to make it lighter, RSP-200 review 2026-11-16) and "Read more", the same on every card (rule, reviews of
+ * 2026-11-20): outside links from g.links (label per language, English when missing; mark: 'github' = GitHub's own
+ * logo file, unchanged, as their brand rules allow for a link to GitHub, brand.github.com/foundations/logo); "In git
+ * help: <section>" (the list that shows the section: `git help`, `git help -a`, `git help --user-interfaces`); the
+ * terminal command for the manual (`$ git help stash`); the manual on git-scm.com.
  * href(id) = the URL of another git card page in the same language; lang = the page language.
  */
 export function gitSide(g, tx, href, lang) {
@@ -123,30 +120,58 @@ export function gitSide(g, tx, href, lang) {
     .join('');
   const h = helpOf(g);
   const cmd = `<code>git help${h.list ? ' ' + esc(h.list) : ''}</code>`;
-  return `${
+  const careful =
+    g.danger && t.careful?.length
+      ? `<div class="g-careful" data-testid="git-careful"><h2>${esc(ui.careful)}</h2>${t.careful
+          .map((p, i) => `<p>${i ? inline(p) : `<b>${inline(p)}</b>`}</p>`)
+          .join('')}</div>
+              `
+      : '';
+  return `${careful}${
     conf
       ? `<h2>${esc(ui.conf)}</h2>
               <div class="mini" data-testid="git-conf">${conf}</div>
               `
       : ''
-  }<h2 data-testid="git-help-title">${ui.help(cmd)}</h2>
-              <p class="g-help" data-testid="git-help">${esc(h.section)}</p>
-              <p class="g-help-from" data-testid="git-help-more">${esc(ui.more)}: <code>git help ${esc(g.id)}</code></p>${
-                t.tip
-                  ? `
+  }${
+    t.tip
+      ? `
               <p class="g-tip" data-testid="git-tip"><b>${esc(ui.tip)}.</b> ${inline(t.tip)}</p>`
-                  : ''
-              }${
-                g.links?.length
-                  ? `
+      : ''
+  }
               <h2>${esc(ui.links)}</h2>
-              <ul class="links" data-testid="git-links">${g.links.map((x) => `<li>${link(x, lang)}</li>`).join('')}</ul>`
-                  : ''
-              }`;
+              <ul class="links" data-testid="git-links">${(g.links || []).map((x) => `<li>${link(x, lang)}</li>`).join('')}<li class="g-help-item"><span data-testid="git-help-title">${ui.help(cmd)}</span>: <span class="g-help" data-testid="git-help">${esc(h.section)}</span></li><li class="g-help-cmd" data-testid="git-help-more">${termCmd(`git help ${g.id}`)}</li><li data-testid="git-manual">${manual(g, lang, ui.manual)}</li></ul>`;
+}
+
+/**
+ * A command to type in the terminal, with the prompt "$" before it (Maryna, 2026-11-20): options and `git help <id>`.
+ * The "$" is not part of the command: hidden from screen readers and left out of a copied selection. Patterns that
+ * aren't commands (the .gitignore options `*.log`, `!keep.log`) get no "$".
+ */
+function termCmd(c) {
+  const ps = c.startsWith('git ') ? '<span class="g-ps" aria-hidden="true">$&nbsp;</span>' : '';
+  return `<code>${ps}${keepGit(esc(c))}</code>`;
+}
+
+/**
+ * The command's manual on git-scm.com (Maryna, 2026-11-20), the last item of "Read more", after the terminal command
+ * `git help <id>`: in the page language where git-scm.com has it (Ukrainian: /docs/git-switch/uk), otherwise the
+ * English manual (no Polish, Danish, Lithuanian or Estonian translations there; their label says "in English").
+ * .gitignore is a file: its manual is /docs/gitignore, without "git-".
+ */
+const MANUAL_LANGS = ['uk'];
+function manual(g, lang, label) {
+  const page = g.id === 'gitignore' ? 'gitignore' : `git-${g.id}`;
+  const own = MANUAL_LANGS.includes(lang);
+  const href = `https://git-scm.com/docs/${page}${own ? `/${lang}` : ''}`;
+  return `<a href="${href}" target="_blank" rel="noopener"${own ? '' : ' hreflang="en"'}>${GIT_MARK}${esc(label)} ↗</a>`;
 }
 
 /** Brand marks next to an outside link: the owner's own files, never redrawn or recoloured (one per theme). */
 const MARKS = { github: ['/img/brand/github-mark-black.svg', '/img/brand/github-mark-white.svg'] };
+/** The Git logomark (Git-Icon-1788C from git-scm.com/community/logos, unchanged; by Jason Long, CC BY 3.0): orange,
+   readable on both themes, so one file. */
+const GIT_MARK = '<img class="mk" src="/img/brand/Git-Icon-1788C.svg" alt="" width="16" height="16">';
 
 /** One "Read more" link: label in the page language (English when missing), opens in a new tab like the HTTP pages. */
 function link(x, lang) {
