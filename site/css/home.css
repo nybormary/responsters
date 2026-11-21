@@ -263,3 +263,12 @@
 .home-author h2 {
   font: 800 22px/1.2 var(--display);
 }
+/* Credits the licences ask for (the Git logomark, CC BY 3.0, 2026-11-20): small, under the author line. */
+.home-credits {
+  font-size: 14px;
+  color: var(--muted);
+}
+.home-credits a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}

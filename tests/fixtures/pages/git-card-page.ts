@@ -116,7 +116,11 @@ export class GitCardPage {
   get helpSection(): Locator {
     return this.root.getByTestId(TID.gitHelp);
   }
+  /** In "Read more": the terminal command `git help <id>` and the link to its manual on git-scm.com. */
   get helpMore(): Locator {
     return this.root.getByTestId(TID.gitHelpMore);
+  }
+  get manual(): Locator {
+    return this.root.getByTestId(TID.gitManual);
   }
 }
