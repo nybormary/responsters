@@ -37,6 +37,7 @@ export const GIT = [
     day: 7,
     art: '/img/git/gitignore.svg',
     help: { list: '--user-interfaces', section: 'User-facing repository, command and file interfaces' },
+    conf: ['git rm'],
   }, // a file, not a command: no "git" in front
   {
     id: 'clone',
@@ -60,7 +61,15 @@ export const GIT = [
       },
     ],
   },
-  { id: 'restore', name: 'git restore', group: 'home', day: 9, art: '/img/git/restore.svg', danger: true },
+  {
+    id: 'restore',
+    name: 'git restore',
+    group: 'home',
+    day: 9,
+    art: '/img/git/restore.svg',
+    danger: true,
+    conf: ['git reset', 'git checkout'],
+  },
   {
     id: 'stash',
     name: 'git stash',
@@ -68,9 +77,17 @@ export const GIT = [
     day: 10,
     art: '/img/git/stash.svg',
     help: { list: '-a', section: 'Main Porcelain Commands' },
+    conf: ['git commit'],
   },
-  { id: 'branch', name: 'git branch', group: 'archive', day: 11, art: '/img/git/branch.svg' },
-  { id: 'switch', name: 'git switch', group: 'archive', day: 12, art: '/img/git/switch.svg' },
+  { id: 'branch', name: 'git branch', group: 'archive', day: 11, art: '/img/git/branch.svg', conf: ['git switch'] },
+  {
+    id: 'switch',
+    name: 'git switch',
+    group: 'archive',
+    day: 12,
+    art: '/img/git/switch.svg',
+    conf: ['git branch', 'git checkout'],
+  },
   { id: 'merge', name: 'git merge', group: 'archive', day: 13 },
   { id: 'fetch', name: 'git fetch', group: 'post', day: 14 },
   { id: 'pull', name: 'git pull', group: 'post', day: 15 },
@@ -126,3 +143,33 @@ export const EGG = {
 
 // Lookup by id: BY_ID.stash → the stash card.
 export const BY_ID = Object.fromEntries(GIT.map((g) => [g.id, g]));
+
+// The command's line from `git help` (its NAME line, git 2.43), shown in English in every language under "Read more"
+// (Maryna, 2026-11-21): git help itself is English, so the reader recognises the line in the terminal.
+export const ABOUT = {
+  init: 'Create an empty Git repository or reinitialize an existing one',
+  status: 'Show the working tree status',
+  add: 'Add file contents to the index',
+  commit: 'Record changes to the repository',
+  log: 'Show commit logs',
+  diff: 'Show changes between commits, commit and working tree, etc',
+  clone: 'Clone a repository into a new directory',
+  restore: 'Restore working tree files',
+  stash: 'Stash the changes in a dirty working directory away',
+  branch: 'List, create, or delete branches',
+  switch: 'Switch branches',
+  merge: 'Join two or more development histories together',
+  fetch: 'Download objects and refs from another repository',
+  pull: 'Fetch from and integrate with another repository or a local branch',
+  push: 'Update remote refs along with associated objects',
+  show: 'Show various types of objects',
+  revert: 'Revert some existing commits',
+  'cherry-pick': 'Apply the changes introduced by some existing commits',
+  reset: 'Reset current HEAD to the specified state',
+  reflog: 'Manage reflog information',
+  rebase: 'Reapply commits on top of another base tip',
+  blame: 'Show what revision and author last modified each line of a file',
+  bisect: 'Use binary search to find the commit that introduced a bug',
+  tag: 'Create, list, delete or verify a tag object signed with GPG',
+  gitignore: 'Specifies intentionally untracked files to ignore',
+};

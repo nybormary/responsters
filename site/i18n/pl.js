@@ -525,6 +525,7 @@ export default {
     ],
     aboutTitle: 'O projekcie',
     aboutText: 'Niezależny projekt QA Maryny Bortnyk.',
+    gitLogo: 'Logo Git:',
   },
   // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: panel Network', 'Firefox: Edit and Resend', 'Postman: wysyłanie żądania'],
@@ -536,12 +537,14 @@ export default {
       does: 'Co robi',
       tip: 'Wskazówka',
       opts: 'Opcje',
+      file: 'Wiersze w pliku',
+      cmds: 'Polecenia',
       careful: 'Uwaga',
       conf: 'Często mylone z',
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
-      help: (c) => `W ${c}`,
+      help: (c) => `Sekcja w ${c}`,
       // before `git help <command>`, the command's own manual
-      more: 'szczegóły',
+      manual: 'Dokumentacja na git-scm.com (w języku angielskim)',
       danger: 'Niebezpieczne polecenie',
       // heading of the outside links on a git card page
       links: 'Więcej',
@@ -552,7 +555,7 @@ export default {
       // n = the number of advent days (25 since 2026-11-17)
       lead: (date, n) => `${n} poleceń gita, jedno okienko dziennie od ${date}. Pominięte dni można otworzyć później.`,
       intro:
-        'Oficjalna dokumentacja gita jest pełna słów z domu: codzienne polecenia nazywa się tam „porcelaną” (porcelain), a wszystko, co działa pod nimi, „hydrauliką” (plumbing); niedokończoną pracę chowa się do schowka (`git stash`), suche gałęzie się przycina (`git prune`), śmieci się wynosi (`git gc`), a do czegoś ważnego przypina się etykietę (`git tag`). To stało się podstawą nauki poleceń gita przez skojarzenia: domowe sceny i zwierzaki domowe, które znajdziesz na każdej karcie.',
+        'Oficjalna dokumentacja Git™ jest pełna słów z domu: codzienne polecenia nazywa się tam „porcelaną” (porcelain), a wszystko, co działa pod nimi, „hydrauliką” (plumbing); niedokończoną pracę chowa się do schowka (`git stash`), suche gałęzie się przycina (`git prune`), śmieci się wynosi (`git gc`), a do czegoś ważnego przypina się etykietę (`git tag`). To stało się podstawą nauki poleceń gita przez skojarzenia: domowe sceny i zwierzaki domowe, które znajdziesz na każdej karcie.',
       today: 'dziś',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'otwórz',
@@ -570,21 +573,179 @@ export default {
     cards: {
       // Pictures ready (RSP-191, RSP-192): only their text for now; the other card texts come with RSP-200.
       init: {
+        title: 'Puste mieszkanie',
+        line: 'Zacznijmy od czystej kartki.',
+        move: '$ git init -b main',
+        hint: 'nowe repozytorium z gałęzią main na start',
+        does: {
+          text: 'Tworzy w bieżącym katalogu nowe, puste repozytorium: ukryty katalog `.git`, w którym git trzyma całą historię. Pliki w katalogu zostają, jak były; git ich jeszcze nie śledzi. Nie ma jeszcze commitów, więc `git branch` nic nie pokazuje: gałąź pojawi się z pierwszym commitem.',
+          meta: 'Nowe mieszkanie: ściany są, mebli jeszcze nie ma, a pierwszy wchodzi kot.',
+        },
+        tip: 'Projekt jest już na GitHubie albo gdzie indziej? To nie init, tylko `git clone <url>`: sam utworzy katalog i przyniesie całą historię.',
+        opts: [
+          {
+            cmd: 'git init',
+            text: '— nowe repozytorium w bieżącym katalogu. Ponowne uruchomienie w istniejącym repozytorium jest bezpieczne: nic nie kasuje.',
+            meta: 'Wieszasz tabliczkę na drzwiach mieszkania, w którym już mieszkasz.',
+          },
+          {
+            cmd: 'git init <katalog>',
+            text: '— tworzy katalog o tej nazwie (jeśli go jeszcze nie ma) i repozytorium w nim.',
+            meta: 'Budujesz nowe mieszkanie i od razu wieszasz tabliczkę.',
+          },
+          {
+            cmd: 'git init -b main',
+            text: '— ustawia nazwę pierwszej gałęzi; bez tego git 2.43 bierze `master` i podpowiada, jak to zmienić.',
+            meta: 'Jak nazwać pierwszy pokój, decydujesz ty.',
+          },
+        ],
         art: 'Szary kot stoi na progu szeroko otwartych drzwi i jako pierwszy stawia łapę w pustym mieszkaniu: nie ma mebli, na ścianie tylko pusta rama. Za nim człowiek z walizkami, na jednej naklejka z żarówką. Przy drzwiach jedna nowa tabliczka z nazwiskiem.',
       },
       gitignore: {
+        title: 'Keczup pod nosem',
+        line: 'Mamo, gdzie jest keczup?',
+        move: '$ git check-ignore -v <plik>',
+        hint: 'która reguła ukrywa ten plik',
+        does: {
+          text: 'To nie polecenie, tylko plik w katalogu głównym repozytorium: lista wzorców (`*.log`, `node_modules/`, `.env`), których git nie pokazuje wśród nieśledzonych (untracked) i nie dodaje przez `git add .`. Działa tylko na pliki, których git jeszcze nie śledzi; sam `.gitignore` się commituje, żeby reguły były wspólne.',
+          meta: 'Lista na drzwiach lodówki: czego nie zauważać, nawet jeśli stoi tuż przed oczami.',
+        },
+        tip: 'Plik jest już w commicie? `.gitignore` go nie ukryje: najpierw `git rm --cached <plik>` — git przestanie go śledzić, a kopia na dysku zostanie.',
+        file: [
+          {
+            line: '*.log',
+            text: 'Wzorzec: wszystkie pliki z tą końcówką w dowolnym katalogu; `/` na końcu (`build/`) — tylko katalogi.',
+            meta: 'Nie zauważać żadnej pustej butelki, gdziekolwiek stoi.',
+          },
+          {
+            line: '!keep.log',
+            text: '`!` na początku przywraca plik, który ukryła reguła wyżej.',
+            meta: 'Oprócz tej jednej — tę zostaw.',
+          },
+        ],
+        opts: [
+          {
+            cmd: 'git add -f <plik>',
+            text: '— dodaje plik mimo `.gitignore`; od tej chwili git go śledzi.',
+            meta: 'Świadomie wkładasz do kosza to, czego zwykle nie zauważasz.',
+          },
+        ],
         art: 'Na ścianie portret kota, który siedzi tyłem do swojej miski z rybką. Człowiek stoi przed otwartą lodówką, drapie się w głowę i zastanawia się, gdzie jest keczup, a butelka keczupu stoi tuż przed nim na środkowej półce. Na drzwiach lodówki wisi na magnesie lista.',
       },
       restore: {
+        title: 'Jak na zdjęciu',
+        line: 'Uwaga, mama sprząta — za skutki nie odpowiadamy',
+        move: '$ git restore --staged <plik>',
+        hint: 'z powrotem z kosza, zmiany w pliku zostają',
+        does: {
+          text: 'Przywraca plik w katalogu roboczym do stanu z indeksu, czyli wyrzuca zmiany, których jeszcze nie dodano. `git restore --staged <plik>` działa odwrotnie: wyjmuje plik z indeksu, a katalog roboczy zostawia, jak jest. Historii commitów nie zmienia.',
+          meta: 'Mama sprząta pokój tak, jak na zdjęciu: co nieskończone, znika.',
+        },
+        tip: 'Ścieżka jest obowiązkowa: `git restore .` przywraca cały katalog. Dawniej robiło się to przez `git checkout -- <plik>`.',
+        opts: [
+          {
+            cmd: 'git restore <plik>',
+            text: '— wyrzuca zmiany w katalogu roboczym, których jeszcze nie ma w indeksie.',
+            meta: 'Porozrzucane wraca na półkę.',
+          },
+          {
+            cmd: 'git restore --staged <plik>',
+            text: '— wyjmuje plik z indeksu (unstage); zmiany w katalogu roboczym zostają.',
+            meta: 'Wyjmujesz rzecz z kosza, ale nie odkładasz jej na miejsce.',
+          },
+          {
+            cmd: 'git restore --source <commit> <plik>',
+            text: '— bierze plik ze wskazanego commita, np. `HEAD~1`.',
+            meta: 'Sprzątasz według starszego zdjęcia.',
+          },
+        ],
+        careful: [
+          'Wyrzucone zmiany znikają na dobre: nie ma ich ani w historii, ani w `git reflog`.',
+          'Przed `git restore` zajrzyj do `git diff`. Jeśli szkoda wyrzucać, najpierw `git stash`.',
+        ],
         art: 'Na ścianie portret królika, który pogryzł kapeć. Mama trzyma w górze zdjęcie uporządkowanej półki, „jak było”, i zdecydowanie zmiata z podłogi na szufelkę niedokończone puzzle, kawałki lecą na szufelkę. W drzwiach pokoju dziecko krzyczy z rękami w górze. Po prawej półka już wygląda jak na zdjęciu: równe pudełka, wśród nich pudełko po puzzlach.',
       },
       stash: {
+        title: 'Goście w drzwiach',
+        line: 'Szybko posprzątam!',
+        move: '$ git stash -u',
+        hint: 'schować także nowe pliki',
+        does: {
+          text: 'Chowa niezacommitowane zmiany w śledzonych plikach (i w indeksie, i w katalogu roboczym) do osobnego schowka i przywraca katalog roboczy do ostatniego commita. Później można je wyjąć, nawet na innej gałęzi.',
+          meta: 'Dzwonek do drzwi: upychasz niedokończone w szafie, żeby w pokoju było czysto.',
+        },
+        tip: 'Schowków może być kilka: `git stash list` pokazuje wszystkie, `stash@{0}` to najnowszy.',
+        opts: [
+          {
+            cmd: 'git stash pop',
+            text: '— przywraca ostatni schowek do katalogu roboczego i usuwa go z listy; `git stash apply` przywraca, ale zostawia na liście.',
+            meta: 'Goście poszli — wyjmujesz sweter z szafy.',
+          },
+          {
+            cmd: 'git stash -u',
+            text: '— chowa także nowe pliki, których git jeszcze nie śledzi. Zwykły `git stash` zostawia je w katalogu roboczym; pliki z `.gitignore` chowa tylko `git stash -a`.',
+            meta: 'Do szafy leci też to, co nie ma jeszcze swojego miejsca.',
+          },
+          {
+            cmd: 'git stash -m "…"',
+            text: '— schowek z opisem, żeby potem znaleźć go w `git stash list`.',
+            meta: 'Karteczka na kłębku: co to i po co.',
+          },
+        ],
         art: 'Na ścianie portret chomika z wypchanymi policzkami. Gdy dzwoni dzwonek do drzwi, człowiek na palcach w pośpiechu wpycha sweter i kłębek włóczki do górnej szafki z drzwiczkami uchylonymi w naszą stronę; na środkowej półce stoją jednakowe kubki.',
       },
       branch: {
+        title: 'Nowa tabliczka',
+        line: 'O, to będzie mój pokój.',
+        move: '$ git branch -d <gałąź>',
+        hint: 'usunąć gałąź, która jest już scalona',
+        does: {
+          text: 'Bez argumentów pokazuje lokalne gałęzie, bieżącą oznacza `*`. Z nazwą tworzy nową gałąź na bieżącym commicie, ale na nią nie przełącza: do tego jest `git switch`.',
+          meta: 'Wieszasz tabliczkę na drzwiach nowego pokoju, ale nie ruszasz się z miejsca.',
+        },
+        tip: 'Utworzyliście gałąź, a commity i tak trafiają do starej? `git branch` — to tylko tabliczka. Żeby przejść, potrzebny jest `git switch <gałąź>`, a żeby utworzyć i od razu przejść — `git switch -c <gałąź>`.',
+        opts: [
+          {
+            cmd: 'git branch -a',
+            text: '— pokazuje też gałęzie zdalne (`remotes/origin/…`).',
+            meta: 'Tabliczki na wszystkich drzwiach, także u sąsiadów.',
+          },
+          {
+            cmd: 'git branch -m <nowa nazwa>',
+            text: '— zmienia nazwę bieżącej gałęzi.',
+            meta: 'Przepisujesz tabliczkę.',
+          },
+          {
+            cmd: 'git branch -d <gałąź>',
+            text: '— usuwa gałąź, jeśli jest już scalona; niescaloną usuwa tylko `git branch -D <gałąź>`.',
+            meta: 'Zdejmujesz tabliczkę z pokoju, z którego wszystko już wyniesiono.',
+          },
+        ],
         art: 'Na ścianie portret papużki na drążku. Dwoje otwartych drzwi obok siebie prowadzi do dwóch jednakowych pokoi z takim samym fotelem i oknem; chodnik na podłodze rozwidla się do obojga drzwi. Przy lewych drzwiach stara tabliczka; człowiek wiesza przy prawych nową żółtą tabliczkę.',
       },
       switch: {
+        title: 'Nowy pokój',
+        line: 'Czas przeprowadzić się do innego pokoju',
+        move: '$ git switch -c <gałąź>',
+        hint: 'utworzyć gałąź i od razu do niej przejść',
+        does: {
+          text: 'Przełącza na inną gałąź: katalog roboczy i indeks stają się takie, jak w jej ostatnim commicie. Niezacommitowane zmiany idą z tobą; jeśli kolidują z plikami tamtej gałęzi, git się zatrzymuje i prosi, żeby je zacommitować albo schować (`git stash`).',
+          meta: 'Przechodzisz chodnikiem do innego pokoju, a to, co masz w rękach, idzie z tobą.',
+        },
+        tip: '`git switch` przejął część starego `git checkout`, który umie i przełączać gałęzie, i przywracać pliki.',
+        opts: [
+          {
+            cmd: 'git switch -c <gałąź>',
+            text: '— tworzy nową gałąź i od razu na nią przełącza.',
+            meta: 'Wieszasz tabliczkę i wchodzisz.',
+          },
+          { cmd: 'git switch -', text: '— wraca na poprzednią gałąź.', meta: 'Z powrotem do poprzedniego pokoju.' },
+          {
+            cmd: 'git switch --detach <commit>',
+            text: '— przechodzi na commit bez gałęzi (detached HEAD), żeby się rozejrzeć; nowe commity łatwo tu zgubić.',
+            meta: 'Zaglądasz do pokoju ze starego zdjęcia, ale mieszkać tam nie warto.',
+          },
+        ],
         art: 'Na ścianie portret papużki: z dwóch drążków siedzi na górnym, dolny jest pusty. Dwoje otwartych drzwi obok siebie prowadzi do dwóch jednakowych pokoi; chodnik na podłodze rozwidla się do obojga drzwi; prawe drzwi są żółte. Człowiek dużym krokiem przechodzi od lewych drzwi do prawego pokoju, ślady na chodniku prowadzą z lewej gałęzi na prawą.',
       },
       clone: {
@@ -606,7 +767,7 @@ export default {
           },
           {
             cmd: 'git clone -b <gałąź> <url>',
-            text: '— (`--branch`) od razu przełącza na wskazaną gałąź zamiast głównej.',
+            text: '— od razu przełącza na wskazaną gałąź zamiast głównej.',
             meta: 'Wchodzisz od razu do potrzebnego pokoju.',
           },
           {
@@ -630,7 +791,7 @@ export default {
         opts: [
           {
             cmd: 'git status -s',
-            text: '— (`--short`) jedna linijka na plik; lewa kolumna to indeks, prawa to katalog roboczy (`M` zmieniony, `A` dodany, `??` untracked).',
+            text: '— jedna linijka na plik; lewa kolumna to indeks, prawa to katalog roboczy (`M` zmieniony, `A` dodany, `??` untracked).',
             meta: 'Ten sam przegląd, jedna linijka na rzecz.',
           },
           {
@@ -664,7 +825,7 @@ export default {
           },
           {
             cmd: 'git add -p',
-            text: '— (`--patch`) pokazuje zmiany kawałkami (hunks) i pyta o każdy; nowych (untracked) plików nie proponuje.',
+            text: '— pokazuje zmiany kawałkami (hunks) i pyta o każdy; nowych (untracked) plików nie proponuje.',
             meta: 'Przebierasz kupkę i wkładasz do kosza tylko to, co potrzebne.',
           },
         ],
@@ -746,7 +907,7 @@ export default {
         opts: [
           {
             cmd: 'git diff --staged',
-            text: '— (`--cached`) indeks względem ostatniego commita, czyli to, co trafi do następnego commita.',
+            text: '— indeks względem ostatniego commita, czyli to, co trafi do następnego commita.',
             meta: 'Zaglądasz do kosza, zanim zaniesiesz go na strych.',
           },
           {

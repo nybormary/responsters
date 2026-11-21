@@ -31,6 +31,8 @@ export const TID = {
   gitHelpTitle: 'git-help-title',
   gitHelp: 'git-help',
   gitHelpMore: 'git-help-more',
+  gitHelpName: 'git-help-name', // the command's line from git help, English (2026-11-21)
+  gitManual: 'git-manual',
   gitTitle: 'git-title',
   gitLine: 'git-line',
   gitMove: 'git-move',
@@ -38,6 +40,8 @@ export const TID = {
   gitDoes: 'git-does',
   gitMeta: 'git-meta',
   gitOpt: 'git-opt',
+  gitFile: 'git-file', // .gitignore: a piece of the file, name on top (variant B, 2026-11-21)
+  gitFileLine: 'git-file-line',
   gitTip: 'git-tip',
   gitLinks: 'git-links',
 

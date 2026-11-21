@@ -523,6 +523,7 @@ export default {
     ],
     aboutTitle: 'Projektist',
     aboutText: 'Maryna Bortnyki sõltumatu QA-projekt.',
+    gitLogo: 'Giti logo:',
   },
   // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network paneel', 'Firefox: Edit and Resend', 'Postman: päringu saatmine'],
@@ -534,12 +535,14 @@ export default {
       does: 'Mida teeb',
       tip: 'Nõuanne',
       opts: 'Valikud',
+      file: 'Read failis',
+      cmds: 'Käsud',
       careful: 'Ettevaatust',
       conf: 'Sageli aetakse segi',
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
-      help: (c) => `Loendis ${c}`,
+      help: (c) => `Jaotis ${c}-is`,
       // before `git help <command>`, the command's own manual
-      more: 'täpsemalt',
+      manual: 'Dokumentatsioon git-scm.com-is (inglise keeles)',
       danger: 'Ohtlik käsk',
       // heading of the outside links on a git card page
       links: 'Loe lisaks',
@@ -551,7 +554,7 @@ export default {
       lead: (date, n) =>
         `${n} git-käsku, iga päev üks luuk. Esimene luuk: ${date}. Vahele jäänud päevi saab hiljem avada.`,
       intro:
-        'Giti ametlik dokumentatsioon on täis koduseid sõnu: igapäevaseid käske nimetatakse seal „portselaniks“ (porcelain) ja kõike, mis nende all töötab, „torustikuks“ (plumbing); pooleli töö pannakse peitu (`git stash`), kuivad oksad lõigatakse ära (`git prune`), prügi korjatakse kokku (`git gc`) ja tähtsale asjale kinnitatakse silt (`git tag`). Sellest sai git-käskude assotsiatiivse õppimise alus: kodused stseenid ja lemmikloomad, keda leiad igalt kaardilt.',
+        'Git™-i ametlik dokumentatsioon on täis koduseid sõnu: igapäevaseid käske nimetatakse seal „portselaniks“ (porcelain) ja kõike, mis nende all töötab, „torustikuks“ (plumbing); pooleli töö pannakse peitu (`git stash`), kuivad oksad lõigatakse ära (`git prune`), prügi korjatakse kokku (`git gc`) ja tähtsale asjale kinnitatakse silt (`git tag`). Sellest sai git-käskude assotsiatiivse õppimise alus: kodused stseenid ja lemmikloomad, keda leiad igalt kaardilt.',
       today: 'täna',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'ootab',
@@ -569,21 +572,179 @@ export default {
     cards: {
       // Pictures ready (RSP-191, RSP-192): only their text for now; the other card texts come with RSP-200.
       init: {
+        title: 'Tühi korter',
+        line: 'Alustame puhtalt lehelt.',
+        move: '$ git init -b main',
+        hint: 'uus hoidla, esimene haru main',
+        does: {
+          text: 'Loob praegusesse kausta uue tühja hoidla (repository): peidetud kausta `.git`, kus git hoiab kogu ajalugu. Kausta failid jäävad, nagu olid; git neid veel ei jälgi. Kommitte veel pole, seega `git branch` ei näita midagi: haru tekib koos esimese kommitiga.',
+          meta: 'Uus korter: seinad on olemas, mööblit veel pole, ja esimesena astub sisse kass.',
+        },
+        tip: 'Projekt on juba GitHubis või mujal? Siis mitte init, vaid `git clone <url>`: see loob ise kausta ja toob kogu ajaloo.',
+        opts: [
+          {
+            cmd: 'git init',
+            text: '— uus hoidla praeguses kaustas. Olemasolevas hoidlas uuesti käivitada on ohutu: midagi ei kustutata.',
+            meta: 'Paned nimesildi selle korteri uksele, kus juba elad.',
+          },
+          {
+            cmd: 'git init <kaust>',
+            text: '— loob sellenimelise kausta (kui seda veel pole) ja sinna hoidla.',
+            meta: 'Ehitad uue korteri ja paned kohe nimesildi üles.',
+          },
+          {
+            cmd: 'git init -b main',
+            text: '— määrab esimese haru nime; ilma selleta kasutab git 2.43 nime `master` ja näitab vihjet, kuidas seda muuta.',
+            meta: 'Kuidas esimest tuba nimetada, otsustad sina.',
+          },
+        ],
         art: 'Hall kass seisab pärani avatud ukse lävel ja astub esimesena käpaga tühja korterisse: mööblit pole, seinal ainult tühi raam. Tema taga inimene kohvritega, ühel neist lambipirni kleeps. Ukse kõrval üks uus nimesilt.',
       },
       gitignore: {
+        title: 'Ketšup nina all',
+        line: 'Emme, kus ketšup on?',
+        move: '$ git check-ignore -v <fail>',
+        hint: 'milline reegel selle faili peidab',
+        does: {
+          text: 'Mitte käsk, vaid fail hoidla juurkaustas: mustrite loend (`*.log`, `node_modules/`, `.env`), mida git ei näita jälgimata failide (untracked) seas ega lisa käsuga `git add .`. Toimib ainult failidele, mida git veel ei jälgi; `.gitignore` ise kommititakse, et reeglid oleksid kõigil samad.',
+          meta: 'Nimekiri külmkapi uksel: mida mitte märgata, isegi kui see seisab otse silme ees.',
+        },
+        tip: 'Fail on juba kommitis? `.gitignore` seda ei peida: kõigepealt `git rm --cached <fail>` — git lõpetab selle jälgimise ja koopia kettal jääb alles.',
+        file: [
+          {
+            line: '*.log',
+            text: 'Muster: kõik selle lõpuga failid igas kaustas; `/` lõpus (`build/`) tähendab ainult kaustu.',
+            meta: 'Ära märka ühtegi tühja pudelit, kus iganes see seisab.',
+          },
+          {
+            line: '!keep.log',
+            text: '`!` alguses toob tagasi faili, mille ülemine reegel peitis.',
+            meta: 'Välja arvatud see — see jääb.',
+          },
+        ],
+        opts: [
+          {
+            cmd: 'git add -f <fail>',
+            text: '— lisab faili hoolimata `.gitignore`-ist; edaspidi git jälgib seda.',
+            meta: 'Paned teadlikult korvi selle, mida tavaliselt ei märka.',
+          },
+        ],
         art: 'Seinal on portree kassist, kes istub selg oma kalakausi poole. Inimene seisab avatud külmkapi ees, sügab kukalt ja mõtleb, kus ketšup on, kuigi ketšupipudel seisab otse tema ees keskmisel riiulil. Külmkapi uksel ripub magneti all nimekiri.',
       },
       restore: {
+        title: 'Nagu fotol',
+        line: 'Ettevaatust, ema koristab — tagajärgede eest me ei vastuta',
+        move: '$ git restore --staged <fail>',
+        hint: 'korvist tagasi, muudatused failis jäävad',
+        does: {
+          text: 'Viib töökausta faili tagasi indeksi olekusse ehk viskab minema muudatused, mida pole veel lisatud. `git restore --staged <fail>` teeb vastupidi: võtab faili indeksist välja ja jätab töökausta nii, nagu see on. Kommitite ajalugu ei muuda.',
+          meta: 'Ema koristab toa nagu fotol: mis pooleli, see kaob.',
+        },
+        tip: 'Tee on kohustuslik: `git restore .` taastab kogu kausta. Varem tehti seda käsuga `git checkout -- <fail>`.',
+        opts: [
+          {
+            cmd: 'git restore <fail>',
+            text: '— viskab minema töökausta muudatused, mida indeksis veel pole.',
+            meta: 'Laiali loobitu läheb tagasi riiulile.',
+          },
+          {
+            cmd: 'git restore --staged <fail>',
+            text: '— võtab faili indeksist välja (unstage); muudatused töökaustas jäävad.',
+            meta: 'Võtad asja korvist välja, aga ei pane seda kohale.',
+          },
+          {
+            cmd: 'git restore --source <kommit> <fail>',
+            text: '— võtab faili antud kommitist, nt `HEAD~1`.',
+            meta: 'Koristad vanema foto järgi.',
+          },
+        ],
+        careful: [
+          'Ära visatud muudatused kaovad jäädavalt: neid pole ei ajaloos ega `git reflog`-is.',
+          'Enne `git restore` vaata `git diff`. Kui on kahju ära visata, siis kõigepealt `git stash`.',
+        ],
         art: 'Seinal on portree jänesest, kes on sussi närinud. Ema hoiab üleval fotot korras riiulist, „nagu oli“, ja pühib otsustavalt pooleli pusle põrandalt kühvlisse, tükid lendavad kühvlisse. Toa uksel karjub laps, käed üleval. Paremal näeb riiul juba välja nagu fotol: korralikud karbid, nende seas puslekarp.',
       },
       stash: {
+        title: 'Külalised ukse taga',
+        line: 'Koristan kiiresti ära!',
+        move: '$ git stash -u',
+        hint: 'peida ka uued failid',
+        does: {
+          text: 'Peidab jälgitavate failide kommitimata muudatused (nii indeksis kui ka töökaustas) eraldi hoidlasse ja viib töökausta tagasi viimase kommiti olekusse. Hiljem saab need välja võtta, ka teises harus.',
+          meta: 'Uksekell heliseb: topid pooleli asjad kappi, et tuba näeks korras välja.',
+        },
+        tip: 'Peidikuid võib olla mitu: `git stash list` näitab kõiki, `stash@{0}` on uusim.',
+        opts: [
+          {
+            cmd: 'git stash pop',
+            text: '— toob viimase peidiku töökausta tagasi ja eemaldab selle loendist; `git stash apply` toob tagasi, aga jätab loendisse alles.',
+            meta: 'Külalised läksid — võtad kampsuni kapist välja.',
+          },
+          {
+            cmd: 'git stash -u',
+            text: '— peidab ka uued failid, mida git veel ei jälgi. Tavaline `git stash` jätab need töökausta; `.gitignore` faile peidab ainult `git stash -a`.',
+            meta: 'Kappi lendab ka see, millel pole veel oma kohta.',
+          },
+          {
+            cmd: 'git stash -m "…"',
+            text: '— kirjeldusega peidik, et selle hiljem `git stash list`-ist üles leida.',
+            meta: 'Silt lõngakerale: mis see on ja milleks.',
+          },
+        ],
         art: 'Seinal on portree täis põskedega hamstrist. Kui uksekell heliseb, toppib inimene kikivarvul kiiruga kampsuni ja lõngakera ülemisse kappi, mille uks on meie poole lahti; keskmisel riiulil seisavad ühesugused kruusid.',
       },
       branch: {
+        title: 'Uus nimesilt',
+        line: 'Oh, sellest saab minu tuba.',
+        move: '$ git branch -d <haru>',
+        hint: 'kustuta juba liidetud haru',
+        does: {
+          text: 'Ilma argumentideta näitab kohalikke harusid ja märgib praeguse tärniga `*`. Nimega loob praegusele kommitile uue haru, aga sellele ei lülitu: selleks on `git switch`.',
+          meta: 'Paned uue toa uksele nimesildi, aga ise jääd sinna, kus olid.',
+        },
+        tip: 'Lõite haru, aga kommitid lähevad ikka vanasse? `git branch` on ainult nimesilt. Üle minekuks on vaja `git switch <haru>`, loomiseks ja kohe üleminekuks `git switch -c <haru>`.',
+        opts: [
+          {
+            cmd: 'git branch -a',
+            text: '— näitab ka kaugharusid (`remotes/origin/…`).',
+            meta: 'Nimesildid kõigil ustel, ka naabritel.',
+          },
+          {
+            cmd: 'git branch -m <uus nimi>',
+            text: '— nimetab praeguse haru ümber.',
+            meta: 'Kirjutad nimesildi ümber.',
+          },
+          {
+            cmd: 'git branch -d <haru>',
+            text: '— kustutab haru, kui see on juba liidetud; liitmata haru kustutab ainult `git branch -D <haru>`.',
+            meta: 'Võtad nimesildi maha toast, kust kõik on juba välja viidud.',
+          },
+        ],
         art: 'Seinal on portree papagoist õrrel. Kaks kõrvuti avatud ust viivad kahte ühesugusesse tuppa, kus on sama tugitool ja aken; põrandal olev vaip hargneb mõlema ukse juurde. Vasaku ukse kõrval on vana nimesilt; inimene paneb parema ukse kõrvale uut kollast nimesilti.',
       },
       switch: {
+        title: 'Uus tuba',
+        line: 'Aeg kolida teise tuppa',
+        move: '$ git switch -c <haru>',
+        hint: 'loo haru ja mine kohe sinna',
+        does: {
+          text: 'Lülitub teisele harule: töökaust ja indeks muutuvad selliseks nagu selle viimases kommitis. Kommitimata muudatused tulevad kaasa; kui need lähevad selle haru failidega vastuollu, git peatub ja palub need kommitida või peita (`git stash`).',
+          meta: 'Kõnnid mööda vaipa teise tuppa ja see, mis sul käes, tuleb kaasa.',
+        },
+        tip: '`git switch` võttis üle osa vanast `git checkout`-ist, mis oskab nii harusid vahetada kui ka faile taastada.',
+        opts: [
+          {
+            cmd: 'git switch -c <haru>',
+            text: '— loob uue haru ja lülitub kohe sellele.',
+            meta: 'Paned nimesildi üles ja astud sisse.',
+          },
+          { cmd: 'git switch -', text: '— läheb tagasi eelmisele harule.', meta: 'Tagasi tuppa, kust just tulid.' },
+          {
+            cmd: 'git switch --detach <kommit>',
+            text: '— läheb kommitile ilma haruta (detached HEAD), et ringi vaadata; uued kommitid lähevad siin kergesti kaotsi.',
+            meta: 'Piilud vana foto tuppa, aga elada seal ei tasu.',
+          },
+        ],
         art: 'Seinal on portree papagoist: kahest õrrest istub ta ülemisel, alumine on tühi. Kaks kõrvuti avatud ust viivad kahte ühesugusesse tuppa; põrandal olev vaip hargneb mõlema ukse juurde; parem uks on kollane. Inimene astub pika sammuga vasaku ukse juurest paremasse tuppa, jäljed vaibal viivad vasakult harult paremale.',
       },
       clone: {
@@ -605,7 +766,7 @@ export default {
           },
           {
             cmd: 'git clone -b <haru> <url>',
-            text: '— (`--branch`) lülitub kohe antud harule, mitte põhiharule.',
+            text: '— lülitub kohe antud harule, mitte põhiharule.',
             meta: 'Lähed kohe sellesse tuppa, mida vaja.',
           },
           {
@@ -629,7 +790,7 @@ export default {
         opts: [
           {
             cmd: 'git status -s',
-            text: '— (`--short`) üks rida faili kohta; vasak veerg on indeks, parem töökaust (`M` muudetud, `A` lisatud, `??` untracked).',
+            text: '— üks rida faili kohta; vasak veerg on indeks, parem töökaust (`M` muudetud, `A` lisatud, `??` untracked).',
             meta: 'Sama ülevaade, üks rida asja kohta.',
           },
           {
@@ -663,7 +824,7 @@ export default {
           },
           {
             cmd: 'git add -p',
-            text: '— (`--patch`) näitab muudatusi tükkidena (hunks) ja küsib iga kohta; uusi (untracked) faile ei paku.',
+            text: '— näitab muudatusi tükkidena (hunks) ja küsib iga kohta; uusi (untracked) faile ei paku.',
             meta: 'Sorteerid hunniku läbi ja paned korvi ainult vajaliku.',
           },
         ],
@@ -745,7 +906,7 @@ export default {
         opts: [
           {
             cmd: 'git diff --staged',
-            text: '— (`--cached`) indeks võrreldes viimase commitiga ehk see, mis läheb järgmisse commiti.',
+            text: '— indeks võrreldes viimase commitiga ehk see, mis läheb järgmisse commiti.',
             meta: 'Vaatad korvi, enne kui selle pööningule viid.',
           },
           {

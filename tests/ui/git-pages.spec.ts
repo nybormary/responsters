@@ -1,7 +1,19 @@
 // Git card pages /<lang>/git/<id>/ (RSP-199). testomat.io folder "Git cards", suite "Git card pages (RSP-199)".
 // Manual only: cc96d414 ("In git help" names the right list, section and manual).
 // 2b281d82: step 1 (a card with texts, RSP-200 batch 1) and step 2 (a card without texts, while there are any).
-import { test, expect, TAG, GIT_CARDS, GIT_EGG, LANGS, THEMES, buildOn, type GitCard } from '../fixtures';
+import {
+  test,
+  expect,
+  TAG,
+  GIT_CARDS,
+  GIT_EGG,
+  GIT_ABOUT,
+  gitHelpOf,
+  LANGS,
+  THEMES,
+  buildOn,
+  type GitCard,
+} from '../fixtures';
 
 const pick = <T>(list: T[]): T => list[Math.floor(Math.random() * list.length)];
 /** The badge text as a visitor reads it: the no-break space after "git" counts as a space. */
@@ -136,6 +148,7 @@ type CardTexts = {
   does: { text: string; meta: string };
   tip?: string;
   opts?: { cmd: string; text: string; meta: string }[];
+  file?: { line: string; text: string; meta: string }[];
 };
 
 test(
@@ -145,6 +158,28 @@ test(
     // A card can have its picture's text (art) before its other texts (init, RSP-191): "with texts" means a title.
     const cards = texts.git.cards as unknown as Record<string, (Partial<CardTexts> & { art?: string }) | undefined>;
 
+    // "Read more" ends with "Section in `git help`: <section>", the terminal command `git help <id>`, the command's
+    // line from git help in English (`init — Create an empty Git repository…`, Maryna, 2026-11-21) and the manual on
+    // git-scm.com: Ukrainian where git-scm.com has it, otherwise English (2026-11-20).
+    const expectReadMore = async (id: string) => {
+      const g = GIT_CARDS.find((x) => x.id === id)!;
+      const h = gitHelpOf(g);
+      await expect(gitCardPage.helpTitle, 'read more: section label').toHaveText(
+        visible(texts.git.ui.help(`\`git help${h.list ? ' ' + h.list : ''}\``)),
+      );
+      await expect(gitCardPage.helpSection, 'read more: section, English').toHaveText(h.section);
+      await expect(gitCardPage.helpMore, 'read more: git help').toHaveText(`$ git help ${id}`);
+      await expect(gitCardPage.helpName, 'read more: the git help line, English').toHaveText(
+        `${id} — ${GIT_ABOUT[id]}`,
+      );
+      if (lang !== 'en') await expect(gitCardPage.helpName).toHaveAttribute('lang', 'en');
+      const page = id === 'gitignore' ? 'gitignore' : `git-${id}`;
+      const manual = gitCardPage.manual.getByRole('link', { name: texts.git.ui.manual });
+      await expect(manual, 'read more: git-scm.com').toHaveAttribute(
+        'href',
+        `https://git-scm.com/docs/${page}${lang === 'uk' ? '/uk' : ''}`,
+      );
+    };
     const g = pick(GIT_CARDS.filter((x) => cards[x.id]?.title));
     const t = cards[g.id] as CardTexts;
     await test.step(`${g.name} (with texts): card texts, What it does, tip, Options, Often confused with`, async () => {
@@ -156,6 +191,16 @@ test(
       await expect(gitCardPage.does).toContainText(visible(t.does.text));
       await expect(gitCardPage.metaOf(gitCardPage.does)).toHaveText(visible(t.does.meta));
       if (t.tip) await expect(gitCardPage.tip).toHaveText(`${texts.git.ui.tip}. ${visible(t.tip)}`);
+      // .gitignore is a file: its patterns are lines of the file under its name, its option is a command (variant B)
+      const file = t.file ?? [];
+      await expect(gitCardPage.fileLines).toHaveCount(file.length);
+      if (file.length) await expect(gitCardPage.file.locator('figcaption')).toHaveText(g.name);
+      for (const [i, l] of file.entries()) {
+        const item = gitCardPage.fileLines.nth(i);
+        await expect(item.locator('code').first(), `file line ${l.line}`).toHaveText(l.line);
+        await expect(item, `file line ${l.line}: text`).toContainText(visible(l.text));
+        await expect(gitCardPage.metaOf(item), `file line ${l.line}: metaphor`).toHaveText(visible(l.meta));
+      }
       const opts = t.opts ?? [];
       await expect(gitCardPage.options).toHaveCount(opts.length);
       for (const [i, o] of opts.entries()) {
@@ -179,6 +224,7 @@ test(
         const a = gitCardPage.links.getByRole('link', { name: new RegExp(l.label[lang] ?? l.label.en) });
         await expect(a, `read more: ${l.u}`).toHaveAttribute('href', l.u);
       }
+      await expectReadMore(g.id);
       await expect(gitCardPage.root).not.toContainText('undefined');
     });
 
@@ -192,7 +238,10 @@ test(
       await expect(gitCardPage.careful).toHaveCount(0);
       await expect(gitCardPage.confused).toHaveCount(0);
       await expect(gitCardPage.tip).toHaveCount(0);
-      await expect(gitCardPage.links).toHaveCount(0);
+      // only the "Read more" items every card has: "Section in git help: <section>", `$ git help <id>`, its git help
+      // line, git-scm.com
+      await expect(gitCardPage.links.getByRole('listitem')).toHaveCount(4);
+      await expectReadMore(b.id);
       await expect(gitCardPage.helpSection).toBeVisible();
       await expect(gitCardPage.root).not.toContainText('undefined');
     });

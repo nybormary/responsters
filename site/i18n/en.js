@@ -527,6 +527,8 @@ export default {
     ],
     aboutTitle: 'About the project',
     aboutText: 'An independent QA project by Maryna Bortnyk.',
+    // credit the CC BY 3.0 licence asks for (the Git logomark next to the git-scm.com links on git card pages)
+    gitLogo: 'Git logo:',
   },
   // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: the Network panel', 'Firefox: Edit and Resend', 'Postman: send a request'],
@@ -538,12 +540,15 @@ export default {
       does: 'What it does',
       tip: 'Tip',
       opts: 'Options',
+      file: 'Lines in the file',
+      cmds: 'Commands',
       careful: 'Careful',
       conf: 'Often confused with',
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
-      help: (c) => `In ${c}`,
+      help: (c) => `Section in ${c}`,
       // before `git help <command>`, the command's own manual
-      more: 'details',
+      // the command's manual on git-scm.com (2026-11-20): in the page language where git-scm.com has it, else English
+      manual: 'Documentation on git-scm.com',
       danger: 'Dangerous command',
       // heading of the outside links on a git card page
       links: 'Read more',
@@ -555,7 +560,7 @@ export default {
       lead: (date, n) => `${n} git commands, one door a day from ${date}. Missed days can be opened later.`,
       // why the cards are household (RSP-219, Maryna's text 2026-11-21; the four examples suggested by Claude)
       intro:
-        'Git’s own documentation is full of household words: the everyday commands are called “porcelain”, and everything that works beneath them is “plumbing”; unfinished work goes into a stash (`git stash`), dead branches get pruned (`git prune`), garbage gets collected (`git gc`), and something important gets a tag (`git tag`). That became the basis for learning git commands by association: household scenes and pets you can find on every card.',
+        'The official Git™ documentation is full of household words: the everyday commands are called “porcelain”, and everything that works beneath them is “plumbing”; unfinished work goes into a stash (`git stash`), dead branches get pruned (`git prune`), garbage gets collected (`git gc`), and something important gets a tag (`git tag`). That became the basis for learning git commands by association: household scenes and pets you can find on every card.',
       today: 'today',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'forgot?',
@@ -575,21 +580,183 @@ export default {
     cards: {
       // Pictures ready (RSP-191, RSP-192): only their text for now; the other card texts come with RSP-200.
       init: {
+        title: 'An empty flat',
+        line: 'Let’s start with a clean sheet.',
+        move: '$ git init -b main',
+        hint: 'a new repository with main as the first branch',
+        does: {
+          text: 'Creates a new, empty repository in the current folder: the hidden `.git` folder where git keeps the whole history. The files in the folder stay as they are; git doesn’t track them yet. There are no commits yet, so `git branch` shows nothing: the branch appears with the first commit.',
+          meta: 'A new flat: walls but no furniture yet, and the cat goes in first.',
+        },
+        tip: 'The project is already on GitHub or elsewhere? Then not init but `git clone <url>`: it creates the folder itself and brings the whole history.',
+        opts: [
+          {
+            cmd: 'git init',
+            text: '— a new repository in the current folder. Running it again in an existing repository is safe: nothing is erased.',
+            meta: 'You put a nameplate on the door of the flat you already live in.',
+          },
+          {
+            cmd: 'git init <folder>',
+            text: '— creates a folder with that name (if it doesn’t exist yet) and the repository in it.',
+            meta: 'You build a new flat and put up the nameplate at once.',
+          },
+          {
+            cmd: 'git init -b main',
+            text: '— sets the name of the first branch; without it git 2.43 uses `master` and shows a hint on how to change it.',
+            meta: 'You choose what to call the first room.',
+          },
+        ],
         art: 'A grey cat stands on the threshold of a wide-open door and is the first to step into the empty flat: no furniture, only an empty frame on the wall. Behind it, a person with suitcases, one with a light-bulb sticker. By the door, a single new nameplate.',
       },
       gitignore: {
+        title: 'Ketchup under your nose',
+        line: 'Mum, where’s the ketchup?',
+        move: '$ git check-ignore -v <file>',
+        hint: 'which rule hides this file',
+        does: {
+          text: 'Not a command but a file in the repository root: a list of patterns (`*.log`, `node_modules/`, `.env`) that git doesn’t show among untracked files and doesn’t add with `git add .`. It only works for files git doesn’t track yet; `.gitignore` itself is committed so everyone shares the rules.',
+          meta: 'The list on the fridge door: what not to notice, even if it stands right in front of you.',
+        },
+        tip: 'Already committed? `.gitignore` won’t hide it: first `git rm --cached <file>` — git stops tracking it and the copy on disk stays.',
+        file: [
+          {
+            line: '*.log',
+            text: 'A pattern: every file with this ending in any folder; a trailing `/` (`build/`) means folders only.',
+            meta: 'Don’t notice any empty bottle, wherever it stands.',
+          },
+          {
+            line: '!keep.log',
+            text: 'A leading `!` brings back a file that a rule above hid.',
+            meta: 'Except this one — keep it.',
+          },
+        ],
+        opts: [
+          {
+            cmd: 'git add -f <file>',
+            text: '— adds a file despite `.gitignore`; from then on git tracks it.',
+            meta: 'You knowingly put in the basket what you usually don’t notice.',
+          },
+        ],
         art: 'On the wall, a portrait of a cat sitting with its back to its bowl of fish. A person stands at the open fridge, scratching their head and wondering where the ketchup is, while the ketchup bottle stands right in front of them on the middle shelf. A list hangs on the fridge door under a magnet.',
       },
       restore: {
+        title: 'As in the photo',
+        line: 'Careful, Mum is tidying — no responsibility for the consequences',
+        move: '$ git restore --staged <file>',
+        hint: 'out of the basket, the changes in the file stay',
+        does: {
+          text: 'Brings a file in the working tree back to its state in the index, that is, throws away changes not yet added. `git restore --staged <file>` works the other way round: takes the file out of the index and leaves the working tree as it is. Doesn’t change the commit history.',
+          meta: 'Mum tidies the room to match the photo: whatever was half done is gone.',
+        },
+        tip: 'A path is required: `git restore .` restores the whole folder. This used to be `git checkout -- <file>`.',
+        opts: [
+          {
+            cmd: 'git restore <file>',
+            text: '— throws away changes in the working tree that aren’t in the index yet.',
+            meta: 'What was scattered goes back on the shelf.',
+          },
+          {
+            cmd: 'git restore --staged <file>',
+            text: '— takes the file out of the index (unstage); the changes in the working tree stay.',
+            meta: 'You take a thing out of the basket but don’t put it away.',
+          },
+          {
+            cmd: 'git restore --source <commit> <file>',
+            text: '— takes the file from the given commit, e.g. `HEAD~1`.',
+            meta: 'Tidying to an older photo.',
+          },
+        ],
+        careful: [
+          'Thrown-away changes are gone for good: they are neither in the history nor in `git reflog`.',
+          'Before `git restore`, look at `git diff`. If it’s a pity to throw away, `git stash` first.',
+        ],
         art: 'On the wall, a portrait of a rabbit that has chewed a slipper. Mum holds up a photo of the tidy shelf, "as it was", and firmly sweeps a half-done puzzle off the floor into a dustpan, the pieces flying in. A child in the doorway screams with arms up. On the right, the shelf already looks like the photo: neat boxes, the puzzle box among them.',
       },
       stash: {
+        title: 'Guests at the door',
+        line: 'A quick tidy-up!',
+        move: '$ git stash -u',
+        hint: 'stash the new files too',
+        does: {
+          text: 'Puts uncommitted changes in tracked files (both in the index and in the working tree) into a separate store and brings the working tree back to the last commit. You can take them out later, even on another branch.',
+          meta: 'The doorbell rings: you stuff the unfinished things into the cupboard so the room looks tidy.',
+        },
+        tip: 'There can be several stashes: `git stash list` shows them all, `stash@{0}` is the newest.',
+        opts: [
+          {
+            cmd: 'git stash pop',
+            text: '— brings the last stash back into the working tree and removes it from the list; `git stash apply` brings it back but keeps it in the list.',
+            meta: 'The guests have left — you take the sweater out of the cupboard.',
+          },
+          {
+            cmd: 'git stash -u',
+            text: '— also stashes new files git doesn’t track yet. A plain `git stash` leaves them in the working tree; files from `.gitignore` only `git stash -a` stashes.',
+            meta: 'Into the cupboard goes what has no place of its own yet, too.',
+          },
+          {
+            cmd: 'git stash -m "…"',
+            text: '— a stash with a description, so you can find it later in `git stash list`.',
+            meta: 'A note on the ball of yarn: what it is and why.',
+          },
+        ],
         art: 'On the wall, a portrait of a hamster with stuffed cheeks. While the doorbell rings, a person on tiptoe hastily stuffs a sweater and a ball of yarn into the top cupboard, its door open towards us; identical mugs stand on the middle shelf.',
       },
       branch: {
+        title: 'A new nameplate',
+        line: 'Oh, this will be my room.',
+        move: '$ git branch -d <branch>',
+        hint: 'remove a branch that’s already merged',
+        does: {
+          text: 'Without arguments it lists the local branches and marks the current one with `*`. With a name it creates a new branch at the current commit but doesn’t switch to it: that’s `git switch`.',
+          meta: 'You put a nameplate on the door of a new room but stay where you were.',
+        },
+        tip: 'Created a branch, but your commits still go to the old one? `git branch` is just the nameplate. To move over you need `git switch <branch>`; to create and move at once, `git switch -c <branch>`.',
+        opts: [
+          {
+            cmd: 'git branch -a',
+            text: '— also lists the remote branches (`remotes/origin/…`).',
+            meta: 'The nameplates on all doors, the neighbours’ too.',
+          },
+          {
+            cmd: 'git branch -m <new name>',
+            text: '— renames the current branch.',
+            meta: 'You rewrite the nameplate.',
+          },
+          {
+            cmd: 'git branch -d <branch>',
+            text: '— deletes the branch if it’s already merged; an unmerged one only `git branch -D <branch>` deletes.',
+            meta: 'You take the nameplate off a room that has been emptied.',
+          },
+        ],
         art: 'On the wall, a portrait of a parrot on a perch. Two open doors side by side lead into two identical rooms with the same armchair and window; a runner on the floor forks to both doors. By the left door, an old nameplate; a person is putting up a new yellow nameplate by the right door.',
       },
       switch: {
+        title: 'A new room',
+        line: 'Time to move to another room',
+        move: '$ git switch -c <branch>',
+        hint: 'create a branch and go there at once',
+        does: {
+          text: 'Switches to another branch: the working tree and the index become as in its last commit. Uncommitted changes come along; if they clash with files on that branch, git stops and asks you to commit or stash them (`git stash`).',
+          meta: 'You walk along the runner into another room, and whatever is in your hands comes with you.',
+        },
+        tip: '`git switch` took over part of the old `git checkout`, which both switches branches and restores files.',
+        opts: [
+          {
+            cmd: 'git switch -c <branch>',
+            text: '— creates a new branch and switches to it at once.',
+            meta: 'You put up the nameplate and walk in.',
+          },
+          {
+            cmd: 'git switch -',
+            text: '— goes back to the previous branch.',
+            meta: 'Back to the room you just left.',
+          },
+          {
+            cmd: 'git switch --detach <commit>',
+            text: '— goes to a commit without a branch (detached HEAD) to have a look; new commits here are easy to lose.',
+            meta: 'You peek into the room from an old photo, but it’s no place to live.',
+          },
+        ],
         art: 'On the wall, a portrait of a parrot: of two perches, it sits on the upper one, the lower one is empty. Two open doors side by side lead into two identical rooms; a runner on the floor forks to both doors; the right door is yellow. A person strides from the left door into the right room, footprints on the runner lead from the left branch to the right one.',
       },
       clone: {
@@ -611,7 +778,7 @@ export default {
           },
           {
             cmd: 'git clone -b <branch> <url>',
-            text: '— (`--branch`) switches straight to that branch instead of the main one.',
+            text: '— switches straight to that branch instead of the main one.',
             meta: 'You walk straight into the room you need.',
           },
           {
@@ -635,7 +802,7 @@ export default {
         opts: [
           {
             cmd: 'git status -s',
-            text: '— (`--short`) one line per file; the left column is the index, the right one the working folder (`M` modified, `A` added, `??` untracked).',
+            text: '— one line per file; the left column is the index, the right one the working folder (`M` modified, `A` added, `??` untracked).',
             meta: 'The same overview, one line per thing.',
           },
           {
@@ -669,7 +836,7 @@ export default {
           },
           {
             cmd: 'git add -p',
-            text: "— (`--patch`) shows the changes in pieces (hunks) and asks about each one; doesn't offer new (untracked) files.",
+            text: "— shows the changes in pieces (hunks) and asks about each one; doesn't offer new (untracked) files.",
             meta: 'You go through the pile and put only what you need in the basket.',
           },
         ],
@@ -751,7 +918,7 @@ export default {
         opts: [
           {
             cmd: 'git diff --staged',
-            text: '— (`--cached`) the index against the last commit, i.e. what goes into the next commit.',
+            text: '— the index against the last commit, i.e. what goes into the next commit.',
             meta: 'You look into the basket before carrying it up to the attic.',
           },
           {

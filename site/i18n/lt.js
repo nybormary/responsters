@@ -525,6 +525,7 @@ export default {
     ],
     aboutTitle: 'Apie projektą',
     aboutText: 'Nepriklausomas Marynos Bortnyk QA projektas.',
+    gitLogo: 'Git logotipas:',
   },
   // "Tools and Read more": labels for data/http/links.js TOOLS, in the same order.
   tools: ['Chrome DevTools: Network skydelis', 'Firefox: Edit and Resend', 'Postman: užklausos siuntimas'],
@@ -536,12 +537,14 @@ export default {
       does: 'Ką daro',
       tip: 'Patarimas',
       opts: 'Parinktys',
+      file: 'Eilutės faile',
+      cmds: 'Komandos',
       careful: 'Atsargiai',
       conf: 'Dažnai painiojama su',
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
-      help: (c) => `${c} sąraše`,
+      help: (c) => `Skyrius ${c}`,
       // before `git help <command>`, the command's own manual
-      more: 'išsamiau',
+      manual: 'Dokumentacija git-scm.com (anglų k.)',
       danger: 'Pavojinga komanda',
       // heading of the outside links on a git card page
       links: 'Skaityti daugiau',
@@ -553,7 +556,7 @@ export default {
       lead: (date, n) =>
         `${n} git komandų, po vieną langelį per dieną nuo ${date} Praleistas dienas galima atidaryti vėliau.`,
       intro:
-        'Oficiali git dokumentacija pilna buitinių žodžių: kasdienės komandos ten vadinamos „porcelianu“ (porcelain), o viskas, kas veikia po jomis, – „santechnika“ (plumbing); nebaigti darbai paslepiami (`git stash`), sausos šakos apkarpomos (`git prune`), šiukšlės surenkamos (`git gc`), o ant svarbių daiktų užkabinama etiketė (`git tag`). Tai tapo git komandų mokymosi per asociacijas pagrindu: buitis ir naminiai gyvūnai, kuriuos rasi kiekvienoje kortelėje.',
+        'Oficiali Git™ dokumentacija pilna buitinių žodžių: kasdienės komandos ten vadinamos „porcelianu“ (porcelain), o viskas, kas veikia po jomis, – „santechnika“ (plumbing); nebaigti darbai paslepiami (`git stash`), sausos šakos apkarpomos (`git prune`), šiukšlės surenkamos (`git gc`), o ant svarbių daiktų užkabinama etiketė (`git tag`). Tai tapo git komandų mokymosi per asociacijas pagrindu: buitis ir naminiai gyvūnai, kuriuos rasi kiekvienoje kortelėje.',
       today: 'šiandien',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'pamiršot?',
@@ -571,21 +574,175 @@ export default {
     cards: {
       // Pictures ready (RSP-191, RSP-192): only their text for now; the other card texts come with RSP-200.
       init: {
+        title: 'Tuščias butas',
+        line: 'Pradėkime nuo švaraus lapo.',
+        move: '$ git init -b main',
+        hint: 'nauja saugykla su pagrindine šaka main',
+        does: {
+          text: 'Dabartiniame aplanke sukuria naują tuščią saugyklą (repository): paslėptą aplanką `.git`, kuriame git laikys visą istoriją. Aplanko failai lieka, kaip buvo; git jų dar neseka. Komitų dar nėra, todėl `git branch` nieko nerodo: šaka atsiras su pirmuoju komitu.',
+          meta: 'Naujas butas: sienos yra, baldų dar nėra, o pirmoji įeina katė.',
+        },
+        tip: 'Projektas jau yra GitHub ar kitur? Tada ne init, o `git clone <url>`: jis pats sukurs aplanką ir atneš visą istoriją.',
+        opts: [
+          {
+            cmd: 'git init',
+            text: '— nauja saugykla dabartiniame aplanke. Paleisti dar kartą esamoje saugykloje saugu: niekas neištrinama.',
+            meta: 'Kabini lentelę ant buto, kuriame jau gyveni, durų.',
+          },
+          {
+            cmd: 'git init <aplankas>',
+            text: '— sukuria tokio pavadinimo aplanką (jei jo dar nėra) ir jame saugyklą.',
+            meta: 'Pastatai naują butą ir iškart pakabini lentelę.',
+          },
+          {
+            cmd: 'git init -b main',
+            text: '— nustato pirmosios šakos pavadinimą; be jo git 2.43 naudoja `master` ir parodo patarimą, kaip tai pakeisti.',
+            meta: 'Kaip pavadinti pirmąjį kambarį, sprendi tu.',
+          },
+        ],
         art: 'Pilka katė stovi ant plačiai atvertų durų slenksčio ir pirmoji įkelia leteną į tuščią butą: baldų nėra, ant sienos tik tuščias rėmelis. Už jos žmogus su lagaminais, ant vieno lemputės lipdukas. Prie durų viena nauja lentelė su vardu.',
       },
       gitignore: {
+        title: 'Kečupas po nosimi',
+        line: 'Mama, kur kečupas?',
+        move: '$ git check-ignore -v <failas>',
+        hint: 'kuri taisyklė slepia šį failą',
+        does: {
+          text: 'Ne komanda, o failas saugyklos šakniniame aplanke: šablonų sąrašas (`*.log`, `node_modules/`, `.env`), kurių git nerodo tarp nesekamų (untracked) ir neprideda per `git add .`. Veikia tik failams, kurių git dar neseka; patį `.gitignore` komituoja, kad taisyklės būtų bendros.',
+          meta: 'Sąrašas ant šaldytuvo durų: ko nepastebėti, net jei stovi tiesiai prieš akis.',
+        },
+        tip: 'Failas jau komite? `.gitignore` jo nepaslėps: pirma `git rm --cached <failas>` — git nustos jį sekti, o kopija diske liks.',
+        file: [
+          {
+            line: '*.log',
+            text: 'Šablonas: visi failai su šia galūne bet kuriame aplanke; `/` pabaigoje (`build/`) — tik aplankai.',
+            meta: 'Nepastebėti nė vieno tuščio butelio, kad ir kur stovėtų.',
+          },
+          {
+            line: '!keep.log',
+            text: '`!` pradžioje sugrąžina failą, kurį paslėpė aukščiau esanti taisyklė.',
+            meta: 'Išskyrus šitą — jį palik.',
+          },
+        ],
+        opts: [
+          {
+            cmd: 'git add -f <failas>',
+            text: '— prideda failą nepaisant `.gitignore`; nuo tada git jį seka.',
+            meta: 'Sąmoningai dedi į krepšį tai, ko paprastai nepastebi.',
+          },
+        ],
         art: 'Ant sienos – katės portretas: ji sėdi nugara į savo dubenėlį su žuvyte. Žmogus stovi prie atviro šaldytuvo, kasosi pakaušį ir galvoja, kur kečupas, o kečupo butelis stovi tiesiai prieš jį ant vidurinės lentynos. Ant šaldytuvo durų po magnetu kabo sąrašas.',
       },
       restore: {
+        title: 'Kaip nuotraukoje',
+        line: 'Atsargiai, mama tvarkosi — už pasekmes neatsakome',
+        move: '$ git restore --staged <failas>',
+        hint: 'atgal iš krepšio, pakeitimai faile lieka',
+        does: {
+          text: 'Grąžina failą darbiniame aplanke į būseną indekse, t. y. išmeta dar nepridėtus pakeitimus. `git restore --staged <failas>` veikia atvirkščiai: išima failą iš indekso, o darbinį aplanką palieka, kaip yra. Komitų istorijos nekeičia.',
+          meta: 'Mama sutvarko kambarį kaip nuotraukoje: kas nebaigta, dingsta.',
+        },
+        tip: 'Kelias privalomas: `git restore .` atkuria visą aplanką. Anksčiau tai darydavo per `git checkout -- <failas>`.',
+        opts: [
+          {
+            cmd: 'git restore <failas>',
+            text: '— išmeta darbinio aplanko pakeitimus, kurių dar nėra indekse.',
+            meta: 'Kas išmėtyta, grįžta į lentyną.',
+          },
+          {
+            cmd: 'git restore --staged <failas>',
+            text: '— išima failą iš indekso (unstage); pakeitimai darbiniame aplanke lieka.',
+            meta: 'Išimi daiktą iš krepšio, bet nepadedi jo į vietą.',
+          },
+          {
+            cmd: 'git restore --source <komitas> <failas>',
+            text: '— paima failą iš nurodyto komito, pvz., `HEAD~1`.',
+            meta: 'Tvarkai pagal senesnę nuotrauką.',
+          },
+        ],
+        careful: [
+          'Išmesti pakeitimai dingsta visam laikui: jų nėra nei istorijoje, nei `git reflog`.',
+          'Prieš `git restore` pažiūrėk `git diff`. Jei gaila išmesti, pirma `git stash`.',
+        ],
         art: 'Ant sienos – triušio, sugraužusio šlepetę, portretas. Mama iškėlusi laiko tvarkingos lentynos nuotrauką, „kaip buvo“, ir ryžtingai šluoja nuo grindų į semtuvėlį nebaigtą dėlionę, detalės skrenda į semtuvėlį. Kambario tarpduryje vaikas iškeltomis rankomis rėkia. Dešinėje lentyna jau kaip nuotraukoje: tvarkingos dėžės, tarp jų dėlionės dėžutė.',
       },
       stash: {
+        title: 'Svečiai prie durų',
+        line: 'Greitai susitvarkysiu!',
+        move: '$ git stash -u',
+        hint: 'paslėpti ir naujus failus',
+        does: {
+          text: 'Paslepia nekomituotus sekamų failų pakeitimus (ir indekse, ir darbiniame aplanke) atskiroje saugykloje ir grąžina darbinį aplanką į paskutinio komito būseną. Vėliau juos galima išsitraukti, net kitoje šakoje.',
+          meta: 'Skambina į duris: nebaigtus darbus sukiši į spintą, kad kambaryje būtų tvarkinga.',
+        },
+        tip: 'Paslėpimų gali būti keli: `git stash list` rodo visus, `stash@{0}` — naujausias.',
+        opts: [
+          {
+            cmd: 'git stash pop',
+            text: '— grąžina paskutinį paslėpimą į darbinį aplanką ir pašalina jį iš sąrašo; `git stash apply` grąžina, bet palieka sąraše.',
+            meta: 'Svečiai išėjo — išsiimi megztinį iš spintos.',
+          },
+          {
+            cmd: 'git stash -u',
+            text: '— paslepia ir naujus failus, kurių git dar neseka. Paprastas `git stash` palieka juos darbiniame aplanke; failus iš `.gitignore` paslepia tik `git stash -a`.',
+            meta: 'Į spintą keliauja ir tai, kas dar neturi savo vietos.',
+          },
+          {
+            cmd: 'git stash -m "…"',
+            text: '— paslėpimas su aprašu, kad vėliau rastum jį `git stash list`.',
+            meta: 'Raštelis ant siūlų kamuolio: kas tai ir kam.',
+          },
+        ],
         art: 'Ant sienos – žiurkėno prikimštais skruostais portretas. Kol skambina į duris, žmogus ant pirštų galiukų skubiai kemša megztinį ir siūlų kamuolį į viršutinę spintelę, kurios durelės pravertos į mus; ant vidurinės lentynos stovi vienodi puodeliai.',
       },
       branch: {
+        title: 'Nauja lentelė',
+        line: 'O, čia bus mano kambarys.',
+        move: '$ git branch -d <šaka>',
+        hint: 'pašalinti jau sulietą šaką',
+        does: {
+          text: 'Be argumentų rodo vietines šakas, dabartinę pažymi `*`. Su pavadinimu sukuria naują šaką ant dabartinio komito, bet į ją neperjungia: tam yra `git switch`.',
+          meta: 'Pakabini lentelę ant naujo kambario durų, bet lieki ten pat.',
+        },
+        tip: 'Sukūrėte šaką, o komitai vis tiek eina į senąją? `git branch` — tik lentelė. Norint pereiti, reikia `git switch <šaka>`, o sukurti ir iškart pereiti — `git switch -c <šaka>`.',
+        opts: [
+          {
+            cmd: 'git branch -a',
+            text: '— rodo ir nuotolines šakas (`remotes/origin/…`).',
+            meta: 'Lentelės ant visų durų, ir kaimynų.',
+          },
+          { cmd: 'git branch -m <naujas pavadinimas>', text: '— pervadina dabartinę šaką.', meta: 'Perrašai lentelę.' },
+          {
+            cmd: 'git branch -d <šaka>',
+            text: '— ištrina šaką, jei ji jau sulieta; nesulietą ištrina tik `git branch -D <šaka>`.',
+            meta: 'Nuimi lentelę nuo kambario, iš kurio viskas jau išnešta.',
+          },
+        ],
         art: 'Ant sienos – papūgėlės ant laktos portretas. Dvejos atviros durys greta veda į du vienodus kambarius su tokiu pačiu foteliu ir langu; takelis ant grindų išsišakoja į abejas duris. Prie kairiųjų durų sena lentelė; žmogus kabina prie dešiniųjų naują geltoną lentelę.',
       },
       switch: {
+        title: 'Naujas kambarys',
+        line: 'Laikas persikraustyti į kitą kambarį',
+        move: '$ git switch -c <šaka>',
+        hint: 'sukurti šaką ir iškart į ją pereiti',
+        does: {
+          text: 'Perjungia į kitą šaką: darbinis aplankas ir indeksas tampa tokie, kaip jos paskutiniame komite. Nekomituoti pakeitimai keliauja kartu; jei jie kertasi su tos šakos failais, git sustoja ir prašo juos komituoti arba paslėpti (`git stash`).',
+          meta: 'Takeliu eini į kitą kambarį, ir tai, ką laikai rankose, keliauja kartu.',
+        },
+        tip: '`git switch` perėmė dalį senojo `git checkout`, kuris moka ir perjungti šakas, ir atkurti failus.',
+        opts: [
+          {
+            cmd: 'git switch -c <šaka>',
+            text: '— sukuria naują šaką ir iškart į ją perjungia.',
+            meta: 'Pakabini lentelę ir įeini.',
+          },
+          { cmd: 'git switch -', text: '— grįžta į ankstesnę šaką.', meta: 'Atgal į ankstesnį kambarį.' },
+          {
+            cmd: 'git switch --detach <komitas>',
+            text: '— pereina į komitą be šakos (detached HEAD), kad apsižiūrėtum; naujus komitus čia lengva pamesti.',
+            meta: 'Žvilgteli į kambarį iš senos nuotraukos, bet gyventi ten neverta.',
+          },
+        ],
         art: 'Ant sienos – papūgėlės portretas: iš dviejų laktų ji tupi ant viršutinės, apatinė tuščia. Dvejos atviros durys greta veda į du vienodus kambarius; takelis ant grindų išsišakoja į abejas duris; dešiniosios durys geltonos. Žmogus plačiu žingsniu eina nuo kairiųjų durų į dešinįjį kambarį, pėdsakai ant takelio veda iš kairiosios šakos į dešiniąją.',
       },
       clone: {
@@ -607,7 +764,7 @@ export default {
           },
           {
             cmd: 'git clone -b <šaka> <url>',
-            text: '— (`--branch`) iškart persijungia į nurodytą šaką vietoj pagrindinės.',
+            text: '— iškart persijungia į nurodytą šaką vietoj pagrindinės.',
             meta: 'Įeini iškart į reikiamą kambarį.',
           },
           {
@@ -631,7 +788,7 @@ export default {
         opts: [
           {
             cmd: 'git status -s',
-            text: '— (`--short`) viena eilutė vienam failui; kairysis stulpelis – indeksas, dešinysis – darbinis aplankas (`M` pakeistas, `A` pridėtas, `??` untracked).',
+            text: '— viena eilutė vienam failui; kairysis stulpelis – indeksas, dešinysis – darbinis aplankas (`M` pakeistas, `A` pridėtas, `??` untracked).',
             meta: 'Ta pati apžvalga, viena eilutė vienam daiktui.',
           },
           {
@@ -665,7 +822,7 @@ export default {
           },
           {
             cmd: 'git add -p',
-            text: '— (`--patch`) rodo pakeitimus gabalais (hunks) ir klausia apie kiekvieną; naujų (untracked) failų nesiūlo.',
+            text: '— rodo pakeitimus gabalais (hunks) ir klausia apie kiekvieną; naujų (untracked) failų nesiūlo.',
             meta: 'Perrenki krūvą ir į krepšį dedi tik tai, ko reikia.',
           },
         ],
@@ -747,7 +904,7 @@ export default {
         opts: [
           {
             cmd: 'git diff --staged',
-            text: '— (`--cached`) indeksas palyginti su paskutiniu commit, t. y. tai, kas pateks į kitą commit.',
+            text: '— indeksas palyginti su paskutiniu commit, t. y. tai, kas pateks į kitą commit.',
             meta: 'Pažvelgi į krepšį, prieš nešdamas jį į palėpę.',
           },
           {
