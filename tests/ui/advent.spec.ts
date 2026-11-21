@@ -301,6 +301,28 @@ test(
   },
 );
 
+// ── 446185bd ──────────────────────────────────────────────────────────────────────────────────────
+// RSP-219: a dashed note above the group legend explains why the cards are household (Maryna's text): in the page
+// language, with the four git commands as code, exactly as wide as the wall.
+
+test(
+  'The advent wall explains why the cards are household: the note above the legend, as wide as the wall @T446185bd',
+  { tag: [TAG.git] },
+  async ({ adventWall, lang, texts }) => {
+    await adventWall.open(lang);
+    await test.step('the note shows the text of the page language, with the commands as code', async () => {
+      await expect(adventWall.intro).toHaveText(texts.git.wall.intro.replaceAll('`', ''));
+      await expect(adventWall.intro.locator('code')).toHaveText(['git stash', 'git prune', 'git gc', 'git tag']);
+    });
+    await test.step('left and right edges match the wall', async () => {
+      const note = await adventWall.intro.boundingBox();
+      const wall = await adventWall.wall.boundingBox();
+      expect(Math.abs(note!.x - wall!.x), 'left edge').toBeLessThanOrEqual(1);
+      expect(Math.abs(note!.x + note!.width - (wall!.x + wall!.width)), 'right edge').toBeLessThanOrEqual(1);
+    });
+  },
+);
+
 // ── cd1fdd02 ────────────────────────────────────────────────────────────────────────────────────
 // The home page as a build of 30 November 2026 (advent start 1 December) wrote it: the served site may already be past
 // its own start (previews start earlier), and the page's script only ever opens the enclosure, never closes it.

@@ -76,6 +76,7 @@ export const TID = {
   doorFlag: 'door-flag',
   adventToday: 'advent-today',
   adventLive: 'advent-live',
+  adventIntro: 'advent-intro', // why the cards are household, above the legend (RSP-219)
 
   // Home page /<lang>/ (RSP-156): glossary terms home page, hero, zoo map, enclosure, pavilion, about
   homePage: 'home-page',

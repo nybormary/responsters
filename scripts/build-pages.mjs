@@ -18,7 +18,7 @@ import { CONF, PAIRS } from '../site/data/http/traps.js';
 import { NEWS } from '../site/data/news.js';
 import { GIT, EGG, WALL, TILT } from '../site/data/git/cards.js';
 import { GROUPS } from '../site/data/git/groups.js';
-import { gitCardBody, gitMain, gitSide, groupIcon } from '../site/js/gitcard.js';
+import { gitCardBody, gitMain, gitSide, groupIcon, inline } from '../site/js/gitcard.js';
 import { LOCALES, LANG_NAMES } from '../site/i18n/index.js';
 import en from '../site/i18n/en.js';
 import { fill } from '../site/i18n/fill.js';
@@ -473,6 +473,7 @@ function gitWallPage(lang, tx) {
       <main class="advent-page" data-testid="advent-page">
         <h1>${esc(w.title)}</h1>
         <p class="advent-lead">${esc(lead)}</p>
+        <p class="advent-intro" data-testid="advent-intro">${inline(w.intro)}</p>
         ${wallLegend(tx)}
         <div class="today-slot" data-testid="advent-today-slot"></div>
         <ul class="wall" data-testid="advent-wall" data-flag-today="${esc(w.today)}" data-flag-missed="${esc(w.missed)}">
