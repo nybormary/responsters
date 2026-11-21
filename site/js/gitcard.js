@@ -108,8 +108,9 @@ export function gitMain(g, tx) {
 }
 
 /**
- * The side column: "Careful" first on danger cards (careful = [paragraphs, the first in bold]; moved here from the
- * main column in the review of 2026-11-20, at the top so a phone shows it right after the options), then "Often
+ * The side column: "Careful" first on every card that has careful texts (careful = [paragraphs, the first in bold];
+ * moved here from the main column in the review of 2026-11-20, at the top so a phone shows it right after the options;
+ * since 2026-11-21 also on calm cards with a dangerous option, e.g. stash drop, RSP-200 AC5), then "Often
  * confused with" (commands only; a command with its own card links to it); then the tip (moved here from the main
  * column to make it lighter, RSP-200 review 2026-11-16) and "Read more", the same on every card (rule, reviews of
  * 2026-11-20): outside links from g.links (label per language, English when missing; mark: 'github' = GitHub's own
@@ -135,13 +136,12 @@ export function gitSide(g, tx, href, lang) {
   // The git help texts stay English on every page (git help is English): marked for screen readers.
   const en = lang === 'en' ? '' : ' lang="en"';
   const cmd = `<code>git help${h.list ? ' ' + esc(h.list) : ''}</code>`;
-  const careful =
-    g.danger && t.careful?.length
-      ? `<div class="g-careful" data-testid="git-careful"><h2>${esc(ui.careful)}</h2>${t.careful
-          .map((p, i) => `<p>${i ? inline(p) : `<b>${inline(p)}</b>`}</p>`)
-          .join('')}</div>
+  const careful = t.careful?.length
+    ? `<div class="g-careful" data-testid="git-careful"><h2>${esc(ui.careful)}</h2>${t.careful
+        .map((p, i) => `<p>${i ? inline(p) : `<b>${inline(p)}</b>`}</p>`)
+        .join('')}</div>
               `
-      : '';
+    : '';
   return `${careful}${
     conf
       ? `<h2>${esc(ui.conf)}</h2>

@@ -693,6 +693,10 @@ export default {
             meta: 'Raštelis ant siūlų kamuolio: kas tai ir kam.',
           },
         ],
+        careful: [
+          '`git stash drop` ir `git stash clear` ištrina paslėpimus visam laikui: jų nėra `git reflog`.',
+          'Prieš trinant pažiūrėk, kas viduje: `git stash show -p`. Ką tik ištrinta? `git stash drop` parašo paslėpimo hash, o `git stash apply <hash>` dar jį grąžins.',
+        ],
         art: 'Ant sienos – žiurkėno prikimštais skruostais portretas. Kol skambina į duris, žmogus ant pirštų galiukų skubiai kemša megztinį ir siūlų kamuolį į viršutinę spintelę, kurios durelės pravertos į mus; ant vidurinės lentynos stovi vienodi puodeliai.',
       },
       branch: {
@@ -742,6 +746,10 @@ export default {
             text: '— pereina į komitą be šakos (detached HEAD), kad apsižiūrėtum; naujus komitus čia lengva pamesti.',
             meta: 'Žvilgteli į kambarį iš senos nuotraukos, bet gyventi ten neverta.',
           },
+        ],
+        careful: [
+          '`git switch --discard-changes <šaka>` ir `git switch -f <šaka>` išmeta nekomituotus pakeitimus visam laikui: jų nėra nei istorijoje, nei `git reflog`.',
+          'Be šių parinkčių git pats sustoja, jei pakeitimai trukdo. Jei gaila išmesti, pirma komituok arba `git stash`.',
         ],
         art: 'Ant sienos – papūgėlės portretas: iš dviejų laktų ji tupi ant viršutinės, apatinė tuščia. Dvejos atviros durys greta veda į du vienodus kambarius; takelis ant grindų išsišakoja į abejas duris; dešiniosios durys geltonos. Žmogus plačiu žingsniu eina nuo kairiųjų durų į dešinįjį kambarį, pėdsakai ant takelio veda iš kairiosios šakos į dešiniąją.',
       },

@@ -690,6 +690,10 @@ export default {
             meta: 'En seddel på garnnøglet: hvad det er, og hvorfor.',
           },
         ],
+        careful: [
+          '`git stash drop` og `git stash clear` sletter stashes for altid: de findes ikke i `git reflog`.',
+          'Kig indenfor, før du sletter: `git stash show -p`. Lige slettet? `git stash drop` skriver stashens hash, og `git stash apply <hash>` henter den stadig tilbage.',
+        ],
         art: 'På væggen et portræt af en hamster med fyldte kinder. Mens det ringer på døren, stopper en person på tæer hurtigt en sweater og et garnnøgle ind i det øverste skab, hvis låge står åben mod os; på den midterste hylde står ens krus.',
       },
       branch: {
@@ -747,6 +751,10 @@ export default {
             text: '— går til et commit uden gren (detached HEAD) for at kigge; nye commits her går let tabt.',
             meta: 'Du kigger ind i værelset fra et gammelt billede, men der skal man ikke bo.',
           },
+        ],
+        careful: [
+          '`git switch --discard-changes <gren>` og `git switch -f <gren>` smider ikke-committede ændringer væk for altid: de findes hverken i historikken eller i `git reflog`.',
+          'Uden disse valgmuligheder stopper git selv, når ændringerne står i vejen. Er det synd at smide væk, så commit først eller `git stash`.',
         ],
         art: 'På væggen et portræt af en papegøje: af to pinde sidder den på den øverste, den nederste er tom. To åbne døre side om side fører ind til to ens rum; en løber på gulvet deler sig til begge døre; den højre dør er gul. En person går med lange skridt fra den venstre dør ind i det højre rum, fodspor på løberen fører fra venstre gren til højre.',
       },

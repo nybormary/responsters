@@ -37,7 +37,7 @@ the front line has a kind (`RUBRICS.<rubric>.front`).
 ## Git-only data
 
 `site/data/git/cards.js`, one entry per card in advent order: `id`, `name`, `group`, `day` (advent day 1, 2, … with no gaps; 25 days since init joined on 2026-11-17; a card added after the season has no day and opens the day after the advent),
-`danger` (the brick-red danger mark: restore, reset, rebase, push). The danger mark is a flag, not a group, because
+`danger` (the brick-red danger mark: the command changes the repository in a way that can't be undone — restore, reset, push; a calm card with a dangerous option, e.g. stash drop, gets only "Careful"). The danger mark is a flag, not a group, because
 it appears in several groups. `scripts/check-locales.mjs` checks the git data: advent days 1, 2, … once each, the wall (`WALL`, `TILT`) hangs every advent day once, unique ids, known
 groups, never two danger marks on neighbouring days.
 

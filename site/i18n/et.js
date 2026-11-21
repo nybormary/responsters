@@ -691,6 +691,10 @@ export default {
             meta: 'Silt lõngakerale: mis see on ja milleks.',
           },
         ],
+        careful: [
+          '`git stash drop` ja `git stash clear` kustutavad peidikud jäädavalt: neid pole `git reflog`-is.',
+          'Enne kustutamist vaata sisse: `git stash show -p`. Just kustutatud? `git stash drop` trükib peidiku räsi ja `git stash apply <räsi>` toob selle veel tagasi.',
+        ],
         art: 'Seinal on portree täis põskedega hamstrist. Kui uksekell heliseb, toppib inimene kikivarvul kiiruga kampsuni ja lõngakera ülemisse kappi, mille uks on meie poole lahti; keskmisel riiulil seisavad ühesugused kruusid.',
       },
       branch: {
@@ -744,6 +748,10 @@ export default {
             text: '— läheb kommitile ilma haruta (detached HEAD), et ringi vaadata; uued kommitid lähevad siin kergesti kaotsi.',
             meta: 'Piilud vana foto tuppa, aga elada seal ei tasu.',
           },
+        ],
+        careful: [
+          '`git switch --discard-changes <haru>` ja `git switch -f <haru>` viskavad kommitimata muudatused jäädavalt ära: neid pole ei ajaloos ega `git reflog`-is.',
+          'Ilma nende valikuteta peatub git ise, kui muudatused segavad. Kui on kahju ära visata, siis kõigepealt kommiti või `git stash`.',
         ],
         art: 'Seinal on portree papagoist: kahest õrrest istub ta ülemisel, alumine on tühi. Kaks kõrvuti avatud ust viivad kahte ühesugusesse tuppa; põrandal olev vaip hargneb mõlema ukse juurde; parem uks on kollane. Inimene astub pika sammuga vasaku ukse juurest paremasse tuppa, jäljed vaibal viivad vasakult harult paremale.',
       },

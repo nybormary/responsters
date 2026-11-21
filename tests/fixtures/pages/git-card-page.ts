@@ -55,7 +55,8 @@ export class GitCardPage {
     return this.root.getByTestId(TID.gitDanger);
   }
 
-  /** The "Careful" box in the main column (danger cards with texts only). */
+  /** The "Careful" box at the top of the side column (every card with careful texts: danger cards and calm cards with a
+   * dangerous option, RSP-200 AC5). */
   get careful(): Locator {
     return this.root.getByTestId(TID.gitCareful);
   }

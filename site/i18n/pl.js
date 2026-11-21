@@ -692,6 +692,10 @@ export default {
             meta: 'Karteczka na kłębku: co to i po co.',
           },
         ],
+        careful: [
+          '`git stash drop` i `git stash clear` usuwają schowki na dobre: nie ma ich w `git reflog`.',
+          'Przed usunięciem zajrzyj do środka: `git stash show -p`. Właśnie usunięty? `git stash drop` wypisuje hash schowka, a `git stash apply <hash>` jeszcze go przywróci.',
+        ],
         art: 'Na ścianie portret chomika z wypchanymi policzkami. Gdy dzwoni dzwonek do drzwi, człowiek na palcach w pośpiechu wpycha sweter i kłębek włóczki do górnej szafki z drzwiczkami uchylonymi w naszą stronę; na środkowej półce stoją jednakowe kubki.',
       },
       branch: {
@@ -745,6 +749,10 @@ export default {
             text: '— przechodzi na commit bez gałęzi (detached HEAD), żeby się rozejrzeć; nowe commity łatwo tu zgubić.',
             meta: 'Zaglądasz do pokoju ze starego zdjęcia, ale mieszkać tam nie warto.',
           },
+        ],
+        careful: [
+          '`git switch --discard-changes <gałąź>` i `git switch -f <gałąź>` wyrzucają niezacommitowane zmiany na dobre: nie ma ich ani w historii, ani w `git reflog`.',
+          'Bez tych opcji git sam się zatrzymuje, jeśli zmiany przeszkadzają. Jeśli szkoda wyrzucać, najpierw zacommituj albo `git stash`.',
         ],
         art: 'Na ścianie portret papużki: z dwóch drążków siedzi na górnym, dolny jest pusty. Dwoje otwartych drzwi obok siebie prowadzi do dwóch jednakowych pokoi; chodnik na podłodze rozwidla się do obojga drzwi; prawe drzwi są żółte. Człowiek dużym krokiem przechodzi od lewych drzwi do prawego pokoju, ślady na chodniku prowadzą z lewej gałęzi na prawą.',
       },
