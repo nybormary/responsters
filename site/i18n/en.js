@@ -540,10 +540,12 @@ export default {
       does: 'What it does',
       tip: 'Tip',
       opts: 'Options',
+      file: 'Lines in the file',
+      cmds: 'Commands',
       careful: 'Careful',
       conf: 'Often confused with',
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
-      help: (c) => `In ${c}`,
+      help: (c) => `Section in ${c}`,
       // before `git help <command>`, the command's own manual
       // the command's manual on git-scm.com (2026-11-20): in the page language where git-scm.com has it, else English
       manual: 'Documentation on git-scm.com',
@@ -558,7 +560,7 @@ export default {
       lead: (date, n) => `${n} git commands, one door a day from ${date}. Missed days can be opened later.`,
       // why the cards are household (RSP-219, Maryna's text 2026-11-21; the four examples suggested by Claude)
       intro:
-        'Git’s own documentation is full of household words: the everyday commands are called “porcelain”, and everything that works beneath them is “plumbing”; unfinished work goes into a stash (`git stash`), dead branches get pruned (`git prune`), garbage gets collected (`git gc`), and something important gets a tag (`git tag`). That became the basis for learning git commands by association: household scenes and pets you can find on every card.',
+        'The official Git™ documentation is full of household words: the everyday commands are called “porcelain”, and everything that works beneath them is “plumbing”; unfinished work goes into a stash (`git stash`), dead branches get pruned (`git prune`), garbage gets collected (`git gc`), and something important gets a tag (`git tag`). That became the basis for learning git commands by association: household scenes and pets you can find on every card.',
       today: 'today',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'forgot?',
@@ -616,17 +618,19 @@ export default {
           meta: 'The list on the fridge door: what not to notice, even if it stands right in front of you.',
         },
         tip: 'Already committed? `.gitignore` won’t hide it: first `git rm --cached <file>` — git stops tracking it and the copy on disk stays.',
-        opts: [
+        file: [
           {
-            cmd: '*.log',
-            text: '— a pattern: every file with this ending in any folder; a trailing `/` (`build/`) means folders only.',
+            line: '*.log',
+            text: 'A pattern: every file with this ending in any folder; a trailing `/` (`build/`) means folders only.',
             meta: 'Don’t notice any empty bottle, wherever it stands.',
           },
           {
-            cmd: '!keep.log',
-            text: '— a leading `!` brings back a file that a rule above hid.',
+            line: '!keep.log',
+            text: 'A leading `!` brings back a file that a rule above hid.',
             meta: 'Except this one — keep it.',
           },
+        ],
+        opts: [
           {
             cmd: 'git add -f <file>',
             text: '— adds a file despite `.gitignore`; from then on git tracks it.',

@@ -147,6 +147,48 @@
   border-radius: 12px;
   margin-top: 8px;
 }
+/* .gitignore: a piece of the file, name on top, explanation under each line (variant B, 2026-11-21). */
+.g-file {
+  margin: 0;
+  border: 2px solid #2b211a;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fffaf2;
+}
+.g-file figcaption {
+  padding: 6px 14px;
+  background: #2b211a;
+  color: #fffaf2;
+}
+.git-page .g-file figcaption code,
+.git-page .g-file .g-file-line {
+  background: none;
+  padding: 0;
+  border: 0;
+}
+.git-page .g-file figcaption code {
+  color: inherit;
+}
+.g-file ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.g-file li {
+  padding: 10px 14px 12px;
+}
+.g-file li + li {
+  border-top: 1px dashed #b8a48c;
+}
+.g-file p {
+  margin: 4px 0 0;
+}
+.git-page .g-file .g-file-line {
+  display: block;
+  font-weight: 700;
+  font-size: 16px;
+  color: #2b211a;
+}
 .g-careful {
   margin-top: 22px;
   padding: 14px 16px;
@@ -182,8 +224,10 @@
   font-size: 14px;
   color: var(--muted);
 }
-/* "Read more" (2026-11-20): "In git help: <section>" and the command are items like the links, the same rhythm. */
+/* "Read more" (2026-11-20, 21): "Section in git help: <section>", the command and its git help line are items like
+   the links, the same rhythm. */
 .git-page .links .g-help-item,
+.git-page .links .g-help-name,
 .git-page .links .g-help-cmd {
   padding: 6px 0;
 }

@@ -42,7 +42,8 @@ import { Axe } from './pages/axe';
 import { Network } from './pages/network';
 import { Preloads } from './pages/preloads';
 import { D } from '../../site/data/http/cards.js';
-import { GIT, EGG } from '../../site/data/git/cards.js';
+import { GIT, EGG, ABOUT } from '../../site/data/git/cards.js';
+import { GROUPS } from '../../site/data/git/groups.js';
 
 // What the site keeps in localStorage (site/js/store.js adds the prefix "httpon." to every key).
 export type Seed = {
@@ -238,8 +239,14 @@ export type GitCard = {
   art?: string;
   conf?: string[];
   links?: { u: string; label: Record<string, string>; mark?: string }[];
+  help?: { list: string; section: string };
 };
 export const GIT_CARDS: GitCard[] = GIT;
+/** Where `git help` lists a card (its own list and section, or its group's section in plain `git help`) and the
+ *  command's line there, English on every page (2026-11-21). */
+export const gitHelpOf = (g: GitCard): { list: string; section: string } =>
+  g.help ?? { list: '', section: (GROUPS as Record<string, { help: string }>)[g.group].help };
+export const GIT_ABOUT: Record<string, string> = ABOUT;
 export const GIT_EGG: { src: string; alt: string } = EGG;
 /** Days of the advent: the cards that have a day (cards added after the season have none). */
 export const ADVENT_DAYS: number = GIT.filter((g: { day?: number }) => g.day).length;

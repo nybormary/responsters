@@ -94,6 +94,14 @@ export class GitCardPage {
     return this.root.getByTestId(TID.gitOpt);
   }
 
+  /** .gitignore: the piece of the file (name in its caption) and its lines, each with its explanation. */
+  get file(): Locator {
+    return this.root.getByTestId(TID.gitFile);
+  }
+  get fileLines(): Locator {
+    return this.root.getByTestId(TID.gitFileLine);
+  }
+
   /** The tip, in the side column (moved there in the RSP-200 review). */
   get tip(): Locator {
     return this.root.getByTestId(TID.gitTip);
@@ -119,6 +127,10 @@ export class GitCardPage {
   /** In "Read more": the terminal command `git help <id>` and the link to its manual on git-scm.com. */
   get helpMore(): Locator {
     return this.root.getByTestId(TID.gitHelpMore);
+  }
+  /** The command's line from git help, in English on every page (`init — Create an empty Git repository…`). */
+  get helpName(): Locator {
+    return this.root.getByTestId(TID.gitHelpName);
   }
   get manual(): Locator {
     return this.root.getByTestId(TID.gitManual);

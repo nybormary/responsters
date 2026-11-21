@@ -537,10 +537,12 @@ export default {
       does: 'Ką daro',
       tip: 'Patarimas',
       opts: 'Parinktys',
+      file: 'Eilutės faile',
+      cmds: 'Komandos',
       careful: 'Atsargiai',
       conf: 'Dažnai painiojama su',
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
-      help: (c) => `${c} sąraše`,
+      help: (c) => `Skyrius ${c}`,
       // before `git help <command>`, the command's own manual
       manual: 'Dokumentacija git-scm.com (anglų k.)',
       danger: 'Pavojinga komanda',
@@ -554,7 +556,7 @@ export default {
       lead: (date, n) =>
         `${n} git komandų, po vieną langelį per dieną nuo ${date} Praleistas dienas galima atidaryti vėliau.`,
       intro:
-        'Oficiali git dokumentacija pilna buitinių žodžių: kasdienės komandos ten vadinamos „porcelianu“ (porcelain), o viskas, kas veikia po jomis, – „santechnika“ (plumbing); nebaigti darbai paslepiami (`git stash`), sausos šakos apkarpomos (`git prune`), šiukšlės surenkamos (`git gc`), o ant svarbių daiktų užkabinama etiketė (`git tag`). Tai tapo git komandų mokymosi per asociacijas pagrindu: buitis ir naminiai gyvūnai, kuriuos rasi kiekvienoje kortelėje.',
+        'Oficiali Git™ dokumentacija pilna buitinių žodžių: kasdienės komandos ten vadinamos „porcelianu“ (porcelain), o viskas, kas veikia po jomis, – „santechnika“ (plumbing); nebaigti darbai paslepiami (`git stash`), sausos šakos apkarpomos (`git prune`), šiukšlės surenkamos (`git gc`), o ant svarbių daiktų užkabinama etiketė (`git tag`). Tai tapo git komandų mokymosi per asociacijas pagrindu: buitis ir naminiai gyvūnai, kuriuos rasi kiekvienoje kortelėje.',
       today: 'šiandien',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'pamiršot?',
@@ -610,17 +612,19 @@ export default {
           meta: 'Sąrašas ant šaldytuvo durų: ko nepastebėti, net jei stovi tiesiai prieš akis.',
         },
         tip: 'Failas jau komite? `.gitignore` jo nepaslėps: pirma `git rm --cached <failas>` — git nustos jį sekti, o kopija diske liks.',
-        opts: [
+        file: [
           {
-            cmd: '*.log',
-            text: '— šablonas: visi failai su šia galūne bet kuriame aplanke; `/` pabaigoje (`build/`) — tik aplankai.',
+            line: '*.log',
+            text: 'Šablonas: visi failai su šia galūne bet kuriame aplanke; `/` pabaigoje (`build/`) — tik aplankai.',
             meta: 'Nepastebėti nė vieno tuščio butelio, kad ir kur stovėtų.',
           },
           {
-            cmd: '!keep.log',
-            text: '— `!` pradžioje sugrąžina failą, kurį paslėpė aukščiau esanti taisyklė.',
+            line: '!keep.log',
+            text: '`!` pradžioje sugrąžina failą, kurį paslėpė aukščiau esanti taisyklė.',
             meta: 'Išskyrus šitą — jį palik.',
           },
+        ],
+        opts: [
           {
             cmd: 'git add -f <failas>',
             text: '— prideda failą nepaisant `.gitignore`; nuo tada git jį seka.',

@@ -143,3 +143,33 @@ export const EGG = {
 
 // Lookup by id: BY_ID.stash → the stash card.
 export const BY_ID = Object.fromEntries(GIT.map((g) => [g.id, g]));
+
+// The command's line from `git help` (its NAME line, git 2.43), shown in English in every language under "Read more"
+// (Maryna, 2026-11-21): git help itself is English, so the reader recognises the line in the terminal.
+export const ABOUT = {
+  init: 'Create an empty Git repository or reinitialize an existing one',
+  status: 'Show the working tree status',
+  add: 'Add file contents to the index',
+  commit: 'Record changes to the repository',
+  log: 'Show commit logs',
+  diff: 'Show changes between commits, commit and working tree, etc',
+  clone: 'Clone a repository into a new directory',
+  restore: 'Restore working tree files',
+  stash: 'Stash the changes in a dirty working directory away',
+  branch: 'List, create, or delete branches',
+  switch: 'Switch branches',
+  merge: 'Join two or more development histories together',
+  fetch: 'Download objects and refs from another repository',
+  pull: 'Fetch from and integrate with another repository or a local branch',
+  push: 'Update remote refs along with associated objects',
+  show: 'Show various types of objects',
+  revert: 'Revert some existing commits',
+  'cherry-pick': 'Apply the changes introduced by some existing commits',
+  reset: 'Reset current HEAD to the specified state',
+  reflog: 'Manage reflog information',
+  rebase: 'Reapply commits on top of another base tip',
+  blame: 'Show what revision and author last modified each line of a file',
+  bisect: 'Use binary search to find the commit that introduced a bug',
+  tag: 'Create, list, delete or verify a tag object signed with GPG',
+  gitignore: 'Specifies intentionally untracked files to ignore',
+};

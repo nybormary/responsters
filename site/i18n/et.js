@@ -535,10 +535,12 @@ export default {
       does: 'Mida teeb',
       tip: 'Nõuanne',
       opts: 'Valikud',
+      file: 'Read failis',
+      cmds: 'Käsud',
       careful: 'Ettevaatust',
       conf: 'Sageli aetakse segi',
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
-      help: (c) => `Loendis ${c}`,
+      help: (c) => `Jaotis ${c}-is`,
       // before `git help <command>`, the command's own manual
       manual: 'Dokumentatsioon git-scm.com-is (inglise keeles)',
       danger: 'Ohtlik käsk',
@@ -552,7 +554,7 @@ export default {
       lead: (date, n) =>
         `${n} git-käsku, iga päev üks luuk. Esimene luuk: ${date}. Vahele jäänud päevi saab hiljem avada.`,
       intro:
-        'Giti ametlik dokumentatsioon on täis koduseid sõnu: igapäevaseid käske nimetatakse seal „portselaniks“ (porcelain) ja kõike, mis nende all töötab, „torustikuks“ (plumbing); pooleli töö pannakse peitu (`git stash`), kuivad oksad lõigatakse ära (`git prune`), prügi korjatakse kokku (`git gc`) ja tähtsale asjale kinnitatakse silt (`git tag`). Sellest sai git-käskude assotsiatiivse õppimise alus: kodused stseenid ja lemmikloomad, keda leiad igalt kaardilt.',
+        'Git™-i ametlik dokumentatsioon on täis koduseid sõnu: igapäevaseid käske nimetatakse seal „portselaniks“ (porcelain) ja kõike, mis nende all töötab, „torustikuks“ (plumbing); pooleli töö pannakse peitu (`git stash`), kuivad oksad lõigatakse ära (`git prune`), prügi korjatakse kokku (`git gc`) ja tähtsale asjale kinnitatakse silt (`git tag`). Sellest sai git-käskude assotsiatiivse õppimise alus: kodused stseenid ja lemmikloomad, keda leiad igalt kaardilt.',
       today: 'täna',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'ootab',
@@ -608,17 +610,19 @@ export default {
           meta: 'Nimekiri külmkapi uksel: mida mitte märgata, isegi kui see seisab otse silme ees.',
         },
         tip: 'Fail on juba kommitis? `.gitignore` seda ei peida: kõigepealt `git rm --cached <fail>` — git lõpetab selle jälgimise ja koopia kettal jääb alles.',
-        opts: [
+        file: [
           {
-            cmd: '*.log',
-            text: '— muster: kõik selle lõpuga failid igas kaustas; `/` lõpus (`build/`) tähendab ainult kaustu.',
+            line: '*.log',
+            text: 'Muster: kõik selle lõpuga failid igas kaustas; `/` lõpus (`build/`) tähendab ainult kaustu.',
             meta: 'Ära märka ühtegi tühja pudelit, kus iganes see seisab.',
           },
           {
-            cmd: '!keep.log',
-            text: '— `!` alguses toob tagasi faili, mille ülemine reegel peitis.',
+            line: '!keep.log',
+            text: '`!` alguses toob tagasi faili, mille ülemine reegel peitis.',
             meta: 'Välja arvatud see — see jääb.',
           },
+        ],
+        opts: [
           {
             cmd: 'git add -f <fail>',
             text: '— lisab faili hoolimata `.gitignore`-ist; edaspidi git jälgib seda.',

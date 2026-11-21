@@ -34,6 +34,10 @@ import {
 } from '../site/js/render.js';
 import { cls, art, addDays, dayMonth } from '../site/js/util.js';
 
+// The Git trademark line (git-scm.com/about/trademark, checked 2026-11-21): as the policy words it, in English on every
+// page, under the logo credit in "About"; the intro above the advent wall marks the first prominent "Git™".
+const TRADEMARK =
+  'Git and the Git logo are either registered trademarks or trademarks of Software Freedom Conservancy, Inc., corporate home of the Git Project, in the United States and/or other countries.';
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const SITE = path.join(ROOT, 'site');
 // BUILD_OUT=<folder> writes the build elsewhere (the noindex test builds several dates without touching dist/, RSP-199).
@@ -623,6 +627,7 @@ function homePage(lang, tx) {
           <h2>${esc(h.aboutTitle)}</h2>
           <p>${esc(h.aboutText)}</p>
           <p class="home-credits" data-testid="home-credits">${esc(h.gitLogo)} <a href="https://git-scm.com/community/logos">Jason Long</a>, <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a></p>
+          <p class="home-credits" data-testid="home-trademark"${lang === 'en' ? '' : ' lang="en"'}>${TRADEMARK}</p>
         </div>
       </section>
     </main>

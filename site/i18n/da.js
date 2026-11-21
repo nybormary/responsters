@@ -534,10 +534,12 @@ export default {
       does: 'Hvad den gør',
       tip: 'Tip',
       opts: 'Tilvalg',
+      file: 'Linjer i filen',
+      cmds: 'Kommandoer',
       careful: 'Pas på',
       conf: 'Forveksles ofte med',
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
-      help: (c) => `I ${c}`,
+      help: (c) => `Afsnit i ${c}`,
       // before `git help <command>`, the command's own manual
       manual: 'Dokumentation på git-scm.com (på engelsk)',
       danger: 'Farlig kommando',
@@ -551,7 +553,7 @@ export default {
       lead: (date, n) =>
         `${n} git-kommandoer, én låge om dagen fra ${date}. Dage, du er gået glip af, kan åbnes senere.`,
       intro:
-        'Gits egen dokumentation er fuld af ord fra hjemmet: de daglige kommandoer kaldes »porcelæn« (porcelain), og alt, hvad der arbejder under dem, »VVS« (plumbing); halvfærdigt arbejde gemmes væk (`git stash`), døde grene beskæres (`git prune`), skraldet samles op (`git gc`), og det vigtige får et mærkat (`git tag`). Det blev grundlaget for at lære git-kommandoer gennem associationer: scener fra hjemmet og kæledyr, som du finder på hvert kort.',
+        'Den officielle Git™-dokumentation er fuld af ord fra hjemmet: de daglige kommandoer kaldes »porcelæn« (porcelain), og alt, hvad der arbejder under dem, »VVS« (plumbing); halvfærdigt arbejde gemmes væk (`git stash`), døde grene beskæres (`git prune`), skraldet samles op (`git gc`), og det vigtige får et mærkat (`git tag`). Det blev grundlaget for at lære git-kommandoer gennem associationer: scener fra hjemmet og kæledyr, som du finder på hvert kort.',
       today: 'i dag',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'glemt?',
@@ -607,17 +609,19 @@ export default {
           meta: 'Listen på køleskabsdøren: hvad man ikke skal lægge mærke til, selv om det står lige foran én.',
         },
         tip: 'Er filen allerede committet? `.gitignore` skjuler den ikke: først `git rm --cached <fil>` — git holder op med at spore den, og kopien på disken bliver.',
-        opts: [
+        file: [
           {
-            cmd: '*.log',
-            text: '— et mønster: alle filer med den endelse i alle mapper; `/` til sidst (`build/`) betyder kun mapper.',
+            line: '*.log',
+            text: 'Et mønster: alle filer med den endelse i alle mapper; `/` til sidst (`build/`) betyder kun mapper.',
             meta: 'Læg ikke mærke til nogen tom flaske, hvor den end står.',
           },
           {
-            cmd: '!keep.log',
-            text: '— `!` forrest henter en fil frem igen, som en regel ovenfor skjulte.',
+            line: '!keep.log',
+            text: '`!` forrest henter en fil frem igen, som en regel ovenfor skjulte.',
             meta: 'Undtagen denne her — den skal blive.',
           },
+        ],
+        opts: [
           {
             cmd: 'git add -f <fil>',
             text: '— tilføjer en fil trods `.gitignore`; derefter sporer git den.',

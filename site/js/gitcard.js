@@ -3,7 +3,7 @@
 // Data: data/git/ (language-free); texts: tx.git (i18n/<lang>.js), card texts under tx.git.cards.<id> (RSP-200).
 // A card without texts yet still builds: the card shows its command and group, the page shows no empty sections.
 import { GROUPS } from '../data/git/groups.js';
-import { BY_ID, EGG } from '../data/git/cards.js';
+import { ABOUT, BY_ID, EGG } from '../data/git/cards.js';
 import { esc } from './util.js';
 
 /** Text with `code` spans: escaped, then `git add` → <code>git add</code>. */
@@ -82,9 +82,21 @@ export function gitMain(g, tx) {
       `<h2>${esc(ui.does)}</h2>
               <div data-testid="git-does"><p>${inline(t.does.text)}</p>${meta(t.does.meta)}</div>`,
     );
+  // .gitignore is a file, not a command: its patterns are shown as a piece of the file, with the file name on top and
+  // the explanation under each line; its options are commands, under "Commands" (Maryna, variant B, 2026-11-21).
+  if (t.file?.length)
+    out.push(
+      `<h2>${esc(ui.file)}</h2>
+              <figure class="g-file" data-testid="git-file"><figcaption><code>${esc(g.name)}</code></figcaption><ul>${t.file
+                .map(
+                  (l) =>
+                    `<li data-testid="git-file-line"><code class="g-file-line">${esc(l.line)}</code><p>${inline(l.text)}</p>${meta(l.meta)}</li>`,
+                )
+                .join('')}</ul></figure>`,
+    );
   if (t.opts?.length)
     out.push(
-      `<h2>${esc(ui.opts)}</h2>
+      `<h2>${esc(t.file ? ui.cmds : ui.opts)}</h2>
               <ul class="g-opts">${t.opts
                 .map((o, i) => {
                   const vig = g.vigs?.[i] ? `<img src="${g.vigs[i]}" alt="${esc(o.vig || '')}" loading="lazy">` : '';
@@ -103,7 +115,8 @@ export function gitMain(g, tx) {
  * 2026-11-20): outside links from g.links (label per language, English when missing; mark: 'github' = GitHub's own
  * logo file, unchanged, as their brand rules allow for a link to GitHub, brand.github.com/foundations/logo); "In git
  * help: <section>" (the list that shows the section: `git help`, `git help -a`, `git help --user-interfaces`); the
- * terminal command for the manual (`$ git help stash`); the manual on git-scm.com.
+ * terminal command for the manual (`$ git help stash`); the command's line from git help in English (ABOUT, `stash —
+ * Stash the changes…`); the manual on git-scm.com.
  * href(id) = the URL of another git card page in the same language; lang = the page language.
  */
 export function gitSide(g, tx, href, lang) {
@@ -119,6 +132,8 @@ export function gitSide(g, tx, href, lang) {
     })
     .join('');
   const h = helpOf(g);
+  // The git help texts stay English on every page (git help is English): marked for screen readers.
+  const en = lang === 'en' ? '' : ' lang="en"';
   const cmd = `<code>git help${h.list ? ' ' + esc(h.list) : ''}</code>`;
   const careful =
     g.danger && t.careful?.length
@@ -140,7 +155,7 @@ export function gitSide(g, tx, href, lang) {
       : ''
   }
               <h2>${esc(ui.links)}</h2>
-              <ul class="links" data-testid="git-links">${(g.links || []).map((x) => `<li>${link(x, lang)}</li>`).join('')}<li class="g-help-item"><span data-testid="git-help-title">${ui.help(cmd)}</span>: <span class="g-help" data-testid="git-help">${esc(h.section)}</span></li><li class="g-help-cmd" data-testid="git-help-more">${termCmd(`git help ${g.id}`)}</li><li data-testid="git-manual">${manual(g, lang, ui.manual)}</li></ul>`;
+              <ul class="links" data-testid="git-links">${(g.links || []).map((x) => `<li>${link(x, lang)}</li>`).join('')}<li class="g-help-item"><span data-testid="git-help-title">${ui.help(cmd)}</span>: <span class="g-help" data-testid="git-help"${en}>${esc(h.section)}</span></li><li class="g-help-cmd" data-testid="git-help-more">${termCmd(`git help ${g.id}`)}</li><li class="g-help-name" data-testid="git-help-name"${en}><code>${esc(g.id)}</code> — ${esc(ABOUT[g.id])}</li><li data-testid="git-manual">${manual(g, lang, ui.manual)}</li></ul>`;
 }
 
 /**

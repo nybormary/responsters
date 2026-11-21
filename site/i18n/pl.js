@@ -537,10 +537,12 @@ export default {
       does: 'Co robi',
       tip: 'Wskazówka',
       opts: 'Opcje',
+      file: 'Wiersze w pliku',
+      cmds: 'Polecenia',
       careful: 'Uwaga',
       conf: 'Często mylone z',
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
-      help: (c) => `W ${c}`,
+      help: (c) => `Sekcja w ${c}`,
       // before `git help <command>`, the command's own manual
       manual: 'Dokumentacja na git-scm.com (w języku angielskim)',
       danger: 'Niebezpieczne polecenie',
@@ -553,7 +555,7 @@ export default {
       // n = the number of advent days (25 since 2026-11-17)
       lead: (date, n) => `${n} poleceń gita, jedno okienko dziennie od ${date}. Pominięte dni można otworzyć później.`,
       intro:
-        'Oficjalna dokumentacja gita jest pełna słów z domu: codzienne polecenia nazywa się tam „porcelaną” (porcelain), a wszystko, co działa pod nimi, „hydrauliką” (plumbing); niedokończoną pracę chowa się do schowka (`git stash`), suche gałęzie się przycina (`git prune`), śmieci się wynosi (`git gc`), a do czegoś ważnego przypina się etykietę (`git tag`). To stało się podstawą nauki poleceń gita przez skojarzenia: domowe sceny i zwierzaki domowe, które znajdziesz na każdej karcie.',
+        'Oficjalna dokumentacja Git™ jest pełna słów z domu: codzienne polecenia nazywa się tam „porcelaną” (porcelain), a wszystko, co działa pod nimi, „hydrauliką” (plumbing); niedokończoną pracę chowa się do schowka (`git stash`), suche gałęzie się przycina (`git prune`), śmieci się wynosi (`git gc`), a do czegoś ważnego przypina się etykietę (`git tag`). To stało się podstawą nauki poleceń gita przez skojarzenia: domowe sceny i zwierzaki domowe, które znajdziesz na każdej karcie.',
       today: 'dziś',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'otwórz',
@@ -609,17 +611,19 @@ export default {
           meta: 'Lista na drzwiach lodówki: czego nie zauważać, nawet jeśli stoi tuż przed oczami.',
         },
         tip: 'Plik jest już w commicie? `.gitignore` go nie ukryje: najpierw `git rm --cached <plik>` — git przestanie go śledzić, a kopia na dysku zostanie.',
-        opts: [
+        file: [
           {
-            cmd: '*.log',
-            text: '— wzorzec: wszystkie pliki z tą końcówką w dowolnym katalogu; `/` na końcu (`build/`) — tylko katalogi.',
+            line: '*.log',
+            text: 'Wzorzec: wszystkie pliki z tą końcówką w dowolnym katalogu; `/` na końcu (`build/`) — tylko katalogi.',
             meta: 'Nie zauważać żadnej pustej butelki, gdziekolwiek stoi.',
           },
           {
-            cmd: '!keep.log',
-            text: '— `!` na początku przywraca plik, który ukryła reguła wyżej.',
+            line: '!keep.log',
+            text: '`!` na początku przywraca plik, który ukryła reguła wyżej.',
             meta: 'Oprócz tej jednej — tę zostaw.',
           },
+        ],
+        opts: [
           {
             cmd: 'git add -f <plik>',
             text: '— dodaje plik mimo `.gitignore`; od tej chwili git go śledzi.',
