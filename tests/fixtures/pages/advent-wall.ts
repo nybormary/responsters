@@ -76,6 +76,10 @@ export class AdventWall {
   get live(): Locator {
     return this.root.getByTestId(TID.adventLive);
   }
+  /** The note above the legend: why the cards are household (RSP-219). */
+  get intro(): Locator {
+    return this.root.getByTestId(TID.adventIntro);
+  }
   /**
    * The door that has keyboard focus: on the wall ('wall') or the big copy of today's door ('copy'), with its day and
    * its focus ring as computed; null when focus is on anything else (RSP-198).

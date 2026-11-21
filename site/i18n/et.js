@@ -551,6 +551,8 @@ export default {
       // n = the number of advent days (25 since 2026-11-17)
       lead: (date, n) =>
         `${n} git-käsku, iga päev üks luuk. Esimene luuk: ${date}. Vahele jäänud päevi saab hiljem avada.`,
+      intro:
+        'Giti ametlik dokumentatsioon on täis koduseid sõnu: igapäevaseid käske nimetatakse seal „portselaniks“ (porcelain) ja kõike, mis nende all töötab, „torustikuks“ (plumbing); pooleli töö pannakse peitu (`git stash`), kuivad oksad lõigatakse ära (`git prune`), prügi korjatakse kokku (`git gc`) ja tähtsale asjale kinnitatakse silt (`git tag`). Sellest sai git-käskude assotsiatiivse õppimise alus: kodused stseenid ja lemmikloomad, keda leiad igalt kaardilt.',
       today: 'täna',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'ootab',

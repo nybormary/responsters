@@ -550,6 +550,8 @@ export default {
       // n = the number of advent days (25 since 2026-11-17)
       lead: (date, n) =>
         `${n} git-kommandoer, én låge om dagen fra ${date}. Dage, du er gået glip af, kan åbnes senere.`,
+      intro:
+        'Gits egen dokumentation er fuld af ord fra hjemmet: de daglige kommandoer kaldes »porcelæn« (porcelain), og alt, hvad der arbejder under dem, »VVS« (plumbing); halvfærdigt arbejde gemmes væk (`git stash`), døde grene beskæres (`git prune`), skraldet samles op (`git gc`), og det vigtige får et mærkat (`git tag`). Det blev grundlaget for at lære git-kommandoer gennem associationer: scener fra hjemmet og kæledyr, som du finder på hvert kort.',
       today: 'i dag',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'glemt?',

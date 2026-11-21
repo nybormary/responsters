@@ -17,6 +17,26 @@
   font-size: 17px;
   line-height: 1.45;
 }
+/* Why the cards are household (RSP-219, Maryna 2026-11-21): a dashed note like the tip on the card pages, as wide as
+   the wall (left edge shared with the title, the lead and the legend), 12px above, 16px to the legend; 16px text.
+   Fixed light colours, so in the dark theme it is a light note on the dark page (contrast 14.25:1, code 11.52:1). */
+.advent-intro {
+  margin: 12px 0 16px;
+  padding: 10px 14px;
+  font-size: 16px;
+  line-height: 1.5;
+  background: #fbf3e2;
+  color: #2b211a;
+  border: 1.5px dashed #2b211a;
+  border-radius: 10px;
+}
+.advent-intro code {
+  font: 800 15px var(--mono);
+  background: #eadbbe;
+  padding: 0 6px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
 .advent-page .sr {
   position: absolute !important;
   width: 1px;

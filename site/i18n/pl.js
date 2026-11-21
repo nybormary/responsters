@@ -457,7 +457,7 @@ export default {
         title: 'Git się wprowadza',
         line: 'Git w Mnemozoo: od 1 grudnia codziennie nowe polecenie wyjaśnione domową scenką.',
         items: [
-          'Ściana adwentowa: 25 drzwiczek, pierwsze otwierają się 1 grudnia.',
+          'Ściana adwentowa: 25 okienek, pierwsze otwiera się 1 grudnia.',
           'Grupy poleceń git mają ikony, nie tylko kolor.',
           'Adresy bez języka od razu otwierają stronę po angielsku z propozycją przejścia na Twój język.',
         ],
@@ -551,18 +551,19 @@ export default {
     wall: {
       title: 'Kalendarz adwentowy gita',
       // n = the number of advent days (25 since 2026-11-17)
-      lead: (date, n) =>
-        `${n} poleceń gita, jedne drzwiczki dziennie od ${date}. Pominięte dni można otworzyć później.`,
+      lead: (date, n) => `${n} poleceń gita, jedno okienko dziennie od ${date}. Pominięte dni można otworzyć później.`,
+      intro:
+        'Oficjalna dokumentacja gita jest pełna słów z domu: codzienne polecenia nazywa się tam „porcelaną” (porcelain), a wszystko, co działa pod nimi, „hydrauliką” (plumbing); niedokończoną pracę chowa się do schowka (`git stash`), suche gałęzie się przycina (`git prune`), śmieci się wynosi (`git gc`), a do czegoś ważnego przypina się etykietę (`git tag`). To stało się podstawą nauki poleceń gita przez skojarzenia: domowe sceny i zwierzaki domowe, które znajdziesz na każdej karcie.',
       today: 'dziś',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'otwórz',
       // phone: the big door of today above the wall (prototype AdventPhone, 2026-11-17)
-      todayHint: 'Otwórz dzisiejsze drzwiczki',
+      todayHint: 'Otwórz dzisiejsze okienko',
       legend: 'Grupy',
       locked: (n, date) => `Dzień ${n}, otwiera się ${date}`,
-      paperToday: (n) => `Dzień ${n}, dziś, otwórz drzwiczki`,
-      paperMissed: (n) => `Dzień ${n}, otwórz drzwiczki`,
-      bigToday: (n) => `Dzień ${n}, dziś. Otwórz dzisiejsze drzwiczki`,
+      paperToday: (n) => `Dzień ${n}, dziś, otwórz okienko`,
+      paperMissed: (n) => `Dzień ${n}, otwórz okienko`,
+      bigToday: (n) => `Dzień ${n}, dziś. Otwórz dzisiejsze okienko`,
       open: (n, cmd) => `Dzień ${n}: ${cmd}, otwórz kartę`,
       revealed: (n, cmd) => `Dzień ${n}: ${cmd}. Naciśnij jeszcze raz, aby otworzyć kartę.`,
     },
