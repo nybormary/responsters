@@ -553,6 +553,9 @@ export default {
       title: 'Git advent calendar',
       // n = the number of advent days (25 since 2026-11-17)
       lead: (date, n) => `${n} git commands, one door a day from ${date}. Missed days can be opened later.`,
+      // why the cards are household (RSP-219, Maryna's text 2026-11-21; the four examples suggested by Claude)
+      intro:
+        'Git’s own documentation is full of household words: the everyday commands are called “porcelain”, and everything that works beneath them is “plumbing”; unfinished work goes into a stash (`git stash`), dead branches get pruned (`git prune`), garbage gets collected (`git gc`), and something important gets a tag (`git tag`). That became the basis for learning git commands by association: household scenes and pets you can find on every card.',
       today: 'today',
       // short, it has to fit a small door on a phone (Maryna, 2026-11-17: «забули?»)
       missed: 'forgot?',
