@@ -482,6 +482,89 @@ export default {
       },
     },
   },
+  // Laboratorija /<lang>/lab/ (RSP-209) ir „Testavimas ratu" /<lang>/lab/geometry/circles/ (RSP-211). Juodraštis.
+  lab: {
+    title: 'Laboratorija · Mnemozoo',
+    description: 'Mano pačios mnemonikos ir schemos testuotojams: testavimo rūšys viename produkto apskritime ir kt.',
+    sign: 'Laboratorija · savi metodai',
+    h1: 'Laboratorija',
+    lead: 'Mnemonikos ir schemos, kurias sugalvojau pati. Tai mano susitarimai, o ne standartas: kur jie skiriasi nuo ISTQB, taip ir parašau.',
+    name: 'Laboratorija',
+    crumbs: 'Naršymo kelias',
+    geometry: {
+      title: 'Testavimo geometrija · Laboratorija · Mnemozoo',
+      name: 'Testavimo geometrija',
+      lead: 'Testavimo rūšys kaip figūros: kurią produkto dalį tikriname ir kaip giliai.',
+    },
+    circles: {
+      title: 'Testavimas ratu · Laboratorija · Mnemozoo',
+      description:
+        'BVT, smoke, sanity, regresija, pakartotinis testas ir įprastas antradienis viename produkto apskritime.',
+      name: 'Testavimas ratu',
+      crumb: 'Ratu',
+      card: 'BVT, smoke, sanity, regresija, pakartotinis testas ir įprastas antradienis viename produkto apskritime. Užpildas rodo gylį, vidinis apskritimas — branduolį.',
+      go: 'Žiūrėti apskritimą →',
+      lead: 'Kiekviena testavimo rūšis yra to paties produkto atranka: kurią dalį tikriname ir kaip giliai. Kaip SQL join diagramos, tik testavimui.',
+      howTitle: 'Kaip skaityti apskritimą',
+      rules: [
+        ['Gylis — tai užpildo rūšis:', 'brūkšniuota — paviršutiniškai, vientisa — giliai, juostos — būna įvairiai.'],
+        ['Branduolys tikrinamas,', 'kai vidinis apskritimas užpildytas.'],
+        ['Spalva — tai sluoksnis:', 'violetinė — build ir diegimas, žalia — funkcionalumas.'],
+      ],
+      legend: {
+        core: 'branduolys',
+        build: 'build ir diegimas',
+        new: 'naujas funkcionalumas',
+        bug: 'ištaisyta klaida',
+        shallow: 'paviršutiniškai',
+        deep: 'giliai',
+        either: 'įvairiai',
+      },
+      panelsLabel: 'Šešios testavimo rūšys',
+      panels: {
+        bvt: {
+          name: 'BVT',
+          caption: 'build gyvas',
+          line: 'Brūkšniuotas tik centras: tikriname, kad build įdiegtas ir pasileidžia. Funkcionalumo dar neliečiame.',
+          alt: 'Brūkšniuotas tik violetinis centras.',
+        },
+        smoke: {
+          name: 'Smoke',
+          caption: 'branduolys, paviršutiniškai',
+          line: 'Branduolys brūkšniuotas: pereiname visus pagrindinius scenarijus, bet negiliai. Ar šį build apskritai galima testuoti?',
+          alt: 'Brūkšniuotas vidinis apskritimas, centras ne.',
+        },
+        sanity: {
+          name: 'Sanity',
+          caption: 'pjūvis iki branduolio',
+          line: 'Plonas vientisas pleištas: vienas kelias per naują funkcionalumą iki pat branduolio. Ar pakeitimą verta testuoti toliau?',
+          alt: 'Plonas vientisas pleištas nuo naujo sektoriaus per branduolį iki centro.',
+        },
+        regression: {
+          name: 'Regresija',
+          caption: 'sena lieka sveika',
+          line: 'Visa, kas sena, juostuota: tikriname, kad pakeitimas nieko nesugadino. Paviršutiniškai ar giliai — pagal riziką.',
+          alt: 'Visas apskritimas juostuotas, išskyrus naują sektorių ir centrą.',
+        },
+        retest: {
+          name: 'Pakartotinis testas',
+          aka: '(confirmation testing)',
+          caption: 'tik ši klaida',
+          line: 'Užpildytas tik žiedas aplink klaidą: tikriname, kad ištaisyta būtent ji, ir nieko aplink.',
+          alt: 'Tik vientisas žiedas aplink klaidą.',
+        },
+        tuesday: {
+          name: 'Įprastas antradienis',
+          caption: 'viskas kartu',
+          line: 'Nauja — vientisai iki pat branduolio, sena — juostomis, ir pakartotinio testo žiedas: taip paprastai atrodo leidimo ciklas.',
+          alt: 'Naujas sektorius vientisas iki centro, likusi dalis juostuota, vientisas žiedas aplink klaidą.',
+        },
+      },
+      istqbTitle: 'Sąžiningai apie terminus',
+      istqb:
+        'ISTQB žodyne sanity test yra smoke test sinonimas. Praktikoje juos dažnai skiria: smoke — plačiai ir paviršutiniškai, sanity — siaurai ir giliai. Šiame puslapyje parodyta praktinė reikšmė. Pakartotinį testą ISTQB vadina confirmation testing.',
+    },
+  },
   // Pagrindinis puslapis /<lang>/ (RSP-156).
   notFound: {
     title: '404: čia niekas negyvena · Mnemozoo',

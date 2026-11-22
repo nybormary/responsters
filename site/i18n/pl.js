@@ -482,6 +482,88 @@ export default {
       },
     },
   },
+  // Laboratorium /<lang>/lab/ (RSP-209) i „Testowanie w kółko" /<lang>/lab/geometry/circles/ (RSP-211). Wersja robocza.
+  lab: {
+    title: 'Laboratorium · Mnemozoo',
+    description: 'Moje własne mnemoniki i schematy dla testerów: rodzaje testów na jednym kole produktu i nie tylko.',
+    sign: 'Laboratorium · własne metody',
+    h1: 'Laboratorium',
+    lead: 'Mnemoniki i schematy, które wymyśliłam sama. To moje umowy, nie standard: tam, gdzie różnią się od ISTQB, piszę o tym wprost.',
+    name: 'Laboratorium',
+    crumbs: 'Okruszki',
+    geometry: {
+      title: 'Geometria testowania · Laboratorium · Mnemozoo',
+      name: 'Geometria testowania',
+      lead: 'Rodzaje testów jako figury: którą część produktu sprawdzamy i jak głęboko.',
+    },
+    circles: {
+      title: 'Testowanie w kółko · Laboratorium · Mnemozoo',
+      description: 'BVT, smoke, sanity, regresja, retest i zwykły wtorek na jednym kole produktu.',
+      name: 'Testowanie w kółko',
+      crumb: 'W kółko',
+      card: 'BVT, smoke, sanity, regresja, retest i zwykły wtorek na jednym kole produktu. Wypełnienie pokazuje głębokość, wewnętrzne koło — rdzeń.',
+      go: 'Zobacz koło →',
+      lead: 'Każdy rodzaj testów to wycinek jednego i tego samego produktu: którą część sprawdzamy i jak głęboko. Jak diagramy złączeń w SQL, tylko dla testowania.',
+      howTitle: 'Jak czytać koło',
+      rules: [
+        ['Głębokość to rodzaj wypełnienia:', 'kreskowanie — płytko, pełne — głęboko, paski — różnie.'],
+        ['Rdzeń jest sprawdzany,', 'gdy wewnętrzne koło jest wypełnione.'],
+        ['Kolor to warstwa:', 'fioletowy — build i wdrożenie, zielony — funkcjonalność.'],
+      ],
+      legend: {
+        core: 'rdzeń',
+        build: 'build i wdrożenie',
+        new: 'nowa funkcjonalność',
+        bug: 'naprawiony błąd',
+        shallow: 'płytko',
+        deep: 'głęboko',
+        either: 'różnie',
+      },
+      panelsLabel: 'Sześć rodzajów testów',
+      panels: {
+        bvt: {
+          name: 'BVT',
+          caption: 'build żyje',
+          line: 'Zakreskowany jest tylko środek: sprawdzamy, że build się wdrożył i uruchamia. Funkcjonalności jeszcze nie ruszamy.',
+          alt: 'Zakreskowane tylko fioletowe kółko w środku.',
+        },
+        smoke: {
+          name: 'Smoke',
+          caption: 'rdzeń, płytko',
+          line: 'Rdzeń jest zakreskowany: przechodzimy wszystkie główne scenariusze, ale płytko. Czy ten build w ogóle da się testować?',
+          alt: 'Zakreskowane wewnętrzne koło, środek nie.',
+        },
+        sanity: {
+          name: 'Sanity',
+          caption: 'przekrój do rdzenia',
+          line: 'Cienki pełny klin: jedna ścieżka przez nową funkcjonalność aż do rdzenia. Czy zmianę warto testować dalej?',
+          alt: 'Cienki pełny klin od nowego sektora przez rdzeń do środka.',
+        },
+        regression: {
+          name: 'Regresja',
+          caption: 'stare w całości',
+          line: 'Wszystko stare jest w paski: sprawdzamy, że zmiana niczego nie zepsuła. Płytko lub głęboko — zależnie od ryzyka.',
+          alt: 'Całe koło w paski oprócz nowego sektora i środka.',
+        },
+        retest: {
+          name: 'Retest',
+          aka: '(confirmation testing)',
+          caption: 'tylko ten błąd',
+          line: 'Wypełniony jest tylko pierścień wokół błędu: sprawdzamy, że naprawiono właśnie ten błąd, i nic obok.',
+          alt: 'Tylko pełny pierścień wokół błędu.',
+        },
+        tuesday: {
+          name: 'Zwykły wtorek',
+          caption: 'wszystko razem',
+          line: 'Nowe — pełne aż do rdzenia, stare — w paski, do tego pierścień retestu: tak zwykle wygląda cykl wydania.',
+          alt: 'Nowy sektor pełny aż do środka, reszta w paski, pełny pierścień wokół błędu.',
+        },
+      },
+      istqbTitle: 'Uczciwie o terminach',
+      istqb:
+        'W glosariuszu ISTQB sanity test to synonim smoke test. W praktyce często się je rozróżnia: smoke — szeroko i płytko, sanity — wąsko i głęboko. Ta strona pokazuje znaczenie praktyczne. Retest w ISTQB to confirmation testing.',
+    },
+  },
   // Strona główna /<lang>/ (RSP-156).
   notFound: {
     title: '404: nikt tu nie mieszka · Mnemozoo',

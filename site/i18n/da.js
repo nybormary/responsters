@@ -479,6 +479,88 @@ export default {
       },
     },
   },
+  // Laboratoriet /<lang>/lab/ (RSP-209) og "Test i ring" /<lang>/lab/geometry/circles/ (RSP-211). Udkast.
+  lab: {
+    title: 'Laboratoriet · Mnemozoo',
+    description: 'Mine egne huskeregler og skemaer for testere: testtyper på én produktcirkel og mere.',
+    sign: 'Laboratoriet · egne metoder',
+    h1: 'Laboratoriet',
+    lead: 'Huskeregler og skemaer, som jeg selv har fundet på. Det er mine aftaler, ikke en standard: hvor de afviger fra ISTQB, skriver jeg det.',
+    name: 'Laboratoriet',
+    crumbs: 'Brødkrummer',
+    geometry: {
+      title: 'Testgeometri · Laboratoriet · Mnemozoo',
+      name: 'Testgeometri',
+      lead: 'Testtyper som figurer: hvilken del af produktet vi tjekker, og hvor dybt.',
+    },
+    circles: {
+      title: 'Test i ring · Laboratoriet · Mnemozoo',
+      description: 'BVT, smoke, sanity, regression, retest og en helt almindelig tirsdag på én produktcirkel.',
+      name: 'Test i ring',
+      crumb: 'I ring',
+      card: 'BVT, smoke, sanity, regression, retest og en helt almindelig tirsdag på én produktcirkel. Fyldet viser dybden, den indre cirkel kernen.',
+      go: 'Se cirklen →',
+      lead: 'Hver testtype er et udsnit af ét og samme produkt: hvilken del vi tjekker, og hvor dybt. Som diagrammerne for join i SQL, bare for test.',
+      howTitle: 'Sådan læser du cirklen',
+      rules: [
+        ['Dybden er fyldet:', 'skravering — overfladisk, fuldt — i dybden, striber — begge dele.'],
+        ['Kernen tjekkes,', 'når den indre cirkel er fyldt.'],
+        ['Farven er laget:', 'lilla — build og deploy, grøn — funktionalitet.'],
+      ],
+      legend: {
+        core: 'kerne',
+        build: 'build og deploy',
+        new: 'ny funktionalitet',
+        bug: 'rettet fejl',
+        shallow: 'overfladisk',
+        deep: 'i dybden',
+        either: 'begge dele',
+      },
+      panelsLabel: 'Seks testtyper',
+      panels: {
+        bvt: {
+          name: 'BVT',
+          caption: 'buildet lever',
+          line: 'Kun midten er skraveret: vi tjekker, at buildet er deployet og starter. Funktionaliteten rører vi ikke endnu.',
+          alt: 'Kun den lilla midte er skraveret.',
+        },
+        smoke: {
+          name: 'Smoke',
+          caption: 'kernen, overfladisk',
+          line: 'Kernen er skraveret: vi går alle hovedscenarier igennem, men ikke i dybden. Kan dette build overhovedet testes?',
+          alt: 'Den indre cirkel er skraveret, midten ikke.',
+        },
+        sanity: {
+          name: 'Sanity',
+          caption: 'et snit ind til kernen',
+          line: 'En tynd fuld kile: én vej gennem den nye funktionalitet helt ind til kernen. Er ændringen værd at teste videre?',
+          alt: 'En tynd fuld kile fra den nye sektor gennem kernen til midten.',
+        },
+        regression: {
+          name: 'Regression',
+          caption: 'det gamle er helt',
+          line: 'Alt det gamle er stribet: vi tjekker, at ændringen ikke har ødelagt noget. Overfladisk eller i dybden, alt efter risikoen.',
+          alt: 'Hele cirklen er stribet undtagen den nye sektor og midten.',
+        },
+        retest: {
+          name: 'Retest',
+          aka: '(confirmation testing)',
+          caption: 'kun denne fejl',
+          line: 'Kun ringen om fejlen er fyldt: vi tjekker, at netop denne fejl er rettet, og intet omkring den.',
+          alt: 'Kun en fuld ring om fejlen.',
+        },
+        tuesday: {
+          name: 'En helt almindelig tirsdag',
+          caption: 'det hele på én gang',
+          line: 'Det nye er fuldt helt ind til kernen, det gamle stribet, plus retest-ringen: sådan ser en releasecyklus som regel ud.',
+          alt: 'Den nye sektor er fuld helt ind til midten, resten stribet, en fuld ring om fejlen.',
+        },
+      },
+      istqbTitle: 'Ærligt om begreberne',
+      istqb:
+        'I ISTQB-ordlisten er sanity test et synonym for smoke test. I praksis skelner man ofte: smoke er bredt og overfladisk, sanity smalt og i dybden. Denne side viser den praktiske betydning. ISTQB kalder en retest confirmation testing.',
+    },
+  },
   // Forside /<lang>/ (RSP-156).
   notFound: {
     title: '404: her bor ingen · Mnemozoo',
