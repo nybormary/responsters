@@ -699,6 +699,10 @@ export default {
             meta: 'A note on the ball of yarn: what it is and why.',
           },
         ],
+        careful: [
+          '`git stash drop` and `git stash clear` delete stashes for good: they are not in `git reflog`.',
+          'Before deleting, look inside: `git stash show -p`. Just dropped one? `git stash drop` prints the stash’s hash, and `git stash apply <hash>` still brings it back.',
+        ],
         art: 'On the wall, a portrait of a hamster with stuffed cheeks. While the doorbell rings, a person on tiptoe hastily stuffs a sweater and a ball of yarn into the top cupboard, its door open towards us; identical mugs stand on the middle shelf.',
       },
       branch: {
@@ -756,6 +760,10 @@ export default {
             text: '— goes to a commit without a branch (detached HEAD) to have a look; new commits here are easy to lose.',
             meta: 'You peek into the room from an old photo, but it’s no place to live.',
           },
+        ],
+        careful: [
+          '`git switch --discard-changes <branch>` and `git switch -f <branch>` throw away uncommitted changes for good: they are neither in the history nor in `git reflog`.',
+          'Without these options git stops on its own when the changes are in the way. If it’s a pity to throw away, commit or `git stash` first.',
         ],
         art: 'On the wall, a portrait of a parrot: of two perches, it sits on the upper one, the lower one is empty. Two open doors side by side lead into two identical rooms; a runner on the floor forks to both doors; the right door is yellow. A person strides from the left door into the right room, footprints on the runner lead from the left branch to the right one.',
       },

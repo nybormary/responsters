@@ -5,7 +5,9 @@
 // not a limit of the collection. id = URL slug (/<lang>/git/<id>/), name = the badge label
 // (English in every language), group = key of groups.js, day = advent day (1, 2, … with no gaps); a card added after
 // the season has no day: it is not on the wall and opens together with the last advent day's next day,
-// danger = the brick-red danger mark (restore, reset --hard, rebase, push --force),
+// danger = the brick-red danger mark: the command changes the repository in a way that can't be undone (Maryna's rule,
+// RSP-200 AC5, 2026-11-21): restore, reset --hard, push --force; a dangerous option of a calm card (stash drop/clear,
+// switch --discard-changes) gets only the "Careful" box (texts: git.cards.<id>.careful), not the mark,
 // help = where `git help` lists a command that is NOT in its short list (the others: their group's section, groups.js):
 // list = which help prints it ('-a' → `git help -a`, '--user-interfaces' → `git help --user-interfaces`), section = the
 // heading there (checked with git 2.43, 2026-11-15),
@@ -115,7 +117,9 @@ export const GIT = [
     day: 21,
     help: { list: '-a', section: 'Ancillary Commands / Manipulators' },
   },
-  { id: 'rebase', name: 'git rebase', group: 'archive', day: 22, danger: true },
+  // no danger mark (Maryna's rule, 2026-11-21): locally a rebase can be undone via `git reflog`; it is irreversible only
+  // together with `git push --force`, which is push's danger
+  { id: 'rebase', name: 'git rebase', group: 'archive', day: 22 },
   {
     id: 'blame',
     name: 'git blame',

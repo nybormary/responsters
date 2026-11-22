@@ -126,11 +126,12 @@ test(
       await expect(gitCardPage.careful).toHaveCount(cards[danger.id]?.careful?.length ? 1 : 0);
     });
 
-    await test.step(`${calm.name}: no danger frame, no "!", no "Careful"`, async () => {
+    // a calm card can still have "Careful" for a dangerous option (stash drop, switch --discard-changes; RSP-200 AC5)
+    await test.step(`${calm.name}: no danger frame, no "!"; "Careful" only if it has careful texts`, async () => {
       await gitCardPage.open(lang, calm.id);
       await expect(gitCardPage.card).not.toHaveClass(/\bdanger\b/);
       await expect(gitCardPage.dangerMark).toHaveCount(0);
-      await expect(gitCardPage.careful).toHaveCount(0);
+      await expect(gitCardPage.careful).toHaveCount(cards[calm.id]?.careful?.length ? 1 : 0);
     });
   },
 );
@@ -149,6 +150,7 @@ type CardTexts = {
   tip?: string;
   opts?: { cmd: string; text: string; meta: string }[];
   file?: { line: string; text: string; meta: string }[];
+  careful?: string[];
 };
 
 test(
@@ -191,6 +193,10 @@ test(
       await expect(gitCardPage.does).toContainText(visible(t.does.text));
       await expect(gitCardPage.metaOf(gitCardPage.does)).toHaveText(visible(t.does.meta));
       if (t.tip) await expect(gitCardPage.tip).toHaveText(`${texts.git.ui.tip}. ${visible(t.tip)}`);
+      // "Careful" on every card with careful texts, danger mark or not (RSP-200 AC5, 2026-11-21)
+      const careful = t.careful ?? [];
+      await expect(gitCardPage.careful).toHaveCount(careful.length ? 1 : 0);
+      for (const p of careful) await expect(gitCardPage.careful, `careful: ${p}`).toContainText(visible(p));
       // .gitignore is a file: its patterns are lines of the file under its name, its option is a command (variant B)
       const file = t.file ?? [];
       await expect(gitCardPage.fileLines).toHaveCount(file.length);
