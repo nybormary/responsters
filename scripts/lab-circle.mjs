@@ -3,13 +3,14 @@
 //
 // The product circle, the same on every panel (design: project doc claude/test-types-circle.md, mockup on the Design
 // canvas "Mnemozoo home — own look"):
-// - outer circle: all existing functionality; inner circle: the core;
+// - outer circle: all existing functionality; inner circle (blue): the critical functionality;
 // - the smallest circle in the centre: build and deploy, a layer of its own (purple);
 // - a dashed sector between the core and the edge: new functionality; a red dot: a fixed bug.
-// Reading rules (on the page): depth = fill type (hatching shallow, solid deep, stripes either); the core is checked
-// when the inner circle is filled; colour = layer. Colours are CSS classes (site/css/lab.css), so dark mode works.
+// The legend on the page says how to read it: depth = fill type (hatching shallow, solid deep, stripes either); the
+// critical functionality is checked when the inner circle is filled. Colours are CSS classes (site/css/lab.css), so dark
+// mode works.
 
-/** Sizes in the 160 × 160 viewBox: centre, outer radius, core radius, build radius. */
+/** Sizes in the 160 × 160 viewBox: centre, outer radius, critical-functionality (core) radius, build radius. */
 const C = 80;
 const R = 60;
 const CORE = 26;
@@ -62,9 +63,11 @@ export const PANELS = [
   { id: 'retest', fills: [], retest: true },
   {
     id: 'tuesday',
+    // a usual Tuesday is all of it together, so the build is hatched too: BVT runs on every build (Maryna, 2026-11-22)
     fills: [
       ['oldBesideWedge', 'stripes'],
       ['wedge', 'solid'],
+      ['build', 'buildHatch'],
     ],
     retest: true,
   },
@@ -77,7 +80,7 @@ const fillPath = ([shape, kind]) =>
 
 /** The outline every panel shares: outer circle, core, build centre, the dashed new sector, the bug. */
 const OUTLINE = `<circle class="lab-line" cx="${C}" cy="${C}" r="${R}" />
-          <circle class="lab-line" cx="${C}" cy="${C}" r="${CORE}" />
+          <circle class="lab-core" cx="${C}" cy="${C}" r="${CORE}" />
           <circle class="lab-build" cx="${C}" cy="${C}" r="${BUILD}" />
           <path class="lab-new" d="${sector(CORE, R, NEW)}" />
           <circle class="lab-bug" cx="${BUG.x}" cy="${BUG.y}" r="${BUG.r}" />`;
@@ -104,9 +107,14 @@ export const circleDefs = `<svg class="lab-defs" aria-hidden="true" width="0" he
         </defs>
       </svg>`;
 
-/** The legend swatches (decorative: the word next to each says the same). */
+/** The legend swatches (decorative: the word next to each says the same), in two groups: the parts of the circle
+ * and the fills (RSP-211 polish, 2026-11-22: the legend replaced the reading rules, which only repeated it). */
+export const LEGEND = [
+  ['core', 'build', 'new', 'bug'],
+  ['shallow', 'deep', 'either'],
+];
 export const SWATCH = {
-  core: `<svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22"><circle class="lab-line" cx="11" cy="11" r="9" /></svg>`,
+  core: `<svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22"><circle class="lab-core" cx="11" cy="11" r="9" /></svg>`,
   build: `<svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22"><circle class="lab-build" cx="11" cy="11" r="6" /></svg>`,
   new: `<svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22"><rect class="lab-new" x="2" y="2" width="18" height="18" rx="2" /></svg>`,
   bug: `<svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22"><circle class="lab-bug" cx="11" cy="11" r="4.5" /></svg>`,
@@ -120,7 +128,7 @@ export const TEASER = `<svg class="lab-teaser" aria-hidden="true" width="260" he
               <circle class="lab-solid" cx="38" cy="38" r="14" />
               <path class="lab-solid" d="M130 38 L138.3 7.1 A32 32 0 0 1 156.2 19.6 Z" />
               <path fill="url(#lab-stripes)" fill-rule="evenodd" d="M190 38 A32 32 0 1 0 254 38 A32 32 0 1 0 190 38 Z M208 38 A14 14 0 1 0 236 38 A14 14 0 1 0 208 38 Z" />
-              <circle class="lab-line" cx="38" cy="38" r="32" /><circle class="lab-line" cx="38" cy="38" r="14" />
-              <circle class="lab-line" cx="130" cy="38" r="32" /><circle class="lab-line" cx="130" cy="38" r="14" />
-              <circle class="lab-line" cx="222" cy="38" r="32" /><circle class="lab-line" cx="222" cy="38" r="14" />
+              <circle class="lab-line" cx="38" cy="38" r="32" /><circle class="lab-core" cx="38" cy="38" r="14" />
+              <circle class="lab-line" cx="130" cy="38" r="32" /><circle class="lab-core" cx="130" cy="38" r="14" />
+              <circle class="lab-line" cx="222" cy="38" r="32" /><circle class="lab-core" cx="222" cy="38" r="14" />
             </svg>`;

@@ -502,11 +502,6 @@ export default {
       go: 'Vaata ringi →',
       lead: 'Iga testiliik on valik ühest ja samast tootest: millist osa kontrollime ja kui sügavalt. Nagu SQL-i join-diagrammid, ainult testimise jaoks.',
       howTitle: 'Kuidas ringi lugeda',
-      rules: [
-        ['Sügavus on täite liik:', 'viirutus — pinnapealselt, täidetud — sügavuti, triibud — nii ja naa.'],
-        ['Tuuma kontrollitakse,', 'kui sisemine ring on täidetud.'],
-        ['Värv on kiht:', 'lilla — build ja paigaldus, roheline — funktsionaalsus.'],
-      ],
       legend: {
         core: 'tuum',
         build: 'build ja paigaldus',

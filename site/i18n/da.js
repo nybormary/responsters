@@ -502,11 +502,6 @@ export default {
       go: 'Se cirklen →',
       lead: 'Hver testtype er et udsnit af ét og samme produkt: hvilken del vi tjekker, og hvor dybt. Som diagrammerne for join i SQL, bare for test.',
       howTitle: 'Sådan læser du cirklen',
-      rules: [
-        ['Dybden er fyldet:', 'skravering — overfladisk, fuldt — i dybden, striber — begge dele.'],
-        ['Kernen tjekkes,', 'når den indre cirkel er fyldt.'],
-        ['Farven er laget:', 'lilla — build og deploy, grøn — funktionalitet.'],
-      ],
       legend: {
         core: 'kerne',
         build: 'build og deploy',

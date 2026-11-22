@@ -506,11 +506,6 @@ export default {
       go: 'Žiūrėti apskritimą →',
       lead: 'Kiekviena testavimo rūšis yra to paties produkto atranka: kurią dalį tikriname ir kaip giliai. Kaip SQL join diagramos, tik testavimui.',
       howTitle: 'Kaip skaityti apskritimą',
-      rules: [
-        ['Gylis — tai užpildo rūšis:', 'brūkšniuota — paviršutiniškai, vientisa — giliai, juostos — būna įvairiai.'],
-        ['Branduolys tikrinamas,', 'kai vidinis apskritimas užpildytas.'],
-        ['Spalva — tai sluoksnis:', 'violetinė — build ir diegimas, žalia — funkcionalumas.'],
-      ],
       legend: {
         core: 'branduolys',
         build: 'build ir diegimas',

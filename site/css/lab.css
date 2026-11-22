@@ -1,7 +1,7 @@
 /* Lab pages (RSP-209, RSP-211): /<lang>/lab/, /<lang>/lab/geometry/, /<lang>/lab/geometry/circles/.
    Alignment standards agreed 2026-11-22 (RSP-211 comment 10545): the same width as the home page; panel cards of equal
    height, 3 per row wide, 2 on a tablet, 1 on a phone, circle centred and texts left-aligned; "How to read the circle"
-   rules left and legend right on wide screens, one column on a phone. Mockup: Design canvas "Mnemozoo home — own look". */
+   = heading + legend in two groups (polish 2026-11-22). Mockup: Design canvas "Mnemozoo home — own look". */
 .lab {
   display: flex;
   flex-direction: column;
@@ -123,11 +123,13 @@
   height: auto;
 }
 
-/* "How to read the circle": rules left, legend right (legend in two columns); one column on a phone. */
+/* "How to read the circle": the heading, then the legend in two groups, one row each: the parts of the circle, then
+   the fills; on a phone each group is a column (polish 2026-11-22: the reading rules went, they only repeated the
+   legend; two rows instead of two columns, because the Ukrainian words don't fit one line side by side). */
 .lab-how {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   padding: 24px;
   border: var(--outline);
   border-radius: var(--r-l);
@@ -136,21 +138,15 @@
 .lab-how h2 {
   font-size: 24px;
 }
-.lab-rules {
+.lab-legends {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin: 12px 0 0;
-  padding-left: 22px;
+  gap: 12px;
 }
 .lab-legend {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  /* Read down each column: the parts of the circle first (core, build, new, bug), then the fills. */
-  grid-template-rows: repeat(4, auto);
-  grid-auto-flow: column;
-  gap: 12px 20px;
-  align-content: start;
+  display: flex;
+  flex-direction: column;
+  gap: 12px 28px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -164,9 +160,11 @@
 .lab-legend svg {
   flex: none;
 }
-@media (min-width: 800px) {
-  .lab-how {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+@media (min-width: 600px) {
+  .lab-legend {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
   }
 }
 
@@ -245,6 +243,11 @@
   fill: none;
   stroke: var(--ink);
   stroke-width: 1.5;
+}
+.lab-core {
+  fill: none;
+  stroke: var(--c3-ink);
+  stroke-width: 2;
 }
 .lab-build {
   fill: none;

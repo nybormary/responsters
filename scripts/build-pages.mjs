@@ -34,7 +34,7 @@ import {
   APP_LANG_MENU,
 } from '../site/js/render.js';
 import { cls, art, addDays, dayMonth } from '../site/js/util.js';
-import { PANELS, circleSvg, circleDefs, SWATCH, TEASER } from './lab-circle.mjs';
+import { PANELS, circleSvg, circleDefs, SWATCH, LEGEND, TEASER } from './lab-circle.mjs';
 
 // The Git trademark line (git-scm.com/about/trademark, checked 2026-11-21): as the policy words it, in English on every
 // page, under the logo credit in "About"; the intro above the advent wall marks the first prominent "Git™".
@@ -814,17 +814,18 @@ function labGeometryPage(lang, tx) {
 }
 
 /**
- * "In circles" /<lang>/lab/geometry/circles/ (RSP-211): how to read the circle, the six panels of the main row, the
+ * "In circles" /<lang>/lab/geometry/circles/ (RSP-211): how to read the circle (the legend), the six panels of the main row, the
  * ISTQB note. Each panel is a <figure>: the picture (its name is the picture description) and a caption with the
  * type's name, its short caption and one sentence that reads the picture (RSP-211 AC8).
  */
 function labCirclesPage(lang, tx) {
   const t = tx.lab;
   const c = t.circles;
-  const rules = c.rules.map(([b, rest]) => `<li><strong>${esc(b)}</strong> ${esc(rest)}</li>`).join('\n            ');
-  const legend = Object.keys(SWATCH)
-    .map((k) => `<li>${SWATCH[k]}<span>${esc(c.legend[k])}</span></li>`)
-    .join('\n            ');
+  const legend = LEGEND.map(
+    (group) => `<ul class="lab-legend" role="list">
+            ${group.map((k) => `<li>${SWATCH[k]}<span>${esc(c.legend[k])}</span></li>`).join('\n            ')}
+          </ul>`,
+  ).join('\n          ');
   const panels = PANELS.map((p) => {
     const pt = c.panels[p.id];
     const aka = pt.aka ? ` <span class="lab-panel-aka">${esc(pt.aka)}</span>` : '';
@@ -850,15 +851,10 @@ function labCirclesPage(lang, tx) {
         <p class="lab-lead">${esc(c.lead)}</p>
       </section>
       <section class="lab-how" aria-labelledby="lab-how-title" data-testid="lab-how">
-        <div>
-          <h2 id="lab-how-title">${esc(c.howTitle)}</h2>
-          <ol class="lab-rules" data-testid="lab-rules">
-            ${rules}
-          </ol>
+        <h2 id="lab-how-title">${esc(c.howTitle)}</h2>
+        <div class="lab-legends" data-testid="lab-legend">
+          ${legend}
         </div>
-        <ul class="lab-legend" role="list" data-testid="lab-legend">
-            ${legend}
-        </ul>
       </section>
       <ul class="lab-panels" role="list" aria-label="${esc(c.panelsLabel)}" data-testid="lab-panels">
         ${panels}

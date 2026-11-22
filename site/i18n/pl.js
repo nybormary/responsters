@@ -505,11 +505,6 @@ export default {
       go: 'Zobacz koło →',
       lead: 'Każdy rodzaj testów to wycinek jednego i tego samego produktu: którą część sprawdzamy i jak głęboko. Jak diagramy złączeń w SQL, tylko dla testowania.',
       howTitle: 'Jak czytać koło',
-      rules: [
-        ['Głębokość to rodzaj wypełnienia:', 'kreskowanie — płytko, pełne — głęboko, paski — różnie.'],
-        ['Rdzeń jest sprawdzany,', 'gdy wewnętrzne koło jest wypełnione.'],
-        ['Kolor to warstwa:', 'fioletowy — build i wdrożenie, zielony — funkcjonalność.'],
-      ],
       legend: {
         core: 'rdzeń',
         build: 'build i wdrożenie',
