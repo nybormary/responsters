@@ -108,7 +108,12 @@ export class GitCardPage {
     return this.root.getByTestId(TID.gitTip);
   }
 
-  /** "Read more": outside links (only cards with links). */
+  /** «Документація» (RSP-221): the strip of git's own documentation, under the three columns on wide screens. */
+  get docs(): Locator {
+    return this.root.getByTestId(TID.gitDocs);
+  }
+
+  /** The four items of «Документація» (the same on every card). */
   get links(): Locator {
     return this.root.getByTestId(TID.gitLinks);
   }
@@ -125,7 +130,7 @@ export class GitCardPage {
   get helpSection(): Locator {
     return this.root.getByTestId(TID.gitHelp);
   }
-  /** In "Read more": the terminal command `git help <id>` and the link to its manual on git-scm.com. */
+  /** In «Документація»: the terminal command `git help <id>` and the link to its manual on git-scm.com. */
   get helpMore(): Locator {
     return this.root.getByTestId(TID.gitHelpMore);
   }

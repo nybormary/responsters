@@ -160,24 +160,24 @@ test(
     // A card can have its picture's text (art) before its other texts (init, RSP-191): "with texts" means a title.
     const cards = texts.git.cards as unknown as Record<string, (Partial<CardTexts> & { art?: string }) | undefined>;
 
-    // "Read more" ends with "Section in `git help`: <section>", the terminal command `git help <id>`, the command's
+    // «Документація» (RSP-221; "Read more" until then): "Section in `git help`: <section>", the terminal command `git help <id>`, the command's
     // line from git help in English (`init — Create an empty Git repository…`, Maryna, 2026-11-21) and the manual on
     // git-scm.com: Ukrainian where git-scm.com has it, otherwise English (2026-11-20).
     const expectReadMore = async (id: string) => {
       const g = GIT_CARDS.find((x) => x.id === id)!;
       const h = gitHelpOf(g);
-      await expect(gitCardPage.helpTitle, 'read more: section label').toHaveText(
+      await expect(gitCardPage.helpTitle, 'documentation: section label').toHaveText(
         visible(texts.git.ui.help(`\`git help${h.list ? ' ' + h.list : ''}\``)),
       );
-      await expect(gitCardPage.helpSection, 'read more: section, English').toHaveText(h.section);
-      await expect(gitCardPage.helpMore, 'read more: git help').toHaveText(`$ git help ${id}`);
-      await expect(gitCardPage.helpName, 'read more: the git help line, English').toHaveText(
+      await expect(gitCardPage.helpSection, 'documentation: section, English').toHaveText(h.section);
+      await expect(gitCardPage.helpMore, 'documentation: git help').toHaveText(`$ git help ${id}`);
+      await expect(gitCardPage.helpName, 'documentation: the git help line, English').toHaveText(
         `${id} — ${GIT_ABOUT[id]}`,
       );
       if (lang !== 'en') await expect(gitCardPage.helpName).toHaveAttribute('lang', 'en');
       const page = id === 'gitignore' ? 'gitignore' : `git-${id}`;
       const manual = gitCardPage.manual.getByRole('link', { name: texts.git.ui.manual });
-      await expect(manual, 'read more: git-scm.com').toHaveAttribute(
+      await expect(manual, 'documentation: git-scm.com').toHaveAttribute(
         'href',
         `https://git-scm.com/docs/${page}${lang === 'uk' ? '/uk' : ''}`,
       );
@@ -192,7 +192,9 @@ test(
       await expect(gitCardPage.hint).toHaveText(t.hint);
       await expect(gitCardPage.does).toContainText(visible(t.does.text));
       await expect(gitCardPage.metaOf(gitCardPage.does)).toHaveText(visible(t.does.meta));
-      if (t.tip) await expect(gitCardPage.tip).toHaveText(`${texts.git.ui.tip}. ${visible(t.tip)}`);
+      // outside links (not git's documentation, e.g. GitHub Docs on fork for clone) end the tip (RSP-221)
+      const outside = (g.links ?? []).map((l) => ` ${l.label[lang] ?? l.label.en} ↗`).join('');
+      if (t.tip) await expect(gitCardPage.tip).toHaveText(`${texts.git.ui.tip}. ${visible(t.tip)}${outside}`);
       // "Careful" on every card with careful texts, danger mark or not (RSP-200 AC5, 2026-11-21)
       const careful = t.careful ?? [];
       await expect(gitCardPage.careful).toHaveCount(careful.length ? 1 : 0);
@@ -227,9 +229,11 @@ test(
         else await expect(gitCardPage.confused.getByRole('link', { name })).toHaveCount(0);
       }
       for (const l of g.links ?? []) {
-        const a = gitCardPage.links.getByRole('link', { name: new RegExp(l.label[lang] ?? l.label.en) });
-        await expect(a, `read more: ${l.u}`).toHaveAttribute('href', l.u);
+        const a = gitCardPage.tip.getByRole('link', { name: new RegExp(l.label[lang] ?? l.label.en) });
+        await expect(a, `tip link: ${l.u}`).toHaveAttribute('href', l.u);
       }
+      // «Документація» holds git's own documentation only: no outside link there (RSP-221 AC3)
+      await expect(gitCardPage.links.getByRole('listitem')).toHaveCount(4);
       await expectReadMore(g.id);
       await expect(gitCardPage.root).not.toContainText('undefined');
     });
@@ -244,8 +248,8 @@ test(
       await expect(gitCardPage.careful).toHaveCount(0);
       await expect(gitCardPage.confused).toHaveCount(0);
       await expect(gitCardPage.tip).toHaveCount(0);
-      // only the "Read more" items every card has: "Section in git help: <section>", `$ git help <id>`, its git help
-      // line, git-scm.com
+      // only the «Документація» items every card has: "Section in git help: <section>", `$ git help <id>`, its git
+      // help line, git-scm.com
       await expect(gitCardPage.links.getByRole('listitem')).toHaveCount(4);
       await expectReadMore(b.id);
       await expect(gitCardPage.helpSection).toBeVisible();
@@ -265,7 +269,7 @@ test(
   async ({ gitCardPage, adventWall, axe, lang }) => {
     const g = pick(GIT_CARDS.filter((x) => x.conf?.length && x.day <= 10));
     for (const theme of THEMES) {
-      await test.step(`${theme}: ${g.name} card page (chips, code pills, tip, Read more)`, async () => {
+      await test.step(`${theme}: ${g.name} card page (chips, code pills, tip, Documentation)`, async () => {
         await axe.theme(theme);
         await gitCardPage.open(lang, g.id);
         await axe.expectNoViolations(`${theme}, git card page ${g.name}`);

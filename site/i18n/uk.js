@@ -544,10 +544,10 @@ export default {
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
       help: (c) => `Розділ у ${c}`,
       // before `git help <command>`, the command's own manual
-      manual: 'Документація на git-scm.com',
+      manual: 'git-scm.com',
       danger: 'Небезпечна команда',
       // heading of the outside links on a git card page
-      links: 'Докладніше',
+      docs: 'Документація',
     },
     // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
     wall: {

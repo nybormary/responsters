@@ -548,10 +548,11 @@ export default {
       help: (c) => `Section in ${c}`,
       // before `git help <command>`, the command's own manual
       // the command's manual on git-scm.com (2026-11-20): in the page language where git-scm.com has it, else English
-      manual: 'Documentation on git-scm.com',
+      manual: 'git-scm.com',
       danger: 'Dangerous command',
       // heading of the outside links on a git card page
-      links: 'Read more',
+      // the strip of git's own documentation (RSP-221, Maryna 2026-11-22): under the three columns on wide screens
+      docs: 'Documentation',
     },
     // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
     wall: {
