@@ -2,6 +2,10 @@
 // Cloudflare Web Analytics: the build puts one loader in every page a visitor stays on; it adds the beacon only on
 // mnemozoo.com. Requests to the beacon are blocked in every test (fixtures/analytics.ts): nothing reaches Cloudflare.
 // AC4 (the loader exactly once in every generated page, the language-less English pages too) is checked by the build itself.
+//
+// Case 0bb00e39 runs as one test per page (RSP-222): the single test that loaded the four pages on the address under
+// test and again through the mnemozoo.com proxy, plus mnemozoo.com/, ran out of its 30 s on a slow deploy preview
+// (PR #72). Each test now loads one page twice; the checks are the same.
 import { test, expect, TAG, AnalyticsBeacon, BeaconRequests, PRODUCTION_HOST, type Lang } from '../fixtures';
 
 const BEACON_SRC = 'https://static.cloudflareinsights.com/beacon.min.js';
@@ -9,39 +13,40 @@ const TOKEN = '0b35d40b48384f0eac7566c199b949a6'; // public: it is in every page
 
 const CODES = [102, 404, 504] as const; // the same cards as site-header.spec.ts and a11y.spec.ts
 
-/** The four pages a visitor stays on, in one language, with a random card. */
-const pagesOf = (lang: Lang) => {
-  const code = CODES[Math.floor(Math.random() * CODES.length)];
-  return [`/${lang}/`, `/${lang}/http/`, `/${lang}/http/${code}/`, `/${lang}/no-such-page/`];
-};
+/** The four pages a visitor stays on, each its own test; the card page takes a random card. */
+const PAGES: { name: string; path: (lang: Lang) => string }[] = [
+  { name: 'home', path: (lang) => `/${lang}/` },
+  { name: 'rubric', path: (lang) => `/${lang}/http/` },
+  {
+    name: 'a random card page',
+    path: (lang) => `/${lang}/http/${CODES[Math.floor(Math.random() * CODES.length)]}/`,
+  },
+  { name: '404', path: (lang) => `/${lang}/no-such-page/` },
+];
 
 // ── 0bb00e39 ────────────────────────────────────────────────────────────────────────────────────
 
-test(
-  'The analytics beacon loads once per page (home, rubric, a random card page, 404), only on mnemozoo.com, and sets no cookies @T0bb00e39',
-  { tag: [TAG.privacy] },
-  async ({ page, browser, baseURL, lang }) => {
-    const paths = pagesOf(lang);
-    const onProduction = new URL(baseURL!).hostname === PRODUCTION_HOST;
-    const here = new AnalyticsBeacon(page);
-    const hereRequests = new BeaconRequests(page);
+for (const { name, path: pathOf } of PAGES) {
+  test(
+    `The analytics beacon loads once per page, only on mnemozoo.com, and sets no cookies: ${name} @T0bb00e39`,
+    { tag: [TAG.privacy] },
+    async ({ page, browser, baseURL, lang }) => {
+      const path = pathOf(lang);
+      const onProduction = new URL(baseURL!).hostname === PRODUCTION_HOST;
+      const here = new AnalyticsBeacon(page);
+      const hereRequests = new BeaconRequests(page);
 
-    await test.step(`On the address under test${onProduction ? ' (production: the beacon loads)' : ''}: ${paths.join(', ')}`, async () => {
-      for (const path of paths) {
-        const before = hereRequests.urls.length;
+      await test.step(`On the address under test${onProduction ? ' (production: the beacon loads)' : ''}: ${path}`, async () => {
         await page.goto(path);
         await page.waitForLoadState('networkidle');
         expect(await here.loaders(), `${path}: beacon loaders in the HTML`).toBe(1);
         expect((await here.beacons()).length, `${path}: beacon tags`).toBe(onProduction ? 1 : 0);
-        expect(hereRequests.urls.length - before, `${path}: beacon requests`).toBe(onProduction ? 1 : 0);
-      }
-    });
+        expect(hereRequests.urls.length, `${path}: beacon requests`).toBe(onProduction ? 1 : 0);
+      });
 
-    const prod = await AnalyticsBeacon.asProduction(browser, baseURL!, page.viewportSize());
-    try {
-      await test.step(`The same pages as on mnemozoo.com: one beacon each, blocked: ${paths.join(', ')}`, async () => {
-        for (const path of paths) {
-          const before = prod.requests.urls.length;
+      const prod = await AnalyticsBeacon.asProduction(browser, baseURL!, page.viewportSize());
+      try {
+        await test.step(`The same page as on mnemozoo.com: one beacon, blocked: ${path}`, async () => {
           await prod.page.goto(`https://${PRODUCTION_HOST}${path}`);
           await prod.page.waitForLoadState('networkidle');
           expect(await prod.beacon.loaders(), `${path}: beacon loaders in the HTML`).toBe(1);
@@ -51,29 +56,40 @@ test(
             `${path}: beacon tags`,
           ).toEqual([BEACON_SRC]);
           expect(JSON.parse(tags[0].settings ?? '{}'), `${path}: beacon settings`).toEqual({ token: TOKEN });
-          expect(prod.requests.urls.slice(before), `${path}: beacon requests`).toEqual([BEACON_SRC]);
-        }
-        expect(
-          prod.requests.errors.filter((e) => !e.includes('ERR_BLOCKED_BY_CLIENT')),
-          'beacon requests that were not blocked',
-        ).toEqual([]);
-      });
+          expect(prod.requests.urls, `${path}: beacon requests`).toEqual([BEACON_SRC]);
+          expect(
+            prod.requests.errors.filter((e) => !e.includes('ERR_BLOCKED_BY_CLIENT')),
+            'beacon requests that were not blocked',
+          ).toEqual([]);
+        });
 
-      await test.step('mnemozoo.com/ is the English home page itself (RSP-216): one beacon request', async () => {
-        const before = prod.requests.urls.length;
+        await test.step('No cookie from the beacon, no consent banner', async () => {
+          expect(await AnalyticsBeacon.foreignCookies(page.context()), 'cookies on the address under test').toEqual([]);
+          expect(await AnalyticsBeacon.foreignCookies(prod.context), 'cookies on mnemozoo.com').toEqual([]);
+          await expect(prod.page.getByRole('dialog'), 'consent banner').toHaveCount(0);
+        });
+      } finally {
+        await AnalyticsBeacon.closeProduction(prod);
+      }
+    },
+  );
+}
+
+test(
+  'The analytics beacon loads once per page, only on mnemozoo.com: mnemozoo.com/ is the English home page itself (RSP-216) @T0bb00e39',
+  { tag: [TAG.privacy] },
+  async ({ page, browser, baseURL }) => {
+    const prod = await AnalyticsBeacon.asProduction(browser, baseURL!, page.viewportSize());
+    try {
+      await test.step('mnemozoo.com/: no redirect, one beacon request', async () => {
         await prod.page.goto(`https://${PRODUCTION_HOST}/`);
         await prod.page.waitForLoadState('networkidle');
         expect(new URL(prod.page.url()).pathname, 'no redirect from /').toBe('/');
-        expect(prod.requests.urls.length - before, 'beacon requests for the visit').toBe(1);
-      });
-
-      await test.step('No cookie from the beacon, no consent banner', async () => {
-        expect(await AnalyticsBeacon.foreignCookies(page.context()), 'cookies on the address under test').toEqual([]);
+        expect(prod.requests.urls.length, 'beacon requests for the visit').toBe(1);
         expect(await AnalyticsBeacon.foreignCookies(prod.context), 'cookies on mnemozoo.com').toEqual([]);
-        await expect(prod.page.getByRole('dialog'), 'consent banner').toHaveCount(0);
       });
     } finally {
-      await prod.context.close();
+      await AnalyticsBeacon.closeProduction(prod);
     }
   },
 );
