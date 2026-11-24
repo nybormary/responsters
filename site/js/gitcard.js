@@ -153,11 +153,12 @@ export function gitSide(g, tx, href, lang) {
 
 /**
  * «Документація» (RSP-221, Maryna 2026-11-22; until then "Read more" at the end of the side column): git's own
- * documentation, the same four items on every card, also without texts: "Section in git help: <section>" (the list
- * that shows the section: `git help`, `git help -a`, `git help --user-interfaces`), the terminal command for the manual
- * (`$ git help stash`), the command's line from git help in English (ABOUT, `stash — Stash the changes…`) and the
- * manual on git-scm.com. Wide screens: a strip under the three columns, each item under its page column (CSS, subgrid);
- * phones: at the end of the page, as before.
+ * documentation, the same four items on every card, also without texts, in this order (review of 2026-11-22): the
+ * terminal command for the manual (`$ git help stash`) with the command's line from git help in English under it
+ * (ABOUT, without the command's name: it stands right above), then "Section in git help: <section>" (the list that
+ * shows the section: `git help`, `git help -a`, `git help --user-interfaces`; usually the longest phrase, so the wide
+ * middle column on wide screens) and the manual on git-scm.com. Wide screens: a strip under the three columns, each
+ * item under its page column (CSS, subgrid); phones: at the end of the page, one under the other in the same order.
  */
 export function gitDocs(g, tx, lang) {
   const ui = tx.git.ui;
@@ -167,7 +168,7 @@ export function gitDocs(g, tx, lang) {
   const cmd = `<code>git help${h.list ? ' ' + esc(h.list) : ''}</code>`;
   return `<section class="g-docs" data-testid="git-docs">
               <h2>${esc(ui.docs)}</h2>
-              <ul class="links" data-testid="git-links"><li class="g-help-item"><span data-testid="git-help-title">${ui.help(cmd)}</span>: <span class="g-help" data-testid="git-help"${en}>${esc(h.section)}</span></li><li class="g-help-cmd" data-testid="git-help-more">${termCmd(`git help ${g.id}`)}</li><li class="g-help-name" data-testid="git-help-name"${en}><code>${esc(g.id)}</code> — ${esc(ABOUT[g.id])}</li><li class="g-manual" data-testid="git-manual">${manual(g, lang, ui.manual)}</li></ul>
+              <ul class="links" data-testid="git-links"><li class="g-help-cmd" data-testid="git-help-more">${termCmd(`git help ${g.id}`)}</li><li class="g-help-name" data-testid="git-help-name"${en}>${esc(ABOUT[g.id])}</li><li class="g-help-item"><span data-testid="git-help-title">${ui.help(cmd)}</span>: <span class="g-help" data-testid="git-help"${en}>${esc(h.section)}</span></li><li class="g-manual" data-testid="git-manual">${manual(g, lang, ui.manual)}</li></ul>
             </section>`;
 }
 

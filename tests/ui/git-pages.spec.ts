@@ -160,9 +160,10 @@ test(
     // A card can have its picture's text (art) before its other texts (init, RSP-191): "with texts" means a title.
     const cards = texts.git.cards as unknown as Record<string, (Partial<CardTexts> & { art?: string }) | undefined>;
 
-    // «Документація» (RSP-221; "Read more" until then): "Section in `git help`: <section>", the terminal command `git help <id>`, the command's
-    // line from git help in English (`init — Create an empty Git repository…`, Maryna, 2026-11-21) and the manual on
-    // git-scm.com: Ukrainian where git-scm.com has it, otherwise English (2026-11-20).
+    // «Документація» (RSP-221; "Read more" until then), in this order (review of 2026-11-22): the terminal command
+    // `git help <id>`, the command's line from git help in English without its name (`Create an empty Git repository…`),
+    // "Section in `git help`: <section>" and the manual on git-scm.com: Ukrainian where git-scm.com has it, otherwise
+    // English (2026-11-20).
     const expectReadMore = async (id: string) => {
       const g = GIT_CARDS.find((x) => x.id === id)!;
       const h = gitHelpOf(g);
@@ -171,10 +172,13 @@ test(
       );
       await expect(gitCardPage.helpSection, 'documentation: section, English').toHaveText(h.section);
       await expect(gitCardPage.helpMore, 'documentation: git help').toHaveText(`$ git help ${id}`);
-      await expect(gitCardPage.helpName, 'documentation: the git help line, English').toHaveText(
-        `${id} — ${GIT_ABOUT[id]}`,
-      );
+      await expect(gitCardPage.helpName, 'documentation: the git help line, English').toHaveText(GIT_ABOUT[id]);
       if (lang !== 'en') await expect(gitCardPage.helpName).toHaveAttribute('lang', 'en');
+      const items = gitCardPage.links.getByRole('listitem');
+      await expect(items.nth(0), 'documentation, 1st: git help <id>').toContainText(`$ git help ${id}`);
+      await expect(items.nth(1), 'documentation, 2nd: the git help line').toHaveText(GIT_ABOUT[id]);
+      await expect(items.nth(2), 'documentation, 3rd: section in git help').toContainText(h.section);
+      await expect(items.nth(3), 'documentation, 4th: git-scm.com').toContainText(texts.git.ui.manual);
       const page = id === 'gitignore' ? 'gitignore' : `git-${id}`;
       const manual = gitCardPage.manual.getByRole('link', { name: texts.git.ui.manual });
       await expect(manual, 'documentation: git-scm.com').toHaveAttribute(
