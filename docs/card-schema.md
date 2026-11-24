@@ -43,7 +43,7 @@ groups, never two danger marks on neighbouring days.
 
 Optional per card: `help` (where `git help` lists a command outside its short list: `{ list: '-a', section }`; the
 others show their group's section), `art` (the picture; without it the placeholder egg `EGG`), `vigs` (pictures for the
-options, only where drawn), `conf`, `links` ("Read more": `u`, `label` per language with English as the fallback,
+options, only where drawn), `conf`, `links` (outside links at the end of the tip, RSP-221: `u`, `label` per language with English as the fallback,
 optional `mark: 'github'` = GitHub's own logo file, unchanged, `site/img/brand/`). The build stops when a picture it names is missing in `site/`.
 
 ## Git card page (RSP-199)

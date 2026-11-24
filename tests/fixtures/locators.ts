@@ -43,6 +43,7 @@ export const TID = {
   gitFile: 'git-file', // .gitignore: a piece of the file, name on top (variant B, 2026-11-21)
   gitFileLine: 'git-file-line',
   gitTip: 'git-tip',
+  gitDocs: 'git-docs',
   gitLinks: 'git-links',
 
   // Practice (RSP-162): the answers of the current question and the feedback after an answer

@@ -541,10 +541,10 @@ export default {
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
       help: (c) => `Afsnit i ${c}`,
       // before `git help <command>`, the command's own manual
-      manual: 'Dokumentation på git-scm.com (på engelsk)',
+      manual: 'git-scm.com (på engelsk)',
       danger: 'Farlig kommando',
       // heading of the outside links on a git card page
-      links: 'Læs mere',
+      docs: 'Dokumentation',
     },
     // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
     wall: {

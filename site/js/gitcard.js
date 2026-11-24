@@ -112,12 +112,10 @@ export function gitMain(g, tx) {
  * moved here from the main column in the review of 2026-11-20, at the top so a phone shows it right after the options;
  * since 2026-11-21 also on calm cards with a dangerous option, e.g. stash drop, RSP-200 AC5), then "Often
  * confused with" (commands only; a command with its own card links to it); then the tip (moved here from the main
- * column to make it lighter, RSP-200 review 2026-11-16) and "Read more", the same on every card (rule, reviews of
- * 2026-11-20): outside links from g.links (label per language, English when missing; mark: 'github' = GitHub's own
- * logo file, unchanged, as their brand rules allow for a link to GitHub, brand.github.com/foundations/logo); "In git
- * help: <section>" (the list that shows the section: `git help`, `git help -a`, `git help --user-interfaces`); the
- * terminal command for the manual (`$ git help stash`); the command's line from git help in English (ABOUT, `stash —
- * Stash the changes…`); the manual on git-scm.com.
+ * column to make it lighter, RSP-200 review 2026-11-16). Outside links from g.links (not git's own documentation, e.g.
+ * GitHub Docs on fork for clone) end the tip (RSP-221, Maryna 2026-11-22): label per language, English when missing;
+ * mark: 'github' = GitHub's own logo file, unchanged, as their brand rules allow for a link to GitHub,
+ * brand.github.com/foundations/logo. git's own documentation is a strip of its own: gitDocs.
  * href(id) = the URL of another git card page in the same language; lang = the page language.
  */
 export function gitSide(g, tx, href, lang) {
@@ -132,16 +130,13 @@ export function gitSide(g, tx, href, lang) {
         : `<span><code>${esc(name)}</code></span>`;
     })
     .join('');
-  const h = helpOf(g);
-  // The git help texts stay English on every page (git help is English): marked for screen readers.
-  const en = lang === 'en' ? '' : ' lang="en"';
-  const cmd = `<code>git help${h.list ? ' ' + esc(h.list) : ''}</code>`;
   const careful = t.careful?.length
     ? `<div class="g-careful" data-testid="git-careful"><h2>${esc(ui.careful)}</h2>${t.careful
         .map((p, i) => `<p>${i ? inline(p) : `<b>${inline(p)}</b>`}</p>`)
         .join('')}</div>
               `
     : '';
+  const outside = (g.links || []).map((x) => ` ${link(x, lang)}`).join('');
   return `${careful}${
     conf
       ? `<h2>${esc(ui.conf)}</h2>
@@ -151,11 +146,30 @@ export function gitSide(g, tx, href, lang) {
   }${
     t.tip
       ? `
-              <p class="g-tip" data-testid="git-tip"><b>${esc(ui.tip)}.</b> ${inline(t.tip)}</p>`
+              <p class="g-tip" data-testid="git-tip"><b>${esc(ui.tip)}.</b> ${inline(t.tip)}${outside}</p>`
       : ''
-  }
-              <h2>${esc(ui.links)}</h2>
-              <ul class="links" data-testid="git-links">${(g.links || []).map((x) => `<li>${link(x, lang)}</li>`).join('')}<li class="g-help-item"><span data-testid="git-help-title">${ui.help(cmd)}</span>: <span class="g-help" data-testid="git-help"${en}>${esc(h.section)}</span></li><li class="g-help-cmd" data-testid="git-help-more">${termCmd(`git help ${g.id}`)}</li><li class="g-help-name" data-testid="git-help-name"${en}><code>${esc(g.id)}</code> — ${esc(ABOUT[g.id])}</li><li data-testid="git-manual">${manual(g, lang, ui.manual)}</li></ul>`;
+  }`;
+}
+
+/**
+ * «Документація» (RSP-221, Maryna 2026-11-22; until then "Read more" at the end of the side column): git's own
+ * documentation, the same four items on every card, also without texts, in this order (review of 2026-11-22): the
+ * terminal command for the manual (`$ git help stash`) with the command's line from git help in English under it
+ * (ABOUT, without the command's name: it stands right above), then "Section in git help: <section>" (the list that
+ * shows the section: `git help`, `git help -a`, `git help --user-interfaces`; usually the longest phrase, so the wide
+ * middle column on wide screens) and the manual on git-scm.com. Wide screens: a strip under the three columns, each
+ * item under its page column (CSS, subgrid); phones: at the end of the page, one under the other in the same order.
+ */
+export function gitDocs(g, tx, lang) {
+  const ui = tx.git.ui;
+  const h = helpOf(g);
+  // The git help texts stay English on every page (git help is English): marked for screen readers.
+  const en = lang === 'en' ? '' : ' lang="en"';
+  const cmd = `<code>git help${h.list ? ' ' + esc(h.list) : ''}</code>`;
+  return `<section class="g-docs" data-testid="git-docs">
+              <h2>${esc(ui.docs)}</h2>
+              <ul class="links" data-testid="git-links"><li class="g-help-cmd" data-testid="git-help-more">${termCmd(`git help ${g.id}`)}</li><li class="g-help-name" data-testid="git-help-name"${en}>${esc(ABOUT[g.id])}</li><li class="g-help-item"><span data-testid="git-help-title">${ui.help(cmd)}</span>: <span class="g-help" data-testid="git-help"${en}>${esc(h.section)}</span></li><li class="g-manual" data-testid="git-manual">${manual(g, lang, ui.manual)}</li></ul>
+            </section>`;
 }
 
 /**
@@ -169,7 +183,7 @@ function termCmd(c) {
 }
 
 /**
- * The command's manual on git-scm.com (Maryna, 2026-11-20), the last item of "Read more", after the terminal command
+ * The command's manual on git-scm.com (Maryna, 2026-11-20), the last item of «Документація», after the terminal command
  * `git help <id>`: in the page language where git-scm.com has it (Ukrainian: /docs/git-switch/uk), otherwise the
  * English manual (no Polish, Danish, Lithuanian or Estonian translations there; their label says "in English").
  * .gitignore is a file: its manual is /docs/gitignore, without "git-".
@@ -182,17 +196,19 @@ function manual(g, lang, label) {
   return `<a href="${href}" target="_blank" rel="noopener"${own ? '' : ' hreflang="en"'}>${GIT_MARK}${esc(label)} ↗</a>`;
 }
 
-/** Brand marks next to an outside link: the owner's own files, never redrawn or recoloured (one per theme). */
-const MARKS = { github: ['/img/brand/github-mark-black.svg', '/img/brand/github-mark-white.svg'] };
+/** Brand marks next to an outside link: the owner's own files, never redrawn or recoloured (the black one: the tip box
+   is light paper in both themes, RSP-221). */
+const MARKS = { github: '/img/brand/github-mark-black.svg' };
 /** The Git logomark (Git-Icon-1788C from git-scm.com/community/logos, unchanged; by Jason Long, CC BY 3.0): orange,
    readable on both themes, so one file. */
 const GIT_MARK = '<img class="mk" src="/img/brand/Git-Icon-1788C.svg" alt="" width="16" height="16">';
 
-/** One "Read more" link: label in the page language (English when missing), opens in a new tab like the HTTP pages. */
+/**
+ * One outside link at the end of the tip: label in the page language (English when missing), opens in a new tab.
+ * The tip box is light paper in both themes, so only the owner's black mark (RSP-221).
+ */
 function link(x, lang) {
   const m = MARKS[x.mark];
-  const mark = m
-    ? `<img class="mk mk-light" src="${m[0]}" alt="" width="16" height="16"><img class="mk mk-dark" src="${m[1]}" alt="" width="16" height="16">`
-    : '';
+  const mark = m ? `<img class="mk" src="${m}" alt="" width="16" height="16">` : '';
   return `<a href="${x.u}" target="_blank" rel="noopener">${mark}${esc(x.label[lang] || x.label.en)} ↗</a>`;
 }

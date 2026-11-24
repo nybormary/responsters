@@ -18,7 +18,7 @@ import { CONF, PAIRS } from '../site/data/http/traps.js';
 import { NEWS } from '../site/data/news.js';
 import { GIT, EGG, WALL, TILT } from '../site/data/git/cards.js';
 import { GROUPS } from '../site/data/git/groups.js';
-import { gitCardBody, gitMain, gitSide, groupIcon, inline } from '../site/js/gitcard.js';
+import { gitCardBody, gitDocs, gitMain, gitSide, groupIcon, inline } from '../site/js/gitcard.js';
 import { LOCALES, LANG_NAMES } from '../site/i18n/index.js';
 import en from '../site/i18n/en.js';
 import { fill } from '../site/i18n/fill.js';
@@ -358,6 +358,7 @@ function gitPage(lang, tx, g) {
             <aside class="page-side">
               ${gitSide(g, tx, (id) => gitUrl(lang, id), lang)}
             </aside>
+            ${gitDocs(g, tx, lang)}
           </div>
           <div class="page-bottom">
             ${back}

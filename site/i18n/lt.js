@@ -544,10 +544,10 @@ export default {
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
       help: (c) => `Skyrius ${c}`,
       // before `git help <command>`, the command's own manual
-      manual: 'Dokumentacija git-scm.com (anglų k.)',
+      manual: 'git-scm.com (anglų k.)',
       danger: 'Pavojinga komanda',
       // heading of the outside links on a git card page
-      links: 'Skaityti daugiau',
+      docs: 'Dokumentacija',
     },
     // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
     wall: {

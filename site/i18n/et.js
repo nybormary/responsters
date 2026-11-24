@@ -542,10 +542,10 @@ export default {
       // c = the list where git help shows the command's section, already as HTML (<code>git help -a</code>)
       help: (c) => `Jaotis ${c}-is`,
       // before `git help <command>`, the command's own manual
-      manual: 'Dokumentatsioon git-scm.com-is (inglise keeles)',
+      manual: 'git-scm.com (inglise keeles)',
       danger: 'Ohtlik käsk',
       // heading of the outside links on a git card page
-      links: 'Loe lisaks',
+      docs: 'Dokumentatsioon',
     },
     // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
     wall: {
