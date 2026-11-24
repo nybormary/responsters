@@ -312,10 +312,18 @@ Workflow: `.github/workflows/ui-tests.yml` (RSP-127). It runs by itself on every
 
 | The PR changes | What CI does | Goes to testomat.io |
 |---|---|---|
-| `site/`, `netlify/`, `scripts/build-pages.mjs` or `netlify.toml` | Waits until Netlify reports the deploy preview of the PR's last commit as ready (up to 10 minutes), then runs [variant 8](#8-deploy-preview-of-a-pr) | Yes: title `🦭 CI · PR #<n> (<branch>) on deploy preview`, environment `Target:deploy-preview,Browser:Chrome` |
+| `site/`, `netlify/`, `scripts/build-pages.mjs` or `netlify.toml` | Waits until Netlify reports the deploy preview of the PR's last commit as ready (up to 10 minutes), then runs [variant 8](#8-deploy-preview-of-a-pr) | Yes: title `🦭 CI · PR #<n> (<branch>) on deploy preview`, environment `Target:deploy-preview,Browser:Chrome`; `… on deploy preview of <commit> (site unchanged)` when the push itself changed no site file (below) |
 | Anything else | No deploy preview exists (Netlify's `ignore` rule), so it runs [variant 1](#1-before-a-commit) on the PR's own files | No |
 
-**A push with only tests or docs in a PR that changes the site** (RSP-174): Netlify compares the push with its last built preview, not with `master`, finds no site change and cancels the preview ("Deploy Preview canceled"). CI then runs [variant 1](#1-before-a-commit) on the PR's own files, not reported, and says so in the log. A failed Netlify build, or no preview after 10 minutes, still fails the check.
+**A push with no site change in a PR that changes the site** (RSP-174, RSP-223): only tests or docs, an empty commit, or **Update branch** with a `master` that changed no site file. Netlify compares the push with its last built preview of the PR, not with `master`, finds no site change and cancels this commit's preview ("Deploy Preview canceled"). The site is then the same as in that last built preview, and `deploy-preview-<n>` still serves it, so CI runs [variant 8](#8-deploy-preview-of-a-pr) there and reports it with `of <commit> (site unchanged)` in the title: `<commit>` is the PR's newest commit whose preview is ready. Only a PR that has no built preview at all gets [variant 1](#1-before-a-commit) on its own files, not reported. The log says which case it was. A failed Netlify build, or no preview after 10 minutes, still fails the check.
+
+Three cases at a glance:
+
+| This commit's Netlify preview | Where the tests run | testomat.io title |
+|---|---|---|
+| ready | this commit's preview | `… on deploy preview` |
+| canceled, the PR has a built preview | the PR's last built preview (same site) | `… on deploy preview of <commit> (site unchanged)` |
+| canceled, no built preview in the PR | the PR's own files (variant 1) | not reported |
 
 Every run also does `npm run typecheck` and `npm run check-locales`.
 
