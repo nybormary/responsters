@@ -113,4 +113,13 @@ export class AnalyticsBeacon {
     });
     return { page, beacon: new AnalyticsBeacon(page), requests: new BeaconRequests(page), context };
   }
+
+  /**
+   * Closes the mnemozoo.com copy from asProduction. Routes still in flight are dropped first, so a request the page
+   * started late doesn't fail the test with "route.fetch: Test ended" (RSP-222).
+   */
+  static async closeProduction(prod: { page: Page; context: BrowserContext }): Promise<void> {
+    await prod.page.unrouteAll({ behavior: 'ignoreErrors' });
+    await prod.context.close();
+  }
 }
