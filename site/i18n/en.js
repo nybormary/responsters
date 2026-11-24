@@ -483,6 +483,85 @@ export default {
       },
     },
   },
+  // Lab /<lang>/lab/ (RSP-209) and "In circles" /<lang>/lab/geometry/circles/ (RSP-211): my own mnemonics and schemes.
+  // Panel texts: name, a short caption, one sentence that reads the picture (it is the figcaption), and the picture
+  // description (the svg's name for screen readers).
+  lab: {
+    title: 'Lab · Mnemozoo',
+    description: 'My own mnemonics and schemes for testers: test types on one product circle and more.',
+    sign: 'Lab · own methods',
+    h1: 'Lab',
+    lead: 'Mnemonics and schemes I came up with myself. These are my conventions, not a standard: where they differ from ISTQB, I say so.',
+    name: 'Lab',
+    crumbs: 'Breadcrumbs',
+    geometry: {
+      title: 'Test geometry · Lab · Mnemozoo',
+      name: 'Test geometry',
+      lead: 'Test types as shapes: which part of the product we check, and how deep.',
+    },
+    circles: {
+      title: 'Testing in circles · Lab · Mnemozoo',
+      description: 'BVT, smoke, sanity, regression, retest and a usual Tuesday on one product circle.',
+      name: 'Testing in circles',
+      crumb: 'In circles',
+      card: 'BVT, smoke, sanity, regression, retest and a usual Tuesday on one product circle. The fill shows the depth, the inner circle the critical functionality.',
+      go: 'See the circle →',
+      lead: "Let's try to show the difference between test types on circles. The diagram is very simplified and doesn't claim to cover every type. But check whether it matches your own experience.",
+      howTitle: 'How to read the circle',
+      legend: {
+        core: 'critical functionality',
+        build: 'build (deploy)',
+        new: 'new functionality',
+        bug: 'fixed bug',
+        shallow: 'shallow',
+        deep: 'deep',
+        either: 'the depth depends on how important the functionality is',
+      },
+      panelsLabel: 'Six test types',
+      panels: {
+        bvt: {
+          name: 'BVT',
+          caption: 'the build is alive',
+          line: 'Only the centre is hatched: we check that the build is deployed and starts. The functionality is not touched yet.',
+          alt: 'Only the purple centre is hatched.',
+        },
+        smoke: {
+          name: 'Smoke',
+          caption: 'critical, shallow',
+          line: 'The critical functionality is hatched: we go through all the main scenarios, but not deep. Can this build be tested at all?',
+          alt: 'The inner circle is hatched, the centre is not.',
+        },
+        sanity: {
+          name: 'Sanity',
+          caption: 'a slice down to the critical part',
+          line: 'A thin solid wedge: one path through the new functionality, all the way down to the critical functionality. Is the change worth testing further?',
+          alt: 'A thin solid wedge from the new sector through the critical functionality to the centre.',
+        },
+        regression: {
+          name: 'Regression',
+          caption: 'the old stays intact',
+          line: 'Everything old is striped: we check that the change broke nothing. Shallow or deep, depending on the risk.',
+          alt: 'The whole circle is striped except the new sector and the centre.',
+        },
+        retest: {
+          name: 'Retest',
+          aka: '(confirmation testing)',
+          caption: 'only this bug',
+          line: 'Only the ring around the bug is filled: we check that exactly this bug is fixed, and nothing around it.',
+          alt: 'Only a solid ring around the bug.',
+        },
+        tuesday: {
+          name: 'A usual Tuesday',
+          caption: 'all together',
+          line: 'The build is hatched, the new part solid down to the critical functionality, the old part striped, plus the retest ring: what a release cycle usually looks like.',
+          alt: 'A hatched centre, the new sector solid down to the centre, the rest striped, a solid ring around the bug.',
+        },
+      },
+      istqbTitle: 'Honestly about the terms',
+      istqb:
+        'In the ISTQB glossary, sanity test is a synonym of smoke test. In practice the two are often told apart: smoke is wide and shallow, sanity narrow and deep. This page shows the practical meaning. ISTQB calls a retest confirmation testing.',
+    },
+  },
   // Home page /<lang>/ (RSP-156). Numbers come from site/data, so they stay true when cards or pairs are added.
   // Page for a missing address (RSP-148): /<lang>/404.html, served by Netlify with status 404.
   notFound: {

@@ -479,6 +479,83 @@ export default {
       },
     },
   },
+  // Labor /<lang>/lab/ (RSP-209) ja „Testimine ringiratast" /<lang>/lab/geometry/circles/ (RSP-211). Mustand.
+  lab: {
+    title: 'Labor · Mnemozoo',
+    description: 'Minu enda mnemoonikad ja skeemid testijatele: testiliigid ühel tooteringil ja muud.',
+    sign: 'Labor · omad meetodid',
+    h1: 'Labor',
+    lead: 'Mnemoonikad ja skeemid, mille olen ise välja mõelnud. Need on minu kokkulepped, mitte standard: kus need ISTQB-st erinevad, ütlen seda otse.',
+    name: 'Labor',
+    crumbs: 'Leivapururada',
+    geometry: {
+      title: 'Testimise geomeetria · Labor · Mnemozoo',
+      name: 'Testimise geomeetria',
+      lead: 'Testiliigid kujunditena: millist osa tootest me kontrollime ja kui sügavalt.',
+    },
+    circles: {
+      title: 'Testimine ringiratast · Labor · Mnemozoo',
+      description: 'BVT, smoke, sanity, regressioon, korduvtest ja tavaline teisipäev ühel tooteringil.',
+      name: 'Testimine ringiratast',
+      crumb: 'Ringiratast',
+      card: 'BVT, smoke, sanity, regressioon, korduvtest ja tavaline teisipäev ühel tooteringil. Täide näitab sügavust, sisemine ring kriitilist funktsionaalsust.',
+      go: 'Vaata ringi →',
+      lead: 'Proovime ringidel näidata, kuidas testiliigid erinevad. Diagramm on väga lihtsustatud ega püüa näidata kõiki liike. Aga kontrolli, kas see klapib sinu kogemusega.',
+      howTitle: 'Kuidas ringi lugeda',
+      legend: {
+        core: 'kriitiline funktsionaalsus',
+        build: 'build (paigaldus)',
+        new: 'uus funktsionaalsus',
+        bug: 'parandatud viga',
+        shallow: 'pinnapealselt',
+        deep: 'sügavuti',
+        either: 'testimise sügavus sõltub sellest, kui oluline on funktsionaalsus',
+      },
+      panelsLabel: 'Kuus testiliiki',
+      panels: {
+        bvt: {
+          name: 'BVT',
+          caption: 'build elab',
+          line: 'Viirutatud on ainult keskpunkt: kontrollime, et build on paigaldatud ja käivitub. Funktsionaalsust veel ei puuduta.',
+          alt: 'Viirutatud on ainult lilla keskpunkt.',
+        },
+        smoke: {
+          name: 'Smoke',
+          caption: 'kriitiline, pinnapealselt',
+          line: 'Kriitiline funktsionaalsus on viirutatud: läbime kõik peamised stsenaariumid, kuid mitte sügavuti. Kas seda buildi saab üldse testida?',
+          alt: 'Sisemine ring on viirutatud, keskpunkt mitte.',
+        },
+        sanity: {
+          name: 'Sanity',
+          caption: 'lõige kriitiliseni',
+          line: 'Õhuke täidetud kiil: üks tee läbi uue funktsionaalsuse kuni kriitilise funktsionaalsuseni välja. Kas muudatust tasub edasi testida?',
+          alt: 'Õhuke täidetud kiil uuest sektorist läbi kriitilise funktsionaalsuse keskpunktini.',
+        },
+        regression: {
+          name: 'Regressioon',
+          caption: 'vana jääb terveks',
+          line: 'Kõik vana on triibuline: kontrollime, et muudatus ei rikkunud midagi. Pinnapealselt või sügavuti, sõltuvalt riskist.',
+          alt: 'Kogu ring on triibuline, välja arvatud uus sektor ja keskpunkt.',
+        },
+        retest: {
+          name: 'Korduvtest',
+          aka: '(confirmation testing)',
+          caption: 'ainult see viga',
+          line: 'Täidetud on ainult rõngas vea ümber: kontrollime, et parandati just see viga, ja mitte midagi selle ümber.',
+          alt: 'Ainult täidetud rõngas vea ümber.',
+        },
+        tuesday: {
+          name: 'Tavaline teisipäev',
+          caption: 'kõik koos',
+          line: 'Build on viirutatud, uus täidetud kuni kriitilise funktsionaalsuseni, vana triibuline, lisaks korduvtesti rõngas: nii näeb väljalasketsükkel tavaliselt välja.',
+          alt: 'Viirutatud keskpunkt, uus sektor täidetud kuni keskpunktini, ülejäänu triibuline, täidetud rõngas vea ümber.',
+        },
+      },
+      istqbTitle: 'Ausalt terminitest',
+      istqb:
+        'ISTQB sõnastikus on sanity test smoke testi sünonüüm. Praktikas eristatakse neid sageli: smoke on lai ja pinnapealne, sanity kitsas ja sügav. Sellel lehel on näidatud praktiline tähendus. Korduvtesti nimetab ISTQB confirmation testing.',
+    },
+  },
   // Avaleht /<lang>/ (RSP-156).
   notFound: {
     title: '404: siin ei ela kedagi · Mnemozoo',

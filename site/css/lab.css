@@ -1,0 +1,285 @@
+/* Lab pages (RSP-209, RSP-211): /<lang>/lab/, /<lang>/lab/geometry/, /<lang>/lab/geometry/circles/.
+   Alignment standards agreed 2026-11-22 (RSP-211 comment 10545): the same width as the home page; panel cards of equal
+   height, 3 per row wide, 2 on a tablet, 1 on a phone, circle centred and texts left-aligned; "How to read the circle"
+   = heading + legend in two groups (polish 2026-11-22). Mockup: Design canvas "Mnemozoo home — own look". */
+.lab {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  margin-top: 40px;
+  font-size: 17px;
+}
+.lab h1 {
+  margin: 0;
+  font: 800 clamp(34px, 6vw, 48px) / 1.08 var(--display);
+}
+.lab h2 {
+  margin: 0;
+  font: 800 clamp(26px, 4vw, 32px) / 1.15 var(--display);
+}
+.lab-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 46em;
+}
+.lab-lead {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.55;
+}
+.lab-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.lab-section > p {
+  margin: 0;
+  max-width: 46em;
+}
+/* Links in Lab texts (breadcrumbs, the rubric heading) in ink, like the site's other in-text links. */
+.lab-crumbs a,
+.lab-section h2 a {
+  color: var(--ink);
+  text-underline-offset: 4px;
+}
+.lab-crumbs a:hover,
+.lab-section h2 a:hover {
+  color: var(--accent);
+}
+
+/* Breadcrumbs: Lab › Geometry › In circles. The current page is text, not a link. */
+.lab-crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+  font-weight: 700;
+}
+.lab-crumbs li + li::before {
+  content: '›';
+  margin-right: 8px;
+  color: var(--muted);
+}
+
+/* Link card to a subsection: the whole card is one link (its title), the teaser circles are decoration. */
+.lab-card {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 28px;
+  padding: 24px;
+  border: var(--outline);
+  border-radius: var(--r-l);
+  background: var(--surface);
+}
+.lab-card-text {
+  display: flex;
+  flex: 1 1 380px;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.lab-card h3 {
+  margin: 0;
+  font: 800 26px/1.15 var(--display);
+}
+.lab-card h3 a {
+  color: var(--ink);
+  text-decoration: none;
+}
+.lab-card h3 a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-l);
+}
+.lab-card h3 a:focus-visible {
+  outline: none;
+}
+.lab-card:focus-within {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.lab-card p {
+  margin: 0;
+}
+.lab-go {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.lab-card:hover .lab-go {
+  color: var(--accent);
+}
+.lab-teaser {
+  flex: none;
+  max-width: 100%;
+  height: auto;
+}
+
+/* "How to read the circle": the heading, then the legend in two groups, one row each: the parts of the circle, then
+   the fills; on a phone each group is a column (polish 2026-11-22: the reading rules went, they only repeated the
+   legend; two rows instead of two columns, because the Ukrainian words don't fit one line side by side). */
+.lab-how {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+  border: var(--outline);
+  border-radius: var(--r-l);
+  background: var(--surface);
+}
+.lab-how h2 {
+  font-size: 24px;
+}
+.lab-legends {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.lab-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+}
+.lab-legend li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lab-legend svg {
+  flex: none;
+}
+@media (min-width: 600px) {
+  .lab-legend {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+  }
+}
+
+/* Panels: equal-height cards, 1 / 2 / 3 per row; the circle centred, the texts left-aligned on the same lines. */
+.lab-panels {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 600px) {
+  .lab-panels {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 960px) {
+  .lab-panels {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.lab-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  margin: 0;
+  padding: 24px;
+  border: var(--outline);
+  border-radius: var(--r-l);
+  background: var(--surface);
+}
+.lab-circle {
+  align-self: center;
+}
+.lab-panel figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lab-panel-name {
+  font: 800 22px/1.2 var(--display);
+}
+.lab-panel-aka {
+  font: 700 16px var(--body);
+  color: var(--muted);
+}
+.lab-panel-caption {
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* "Honestly about the terms": a dashed note, like a hand-written addition. */
+.lab-note {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 52em;
+  padding: 20px 24px;
+  border: 2.5px dashed var(--ink);
+  border-radius: var(--r-l);
+}
+.lab-note h2 {
+  font-size: 22px;
+}
+.lab-note p {
+  margin: 0;
+}
+
+/* Circle colours: classes, not fixed colours, so the dark theme recolours them (base.css tokens). */
+.lab-defs {
+  position: absolute;
+}
+.lab-line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+.lab-core {
+  fill: none;
+  stroke: var(--c3-ink);
+  stroke-width: 2;
+}
+.lab-build {
+  fill: none;
+  stroke: var(--c1-ink);
+  stroke-width: 2;
+}
+.lab-new {
+  fill: none;
+  stroke: var(--c4-ink);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+}
+.lab-bug {
+  fill: var(--bad);
+}
+.lab-solid {
+  fill: var(--c2-ink);
+  fill-opacity: 0.6;
+}
+.lab-hatch-line {
+  stroke: var(--c2-ink);
+  stroke-width: 2;
+}
+.lab-hatch-build-line {
+  stroke: var(--c1-ink);
+  stroke-width: 2;
+}
+.lab-stripe-band {
+  fill: var(--c2-ink);
+  fill-opacity: 0.5;
+}
+.lab-swatch {
+  stroke: var(--ink);
+  stroke-width: 1;
+}

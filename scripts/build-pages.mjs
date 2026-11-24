@@ -1,6 +1,7 @@
 // Page build (RSP-90, URL scheme RSP-138, home page RSP-156): copies site/ to dist/ and writes, per language,
 // the home page at /<lang>/, the app at /<lang>/http/, one static page per creature at /<lang>/http/<code>/ and one per
-// git card at /<lang>/git/<id>/ (RSP-199). Language-less URLs (/, /http/, /http/<code>/, /git/<id>/) show the English
+// git card at /<lang>/git/<id>/ (RSP-199), and the Lab at /<lang>/lab/, /<lang>/lab/geometry/,
+// /<lang>/lab/geometry/circles/ (RSP-209, RSP-211). Language-less URLs (/, /http/, /http/<code>/, /git/<id>/) show the English
 // page itself, with a hint to open the visitor's language (RSP-216): no redirect at all, so nothing flashes. The same
 // file on Netlify and in a local run; no server-side language redirect (RSP-183).
 // Netlify runs the build before every deploy (netlify.toml) and publishes dist/.
@@ -33,6 +34,7 @@ import {
   APP_LANG_MENU,
 } from '../site/js/render.js';
 import { cls, art, addDays, dayMonth } from '../site/js/util.js';
+import { PANELS, circleSvg, circleDefs, SWATCH, LEGEND, TEASER } from './lab-circle.mjs';
 
 // The Git trademark line (git-scm.com/about/trademark, checked 2026-11-21): as the policy words it, in English on every
 // page, under the logo credit in "About"; the intro above the advent wall marks the first prominent "Git™".
@@ -105,6 +107,12 @@ const FIRST_SCREEN_FONTS = {
     pl: [...NEWS_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 700'],
     lt: [...NEWS_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 700'],
   },
+  // Lab pages (RSP-209, RSP-211): like "What's new", no codes; headings in Bitter 800 (h1, h2) and 700 (signs).
+  lab: {
+    uk: [...NEWS_FONTS, 'bitter cyrillic 700', 'bitter cyrillic 800'],
+    pl: [...NEWS_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 800'],
+    lt: [...NEWS_FONTS, ...ATKINSON_EXT, 'bitter latin-ext 800'],
+  },
   'not-found': {
     uk: [...PAGE_FONTS, 'bitter cyrillic 800'],
     pl: [...PAGE_FONTS, ...ATKINSON_EXT],
@@ -117,7 +125,7 @@ const CARD_FONTS = { et: { 503: ['atkinson latin-ext 400'] } };
 // Every page type × language not listed above uses its type's common set.
 const firstScreenFonts = (type, lang, code) =>
   [
-    ...(FIRST_SCREEN_FONTS[type][lang] || { app: APP_FONTS, news: NEWS_FONTS }[type] || PAGE_FONTS),
+    ...(FIRST_SCREEN_FONTS[type][lang] || { app: APP_FONTS, news: NEWS_FONTS, lab: NEWS_FONTS }[type] || PAGE_FONTS),
     ...((type === 'creature' && CARD_FONTS[lang]?.[code]) || []),
   ].map(fontFile);
 
@@ -168,6 +176,7 @@ const STYLES = {
   home: ['fonts', 'base', 'site', 'home'],
   'not-found': ['fonts', 'base', 'site', 'card'],
   news: ['fonts', 'base', 'site', 'news'],
+  lab: ['fonts', 'base', 'site', 'lab'],
   git: ['fonts', 'base', 'site', 'card', 'detail', 'git'],
   wall: ['fonts', 'base', 'site', 'advent'],
 };
@@ -204,6 +213,14 @@ const appUrl = (lang) => (lang ? `/${lang}` : '') + '/http/';
 const homeOrRoot = (lang) => (lang ? homeUrl(lang) : '/');
 /** Path of the "What's new" page (RSP-145), e.g. newsUrl('uk') → '/uk/news/'; newsUrl(null) → '/news/'. */
 const newsUrl = (lang) => (lang ? `/${lang}` : '') + '/news/';
+/** Lab (RSP-209): labUrl('uk') → '/uk/lab/'; labUrl(null) → '/lab/'. */
+const labUrl = (lang) => (lang ? `/${lang}` : '') + '/lab/';
+/** The Geometry rubric of the Lab: labGeometryUrl('uk') → '/uk/lab/geometry/'. */
+const labGeometryUrl = (lang) => `${labUrl(lang)}geometry/`;
+/** "In circles" (RSP-211): labCirclesUrl('uk') → '/uk/lab/geometry/circles/'. */
+const labCirclesUrl = (lang) => `${labGeometryUrl(lang)}circles/`;
+/** The Lab pages, in the order of the breadcrumbs. */
+const LAB_URLS = [labUrl, labGeometryUrl, labCirclesUrl];
 /** Path of a creature page, e.g. creatureUrl('uk', 401) → '/uk/http/401/'. */
 const creatureUrl = (lang, c) => `${appUrl(lang)}${c}/`;
 /** Path of the git rubric (the advent wall, RSP-195), e.g. gitHome('uk') → '/uk/git/'. */
@@ -702,6 +719,155 @@ function newsPage(lang, tx) {
 }
 
 /**
+ * The head and frame of one Lab page (RSP-209): title, description, canonical, hreflang, the site header with the
+ * language menu to the same Lab page, and the footer. `url` is one of LAB_URLS.
+ */
+function labPage(lang, tx, url, { title, description, testid, body }) {
+  return `<!doctype html>
+<html lang="${lang}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    ${BEACON}
+    <title>${esc(title)}</title>
+    <meta name="description" content="${esc(description)}" />
+    <link rel="canonical" href="${ORIGIN}${url(lang)}" />
+    ${alternates(url)}
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    ${styles('lab')}
+    ${preloads('lab', lang)}
+    <script type="module" src="/js/site.js"></script>
+  </head>
+  <body>
+    <div class="wrap">
+    ${siteHeader(lang, tx.site, langMenu(lang, url, LANG_NAMES, tx.ui.lang))}
+    <main class="lab" data-testid="${testid}">
+      ${body}
+    </main>
+    ${siteFooter(lang, tx.site, COPY, `${ORIGIN}${url(lang)}`)}
+    </div>
+  </body>
+</html>
+`;
+}
+
+/** Breadcrumbs of a Lab page: every level above it as a link, the page itself as text (aria-current). */
+function labCrumbs(lang, t, depth) {
+  const names = [t.name, t.geometry.name, t.circles.crumb];
+  const items = LAB_URLS.slice(0, depth + 1).map((url, i) =>
+    i === depth
+      ? `<li><span aria-current="page">${esc(names[i])}</span></li>`
+      : `<li><a href="${url(lang)}">${esc(names[i])}</a></li>`,
+  );
+  return `<nav class="lab-crumbs" aria-label="${esc(t.crumbs)}" data-testid="lab-crumbs">
+        <ol>
+          ${items.join('\n          ')}
+        </ol>
+      </nav>`;
+}
+
+/** The link card to "In circles", on the Lab page and the Geometry page. */
+const circlesCard = (lang, t) => `<div class="lab-card" data-testid="lab-card-circles">
+          <div class="lab-card-text">
+            <h3><a href="${labCirclesUrl(lang)}" data-testid="lab-link-circles">${esc(t.circles.name)}</a></h3>
+            <p>${esc(t.circles.card)}</p>
+            <span class="lab-go" aria-hidden="true">${esc(t.circles.go)}</span>
+          </div>
+          ${TEASER}
+        </div>`;
+
+/** The Lab /<lang>/lab/ (RSP-209): my own mnemonics; for now the Geometry rubric with "In circles". */
+function labSectionPage(lang, tx) {
+  const t = tx.lab;
+  return labPage(lang, tx, labUrl, {
+    title: t.title,
+    description: t.description,
+    testid: 'lab-page',
+    body: `${circleDefs}
+      <section class="lab-intro" aria-labelledby="lab-title">
+        <p class="sign sign-open" data-testid="lab-sign">${esc(t.sign)}</p>
+        <h1 id="lab-title">${esc(t.h1)}</h1>
+        <p class="lab-lead">${esc(t.lead)}</p>
+      </section>
+      <section class="lab-section" aria-labelledby="lab-geometry" data-testid="lab-rubric-geometry">
+        <h2 id="lab-geometry"><a href="${labGeometryUrl(lang)}" data-testid="lab-link-geometry">${esc(t.geometry.name)}</a></h2>
+        <p>${esc(t.geometry.lead)}</p>
+        ${circlesCard(lang, t)}
+      </section>`,
+  });
+}
+
+/** The Geometry rubric /<lang>/lab/geometry/ (RSP-209): its subsections; for now "In circles". */
+function labGeometryPage(lang, tx) {
+  const t = tx.lab;
+  return labPage(lang, tx, labGeometryUrl, {
+    title: t.geometry.title,
+    description: t.geometry.lead,
+    testid: 'lab-geometry-page',
+    body: `${circleDefs}
+      <section class="lab-intro" aria-labelledby="lab-title">
+        ${labCrumbs(lang, t, 1)}
+        <h1 id="lab-title">${esc(t.geometry.name)}</h1>
+        <p class="lab-lead">${esc(t.geometry.lead)}</p>
+      </section>
+      ${circlesCard(lang, t)}`,
+  });
+}
+
+/**
+ * "In circles" /<lang>/lab/geometry/circles/ (RSP-211): how to read the circle (the legend), the six panels of the main row, the
+ * ISTQB note. Each panel is a <figure>: the picture (its name is the picture description) and a caption with the
+ * type's name, its short caption and one sentence that reads the picture (RSP-211 AC8).
+ */
+function labCirclesPage(lang, tx) {
+  const t = tx.lab;
+  const c = t.circles;
+  const legend = LEGEND.map(
+    (group) => `<ul class="lab-legend" role="list">
+            ${group.map((k) => `<li>${SWATCH[k]}<span>${esc(c.legend[k])}</span></li>`).join('\n            ')}
+          </ul>`,
+  ).join('\n          ');
+  const panels = PANELS.map((p) => {
+    const pt = c.panels[p.id];
+    const aka = pt.aka ? ` <span class="lab-panel-aka">${esc(pt.aka)}</span>` : '';
+    return `<li>
+          <figure class="lab-panel" data-testid="lab-panel-${p.id}">
+        ${circleSvg(p, pt.alt, esc)}
+            <figcaption>
+              <span class="lab-panel-name">${esc(pt.name)}${aka}</span>
+              <span class="lab-panel-caption">${esc(pt.caption)}</span>
+              <span>${esc(pt.line)}</span>
+            </figcaption>
+          </figure>
+        </li>`;
+  }).join('\n        ');
+  return labPage(lang, tx, labCirclesUrl, {
+    title: c.title,
+    description: c.description,
+    testid: 'lab-circles-page',
+    body: `${circleDefs}
+      <section class="lab-intro" aria-labelledby="lab-title">
+        ${labCrumbs(lang, t, 2)}
+        <h1 id="lab-title">${esc(c.name)}</h1>
+        <p class="lab-lead">${esc(c.lead)}</p>
+      </section>
+      <section class="lab-how" aria-labelledby="lab-how-title" data-testid="lab-how">
+        <h2 id="lab-how-title">${esc(c.howTitle)}</h2>
+        <div class="lab-legends" data-testid="lab-legend">
+          ${legend}
+        </div>
+      </section>
+      <ul class="lab-panels" role="list" aria-label="${esc(c.panelsLabel)}" data-testid="lab-panels">
+        ${panels}
+      </ul>
+      <section class="lab-note" aria-labelledby="lab-note-title" data-testid="lab-istqb">
+        <h2 id="lab-note-title">${esc(c.istqbTitle)}</h2>
+        <p>${esc(c.istqb)}</p>
+      </section>`,
+  });
+}
+
+/**
  * Page for a missing address (RSP-148), one per language: dist/<lang>/404.html, and dist/404.html in English.
  * Netlify serves it with status 404 (dist/_redirects picks the language). Bots ask for missing paths thousands of
  * times, so the HTML stays small (AC6, under 10 KB): no inline images, the creature picture loads lazily.
@@ -808,11 +974,11 @@ function redirects() {
 }
 
 /**
- * sitemap.xml: the home page, the app, "What's new", every creature page and every git card page whose advent day
+ * sitemap.xml: the home page, the app, "What's new", the Lab pages (RSP-209), every creature page and every git card page whose advent day
  * has come (gitOpen, RSP-199) in every language, each with its hreflang alternates.
  */
 function sitemap(today) {
-  const groups = [homeOrRoot, appUrl, newsUrl]
+  const groups = [homeOrRoot, appUrl, newsUrl, ...LAB_URLS]
     .concat(D.map((d) => (l) => creatureUrl(l, d.c)))
     .concat(adventStarted ? [gitHome] : [])
     .concat(GIT.filter(gitOpen).map((g) => (l) => gitUrl(l, g.id)));
@@ -864,6 +1030,7 @@ async function checkBeacons() {
     ...D.map((d) => `${creatureUrl(l, d.c).slice(1)}index.html`),
     `${gitHome(l).slice(1)}index.html`,
     ...GIT.map((g) => `${gitUrl(l, g.id).slice(1)}index.html`),
+    ...LAB_URLS.map((url) => `${url(l).slice(1)}index.html`),
   ]).concat('404.html');
   const bare = [
     'index.html',
@@ -872,6 +1039,7 @@ async function checkBeacons() {
     ...D.map((d) => `${creatureUrl(null, d.c).slice(1)}index.html`),
     `${gitHome(null).slice(1)}index.html`,
     ...GIT.map((g) => `${gitUrl(null, g.id).slice(1)}index.html`),
+    ...LAB_URLS.map((url) => `${url(null).slice(1)}index.html`),
   ];
   for (const file of stay.concat(bare))
     if ((await count(file)) !== 1)
@@ -914,6 +1082,9 @@ async function build() {
     if (lang === 'en') await writeFile(path.join(DIST, '404.html'), notFoundPage(lang, tx)); // Netlify's default
     await page(appUrl(lang), appPage(lang, tx));
     await page(newsUrl(lang), newsPage(lang, tx));
+    await page(labUrl(lang), labSectionPage(lang, tx));
+    await page(labGeometryUrl(lang), labGeometryPage(lang, tx));
+    await page(labCirclesUrl(lang), labCirclesPage(lang, tx));
     for (const d of D) {
       await page(creatureUrl(lang, d.c), creaturePage(lang, tx, d));
       pages++;
@@ -924,7 +1095,7 @@ async function build() {
       gitPages++;
     }
   }
-  for (const rest of ['/', appUrl(null), newsUrl(null), gitHome(null)]
+  for (const rest of ['/', appUrl(null), newsUrl(null), gitHome(null), ...LAB_URLS.map((url) => url(null))]
     .concat(D.map((d) => creatureUrl(null, d.c)))
     .concat(GIT.map((g) => gitUrl(null, g.id))))
     await page(rest, barePage(await readFile(path.join(DIST, 'en', rest, 'index.html'), 'utf8'), hints));
@@ -932,7 +1103,7 @@ async function build() {
   await writeFile(path.join(DIST, 'sitemap.xml'), sitemap(new Date().toISOString().slice(0, 10)));
   await checkBeacons();
   console.log(
-    `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${LANGS.length} news pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards) + ${gitPages} git card pages (${GIT.filter(gitOpen).length} of ${GIT.length} cards open on ${BUILD_DATE}, advent start ${ADVENT_START}, ${ADVENT_DAYS} days) + the advent wall, the English pages at the language-less paths, _redirects → dist/`,
+    `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${LANGS.length} news pages + ${LANGS.length * LAB_URLS.length} Lab pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards) + ${gitPages} git card pages (${GIT.filter(gitOpen).length} of ${GIT.length} cards open on ${BUILD_DATE}, advent start ${ADVENT_START}, ${ADVENT_DAYS} days) + the advent wall, the English pages at the language-less paths, _redirects → dist/`,
   );
 }
 

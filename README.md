@@ -42,6 +42,7 @@ The language is always the first part of the path, then the rubric. URLs end wit
 | `/<lang>/` | The home page: zoo map (`#map`), about (`#about`) |
 | `/<lang>/http/` | The HTTP rubric: Collection, Practice, Traps (`#collection`, `#practice`, `#traps`) |
 | `/<lang>/http/<code>/` | One creature, e.g. `/uk/http/401/` |
+| `/<lang>/lab/` | The Lab: my own mnemonics and schemes; `/<lang>/lab/geometry/` (test geometry), `/<lang>/lab/geometry/circles/` (test types on one product circle) |
 | `/`, `/http/`, `/http/<code>/` | No language: sends you to your language with the same hash. Use these in shared links and QR codes. |
 | Any missing address | The 404 page in your language (status 404): the path's language, otherwise your saved or browser language |
 | `/#collection`, `/#practice`, `/#traps` | Old links: land on the home page, which sends them on to `/<lang>/http/` with the same hash |
