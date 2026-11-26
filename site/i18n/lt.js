@@ -927,6 +927,45 @@ export default {
           },
         ],
       },
+      merge: {
+        art: 'Kairėje pro atviras lauko duris įeina besišypsantis žmogus su dėže, ant kurios geltonas lipdukas; kelios tokios dėžės jau stovi kambaryje. Dešinėje šeimininkas, ranką prie smakro, žiūri į stalviršį, kur greta stovi du vienodi virduliai: jo šviesus ir atvykėlio geltonas, tarp jų klaustukas. Lentynoje virš stalviršio jo paties dėžės be lipdukų. Ant sienos dviejų katinų, pilko ir šviesaus, uostančių vienas kitą nosimis, portretas.',
+      },
+      fetch: {
+        art: 'Dešinėje eglutė su žvaigžde, po ja supakuotos dovanos oranžiniais kaspinais. Žmogus, priklaupęs ant vieno kelio prie eglutės, laiko vieną dovaną prie ausies ir ją purto, kad atspėtų, kas viduje, bet neišpakuoja. Ant sienos šuns su dovana dantyse portretas.',
+      },
+      pull: {
+        art: 'Kairėje savų supakuotų daiktų krūva: bespalvės dėžės, ant kiekvienos lentelė su piešinėliu (namelis, knyga, puodelis). Šalia stovi dovanos oranžiniais kaspinais; ant kelių klūpantis žmogus laiko priešais save megztinį, ką tik ištrauktą iš atidarytos dėžės, per dėžės kraštą kabo kaspinas, šalia suglamžytas popierius. Dešinėje eglutė. Ant sienos kačiuko, traukiančio oranžinį kaspiną nuo dovanos, portretas.',
+      },
+      push: {
+        art: 'Bendra lentyna pašte pilna svetimų siuntinių su adresais ir pašto ženklais, virš jos lentelė su voku. Žmogus kairėje iš visų jėgų stumia į pilną lentyną savo siuntinį oranžiniu kaspinu, o kitame gale svetimas siuntinys krenta ant grindų. Ant sienos pašto balandžio su laišku portretas.',
+      },
+      show: {
+        art: 'Ant stalo atverstas šeimos albumas žaliu viršeliu; vienoje vietoje liko tik kampučiai ir data 02.05.2004, nuotraukos nėra. Žmogus stovi šalia ir iš arti apžiūri tą nuotrauką: du žmonės, susikibę už rankų, apačioje ta pati data. Ant sienos šuns su žalia nugalėtojo rozete, kaip šunų parodoje, portretas.',
+      },
+      revert: {
+        art: 'Kairėje sienos pusėje seni tapetai banguotomis juostomis, dešinėje nauji taškuoti. Žmogus ant taburetės vėl klijuoja seną banguotą raštą ant naujų tapetų: viena geltona juosta jau priklijuota, kitos apatinis galas dar rankoje; kraštas rodo, kad nauji tapetai liko apačioje. Ant grindų kibiras klijų su teptuku. Ant sienos geltono krabo su rodykle į kairę portretas.',
+      },
+      'cherry-pick': {
+        art: 'Ant stalo du atversti receptų sąsiuviniai. Kairėje didelis senas močiutės, nutrintu viršeliu ir kaspinu-žymekliu: viename puslapyje puodas, kitame vyšnių pyragas. Dešinėje mažesnis sąsiuvinis su spirale ir geltonu viršeliu: viename puslapyje dubenėlis su lazdelėmis, kitame tas pats pyragas, dar nebaigtas piešti. Žmogus stovi priešais stalą, pasilenkęs prie savo sąsiuvinio, ir su rašikliu rankoje perpiešia pyragą. Ant sienos strazdo su dviem geltonomis vyšniomis snape portretas.',
+      },
+      reset: {
+        art: 'Namuose papuošta eglutė, po ja atvira geltona dėžė iš palėpės. Žmogus stovi tarp šiukšliadėžės ir eglutės: viena ranka kabina sveiką žaisliuką ant eglutės, kita meta į šiukšliadėžę sudužusį. Ant sienos auksinės žuvelės akvariume portretas.',
+      },
+      reflog: {
+        art: 'Namuose papuošta eglutė, kampe šiukšliadėžė su sudužusiu žaisliuku. Žmogus prie eglutės skaito sąrašą ant žalios planšetės: kiekvienoje eilutėje mažas eglutės žaisliukas ir skaičiavimo brūkšneliai, viena eilutė apvesta; žmogus žvilgčioja į eglutę ir skaičiuoja. Ant sienos žiurkės ant šiukšliadėžės krašto portretas.',
+      },
+      rebase: {
+        art: 'Palėpė. Dėžių su lentelėmis krūva: apačioje dėžė su knygomis, virš jos naujesnė dėžė su Helovino moliūgu, o viršuje žmogus atsargiai stato dvi geltonas dėžes, su gimtadienio tortu ir su meškiuku, ir prilaiko jas, kad nenukristų. Ant sienos pilko katino, sėdinčio ant dėžių, portretas.',
+      },
+      blame: {
+        art: 'Ant šaldytuvo po žaliu magnetu kabo pirkinių sąrašas: kiekviena eilutė prasideda prekės piešinėliu, parašyta vis kita rašysena ir baigiasi veideliu to, kas ją prirašė; tie patys veideliai kabo kaip nuotraukų magnetai ant šaldiklio durelių. Žmogus laiko didinamąjį stiklą virš žalių vynuogių eilutės galo, o stikle matyti veidelis su kaspinėliu. Prie kojų tuščias pirkinių krepšys. Ant sienos šuns su žalia kojine dantyse portretas.',
+      },
+      bisect: {
+        art: 'Per sieną ant dviejų vinių kabo girlianda, ir visa nešviečia. Po kairiąja puse ir po kitu ketvirčiu skliaustai su varnelėmis: tos dalys patikrintos, ties ribomis žali skalbinių segtukai. Žmogus išsuko lemputę iš likusios dalies ir laiko ją prieš šviesą: stiklas tamsus, siūlelis nutrūkęs; kitoje rankoje atsarginė lemputė. Ant sienos jūrų kiaulytės, graužiančios girliandos laidą, portretas.',
+      },
+      tag: {
+        art: 'Sandėliuke lentyna, pilna vienodų uogienės stiklainių po lininiais dangteliais; ant dviejų stiklainių šviesios etiketės 2024 ir 2025. Žmogus, priklaupęs prie lentynos, prispaudžia geltoną etiketę 2026 prie naujausio stiklainio apatinėje lentynoje. Šalia geltonų etikečių ritinėlis. Ant sienos šuns su geltonu adreso medalionu ant antkaklio portretas.',
+      },
     },
   },
 };

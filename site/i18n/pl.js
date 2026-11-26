@@ -930,6 +930,45 @@ export default {
           },
         ],
       },
+      merge: {
+        art: 'Po lewej przez otwarte drzwi wejściowe wchodzi uśmiechnięta osoba z pudłem z żółtą naklejką; kilka takich pudeł stoi już w pokoju. Po prawej gospodarz z ręką przy brodzie patrzy na blat, na którym obok siebie stoją dwa jednakowe czajniki, jego jasny i żółty nowego lokatora, a między nimi znak zapytania. Na półce nad blatem jego własne pudła bez naklejek. Na ścianie portret dwóch kotów, szarego i jasnego, obwąchujących się nos w nos.',
+      },
+      fetch: {
+        art: 'Po prawej choinka z gwiazdą, pod nią zapakowane prezenty z pomarańczowymi wstążkami. Osoba klęczy na jednym kolanie przy choince, trzyma jeden prezent przy uchu i potrząsa nim, żeby zgadnąć, co jest w środku, ale go nie rozpakowuje. Na ścianie portret psa z prezentem w pysku.',
+      },
+      pull: {
+        art: 'Po lewej stos własnych spakowanych rzeczy: pudła bez koloru, na każdym tabliczka z obrazkiem (domek, książka, kubek). Obok stoją prezenty z pomarańczowymi wstążkami; osoba na kolanach trzyma przed sobą sweter wyjęty przed chwilą z otwartego pudła, przez brzeg pudła zwisa wstążka, obok zmięty papier. Po prawej choinka. Na ścianie portret kociaka ciągnącego pomarańczową wstążkę z prezentu.',
+      },
+      push: {
+        art: 'Wspólna półka na poczcie pełna cudzych paczek z adresami i znaczkami, nad nią tabliczka z kopertą. Osoba po lewej z całej siły wpycha na pełną półkę swoją paczkę z pomarańczową wstążką, a z drugiego końca cudza paczka spada na podłogę. Na ścianie portret gołębia pocztowego z listem.',
+      },
+      show: {
+        art: 'Na stole otwarty rodzinny album w zielonej okładce; w jednym miejscu zostały tylko narożniki i data 02.05.2004, zdjęcia nie ma. Osoba stoi obok i ogląda to zdjęcie z bliska: dwoje ludzi trzyma się za ręce, pod spodem ta sama data. Na ścianie portret psa z zieloną rozetą zwycięzcy, jak na wystawie psów.',
+      },
+      revert: {
+        art: 'Po lewej na ścianie stara tapeta w faliste paski, po prawej nowa w kropki. Osoba na taborecie znowu nakleja stary falisty wzór na nową tapetę: jeden żółty pas już wisi, dolny koniec następnego jest jeszcze w jej ręce; brzeg pokazuje, że nowa tapeta została pod spodem. Na podłodze wiadro z klejem i pędzlem. Na ścianie portret żółtego kraba ze strzałką w lewo.',
+      },
+      'cherry-pick': {
+        art: 'Na stole dwa otwarte zeszyty z przepisami. Po lewej duży, stary zeszyt babci z wytartą okładką i wstążką-zakładką: na jednej stronie garnek, na drugiej ciasto z wiśniami. Po prawej mniejszy zeszyt na spirali z żółtą okładką: na jednej stronie miska z pałeczkami, na drugiej to samo ciasto, jeszcze nie dorysowane. Osoba stoi przed stołem, pochyla się nad swoim zeszytem i z długopisem w ręce przerysowuje ciasto. Na ścianie portret drozda z dwiema żółtymi wiśniami w dziobie.',
+      },
+      reset: {
+        art: 'W domu ubrana choinka, pod nią otwarte żółte pudło ze strychu. Osoba stoi między koszem na śmieci a choinką: jedną ręką wiesza całą bombkę na choince, a drugą wrzuca do kosza stłuczoną. Na ścianie portret złotej rybki w akwarium.',
+      },
+      reflog: {
+        art: 'W domu ubrana choinka, w kącie kosz ze stłuczoną bombką. Osoba przy choince czyta listę na zielonej podkładce: w każdym wierszu mała bombka i kreski do liczenia, jeden wiersz zakreślony; osoba zerka na choinkę i liczy. Na ścianie portret szczura na brzegu kosza na śmieci.',
+      },
+      rebase: {
+        art: 'Strych. Stos pudeł z tabliczkami: na dole pudło z książkami, nad nim nowsze pudło z dynią na Halloween, a na górę osoba ostrożnie stawia dwa żółte pudła, z tortem urodzinowym i z misiem, i przytrzymuje je, żeby nie spadły. Na ścianie portret szarego kota siedzącego na pudłach.',
+      },
+      blame: {
+        art: 'Na lodówce pod zielonym magnesem wisi lista zakupów: każdy wiersz zaczyna się obrazkiem produktu, jest napisany innym charakterem pisma i kończy się buzią osoby, która go dopisała; te same buzie wiszą jako magnesy ze zdjęciami na drzwiczkach zamrażarki. Osoba trzyma lupę nad końcem wiersza z zielonymi winogronami, a w lupie widać buzię z kokardką. Przy nogach pusta torba na zakupy. Na ścianie portret psa z zieloną skarpetką w pysku.',
+      },
+      bisect: {
+        art: 'Przez ścianę na dwóch gwoździach wisi girlanda i cała nie świeci. Pod lewą połową i pod następną ćwiartką nawiasy z ptaszkami: te części są sprawdzone, na granicach zielone klamerki. Osoba wyjęła żarówkę z pozostałej części i trzyma ją pod światło: szkło jest ciemne, włókno przerwane; w drugiej ręce zapasowa żarówka. Na ścianie portret świnki morskiej gryzącej kabel girlandy.',
+      },
+      tag: {
+        art: 'W spiżarni regał pełen jednakowych słoików z konfiturą pod płóciennymi przykrywkami; na dwóch słoikach jasne etykiety 2024 i 2025. Osoba klęczy przy regale i dociska żółtą etykietę 2026 do najnowszego słoika na dolnej półce. Obok rolka żółtych etykiet. Na ścianie portret psa z żółtym adresownikiem na obroży.',
+      },
     },
   },
 };

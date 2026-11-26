@@ -942,6 +942,45 @@ export default {
           },
         ],
       },
+      merge: {
+        art: "On the left, a smiling person comes in through the open front door carrying a box with a yellow label; a few more boxes like it already stand in the room. On the right, the host, hand at the chin, looks at the counter, where two identical kettles stand side by side, the host's light one and the newcomer's yellow one, with a question mark between them. On the shelf above the counter, the host's own boxes without labels. On the wall, a portrait of two cats, a grey one and a light one, sniffing nose to nose.",
+      },
+      fetch: {
+        art: "On the right, a Christmas tree with a star and wrapped presents with orange ribbons under it. A person on one knee by the tree holds one present to their ear and shakes it to guess what's inside, without unwrapping it. On the wall, a portrait of a dog with a present in its mouth.",
+      },
+      pull: {
+        art: "On the left, a stack of the household's own packed things: boxes without colour, each with a picture label (a little house, a book, a cup). Next to them stand presents with orange ribbons; a person on their knees holds up a jumper just taken out of an open box, a ribbon hanging over its edge and crumpled paper nearby. On the right, a Christmas tree. On the wall, a portrait of a kitten pulling the orange ribbon off a present.",
+      },
+      push: {
+        art: "A shared shelf at the post office, full of other people's parcels with addresses and stamps, a sign with an envelope above it. A person on the left shoves their own parcel with an orange ribbon onto the full shelf with all their strength, and at the other end someone else's parcel falls to the floor. On the wall, a portrait of a carrier pigeon with a letter.",
+      },
+      show: {
+        art: "An open family album with a green cover on a table; in one place only the photo corners and the date 02.05.2004 are left, the photo is gone. A person stands next to it and looks at that photo up close: two people holding hands, the same date below. On the wall, a portrait of a dog with a green winner's rosette, as at a dog show.",
+      },
+      revert: {
+        art: 'On the left of the wall, the old wallpaper with wavy stripes; on the right, the new one with dots. A person on a stool pastes the old wavy pattern again over the new wallpaper: one yellow strip is already up, the lower end of the next one is still in their hand; its edge shows the new wallpaper stays underneath. On the floor, a bucket of paste with a brush. On the wall, a portrait of a yellow crab with an arrow pointing left.',
+      },
+      'cherry-pick': {
+        art: "Two open recipe notebooks on a table. On the left, grandma's: big and old, with a worn cover and a ribbon bookmark; a pot on one page, a cherry pie on the other. On the right, a smaller spiral notebook with a yellow cover: a bowl with chopsticks on one page and the same pie, still half drawn, on the other. A person stands in front of the table, leaning over their own notebook, copying the pie with a pen. On the wall, a portrait of a thrush with two yellow cherries in its beak.",
+      },
+      reset: {
+        art: 'At home, a decorated Christmas tree, an open yellow box from the attic under it. A person stands between a bin and the tree: with one hand they hang a whole bauble on the tree, with the other they drop a broken one into the bin. On the wall, a portrait of a goldfish in a bowl.',
+      },
+      reflog: {
+        art: 'At home, a decorated Christmas tree, and in the corner a bin with a broken bauble in it. A person by the tree reads a list on a green clipboard: each line has a small bauble and tally marks, one line is circled; the person glances at the tree and counts. On the wall, a portrait of a rat on the rim of a bin.',
+      },
+      rebase: {
+        art: "An attic. A stack of boxes with picture labels: books at the bottom, above them a newer box with a Halloween pumpkin, and on top a person carefully sets two yellow boxes, one with a birthday cake and one with a teddy bear, steadying them so they don't fall. On the wall, a portrait of a grey cat sitting on boxes.",
+      },
+      blame: {
+        art: 'A shopping list hangs on the fridge under a green magnet: each line starts with a picture of the item, is written in different handwriting and ends with the little face of whoever added it; the same faces hang as photo magnets on the freezer door. A person holds a magnifying glass over the end of the green grapes line, and the glass shows a face with a bow. An empty shopping bag at their feet. On the wall, a portrait of a dog with a green sock in its mouth.',
+      },
+      bisect: {
+        art: 'A garland hangs across the wall on two nails, and none of it lights up. Under the left half and the next quarter, brackets with ticks: those parts are checked, with green clothes pegs at their borders. A person has taken a bulb out of the remaining part and holds it up to the light: the glass is dark, the filament broken; a spare bulb in the other hand. On the wall, a portrait of a guinea pig chewing the garland wire.',
+      },
+      tag: {
+        art: 'A pantry rack full of identical jars of jam under cloth covers; two jars have light labels, 2024 and 2025. A person on one knee by the rack presses a yellow 2026 label onto the newest jar on the bottom shelf. A roll of yellow labels nearby. On the wall, a portrait of a dog with a yellow address tag on its collar.',
+      },
     },
   },
 };
