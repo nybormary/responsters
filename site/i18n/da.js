@@ -945,7 +945,7 @@ export default {
         art: 'En fælles hylde på posthuset, fuld af andres pakker med adresser og frimærker, med et skilt med en kuvert over. En person til venstre skubber af al kraft sin egen pakke med orange bånd ind på den fulde hylde, og i den anden ende falder en andens pakke på gulvet. På væggen et portræt af en brevdue med et brev.',
       },
       show: {
-        art: 'Et opslået familiealbum med grønt omslag på et bord; ét sted er der kun fotohjørnerne og datoen 02.05.2004 tilbage, billedet er væk. En person står ved siden af og ser tæt på netop det billede: to mennesker, der holder i hånd, med samme dato nedenunder. På væggen et portræt af en hund med en grøn vinderroset som på en hundeudstilling.',
+        art: 'Et opslået familiealbum med grønt omslag på et bord; ét sted er der kun fotohjørnerne og datoen 25.12.2026 tilbage, billedet er væk. En person står ved siden af og ser tæt på netop det billede: to mennesker på hver sin side af et juletræ, med samme dato nedenunder. På væggen et portræt af en hund med en grøn vinderroset som på en hundeudstilling.',
       },
       revert: {
         art: 'Til venstre på væggen det gamle tapet med bølgede striber, til højre det nye med prikker. En person på en skammel klistrer det gamle bølgede mønster op igen oven på det nye tapet: én gul bane sidder allerede, den nederste ende af den næste er stadig i hånden; kanten viser, at det nye tapet er tilbage nedenunder. På gulvet en spand klister med en pensel. På væggen et portræt af en gul krabbe med en pil mod venstre.',

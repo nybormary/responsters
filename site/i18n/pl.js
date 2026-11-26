@@ -943,7 +943,7 @@ export default {
         art: 'Wspólna półka na poczcie pełna cudzych paczek z adresami i znaczkami, nad nią tabliczka z kopertą. Osoba po lewej z całej siły wpycha na pełną półkę swoją paczkę z pomarańczową wstążką, a z drugiego końca cudza paczka spada na podłogę. Na ścianie portret gołębia pocztowego z listem.',
       },
       show: {
-        art: 'Na stole otwarty rodzinny album w zielonej okładce; w jednym miejscu zostały tylko narożniki i data 02.05.2004, zdjęcia nie ma. Osoba stoi obok i ogląda to zdjęcie z bliska: dwoje ludzi trzyma się za ręce, pod spodem ta sama data. Na ścianie portret psa z zieloną rozetą zwycięzcy, jak na wystawie psów.',
+        art: 'Na stole otwarty rodzinny album w zielonej okładce; w jednym miejscu zostały tylko narożniki i data 25.12.2026, zdjęcia nie ma. Osoba stoi obok i ogląda to zdjęcie z bliska: dwoje ludzi po obu stronach choinki, pod spodem ta sama data. Na ścianie portret psa z zieloną rozetą zwycięzcy, jak na wystawie psów.',
       },
       revert: {
         art: 'Po lewej na ścianie stara tapeta w faliste paski, po prawej nowa w kropki. Osoba na taborecie znowu nakleja stary falisty wzór na nową tapetę: jeden żółty pas już wisi, dolny koniec następnego jest jeszcze w jej ręce; brzeg pokazuje, że nowa tapeta została pod spodem. Na podłodze wiadro z klejem i pędzlem. Na ścianie portret żółtego kraba ze strzałką w lewo.',

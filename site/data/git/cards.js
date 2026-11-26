@@ -1,9 +1,9 @@
 // The git cards (RSP-117), in advent order (RSP-146). The order is a learning path (Maryna, 2026-11-16): a new flat and
 // the first box (init … diff), then moving in (.gitignore, clone), the rooms (restore, stash, branches), the post
-// (fetch … cherry-pick), archive and detective work (reset … tag). 2026-11-17 (Maryna): init is day 1 (a newly built
-// flat), clone day 8 (a furnished rented one), so the advent has 25 days; the advent is how cards open in the season,
-// not a limit of the collection. id = URL slug (/<lang>/git/<id>/), name = the badge label
-// (English in every language), group = key of groups.js, day = advent day (1, 2, … with no gaps); a card added after
+// (fetch … push, then tag), archive and detective work (revert … bisect), and show on 25 December (Maryna,
+// 2026-11-26). 2026-11-17 (Maryna): init is day 1 (a newly built flat), clone day 8 (a furnished rented one), so the
+// advent has 25 days; the advent is how cards open in the season, not a limit of the collection.
+// id = URL slug (/<lang>/git/<id>/), name = the badge label (English in every language), group = key of groups.js, day = advent day (1, 2, … with no gaps); a card added after
 // the season has no day: it is not on the wall and opens together with the last advent day's next day,
 // danger = the brick-red danger mark: the command changes the repository in a way that can't be undone (Maryna's rule,
 // RSP-200 AC5, 2026-11-21): restore, reset --hard, push --force; a dangerous option of a calm card (stash drop/clear,
@@ -94,7 +94,8 @@ export const GIT = [
   { id: 'fetch', name: 'git fetch', group: 'post', day: 14, art: '/img/git/fetch.svg' },
   { id: 'pull', name: 'git pull', group: 'post', day: 15, art: '/img/git/pull.svg' },
   { id: 'push', name: 'git push', group: 'post', day: 16, danger: true, art: '/img/git/push.svg' },
-  { id: 'show', name: 'git show', group: 'visit', day: 17, art: '/img/git/show.svg' },
+  // tag right after push: a label you then push along (git push origin <tag>)
+  { id: 'tag', name: 'git tag', group: 'archive', day: 17, art: '/img/git/tag.svg' },
   {
     id: 'revert',
     name: 'git revert',
@@ -132,14 +133,17 @@ export const GIT = [
     art: '/img/git/blame.svg',
   },
   { id: 'bisect', name: 'git bisect', group: 'visit', day: 24, art: '/img/git/bisect.svg' },
-  { id: 'tag', name: 'git tag', group: 'archive', day: 25, art: '/img/git/tag.svg' },
+  // the last day is the festive one (Maryna, 2026-11-26): show, one photo out of log's album, dated 25.12.2026
+  { id: 'show', name: 'git show', group: 'visit', day: 25, art: '/img/git/show.svg' },
 ];
 
 // The placeholder picture for a card whose art isn't drawn yet (RSP-199): a big egg with Maryna's handwritten note
 // "This time I couldn't stop Claude from drawing", English in every language (the note is part of the picture).
 // The advent wall (RSP-195): the advent days in the order the doors hang (25 → 5 × 5 on a wide screen), scattered like on a real advent calendar, and a
 // small tilt per door (degrees) so the wall looks hand-hung. From the prototype on the canvas (artboard Advent).
-export const WALL = [17, 3, 22, 9, 1, 14, 6, 25, 20, 11, 24, 4, 15, 8, 19, 2, 12, 23, 7, 16, 10, 5, 21, 13, 18];
+// No two doors of the same colour side by side, on the wide wall (5 columns) or on a phone (3), and the three dangerous
+// doors don't touch even at a corner (Maryna, 2026-11-26, once all 25 pictures were in).
+export const WALL = [20, 25, 22, 6, 13, 7, 14, 1, 15, 9, 4, 2, 12, 24, 19, 10, 8, 3, 16, 23, 17, 5, 11, 21, 18];
 export const TILT = [
   -2, 1.5, -1, 2, -1.5, 1, 0.5, -2, 1.5, -0.5, 2, -1, -2, 1.5, -1, 2, -1.5, 1, 0.5, -2, 1.5, -0.5, 2, -1, 1,
 ];

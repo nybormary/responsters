@@ -942,7 +942,7 @@ export default {
         art: 'Postkontori ühine riiul on täis teiste inimeste pakke aadresside ja markidega, selle kohal ümbrikuga silt. Vasakul olev inimene surub kogu jõust täis riiulile oma paki oranži paelaga ja teises otsas kukub kellegi teise pakk põrandale. Seinal portree kirjatuvist kirjaga.',
       },
       show: {
-        art: 'Laual on avatud rohelise kaanega pere fotoalbum; ühest kohast on alles ainult fotonurgad ja kuupäev 02.05.2004, fotot pole. Inimene seisab kõrval ja uurib just seda fotot lähedalt: kaks inimest käest kinni, all sama kuupäev. Seinal portree koerast rohelise võitjarosetiga nagu koertenäitusel.',
+        art: 'Laual on avatud rohelise kaanega pere fotoalbum; ühest kohast on alles ainult fotonurgad ja kuupäev 25.12.2026, fotot pole. Inimene seisab kõrval ja uurib just seda fotot lähedalt: kaks inimest kummalgi pool kuuske, all sama kuupäev. Seinal portree koerast rohelise võitjarosetiga nagu koertenäitusel.',
       },
       revert: {
         art: 'Seina vasakul pool on vana lainelise triibuga tapeet, paremal uus täpiline. Inimene taburetil kleebib vana lainelist mustrit uuesti uue tapeedi peale: üks kollane riba on juba üleval, järgmise alumine ots on veel tal käes; serv näitab, et uus tapeet jäi alla. Põrandal liimiämber pintsliga. Seinal portree kollasest krabist, nool vasakule.',

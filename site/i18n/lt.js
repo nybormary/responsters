@@ -940,7 +940,7 @@ export default {
         art: 'Bendra lentyna pašte pilna svetimų siuntinių su adresais ir pašto ženklais, virš jos lentelė su voku. Žmogus kairėje iš visų jėgų stumia į pilną lentyną savo siuntinį oranžiniu kaspinu, o kitame gale svetimas siuntinys krenta ant grindų. Ant sienos pašto balandžio su laišku portretas.',
       },
       show: {
-        art: 'Ant stalo atverstas šeimos albumas žaliu viršeliu; vienoje vietoje liko tik kampučiai ir data 02.05.2004, nuotraukos nėra. Žmogus stovi šalia ir iš arti apžiūri tą nuotrauką: du žmonės, susikibę už rankų, apačioje ta pati data. Ant sienos šuns su žalia nugalėtojo rozete, kaip šunų parodoje, portretas.',
+        art: 'Ant stalo atverstas šeimos albumas žaliu viršeliu; vienoje vietoje liko tik kampučiai ir data 25.12.2026, nuotraukos nėra. Žmogus stovi šalia ir iš arti apžiūri tą nuotrauką: du žmonės abipus eglutės, apačioje ta pati data. Ant sienos šuns su žalia nugalėtojo rozete, kaip šunų parodoje, portretas.',
       },
       revert: {
         art: 'Kairėje sienos pusėje seni tapetai banguotomis juostomis, dešinėje nauji taškuoti. Žmogus ant taburetės vėl klijuoja seną banguotą raštą ant naujų tapetų: viena geltona juosta jau priklijuota, kitos apatinis galas dar rankoje; kraštas rodo, kad nauji tapetai liko apačioje. Ant grindų kibiras klijų su teptuku. Ant sienos geltono krabo su rodykle į kairę portretas.',

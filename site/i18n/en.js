@@ -955,7 +955,7 @@ export default {
         art: "A shared shelf at the post office, full of other people's parcels with addresses and stamps, a sign with an envelope above it. A person on the left shoves their own parcel with an orange ribbon onto the full shelf with all their strength, and at the other end someone else's parcel falls to the floor. On the wall, a portrait of a carrier pigeon with a letter.",
       },
       show: {
-        art: "An open family album with a green cover on a table; in one place only the photo corners and the date 02.05.2004 are left, the photo is gone. A person stands next to it and looks at that photo up close: two people holding hands, the same date below. On the wall, a portrait of a dog with a green winner's rosette, as at a dog show.",
+        art: "An open family album with a green cover on a table; in one place only the photo corners and the date 25.12.2026 are left, the photo is gone. A person stands next to it and looks at that photo up close: two people on either side of a Christmas tree, the same date below. On the wall, a portrait of a dog with a green winner's rosette, as at a dog show.",
       },
       revert: {
         art: 'On the left of the wall, the old wallpaper with wavy stripes; on the right, the new one with dots. A person on a stool pastes the old wavy pattern again over the new wallpaper: one yellow strip is already up, the lower end of the next one is still in their hand; its edge shows the new wallpaper stays underneath. On the floor, a bucket of paste with a brush. On the wall, a portrait of a yellow crab with an arrow pointing left.',
