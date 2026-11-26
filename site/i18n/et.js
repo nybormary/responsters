@@ -929,6 +929,45 @@ export default {
           },
         ],
       },
+      merge: {
+        art: 'Vasakul astub avatud välisuksest sisse naeratav inimene, kandes kasti kollase kleebisega; mõned samasugused kastid seisavad juba toas. Paremal vaatab pererahvas, käsi lõua juures, tööpinda, kus seisavad kõrvuti kaks ühesugust veekeetjat, tema hele ja uustulnuka kollane, nende vahel küsimärk. Tööpinna kohal riiulil tema enda kastid ilma kleebisteta. Seinal portree kahest kassist, hallist ja heledast, kes nuusutavad teineteist ninapidi.',
+      },
+      fetch: {
+        art: 'Paremal kuusk tähega ja selle all pakitud kingid oranžide paeltega. Inimene põlvitab ühel põlvel kuuse juures, hoiab üht kinki kõrva ääres ja raputab seda, et ära arvata, mis sees on, kuid lahti ei paki. Seinal portree koerast, kink suus.',
+      },
+      pull: {
+        art: 'Vasakul virn majapidamise enda pakitud asju: värvita kastid, igaühel pildiga silt (majake, raamat, tass). Nende kõrval seisavad kingid oranžide paeltega; põlvili inimene hoiab enda ees kampsunit, mille ta just avatud kastist välja võttis, üle kasti ääre ripub pael ja kõrval on kortsus paber. Paremal kuusk. Seinal portree kassipojast, kes tõmbab kingilt oranži paela.',
+      },
+      push: {
+        art: 'Postkontori ühine riiul on täis teiste inimeste pakke aadresside ja markidega, selle kohal ümbrikuga silt. Vasakul olev inimene surub kogu jõust täis riiulile oma paki oranži paelaga ja teises otsas kukub kellegi teise pakk põrandale. Seinal portree kirjatuvist kirjaga.',
+      },
+      show: {
+        art: 'Laual on avatud rohelise kaanega pere fotoalbum; ühest kohast on alles ainult fotonurgad ja kuupäev 25.12.2026, fotot pole. Inimene seisab kõrval ja uurib just seda fotot lähedalt: kaks inimest kummalgi pool kuuske, all sama kuupäev. Seinal portree koerast rohelise võitjarosetiga nagu koertenäitusel.',
+      },
+      revert: {
+        art: 'Seina vasakul pool on vana lainelise triibuga tapeet, paremal uus täpiline. Inimene taburetil kleebib vana lainelist mustrit uuesti uue tapeedi peale: üks kollane riba on juba üleval, järgmise alumine ots on veel tal käes; serv näitab, et uus tapeet jäi alla. Põrandal liimiämber pintsliga. Seinal portree kollasest krabist, nool vasakule.',
+      },
+      'cherry-pick': {
+        art: 'Laual on kaks avatud retseptivihikut. Vasakul vanaema oma: suur ja vana, kulunud kaane ja paelast järjehoidjaga; ühel lehel pott, teisel kirsipirukas. Paremal väiksem spiraalvihik kollase kaanega: ühel lehel kauss söögipulkadega, teisel sama pirukas, alles poolenisti joonistatud. Inimene seisab laua ees, kummardub oma vihiku kohale ja joonistab pastakaga pirukat ümber. Seinal portree rästast, kahe kollase kirsiga nokas.',
+      },
+      reset: {
+        art: 'Kodus on ehitud kuusk, selle all avatud kollane kast pööningult. Inimene seisab prügikasti ja kuuse vahel: ühe käega riputab ta terve kuuseehte kuusele, teisega viskab katkise prügikasti. Seinal portree kuldkalast akvaariumis.',
+      },
+      reflog: {
+        art: 'Kodus on ehitud kuusk ja nurgas prügikast katkise kuuseehtega. Inimene kuuse juures loeb rohelisel kirjutusalusel olevat nimekirja: igal real on väike kuusekuul ja loendusjooned, üks rida on ringiga ümbritsetud; inimene heidab pilgu kuusele ja loeb. Seinal portree rotist prügikasti serval.',
+      },
+      rebase: {
+        art: 'Pööning. Pildisiltidega kastide virn: all kast raamatutega, selle peal uuem kast halloweeni kõrvitsaga ja peale asetab inimene ettevaatlikult kaks kollast kasti, ühe sünnipäevatordi ja teise mängukaruga, ning hoiab neid, et need ümber ei kukuks. Seinal portree hallist kassist, kes istub kastidel.',
+      },
+      blame: {
+        art: 'Külmkapil rohelise magneti all ripub ostunimekiri: iga rida algab kauba pildiga, on kirjutatud erineva käekirjaga ja lõpeb selle näokesega, kes rea lisas; samad näokesed ripuvad fotomagnetitena sügavkülmiku uksel. Inimene hoiab suurendusklaasi rohelise viinamarja rea lõpu kohal ja klaasis on näha lipsuga näoke. Jalgade juures tühi ostukott. Seinal portree koerast, roheline sokk suus.',
+      },
+      bisect: {
+        art: 'Üle seina ripub kahe naela küljes jõuluvalgusti ja ükski pirn ei põle. Vasaku poole ja järgmise veerandi all on linnukestega sulud: need osad on kontrollitud, piiridel rohelised pesulõksud. Inimene on ülejäänud osast pirni välja võtnud ja hoiab seda valguse poole: klaas on tume, hõõgniit katki; teises käes varupirn. Seinal portree meriseast, kes närib valguskette juhet.',
+      },
+      tag: {
+        art: 'Sahvris on riiul täis ühesuguseid moosipurke riidest kaantega; kahel purgil on heledad sildid 2024 ja 2025. Inimene põlvitab riiuli juures ja surub kollase sildi 2026 alumisel riiulil kõige uuema purgi külge. Kõrval kollaste siltide rull. Seinal portree koerast, kaelarihmas kollane nimesilt.',
+      },
     },
   },
 };

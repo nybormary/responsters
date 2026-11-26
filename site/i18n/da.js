@@ -932,6 +932,45 @@ export default {
           },
         ],
       },
+      merge: {
+        art: 'Til venstre kommer en smilende person ind ad den åbne hoveddør med en kasse med en gul mærkat; flere kasser af samme slags står allerede i stuen. Til højre står værten med hånden ved hagen og kigger på køkkenbordet, hvor to ens elkedler står side om side, værtens lyse og den nyankomnes gule, med et spørgsmålstegn imellem. På hylden over bordet står værtens egne kasser uden mærkater. På væggen et portræt af to katte, en grå og en lys, der snuser næse mod næse.',
+      },
+      fetch: {
+        art: 'Til højre et juletræ med en stjerne og indpakkede gaver med orange bånd under det. En person på ét knæ ved træet holder en gave op til øret og ryster den for at gætte, hvad der er i, uden at pakke den op. På væggen et portræt af en hund med en gave i munden.',
+      },
+      pull: {
+        art: 'Til venstre en stak af husets egne pakkede ting: kasser uden farve, hver med et skilt med et billede (et lille hus, en bog, en kop). Ved siden af står gaver med orange bånd; en person på knæ holder en sweater op, lige taget ud af en åben kasse, et bånd hænger ud over kanten og der ligger krøllet papir ved siden af. Til højre et juletræ. På væggen et portræt af en killing, der trækker det orange bånd af en gave.',
+      },
+      push: {
+        art: 'En fælles hylde på posthuset, fuld af andres pakker med adresser og frimærker, med et skilt med en kuvert over. En person til venstre skubber af al kraft sin egen pakke med orange bånd ind på den fulde hylde, og i den anden ende falder en andens pakke på gulvet. På væggen et portræt af en brevdue med et brev.',
+      },
+      show: {
+        art: 'Et opslået familiealbum med grønt omslag på et bord; ét sted er der kun fotohjørnerne og datoen 25.12.2026 tilbage, billedet er væk. En person står ved siden af og ser tæt på netop det billede: to mennesker på hver sin side af et juletræ, med samme dato nedenunder. På væggen et portræt af en hund med en grøn vinderroset som på en hundeudstilling.',
+      },
+      revert: {
+        art: 'Til venstre på væggen det gamle tapet med bølgede striber, til højre det nye med prikker. En person på en skammel klistrer det gamle bølgede mønster op igen oven på det nye tapet: én gul bane sidder allerede, den nederste ende af den næste er stadig i hånden; kanten viser, at det nye tapet er tilbage nedenunder. På gulvet en spand klister med en pensel. På væggen et portræt af en gul krabbe med en pil mod venstre.',
+      },
+      'cherry-pick': {
+        art: 'To opslåede opskriftshæfter på et bord. Til venstre bedstemors: stort og gammelt, med slidt omslag og et bogmærkebånd; en gryde på den ene side, en kirsebærtærte på den anden. Til højre et mindre spiralhæfte med gult omslag: en skål med spisepinde på den ene side og den samme tærte, kun halvt tegnet, på den anden. En person står foran bordet, læner sig over sit eget hæfte og tegner tærten af med en kuglepen. På væggen et portræt af en drossel med to gule kirsebær i næbbet.',
+      },
+      reset: {
+        art: 'Hjemme et pyntet juletræ med en åben gul kasse fra loftet under. En person står mellem en skraldespand og træet: med den ene hånd hænger personen en hel julekugle på træet og smider med den anden en knust i skraldespanden. På væggen et portræt af en guldfisk i en glasskål.',
+      },
+      reflog: {
+        art: 'Hjemme et pyntet juletræ og i hjørnet en skraldespand med en knust julekugle. En person ved træet læser en liste på et grønt clipboard: hver linje har en lille julekugle og tællestreger, én linje er ringet ind; personen kaster et blik på træet og tæller. På væggen et portræt af en rotte på kanten af en skraldespand.',
+      },
+      rebase: {
+        art: 'Et loft. En stak kasser med billedskilte: bøger nederst, over dem en nyere kasse med et halloweengræskar, og øverst sætter en person forsigtigt to gule kasser, én med en fødselsdagskage og én med en bamse, og holder dem, så de ikke vælter. På væggen et portræt af en grå kat, der sidder på kasser.',
+      },
+      blame: {
+        art: 'På køleskabet hænger en indkøbsliste under en grøn magnet: hver linje begynder med et billede af varen, er skrevet med en anden håndskrift og slutter med et lille ansigt på den, der skrev den; de samme ansigter hænger som fotomagneter på frysedøren. En person holder et forstørrelsesglas over enden af linjen med grønne vindruer, og i glasset ses et ansigt med en sløjfe. Ved fødderne en tom indkøbspose. På væggen et portræt af en hund med en grøn sok i munden.',
+      },
+      bisect: {
+        art: 'En lyskæde hænger på tværs af væggen på to søm, og ingen af pærerne lyser. Under den venstre halvdel og den næste fjerdedel er der klammer med flueben: de dele er tjekket, med grønne tøjklemmer ved grænserne. En person har taget en pære ud af den resterende del og holder den op mod lyset: glasset er mørkt, glødetråden knækket; en reservepære i den anden hånd. På væggen et portræt af et marsvin, der gnaver i lyskædens ledning.',
+      },
+      tag: {
+        art: 'Et reol i spisekammeret fuld af ens syltetøjsglas under stofdækkener; to glas har lyse etiketter, 2024 og 2025. En person på ét knæ ved reolen trykker en gul 2026-etiket fast på det nyeste glas på nederste hylde. En rulle gule etiketter ved siden af. På væggen et portræt af en hund med et gult navneskilt på halsbåndet.',
+      },
     },
   },
 };
