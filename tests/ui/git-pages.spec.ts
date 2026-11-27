@@ -278,11 +278,10 @@ test(
         await gitCardPage.open(lang, g.id);
         await axe.expectNoViolations(`${theme}, git card page ${g.name}`);
       });
-      // The first theme opens the door; the wall remembers it (RSP-196), so in the second theme it is already open.
-      const first = theme === THEMES[0];
-      await test.step(`${theme}: the advent wall on day 10, door ${g.day} ${first ? 'opened' : 'still open (remembered)'}`, async () => {
+      // The card page just visited marks its door opened (RSP-226, 2026-11-27), and the wall remembers it (RSP-196):
+      // door g.day is open on the wall without a click, in both themes.
+      await test.step(`${theme}: the advent wall on day 10, door ${g.day} open (its card page was visited)`, async () => {
         await adventWall.openOnDay(lang, 10);
-        if (first) await adventWall.door(g.day).click();
         await expect(adventWall.door(g.day)).toHaveClass(/\bopen\b/);
         await adventWall.settled(g.day);
         await axe.expectNoViolations(`${theme}, advent wall`);

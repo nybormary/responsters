@@ -100,6 +100,28 @@ function openEnclosure(li) {
   li.replaceChildren(template.content.cloneNode(true));
 }
 
+/**
+ * The day row under a git card (RSP-226): a neighbour opens on its day by the visitor's date, like the wall's doors;
+ * a missed day is open. A locked neighbour is an <a> without href: not a link, not in the Tab order.
+ */
+function paintDays(row) {
+  const today = localToday();
+  // This card counts as opened once its day has come, however the visitor got here (the day row, a shared link,
+  // the browser's back button), so its door on the wall shows the picture too (Maryna, 2026-11-27).
+  if (row.dataset.date && row.dataset.date <= today) {
+    const opened = new Set(store.get('opened', []));
+    if (!opened.has(row.dataset.id)) store.set('opened', [...opened, row.dataset.id]);
+  }
+  for (const day of row.querySelectorAll('a[data-date]')) {
+    const locked = day.dataset.date > today;
+    day.classList.toggle('locked', locked);
+    if (locked) day.removeAttribute('href');
+    else day.setAttribute('href', day.dataset.href);
+  }
+}
+
+const days = document.querySelector('[data-testid="git-days"]');
+if (days) paintDays(days);
 const wall = document.querySelector('[data-testid="advent-wall"]');
 if (wall) setUpWall(wall);
 const enclosure = document.querySelector('[data-testid="enclosure-git"][data-advent-start]');

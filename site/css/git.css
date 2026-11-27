@@ -329,3 +329,60 @@
   color: #1e5a45;
   text-underline-offset: 3px;
 }
+
+/* The day row under the card (RSP-226, layout standard of 2026-11-27): as wide as the card, previous left, this day
+   centred, next right; a neighbour is the day over its command, a locked one is grey with its opening date. */
+.git-page .g-days {
+  display: grid;
+  /* minmax(0, 1fr): both sides stay equal, so this day stays centred on day 1 and on the last day too */
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  /* start: this day's "Day 13" on one line with the neighbours' "Day 12" / "Day 14", not between their two lines */
+  align-items: start;
+  gap: 6px;
+  margin-top: 16px;
+}
+.git-page .g-day {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 700;
+}
+.git-page .g-day-prev {
+  align-items: flex-start;
+  text-align: left;
+}
+.git-page .g-day-next {
+  align-items: flex-end;
+  text-align: right;
+}
+.git-page .g-day-cmd {
+  font-size: 0.85em;
+  background: none;
+  padding: 0;
+}
+.git-page .g-day-from {
+  display: none;
+  font-size: 0.85em;
+  font-weight: 400;
+}
+.git-page .g-day.locked {
+  color: var(--muted);
+  font-weight: 400;
+}
+.git-page .g-day.locked .g-day-arrow,
+.git-page .g-day.locked .g-day-cmd {
+  display: none;
+}
+.git-page .g-day.locked .g-day-from {
+  display: block;
+}
+.git-page a.g-day[href]:hover .g-day-n {
+  text-decoration: underline;
+}
+.git-page .g-day-now {
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}

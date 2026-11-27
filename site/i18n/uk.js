@@ -548,6 +548,14 @@ export default {
       danger: 'Небезпечна команда',
       // heading of the outside links on a git card page
       docs: 'Документація',
+      // the day row under the card (RSP-226): n = advent day, date = the day it opens ("14 грудня")
+      nav: {
+        label: 'Дні адвенту',
+        day: (n) => `День ${n}`,
+        from: (date) => `з ${date}`,
+        prev: 'Попередній:',
+        next: 'Наступний:',
+      },
     },
     // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
     wall: {
@@ -793,7 +801,7 @@ export default {
         opts: [
           {
             cmd: 'git status -s',
-            text: '— рядок на файл; ліва колонка — індекс, права — робоча тека (`M` змінено, `A` додано, `??` untracked).',
+            text: '— короткий запис: лише файли з короткими позначками статусу (`M`, `A`, `??`).',
             meta: 'Той самий огляд, одним рядком на річ.',
           },
           {

@@ -319,6 +319,37 @@ function creaturePage(lang, tx, d) {
 `;
 }
 
+/**
+ * The card order by meaning (RSP-226, RSP-197; Maryna 2026-11-27): the advent days in order (a learning path), then
+ * cards added after the season in GIT order. Previous / next on a card page follow it, also after the advent.
+ */
+const ORDER = [...GIT.filter((g) => g.day).sort((a, b) => a.day - b.day), ...GIT.filter((g) => !g.day)];
+
+/**
+ * The day row under the card (RSP-226, layout standard of 2026-11-27): previous day left, this day centred, next day
+ * right, as wide as the card. A neighbour whose day has come is a link ("← Day 12" over `switch`, without "git");
+ * one whose day hasn't come is grey text without a link ("Day 14" over "from 14 December"). The build writes the state
+ * on its own date (the fallback without JS); js/advent.js repaints it by the visitor's date, like the wall, so a missed
+ * day is open. The names say previous / next and the whole command for screen readers.
+ */
+function gitDays(lang, tx, g) {
+  const n = tx.git.ui.nav;
+  const i = ORDER.indexOf(g);
+  const cmd = (x) => x.name.replace(/^git /, '');
+  const side = (x, dir) => {
+    if (!x) return `<span class="g-day g-day-${dir}" aria-hidden="true"></span>`;
+    const date = adventDay(x.day);
+    const open = BUILD_DATE >= date;
+    const label = x.day ? esc(n.day(x.day)) : '';
+    const arrowL = dir === 'prev' ? '<span class="g-day-arrow" aria-hidden="true">← </span>' : '';
+    const arrowR = dir === 'next' ? '<span class="g-day-arrow" aria-hidden="true"> →</span>' : '';
+    const git = x.name.startsWith('git ') ? '<span class="sr-only">git </span>' : '';
+    return `<a class="g-day g-day-${dir}${open ? '' : ' locked'}"${open ? ` href="${gitUrl(lang, x.id)}"` : ''} data-testid="git-day-${dir}" data-date="${date}" data-href="${gitUrl(lang, x.id)}"><span class="sr-only">${esc(n[dir])} </span><span class="g-day-n">${arrowL}${label}${arrowR}</span> <code class="g-day-cmd">${git}${esc(cmd(x))}</code> <span class="g-day-from">${esc(n.from(dayMonth(lang, date)))}</span></a>`;
+  };
+  const own = g.day ? ` data-id="${g.id}" data-date="${adventDay(g.day)}"` : '';
+  return `<nav class="g-days" aria-label="${esc(n.label)}" data-testid="git-days"${own}>${side(ORDER[i - 1], 'prev')} <span class="g-day-now" data-testid="git-day-now">${g.day ? esc(n.day(g.day)) : ''}</span> ${side(ORDER[i + 1], 'next')}</nav>`;
+}
+
 /** One git card page in one language (RSP-199): the HTTP card page layout with the git card and its sections. */
 function gitPage(lang, tx, g) {
   const ui = tx.git.ui;
@@ -351,7 +382,7 @@ function gitPage(lang, tx, g) {
         <article class="sheet" style="--cls: ${gitColourVar(g)}">
           <div class="in page-grid">
             <h1 class="sr">${esc(title)}</h1>
-            <div class="page-card"><div class="card cf-static git${g.danger ? ' danger' : ''}" data-testid="git-card">${gitCardBody(g, tx)}</div></div>
+            <div class="page-card"><div class="card cf-static git${g.danger ? ' danger' : ''}" data-testid="git-card">${gitCardBody(g, tx)}</div>${gitDays(lang, tx, g)}</div>
             <div class="page-main">
               ${gitMain(g, tx)}
             </div>

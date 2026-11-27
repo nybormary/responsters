@@ -553,6 +553,14 @@ export default {
       // heading of the outside links on a git card page
       // the strip of git's own documentation (RSP-221, Maryna 2026-11-22): under the three columns on wide screens
       docs: 'Documentation',
+      // the day row under the card (RSP-226): n = advent day, date = the day it opens ("14 December")
+      nav: {
+        label: 'Advent days',
+        day: (n) => `Day ${n}`,
+        from: (date) => `from ${date}`,
+        prev: 'Previous:',
+        next: 'Next:',
+      },
     },
     // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
     wall: {
@@ -801,7 +809,7 @@ export default {
         opts: [
           {
             cmd: 'git status -s',
-            text: '— one line per file; the left column is the index, the right one the working folder (`M` modified, `A` added, `??` untracked).',
+            text: '— a short form: just the files with short status marks (`M`, `A`, `??`).',
             meta: 'The same overview, one line per thing.',
           },
           {

@@ -50,7 +50,10 @@ const PENDING = new Set([
   'show',
 ]);
 const pending = [];
+// new interface texts that wait the same way (RSP-226: the day row under a git card)
+const PENDING_UI = ['git.ui.nav'];
 const isPending = (path) => {
+  if (PENDING_UI.some((p) => path === p || path.startsWith(p + '.'))) return true;
   const m = /^git\.cards\.([^.[]+)/.exec(path);
   return !!m && PENDING.has(m[1]);
 };
@@ -142,7 +145,7 @@ for (const l of Object.keys(LOCALES))
 
 if (pending.length)
   console.warn(
-    `⚠ ${pending.length} text(s) wait for translation (RSP-200, English for now; empty the PENDING list before the Git launch): ${[...PENDING].join(', ')}`,
+    `⚠ ${pending.length} text(s) wait for translation (RSP-200, RSP-226; English for now; empty PENDING and PENDING_UI before the Git launch): ${[...PENDING, ...PENDING_UI].join(', ')}`,
   );
 if (problems.length) {
   console.error(`✗ ${problems.length} problem(s):\n  ` + problems.join('\n  '));
