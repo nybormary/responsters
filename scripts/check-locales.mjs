@@ -19,7 +19,46 @@ const { GROUPS } = await load('data/git/groups.js');
 const { NEWS, KINDS } = await load('data/news.js');
 
 const problems = [];
+// Git cards whose pl/da/lt/et texts wait for Maryna's review of uk/en (RSP-200, decided 2026-11-27): until she
+// approves uk/en locally, those languages show English (i18n/fill.js), and a gap under git.cards.<id> here is a
+// warning, not a problem. The list must be EMPTY before the Git launch release (RSP-146): translate, then delete the id.
+const PENDING = new Set([
+  // days 1–12: the new "$" line is the most common form, its hint not translated yet
+  'init',
+  'clone',
+  'status',
+  'add',
+  'log',
+  'diff',
+  'restore',
+  'stash',
+  'branch',
+  'switch',
+  // days 13–25: all texts but the picture's (blame's picture text also changes: a potluck dinner list)
+  'merge',
+  'fetch',
+  'pull',
+  'push',
+  'tag',
+  'revert',
+  'cherry-pick',
+  'reset',
+  'reflog',
+  'rebase',
+  'blame',
+  'bisect',
+  'show',
+]);
+const pending = [];
+const isPending = (path) => {
+  const m = /^git\.cards\.([^.[]+)/.exec(path);
+  return !!m && PENDING.has(m[1]);
+};
 function compare(base, loc, path, lang) {
+  if (loc === undefined && isPending(path)) {
+    pending.push(`${lang}: ${path}`);
+    return;
+  }
   if (loc === undefined) {
     problems.push(`${lang}: missing ${path}`);
     return;
@@ -101,6 +140,10 @@ for (const f of files) {
 for (const l of Object.keys(LOCALES))
   if (!files.includes(l + '.js')) problems.push(`index.js lists ${l}, but i18n/${l}.js doesn't exist`);
 
+if (pending.length)
+  console.warn(
+    `⚠ ${pending.length} text(s) wait for translation (RSP-200, English for now; empty the PENDING list before the Git launch): ${[...PENDING].join(', ')}`,
+  );
 if (problems.length) {
   console.error(`✗ ${problems.length} problem(s):\n  ` + problems.join('\n  '));
   process.exit(1);

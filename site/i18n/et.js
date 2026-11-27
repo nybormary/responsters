@@ -574,19 +574,13 @@ export default {
       init: {
         title: 'Tühi korter',
         line: 'Alustame puhtalt lehelt.',
-        move: '$ git init -b main',
-        hint: 'uus hoidla, esimene haru main',
+        move: '$ git init',
         does: {
           text: 'Loob praegusesse kausta uue tühja hoidla (repository): peidetud kausta `.git`, kus git hoiab kogu ajalugu. Kausta failid jäävad, nagu olid; git neid veel ei jälgi. Kommitte veel pole, seega `git branch` ei näita midagi: haru tekib koos esimese kommitiga.',
           meta: 'Uus korter: seinad on olemas, mööblit veel pole, ja esimesena astub sisse kass.',
         },
         tip: 'Projekt on juba GitHubis või mujal? Siis mitte init, vaid `git clone <url>`: see loob ise kausta ja toob kogu ajaloo.',
         opts: [
-          {
-            cmd: 'git init',
-            text: '— uus hoidla praeguses kaustas. Olemasolevas hoidlas uuesti käivitada on ohutu: midagi ei kustutata.',
-            meta: 'Paned nimesildi selle korteri uksele, kus juba elad.',
-          },
           {
             cmd: 'git init <kaust>',
             text: '— loob sellenimelise kausta (kui seda veel pole) ja sinna hoidla.',
@@ -634,19 +628,13 @@ export default {
       restore: {
         title: 'Nagu fotol',
         line: 'Ettevaatust, ema koristab — tagajärgede eest me ei vastuta',
-        move: '$ git restore --staged <fail>',
-        hint: 'korvist tagasi, muudatused failis jäävad',
+        move: '$ git restore <fail>',
         does: {
           text: 'Viib töökausta faili tagasi indeksi olekusse ehk viskab minema muudatused, mida pole veel lisatud. `git restore --staged <fail>` teeb vastupidi: võtab faili indeksist välja ja jätab töökausta nii, nagu see on. Kommitite ajalugu ei muuda.',
           meta: 'Ema koristab toa nagu fotol: mis pooleli, see kaob.',
         },
         tip: 'Tee on kohustuslik: `git restore .` taastab kogu kausta. Varem tehti seda käsuga `git checkout -- <fail>`.',
         opts: [
-          {
-            cmd: 'git restore <fail>',
-            text: '— viskab minema töökausta muudatused, mida indeksis veel pole.',
-            meta: 'Laiali loobitu läheb tagasi riiulile.',
-          },
           {
             cmd: 'git restore --staged <fail>',
             text: '— võtab faili indeksist välja (unstage); muudatused töökaustas jäävad.',
@@ -667,8 +655,7 @@ export default {
       stash: {
         title: 'Külalised ukse taga',
         line: 'Koristan kiiresti ära!',
-        move: '$ git stash -u',
-        hint: 'peida ka uued failid',
+        move: '$ git stash',
         does: {
           text: 'Peidab jälgitavate failide kommitimata muudatused (nii indeksis kui ka töökaustas) eraldi hoidlasse ja viib töökausta tagasi viimase kommiti olekusse. Hiljem saab need välja võtta, ka teises harus.',
           meta: 'Uksekell heliseb: topid pooleli asjad kappi, et tuba näeks korras välja.',
@@ -700,8 +687,7 @@ export default {
       branch: {
         title: 'Uus nimesilt',
         line: 'Oh, sellest saab minu tuba.',
-        move: '$ git branch -d <haru>',
-        hint: 'kustuta juba liidetud haru',
+        move: '$ git branch',
         does: {
           text: 'Ilma argumentideta näitab kohalikke harusid ja märgib praeguse tärniga `*`. Nimega loob praegusele kommitile uue haru, aga sellele ei lülitu: selleks on `git switch`.',
           meta: 'Paned uue toa uksele nimesildi, aga ise jääd sinna, kus olid.',
@@ -729,8 +715,7 @@ export default {
       switch: {
         title: 'Uus tuba',
         line: 'Aeg kolida teise tuppa',
-        move: '$ git switch -c <haru>',
-        hint: 'loo haru ja mine kohe sinna',
+        move: '$ git switch <haru>',
         does: {
           text: 'Lülitub teisele harule: töökaust ja indeks muutuvad selliseks nagu selle viimases kommitis. Kommitimata muudatused tulevad kaasa; kui need lähevad selle haru failidega vastuollu, git peatub ja palub need kommitida või peita (`git stash`).',
           meta: 'Kõnnid mööda vaipa teise tuppa ja see, mis sul käes, tuleb kaasa.',
@@ -759,8 +744,7 @@ export default {
         title: 'Möbleeritud korter',
         art: 'Kohvritega inimene, ühel kohvril lambipirni kleebis, seisab pärani avatud ukse ees. Korteris on juba eelmiste üürnike tugitool, sellel vanade arvetega kaust, ja seinal ripub kahe ühesuguse kassipoja portree. Ukse kõrval uus nimesilt, vana kukub maha.',
         line: 'Keegi elas siin, nüüd olen mina.',
-        move: '$ git clone --depth 1 <url>',
-        hint: 'ainult viimane seis, ilma vana ajaloota',
+        move: '$ git clone <url>',
         does: {
           text: 'Kopeerib kaughoidla uude kausta: kogu ajaloo ja harud (kui `origin/…`) ning lülitub põhiharule. git jätab aadressi meelde nimega `origin`, nii et hiljem töötavad `git fetch`, `git pull` ja `git push`.',
           meta: 'Kolid möbleeritud üürikorterisse: kõik, mis eelmised üürnikud maha jätsid, on alles, isegi vanade arvetega kaust.',
@@ -788,8 +772,7 @@ export default {
         title: 'Kolm hunnikut',
         art: 'Seinal luubiga kassi portree. Inimene vaatab rahulikult kolme riidehunnikut: rataste peal korvist paistavad välja sokk, varrukas ja käterätik, põrandal on kantud riided ja nende kõrval kokkuvolditud uus särk suure poesildiga.',
         line: 'Mis meil siin on? Vaatame järele.',
-        move: '$ git status -s',
-        hint: 'sama ülevaade, üks rida asja kohta',
+        move: '$ git status',
         does: {
           text: 'Näitab töökausta ja indeksi seisu: millised muudatused on juba commitiks ette valmistatud (staged), millised on muudetud, aga veel ette valmistamata, ja milliseid faile git ei jälgi (untracked). Midagi ei muuda.',
           meta: 'Laotad asjad kolme hunnikusse ja vaatad, mis kus on.',
@@ -812,8 +795,7 @@ export default {
         title: 'Korvi',
         art: 'Seinal portree kassist, kes magab korvis. Inimene paneb sinise asjade kimbu rataste peal korvi, kus on juba sokk, varrukas ja käterätik; põrandal on veel kampsun ja sokk, mida pole lisatud.',
         line: 'Korista palun oma tuba ära.',
-        move: '$ git add -p',
-        hint: 'lisa osa muudatustest, tükk tüki haaval',
+        move: '$ git add .',
         does: {
           text: 'Lisab faili praeguse seisu indeksisse (staged): just see läheb järgmisse commiti. Uut faili hakkab git pärast käsku `git add` jälgima.',
           meta: 'Paned asjad korvi, et need hiljem kasti pakkida.',
@@ -824,11 +806,6 @@ export default {
             cmd: 'git add <fail>',
             text: '— lisab ühe faili (või kausta).',
             meta: 'Üks asi korvi.',
-          },
-          {
-            cmd: 'git add .',
-            text: '— kõik muudatused praeguses kaustas ja allpool, ka uued ja kustutatud failid.',
-            meta: 'Pühid kõik toast korvi.',
           },
           {
             cmd: 'git add -p',
@@ -850,11 +827,6 @@ export default {
         tip: 'Üks commit, üks mõte; kirjuta sõnumisse „miks“, mitte ainult „mis“.',
         opts: [
           {
-            cmd: 'git commit -m "…"',
-            text: '— sõnum käsurealt, ilma redaktorita.',
-            meta: 'Pane kastile silt.',
-          },
-          {
             cmd: 'git commit -a',
             text: '— lisab kõigepealt ise jälgitavate failide muudatused (muudetud ja kustutatud), aga mitte uusi faile. Tavaliselt kirjutatakse koos sõnumiga: `git commit -am "…"`.',
             meta: 'Tuttav pööningule, uus jääb.',
@@ -870,8 +842,7 @@ export default {
         title: 'Perealbum',
         art: 'Lahtine rohelises kaanes perealbum. Neli fotot vanimast alates: majake puuga, kilpkonn, kaks inimest kõrvuti, meri ja päike; iga foto all loetamatu allkiri ja kuupäev, 09.11.1996 kuni 15.07.2007.',
         line: 'Kas soovite albumit vaadata?',
-        move: '$ git log --oneline',
-        hint: 'üks rida commiti kohta',
+        move: '$ git log',
         does: {
           text: 'Näitab praeguse haru commitide ajalugu, uusim eespool: räsi, autor, kuupäev, sõnum.',
           meta: 'Lehitsed albumit viimasest fotost tagasi.',
@@ -904,8 +875,7 @@ export default {
         title: 'Leia erinevused',
         art: 'Inimene toas hoiab korteri plaani ja võrdleb seda sellega, mida näeb. Plaanil on ümmargune laud, aga toas on sellest järel ainult kontuur põrandal; plaanil on põrandalamp tugitooli kõrval, toas aga teises otsas; vana tugitool on sama. Seinal portree kameeleonist, kes hoiab oma fotot, kus ta on teist värvi, ja nende vahel märk „ei võrdu“.',
         line: 'Leia kolm erinevust',
-        move: '$ git diff --staged',
-        hint: 'täpselt see, mis läheb järgmisse commiti',
+        move: '$ git diff',
         does: {
           text: 'Näitab rida-realt, mis muutus: `-` eemaldatud rida, `+` lisatud. Ilma valikuteta võrdleb töökausta indeksiga ehk näitab muudatusi, mida pole veel käsuga `git add` lisatud; uusi (untracked) faile ei näita.',
           meta: 'Võrdled „enne“ ja „pärast“ viimase pisiasjani.',

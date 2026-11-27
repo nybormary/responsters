@@ -575,19 +575,13 @@ export default {
       init: {
         title: 'Puste mieszkanie',
         line: 'Zacznijmy od czystej kartki.',
-        move: '$ git init -b main',
-        hint: 'nowe repozytorium z gałęzią main na start',
+        move: '$ git init',
         does: {
           text: 'Tworzy w bieżącym katalogu nowe, puste repozytorium: ukryty katalog `.git`, w którym git trzyma całą historię. Pliki w katalogu zostają, jak były; git ich jeszcze nie śledzi. Nie ma jeszcze commitów, więc `git branch` nic nie pokazuje: gałąź pojawi się z pierwszym commitem.',
           meta: 'Nowe mieszkanie: ściany są, mebli jeszcze nie ma, a pierwszy wchodzi kot.',
         },
         tip: 'Projekt jest już na GitHubie albo gdzie indziej? To nie init, tylko `git clone <url>`: sam utworzy katalog i przyniesie całą historię.',
         opts: [
-          {
-            cmd: 'git init',
-            text: '— nowe repozytorium w bieżącym katalogu. Ponowne uruchomienie w istniejącym repozytorium jest bezpieczne: nic nie kasuje.',
-            meta: 'Wieszasz tabliczkę na drzwiach mieszkania, w którym już mieszkasz.',
-          },
           {
             cmd: 'git init <katalog>',
             text: '— tworzy katalog o tej nazwie (jeśli go jeszcze nie ma) i repozytorium w nim.',
@@ -635,19 +629,13 @@ export default {
       restore: {
         title: 'Jak na zdjęciu',
         line: 'Uwaga, mama sprząta — za skutki nie odpowiadamy',
-        move: '$ git restore --staged <plik>',
-        hint: 'z powrotem z kosza, zmiany w pliku zostają',
+        move: '$ git restore <plik>',
         does: {
           text: 'Przywraca plik w katalogu roboczym do stanu z indeksu, czyli wyrzuca zmiany, których jeszcze nie dodano. `git restore --staged <plik>` działa odwrotnie: wyjmuje plik z indeksu, a katalog roboczy zostawia, jak jest. Historii commitów nie zmienia.',
           meta: 'Mama sprząta pokój tak, jak na zdjęciu: co nieskończone, znika.',
         },
         tip: 'Ścieżka jest obowiązkowa: `git restore .` przywraca cały katalog. Dawniej robiło się to przez `git checkout -- <plik>`.',
         opts: [
-          {
-            cmd: 'git restore <plik>',
-            text: '— wyrzuca zmiany w katalogu roboczym, których jeszcze nie ma w indeksie.',
-            meta: 'Porozrzucane wraca na półkę.',
-          },
           {
             cmd: 'git restore --staged <plik>',
             text: '— wyjmuje plik z indeksu (unstage); zmiany w katalogu roboczym zostają.',
@@ -668,8 +656,7 @@ export default {
       stash: {
         title: 'Goście w drzwiach',
         line: 'Szybko posprzątam!',
-        move: '$ git stash -u',
-        hint: 'schować także nowe pliki',
+        move: '$ git stash',
         does: {
           text: 'Chowa niezacommitowane zmiany w śledzonych plikach (i w indeksie, i w katalogu roboczym) do osobnego schowka i przywraca katalog roboczy do ostatniego commita. Później można je wyjąć, nawet na innej gałęzi.',
           meta: 'Dzwonek do drzwi: upychasz niedokończone w szafie, żeby w pokoju było czysto.',
@@ -701,8 +688,7 @@ export default {
       branch: {
         title: 'Nowa tabliczka',
         line: 'O, to będzie mój pokój.',
-        move: '$ git branch -d <gałąź>',
-        hint: 'usunąć gałąź, która jest już scalona',
+        move: '$ git branch',
         does: {
           text: 'Bez argumentów pokazuje lokalne gałęzie, bieżącą oznacza `*`. Z nazwą tworzy nową gałąź na bieżącym commicie, ale na nią nie przełącza: do tego jest `git switch`.',
           meta: 'Wieszasz tabliczkę na drzwiach nowego pokoju, ale nie ruszasz się z miejsca.',
@@ -730,8 +716,7 @@ export default {
       switch: {
         title: 'Nowy pokój',
         line: 'Czas przeprowadzić się do innego pokoju',
-        move: '$ git switch -c <gałąź>',
-        hint: 'utworzyć gałąź i od razu do niej przejść',
+        move: '$ git switch <gałąź>',
         does: {
           text: 'Przełącza na inną gałąź: katalog roboczy i indeks stają się takie, jak w jej ostatnim commicie. Niezacommitowane zmiany idą z tobą; jeśli kolidują z plikami tamtej gałęzi, git się zatrzymuje i prosi, żeby je zacommitować albo schować (`git stash`).',
           meta: 'Przechodzisz chodnikiem do innego pokoju, a to, co masz w rękach, idzie z tobą.',
@@ -760,8 +745,7 @@ export default {
         title: 'Mieszkanie z meblami',
         art: 'Osoba z walizkami, na jednej naklejka z żarówką, stoi przed szeroko otwartymi drzwiami. W mieszkaniu stoi już fotel poprzednich lokatorów, na nim segregator ze starymi rachunkami, a na ścianie wisi portret dwóch identycznych kociąt. Przy drzwiach nowa tabliczka z nazwiskiem, a stara odpada.',
         line: 'Ktoś tu mieszkał, a teraz ja.',
-        move: '$ git clone --depth 1 <url>',
-        hint: 'tylko ostatni stan, bez dawnej historii',
+        move: '$ git clone <url>',
         does: {
           text: 'Kopiuje zdalne repozytorium do nowego katalogu: całą historię i gałęzie (jako `origin/…`), i przełącza na gałąź główną. git zapamiętuje adres pod nazwą `origin`, dlatego potem działają `git fetch`, `git pull` i `git push`.',
           meta: 'Wprowadzasz się do wynajętego mieszkania z meblami: wszystko, co zostawili poprzedni lokatorzy, jest na miejscu, nawet segregator ze starymi rachunkami.',
@@ -789,8 +773,7 @@ export default {
         title: 'Trzy kupki',
         art: 'Na ścianie portret kota z lupą. Osoba spokojnie przygląda się trzem kupkom ubrań: z kosza na kółkach wystają skarpetka, rękaw i ręcznik, na podłodze leżą noszone rzeczy, a obok złożona nowa koszula z dużą metką ze sklepu.',
         line: 'Co tu mamy? Sprawdźmy.',
-        move: '$ git status -s',
-        hint: 'ten sam przegląd, jedna linijka na rzecz',
+        move: '$ git status',
         does: {
           text: 'Pokazuje stan katalogu roboczego i indeksu: które zmiany są już przygotowane do commita (staged), które są zmienione, ale jeszcze nieprzygotowane, i których plików git nie śledzi (untracked). Niczego nie zmienia.',
           meta: 'Rozkładasz rzeczy na trzy kupki i patrzysz, co gdzie jest.',
@@ -813,8 +796,7 @@ export default {
         title: 'Do kosza',
         art: 'Na ścianie portret kota śpiącego w koszyku. Osoba wkłada niebieski kłębek rzeczy do kosza na kółkach, w którym leżą już skarpetka, rękaw i ręcznik; na podłodze wciąż leżą sweter i skarpetka, jeszcze niedodane.',
         line: 'Posprzątaj w pokoju, proszę.',
-        move: '$ git add -p',
-        hint: 'dodać część zmian, kawałek po kawałku',
+        move: '$ git add .',
         does: {
           text: 'Dodaje bieżący stan pliku do indeksu (staged): właśnie to trafi do następnego commita. Nowy plik po `git add` git zaczyna śledzić.',
           meta: 'Wkładasz rzeczy do kosza, żeby potem spakować je do pudła.',
@@ -825,11 +807,6 @@ export default {
             cmd: 'git add <plik>',
             text: '— dodaje jeden plik (albo katalog).',
             meta: 'Jedna rzecz do kosza.',
-          },
-          {
-            cmd: 'git add .',
-            text: '— wszystkie zmiany w bieżącym katalogu i niżej, razem z nowymi i usuniętymi plikami.',
-            meta: 'Zgarniasz do kosza wszystko z pokoju.',
           },
           {
             cmd: 'git add -p',
@@ -851,11 +828,6 @@ export default {
         tip: 'Jeden commit — jedna myśl; w opisie pisz „po co”, a nie tylko „co”.',
         opts: [
           {
-            cmd: 'git commit -m "…"',
-            text: '— opis z wiersza poleceń, bez edytora.',
-            meta: 'Podpisz pudło.',
-          },
-          {
             cmd: 'git commit -a',
             text: '— najpierw sam dodaje zmiany w śledzonych plikach (zmienionych i usuniętych); nowych plików nie. Zwykle pisze się razem z opisem: `git commit -am "…"`.',
             meta: 'Znane na strych, nowe zostaje.',
@@ -871,8 +843,7 @@ export default {
         title: 'Album rodzinny',
         art: 'Otwarty album rodzinny w zielonej okładce. Cztery zdjęcia od najstarszego: domek z drzewem, żółw, dwoje ludzi obok siebie, morze i słońce; pod każdym nieczytelny podpis i data, od 09.11.1996 do 15.07.2007.',
         line: 'Chcecie obejrzeć album?',
-        move: '$ git log --oneline',
-        hint: 'jedna linijka na commit',
+        move: '$ git log',
         does: {
           text: 'Pokazuje historię commitów bieżącej gałęzi od najnowszego: hash, autor, data, opis.',
           meta: 'Przeglądasz album od ostatniego zdjęcia wstecz.',
@@ -905,8 +876,7 @@ export default {
         title: 'Znajdź różnice',
         art: 'Osoba w pokoju trzyma plan mieszkania i porównuje go z tym, co widzi. Na planie jest okrągły stół, a w pokoju został po nim tylko kontur na podłodze; na planie lampa stojąca jest przy fotelu, a w pokoju w drugim końcu; stary fotel jest ten sam. Na ścianie portret kameleona, który trzyma swoje zdjęcie w innym kolorze, a między nimi znak „nie równa się”.',
         line: 'Znajdź trzy różnice',
-        move: '$ git diff --staged',
-        hint: 'dokładnie to, co trafi do następnego commita',
+        move: '$ git diff',
         does: {
           text: 'Pokazuje linijka po linijce, co się zmieniło: `-` usunięta linijka, `+` dodana. Bez opcji porównuje katalog roboczy z indeksem, czyli pokazuje zmiany jeszcze niedodane przez `git add`; nowych (untracked) plików nie pokazuje.',
           meta: 'Porównujesz „jak było” i „jak jest” do najmniejszego szczegółu.',

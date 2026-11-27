@@ -576,19 +576,13 @@ export default {
       init: {
         title: 'Tuščias butas',
         line: 'Pradėkime nuo švaraus lapo.',
-        move: '$ git init -b main',
-        hint: 'nauja saugykla su pagrindine šaka main',
+        move: '$ git init',
         does: {
           text: 'Dabartiniame aplanke sukuria naują tuščią saugyklą (repository): paslėptą aplanką `.git`, kuriame git laikys visą istoriją. Aplanko failai lieka, kaip buvo; git jų dar neseka. Komitų dar nėra, todėl `git branch` nieko nerodo: šaka atsiras su pirmuoju komitu.',
           meta: 'Naujas butas: sienos yra, baldų dar nėra, o pirmoji įeina katė.',
         },
         tip: 'Projektas jau yra GitHub ar kitur? Tada ne init, o `git clone <url>`: jis pats sukurs aplanką ir atneš visą istoriją.',
         opts: [
-          {
-            cmd: 'git init',
-            text: '— nauja saugykla dabartiniame aplanke. Paleisti dar kartą esamoje saugykloje saugu: niekas neištrinama.',
-            meta: 'Kabini lentelę ant buto, kuriame jau gyveni, durų.',
-          },
           {
             cmd: 'git init <aplankas>',
             text: '— sukuria tokio pavadinimo aplanką (jei jo dar nėra) ir jame saugyklą.',
@@ -636,19 +630,13 @@ export default {
       restore: {
         title: 'Kaip nuotraukoje',
         line: 'Atsargiai, mama tvarkosi — už pasekmes neatsakome',
-        move: '$ git restore --staged <failas>',
-        hint: 'atgal iš krepšio, pakeitimai faile lieka',
+        move: '$ git restore <failas>',
         does: {
           text: 'Grąžina failą darbiniame aplanke į būseną indekse, t. y. išmeta dar nepridėtus pakeitimus. `git restore --staged <failas>` veikia atvirkščiai: išima failą iš indekso, o darbinį aplanką palieka, kaip yra. Komitų istorijos nekeičia.',
           meta: 'Mama sutvarko kambarį kaip nuotraukoje: kas nebaigta, dingsta.',
         },
         tip: 'Kelias privalomas: `git restore .` atkuria visą aplanką. Anksčiau tai darydavo per `git checkout -- <failas>`.',
         opts: [
-          {
-            cmd: 'git restore <failas>',
-            text: '— išmeta darbinio aplanko pakeitimus, kurių dar nėra indekse.',
-            meta: 'Kas išmėtyta, grįžta į lentyną.',
-          },
           {
             cmd: 'git restore --staged <failas>',
             text: '— išima failą iš indekso (unstage); pakeitimai darbiniame aplanke lieka.',
@@ -669,8 +657,7 @@ export default {
       stash: {
         title: 'Svečiai prie durų',
         line: 'Greitai susitvarkysiu!',
-        move: '$ git stash -u',
-        hint: 'paslėpti ir naujus failus',
+        move: '$ git stash',
         does: {
           text: 'Paslepia nekomituotus sekamų failų pakeitimus (ir indekse, ir darbiniame aplanke) atskiroje saugykloje ir grąžina darbinį aplanką į paskutinio komito būseną. Vėliau juos galima išsitraukti, net kitoje šakoje.',
           meta: 'Skambina į duris: nebaigtus darbus sukiši į spintą, kad kambaryje būtų tvarkinga.',
@@ -702,8 +689,7 @@ export default {
       branch: {
         title: 'Nauja lentelė',
         line: 'O, čia bus mano kambarys.',
-        move: '$ git branch -d <šaka>',
-        hint: 'pašalinti jau sulietą šaką',
+        move: '$ git branch',
         does: {
           text: 'Be argumentų rodo vietines šakas, dabartinę pažymi `*`. Su pavadinimu sukuria naują šaką ant dabartinio komito, bet į ją neperjungia: tam yra `git switch`.',
           meta: 'Pakabini lentelę ant naujo kambario durų, bet lieki ten pat.',
@@ -727,8 +713,7 @@ export default {
       switch: {
         title: 'Naujas kambarys',
         line: 'Laikas persikraustyti į kitą kambarį',
-        move: '$ git switch -c <šaka>',
-        hint: 'sukurti šaką ir iškart į ją pereiti',
+        move: '$ git switch <šaka>',
         does: {
           text: 'Perjungia į kitą šaką: darbinis aplankas ir indeksas tampa tokie, kaip jos paskutiniame komite. Nekomituoti pakeitimai keliauja kartu; jei jie kertasi su tos šakos failais, git sustoja ir prašo juos komituoti arba paslėpti (`git stash`).',
           meta: 'Takeliu eini į kitą kambarį, ir tai, ką laikai rankose, keliauja kartu.',
@@ -757,8 +742,7 @@ export default {
         title: 'Butas su baldais',
         art: 'Žmogus su lagaminais, ant vieno lipdukas su lempute, stovi prie plačiai atvertų durų. Bute jau stovi ankstesnių nuomininkų fotelis, ant jo segtuvas su senomis sąskaitomis, o ant sienos kabo dviejų vienodų kačiukų portretas. Prie durų nauja lentelė su vardu, o senoji krenta.',
         line: 'Čia kažkas gyveno, o dabar gyvensiu aš.',
-        move: '$ git clone --depth 1 <url>',
-        hint: 'tik paskutinė būsena, be senos istorijos',
+        move: '$ git clone <url>',
         does: {
           text: 'Nukopijuoja nuotolinę saugyklą į naują aplanką: visą istoriją ir šakas (kaip `origin/…`), ir persijungia į pagrindinę šaką. git įsimena adresą vardu `origin`, todėl vėliau veikia `git fetch`, `git pull` ir `git push`.',
           meta: 'Įsikrauštai į nuomojamą butą su baldais: viskas, ką paliko ankstesni nuomininkai, vietoje, net segtuvas su senomis sąskaitomis.',
@@ -786,8 +770,7 @@ export default {
         title: 'Trys krūvelės',
         art: 'Ant sienos katino su didinamuoju stiklu portretas. Žmogus ramiai žiūri į tris drabužių krūveles: iš krepšio su ratukais kyšo kojinė, rankovė ir rankšluostis, ant grindų guli dėvėti drabužiai, o šalia sulankstyti nauji marškiniai su didele parduotuvės etikete.',
         line: 'Ką čia turime? Patikrinkime.',
-        move: '$ git status -s',
-        hint: 'ta pati apžvalga, viena eilutė vienam daiktui',
+        move: '$ git status',
         does: {
           text: 'Rodo darbinio aplanko ir indekso būseną: kurie pakeitimai jau paruošti commit (staged), kurie pakeisti, bet dar neparuošti, ir kurių failų git neseka (untracked). Nieko nekeičia.',
           meta: 'Išdėlioji daiktus į tris krūveles ir žiūri, kas kur.',
@@ -810,8 +793,7 @@ export default {
         title: 'Į krepšį',
         art: 'Ant sienos portretas katino, miegančio krepšyje. Žmogus deda mėlyną daiktų gniužulą į krepšį su ratukais, kuriame jau guli kojinė, rankovė ir rankšluostis; ant grindų dar guli megztinis ir kojinė, nepridėti.',
         line: 'Susitvarkyk kambarį, prašau.',
-        move: '$ git add -p',
-        hint: 'pridėti dalį pakeitimų, gabalą po gabalo',
+        move: '$ git add .',
         does: {
           text: 'Prideda dabartinę failo būseną į indeksą (staged): būtent tai pateks į kitą commit. Naują failą po `git add` git pradeda sekti.',
           meta: 'Dedi daiktus į krepšį, kad paskui supakuotum į dėžę.',
@@ -822,11 +804,6 @@ export default {
             cmd: 'git add <failas>',
             text: '— prideda vieną failą (arba aplanką).',
             meta: 'Vienas daiktas į krepšį.',
-          },
-          {
-            cmd: 'git add .',
-            text: '— visi pakeitimai dabartiniame aplanke ir žemiau, kartu su naujais ir ištrintais failais.',
-            meta: 'Sužeri į krepšį viską iš kambario.',
           },
           {
             cmd: 'git add -p',
@@ -848,11 +825,6 @@ export default {
         tip: 'Vienas commit – viena mintis; apraše rašyk „kodėl“, o ne tik „ką“.',
         opts: [
           {
-            cmd: 'git commit -m "…"',
-            text: '— aprašas iš komandinės eilutės, be redaktoriaus.',
-            meta: 'Užrašyk dėžę.',
-          },
-          {
             cmd: 'git commit -a',
             text: '— pirmiausia pats prideda pakeitimus sekamuose failuose (pakeistuose ir ištrintuose), bet ne naujus failus. Paprastai rašoma kartu su aprašu: `git commit -am "…"`.',
             meta: 'Pažįstama – į palėpę, nauja lieka.',
@@ -868,8 +840,7 @@ export default {
         title: 'Šeimos albumas',
         art: 'Atverstas šeimos albumas žaliu viršeliu. Keturios nuotraukos nuo seniausios: namelis su medžiu, vėžlys, du žmonės greta, jūra ir saulė; po kiekviena neįskaitomas parašas ir data, nuo 09.11.1996 iki 15.07.2007.',
         line: 'Ar norite pažiūrėti albumą?',
-        move: '$ git log --oneline',
-        hint: 'viena eilutė vienam commit',
+        move: '$ git log',
         does: {
           text: 'Rodo dabartinės šakos commit istoriją nuo naujausio: hash, autorius, data, aprašas.',
           meta: 'Verti albumą nuo paskutinės nuotraukos atgal.',
@@ -902,8 +873,7 @@ export default {
         title: 'Rask skirtumus',
         art: 'Žmogus kambaryje laiko buto planą ir lygina jį su tuo, ką mato. Plane yra apvalus stalas, o kambaryje iš jo liko tik kontūras ant grindų; plane toršeras stovi prie fotelio, o kambaryje – kitame gale; senas fotelis tas pats. Ant sienos portretas chameleono, kuris laiko savo nuotrauką, kur jis kitos spalvos, o tarp jų ženklas „nelygu“.',
         line: 'Rask tris skirtumus',
-        move: '$ git diff --staged',
-        hint: 'kas tiksliai pateks į kitą commit',
+        move: '$ git diff',
         does: {
           text: 'Rodo eilutė po eilutės, kas pasikeitė: `-` – pašalinta eilutė, `+` – pridėta. Be parinkčių lygina darbinį aplanką su indeksu, t. y. rodo pakeitimus, dar nepridėtus per `git add`; naujų (untracked) failų nerodo.',
           meta: 'Lygini „kaip buvo“ ir „kaip yra“ iki mažiausios smulkmenos.',

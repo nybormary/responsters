@@ -583,19 +583,14 @@ export default {
       init: {
         title: 'An empty flat',
         line: 'Let’s start with a clean sheet.',
-        move: '$ git init -b main',
-        hint: 'a new repository with main as the first branch',
+        move: '$ git init',
+        hint: 'a new repository in the current folder',
         does: {
           text: 'Creates a new, empty repository in the current folder: the hidden `.git` folder where git keeps the whole history. The files in the folder stay as they are; git doesn’t track them yet. There are no commits yet, so `git branch` shows nothing: the branch appears with the first commit.',
           meta: 'A new flat: walls but no furniture yet, and the cat goes in first.',
         },
         tip: 'The project is already on GitHub or elsewhere? Then not init but `git clone <url>`: it creates the folder itself and brings the whole history.',
         opts: [
-          {
-            cmd: 'git init',
-            text: '— a new repository in the current folder. Running it again in an existing repository is safe: nothing is erased.',
-            meta: 'You put a nameplate on the door of the flat you already live in.',
-          },
           {
             cmd: 'git init <folder>',
             text: '— creates a folder with that name (if it doesn’t exist yet) and the repository in it.',
@@ -643,19 +638,14 @@ export default {
       restore: {
         title: 'As in the photo',
         line: 'Careful, Mum is tidying — no responsibility for the consequences',
-        move: '$ git restore --staged <file>',
-        hint: 'out of the basket, the changes in the file stay',
+        move: '$ git restore <file>',
+        hint: 'throw away the changes in a file',
         does: {
           text: 'Brings a file in the working tree back to its state in the index, that is, throws away changes not yet added. `git restore --staged <file>` works the other way round: takes the file out of the index and leaves the working tree as it is. Doesn’t change the commit history.',
           meta: 'Mum tidies the room to match the photo: whatever was half done is gone.',
         },
         tip: 'A path is required: `git restore .` restores the whole folder. This used to be `git checkout -- <file>`.',
         opts: [
-          {
-            cmd: 'git restore <file>',
-            text: '— throws away changes in the working tree that aren’t in the index yet.',
-            meta: 'What was scattered goes back on the shelf.',
-          },
           {
             cmd: 'git restore --staged <file>',
             text: '— takes the file out of the index (unstage); the changes in the working tree stay.',
@@ -676,8 +666,8 @@ export default {
       stash: {
         title: 'Guests at the door',
         line: 'A quick tidy-up!',
-        move: '$ git stash -u',
-        hint: 'stash the new files too',
+        move: '$ git stash',
+        hint: 'put uncommitted work away',
         does: {
           text: 'Puts uncommitted changes in tracked files (both in the index and in the working tree) into a separate store and brings the working tree back to the last commit. You can take them out later, even on another branch.',
           meta: 'The doorbell rings: you stuff the unfinished things into the cupboard so the room looks tidy.',
@@ -709,8 +699,8 @@ export default {
       branch: {
         title: 'A new nameplate',
         line: 'Oh, this will be my room.',
-        move: '$ git branch -d <branch>',
-        hint: 'remove a branch that’s already merged',
+        move: '$ git branch',
+        hint: 'the list of branches, the current one with *',
         does: {
           text: 'Without arguments it lists the local branches and marks the current one with `*`. With a name it creates a new branch at the current commit but doesn’t switch to it: that’s `git switch`.',
           meta: 'You put a nameplate on the door of a new room but stay where you were.',
@@ -738,8 +728,8 @@ export default {
       switch: {
         title: 'A new room',
         line: 'Time to move to another room',
-        move: '$ git switch -c <branch>',
-        hint: 'create a branch and go there at once',
+        move: '$ git switch <branch>',
+        hint: 'go to another branch',
         does: {
           text: 'Switches to another branch: the working tree and the index become as in its last commit. Uncommitted changes come along; if they clash with files on that branch, git stops and asks you to commit or stash them (`git stash`).',
           meta: 'You walk along the runner into another room, and whatever is in your hands comes with you.',
@@ -772,8 +762,8 @@ export default {
         title: 'Furnished flat',
         art: "A person with suitcases, one with a light-bulb sticker, stands at a wide-open door. Inside, the previous tenants' armchair is already there with a binder of old bills on it, and a portrait of two identical kittens hangs on the wall. By the door, a new name plate; the old one is falling off.",
         line: "Someone lived here; now it's my turn.",
-        move: '$ git clone --depth 1 <url>',
-        hint: 'only the latest state, no old history',
+        move: '$ git clone <url>',
+        hint: 'a copy of a repository with all its history',
         does: {
           text: 'Copies a remote repository into a new folder: all the history and branches (as `origin/…`), and switches to the main branch. git remembers the address as `origin`, so `git fetch`, `git pull` and `git push` work later.',
           meta: 'You move into a furnished rented flat: whatever the previous tenants left is still there, even the binder of old bills.',
@@ -801,8 +791,8 @@ export default {
         title: 'Three piles',
         art: 'A portrait of a cat with a magnifying glass on the wall. A person calmly looks at three piles of clothes: a sock, a sleeve and a towel stick out of the basket on wheels, worn clothes lie on the floor, and next to them lies a folded new shirt with a big shop tag.',
         line: "What have we got here? Let's check.",
-        move: '$ git status -s',
-        hint: 'the same overview, one line per thing',
+        move: '$ git status',
+        hint: 'what has changed and what goes into the commit',
         does: {
           text: "Shows the state of the working folder and the index: which changes are already prepared for the commit (staged), which are changed but not prepared yet, and which files git doesn't track (untracked). Changes nothing.",
           meta: "You sort things into three piles and look at what's where.",
@@ -825,8 +815,8 @@ export default {
         title: 'Into the basket',
         art: 'A portrait of a cat asleep in a basket on the wall. A person puts a blue bundle of things into the basket on wheels, which already holds a sock, a sleeve and a towel; a sweater and a sock still lie on the floor, not added.',
         line: 'Tidy up your room, please.',
-        move: '$ git add -p',
-        hint: 'add part of the changes, piece by piece',
+        move: '$ git add .',
+        hint: 'all changes in the folder into the basket',
         does: {
           text: 'Adds the current state of a file to the index (staged): exactly this goes into the next commit. After `git add`, git starts tracking a new file.',
           meta: 'You put things in the basket to pack them into a box later.',
@@ -837,11 +827,6 @@ export default {
             cmd: 'git add <file>',
             text: '— adds one file (or folder).',
             meta: 'One thing into the basket.',
-          },
-          {
-            cmd: 'git add .',
-            text: '— all changes in the current folder and below, including new and deleted files.',
-            meta: 'You sweep everything in the room into the basket.',
           },
           {
             cmd: 'git add -p',
@@ -863,11 +848,6 @@ export default {
         tip: 'One commit, one idea; in the message write “why”, not only “what”.',
         opts: [
           {
-            cmd: 'git commit -m "…"',
-            text: '— the message from the command line, no editor.',
-            meta: 'Label the box.',
-          },
-          {
             cmd: 'git commit -a',
             text: '— first adds the changes in tracked files by itself (modified and deleted), but not new files. Usually written together with the message: `git commit -am "…"`.',
             meta: 'The familiar goes to the attic, the new stays.',
@@ -883,8 +863,8 @@ export default {
         title: 'Family album',
         art: 'An open family album with a green cover. Four photos, oldest first: a little house with a tree, a turtle, two people side by side, the sea and the sun; under each an unreadable caption and a date, from 09.11.1996 to 15.07.2007.',
         line: 'Would you like to see the album?',
-        move: '$ git log --oneline',
-        hint: 'one line per commit',
+        move: '$ git log',
+        hint: 'the commit history, newest first',
         does: {
           text: 'Shows the commit history of the current branch, newest first: hash, author, date, message.',
           meta: 'You leaf through the album from the last photo back.',
@@ -917,8 +897,8 @@ export default {
         title: 'Spot the difference',
         art: 'A person in a room holds the floor plan of the flat and compares it with what they see. The plan has a round table, but in the room only its outline is left on the floor; on the plan the floor lamp is next to the armchair, in the room it is at the other end; the old armchair is the same. On the wall, a portrait of a chameleon holding a photo of itself in another colour, with a not-equal sign between them.',
         line: 'Spot three differences',
-        move: '$ git diff --staged',
-        hint: 'exactly what goes into the next commit',
+        move: '$ git diff',
+        hint: 'what has changed but isn’t in the basket yet',
         does: {
           text: "Shows line by line what changed: `-` a removed line, `+` an added one. Without options it compares the working folder with the index, i.e. shows the changes not yet added with `git add`; it doesn't show new (untracked) files.",
           meta: 'You compare “before” and “after” down to the smallest detail.',
@@ -943,42 +923,372 @@ export default {
         ],
       },
       merge: {
+        title: 'A new neighbour',
+        line: 'Let’s try living together',
+        move: '$ git merge <branch>',
+        hint: 'join a branch into the current one',
+        does: {
+          text: 'Joins another branch’s commits into the current branch. If the current branch has had no new commits since, git simply moves it forward (fast-forward); otherwise it creates a merge commit with two parents. If both branches changed the same lines, git stops at a conflict and waits until it is resolved.',
+          meta: 'Someone moves in with their boxes; where two identical kettles claim the same spot, you decide.',
+        },
+        tip: 'A conflict? Fix the marked files, then `git add <file>` and `git commit`. Changed your mind? `git merge --abort` puts everything back as it was before the merge.',
+        opts: [
+          {
+            cmd: 'git merge --no-ff <branch>',
+            text: '— always a merge commit, even when a fast-forward would do: the history shows the branch was separate.',
+            meta: 'You can see what your neighbour moved in with.',
+          },
+          {
+            cmd: 'git merge --squash <branch>',
+            text: '— brings all the branch’s changes into the index as one change, with no merge commit and no link to the branch; then `git commit`.',
+            meta: 'You unpack all your neighbour’s boxes and put the things into one box of your own.',
+          },
+          {
+            cmd: 'git merge --abort',
+            text: '— during a conflict, goes back to the state before the merge.',
+            meta: 'The neighbour moves out with their things.',
+          },
+        ],
         art: "On the left, a smiling person comes in through the open front door carrying a box with a yellow label; a few more boxes like it already stand in the room. On the right, the host, hand at the chin, looks at the counter, where two identical kettles stand side by side, the host's light one and the newcomer's yellow one, with a question mark between them. On the shelf above the counter, the host's own boxes without labels. On the wall, a portrait of two cats, a grey one and a light one, sniffing nose to nose.",
       },
       fetch: {
+        title: 'What did we get?',
+        line: 'Shall we have a quick look at the presents under the tree?',
+        move: '$ git fetch',
+        hint: 'what’s new on the server, nothing changes on your side',
+        does: {
+          text: 'Downloads new commits and branches from the remote repository and updates `origin/…`. Your own branches and working tree don’t change: you can look at what’s new with `git log origin/main` and bring it in with `git merge` or `git rebase`.',
+          meta: 'The presents are already under the tree: you may shake them and read the gift tags, but it’s too early to unwrap them.',
+        },
+        tip: 'A safe command: run it any time to find out what has changed on the server.',
+        opts: [
+          {
+            cmd: 'git fetch --prune',
+            text: '— removes local `origin/…` branches that are gone from the server.',
+            meta: 'You throw away the tags of presents already taken.',
+          },
+          {
+            cmd: 'git fetch --all',
+            text: '— from every remote repository, not only `origin`.',
+            meta: 'You check every place where presents might be hidden.',
+          },
+          {
+            cmd: 'git fetch origin <branch>',
+            text: '— only one branch.',
+            meta: 'You shake just one present.',
+          },
+        ],
         art: "On the right, a Christmas tree with a star and wrapped presents with orange ribbons under it. A person on one knee by the tree holds one present to their ear and shakes it to guess what's inside, without unwrapping it. On the wall, a portrait of a dog with a present in its mouth.",
       },
       pull: {
+        title: 'Unwrapping a present',
+        line: 'Oh, I’ve never had one like this',
+        move: '$ git pull',
+        hint: 'get what’s new from the server and merge it at once',
+        does: {
+          text: 'This is `git fetch` followed at once by merging what came in into the current branch. If the histories have diverged (new commits both on the server and on your side), git 2.43 stops and asks you to choose: a merge or `git pull --rebase` (the `pull.rebase` setting); if a simple fast-forward is possible, it goes through without questions.',
+          meta: 'The present wasn’t just brought in: you unwrap it right away, and it takes its place in your home.',
+        },
+        tip: 'Before `git pull`, commit or stash your changes (`git stash`): that makes a conflict easier to sort out if one happens.',
+        opts: [
+          {
+            cmd: 'git pull --rebase',
+            text: '— after the fetch, puts your local commits on top of the ones that came in; the history stays straight.',
+            meta: 'Other people’s presents go on the pile first, yours on top.',
+          },
+          {
+            cmd: 'git pull --ff-only',
+            text: '— updates only when a simple fast-forward is possible; otherwise stops and changes nothing.',
+            meta: 'You unwrap only if you’re sure there is room.',
+          },
+          {
+            cmd: 'git pull origin <branch>',
+            text: '— from one particular remote branch.',
+            meta: 'You unwrap only the present from someone close.',
+          },
+        ],
         art: "On the left, a stack of the household's own packed things: boxes without colour, each with a picture label (a little house, a book, a cup). Next to them stand presents with orange ribbons; a person on their knees holds up a jumper just taken out of an open box, a ribbon hanging over its edge and crumpled paper nearby. On the right, a Christmas tree. On the wall, a portrait of a kitten pulling the orange ribbon off a present.",
       },
       push: {
+        title: 'A full shelf',
+        line: 'Time to send the presents',
+        move: '$ git push',
+        hint: 'send your commits to the server',
+        does: {
+          text: 'Sends your commits to the remote branch. If it has commits you don’t have, git rejects the push: first `git pull`, then `git push` again.',
+          meta: 'You take your parcel to the post office, where everyone will see it.',
+        },
+        tip: 'After a push everyone sees the commits: don’t rewrite them (`git commit --amend`, `git rebase`), or you’ll have to send them by force.',
+        opts: [
+          {
+            cmd: 'git push -u origin <branch>',
+            text: '— the first push of a new branch: remembers which remote branch yours goes with, so from then on `git push` is enough.',
+            meta: 'The post office remembers your address.',
+          },
+          {
+            cmd: 'git push --force-with-lease',
+            text: '— overwrites the remote branch only if nobody else has added new commits there.',
+            meta: 'You swap your parcel after checking that nobody has put theirs next to it.',
+          },
+          {
+            cmd: 'git push origin --delete <branch>',
+            text: '— deletes the branch on the server.',
+            meta: 'You take your name off the letterbox.',
+          },
+        ],
+        careful: [
+          '`git push --force` overwrites the remote branch: other people’s commits that you don’t have disappear from the server.',
+          'If you really must rewrite, use `git push --force-with-lease`, and never on a shared branch (`main`).',
+        ],
         art: "A shared shelf at the post office, full of other people's parcels with addresses and stamps, a sign with an envelope above it. A person on the left shoves their own parcel with an orange ribbon onto the full shelf with all their strength, and at the other end someone else's parcel falls to the floor. On the wall, a portrait of a carrier pigeon with a letter.",
       },
       show: {
+        title: 'One photo',
+        line: 'That day when',
+        move: '$ git show <commit>',
+        hint: 'one commit in full',
+        does: {
+          text: 'Shows one object: for a commit, its author, date, message and changes (the diff); the first 7 characters of the hash are enough. Without arguments it shows the latest commit (`HEAD`). Changes nothing.',
+          meta: 'You take one photo out of the family album and look at it closely, date and all.',
+        },
+        tip: '`git log` to find a commit, `git show <hash>` to look at it.',
+        opts: [
+          {
+            cmd: 'git show <commit>:<file>',
+            text: '— the file as it was in that commit.',
+            meta: 'What the room looked like that day.',
+          },
+          {
+            cmd: 'git show --stat <commit>',
+            text: '— only the list of changed files and how many lines changed.',
+            meta: 'Only the caption under the photo.',
+          },
+        ],
         art: "An open family album with a green cover on a table; in one place only the photo corners and the date 25.12.2026 are left, the photo is gone. A person stands next to it and looks at that photo up close: two people on either side of a Christmas tree, the same date below. On the wall, a portrait of a dog with a green winner's rosette, as at a dog show.",
       },
       revert: {
+        title: 'The old wallpaper',
+        line: 'The old ones were better. Let’s put them back.',
+        move: '$ git revert <commit>',
+        hint: 'a new commit that undoes an old one',
+        does: {
+          text: 'Creates a new commit that undoes the changes of the given commit; an editor opens for its message. The history isn’t rewritten, so this is the safe way to undo something already sent with `git push`.',
+          meta: 'You don’t strip the new wallpaper: you paste the old pattern over it as a new layer.',
+        },
+        tip: 'A commit nobody has seen yet can also be removed with `git reset`; one that’s already on the server, only with `git revert`. A merge commit is undone with `git revert -m 1 <merge-commit>`, where 1 is the number of the branch you go back to (usually the main one).',
+        opts: [
+          {
+            cmd: 'git revert --no-edit <commit>',
+            text: '— the same, with the default message “Revert "…"”, without the editor.',
+            meta: 'You paste straight away, no trying it on.',
+          },
+          {
+            cmd: 'git revert HEAD',
+            text: '— undoes the latest commit.',
+            meta: 'You redo only the last strip.',
+          },
+          {
+            cmd: 'git revert --no-commit <commit>',
+            text: '— undoes the changes in the working tree and the index without a commit, so several undos can go into one commit.',
+            meta: 'You take down several strips and repaper them in one go.',
+          },
+        ],
         art: 'On the left of the wall, the old wallpaper with wavy stripes; on the right, the new one with dots. A person on a stool pastes the old wavy pattern again over the new wallpaper: one yellow strip is already up, the lower end of the next one is still in their hand; its edge shows the new wallpaper stays underneath. On the floor, a bucket of paste with a brush. On the wall, a portrait of a yellow crab with an arrow pointing left.',
       },
       'cherry-pick': {
+        title: 'Grandma’s recipe',
+        line: 'Oh, my favourite pie. I must copy it for myself',
+        move: '$ git cherry-pick <commit>',
+        hint: 'a copy of one commit in the current branch',
+        does: {
+          text: 'Takes the changes of one commit from another branch and applies them to the current one as a new commit, with a new hash. The original stays on its branch.',
+          meta: 'You copy one recipe from grandma’s notebook into yours; grandma still has it too.',
+        },
+        tip: 'A conflict? Fix it, `git add <file>`, then `git cherry-pick --continue`. Changed your mind? `git cherry-pick --abort`.',
+        opts: [
+          {
+            cmd: 'git cherry-pick <from>..<to>',
+            text: '— several commits in a row, without `<from>` itself.',
+            meta: 'Several recipes in a row.',
+          },
+          {
+            cmd: 'git cherry-pick -x <commit>',
+            text: '— adds the line “(cherry picked from commit …)” to the message.',
+            meta: 'You write under the recipe: “from grandma”.',
+          },
+          {
+            cmd: 'git cherry-pick -n <commit>',
+            text: '— brings the commit’s changes into the working tree and the index without a commit, so you can adjust them or collect several into one commit.',
+            meta: 'You copy the recipe and add your own changes before writing it out neatly.',
+          },
+        ],
         art: "Two open recipe notebooks on a table. On the left, grandma's: big and old, with a worn cover and a ribbon bookmark; a pot on one page, a cherry pie on the other. On the right, a smaller spiral notebook with a yellow cover: a bowl with chopsticks on one page and the same pie, still half drawn, on the other. A person stands in front of the table, leaning over their own notebook, copying the pie with a pen. On the wall, a portrait of a thrush with two yellow cherries in its beak.",
       },
       reset: {
+        title: 'Tree or bin',
+        line: 'This one on the tree, this one in the bin. Just don’t mix them up',
+        move: '$ git reset HEAD~1',
+        hint: 'take off the last commit, the changes stay in the files',
+        does: {
+          text: 'Moves the current branch to another commit (for example, `HEAD~1` is one back). What happens to the changes of the removed commits depends on the mode: with `git reset --soft` they stay in the index, with the default `git reset` only in the working tree, with `git reset --hard` they are gone.',
+          meta: 'You unpack a box from the attic: some things go on the tree, some into the bin.',
+        },
+        tip: 'With a file instead of a commit, `git reset <file>` just takes the file out of the index, like `git restore --staged <file>`.',
+        opts: [
+          {
+            cmd: 'git reset --soft HEAD~1',
+            text: '— takes off the last commit; the changes stay in the index, ready for a new commit.',
+            meta: 'The bauble stays in the box, close at hand.',
+          },
+          {
+            cmd: 'git reset --hard HEAD~1',
+            text: '— takes off the commit and wipes the changes in the index and the working tree.',
+            meta: 'The bauble goes into the bin.',
+          },
+        ],
+        careful: [
+          '`git reset --hard` wipes uncommitted changes for good.',
+          'Removed commits can still be found in `git reflog` until git cleans them up. Don’t take commits that are already on the server off with `git reset`: for those there is `git revert`.',
+        ],
         art: 'At home, a decorated Christmas tree, an open yellow box from the attic under it. A person stands between a bin and the tree: with one hand they hang a whole bauble on the tree, with the other they drop a broken one into the bin. On the wall, a portrait of a goldfish in a bowl.',
       },
       reflog: {
+        title: 'The bauble list',
+        line: 'Small baubles: there were 10, now there are 8',
+        move: '$ git reflog',
+        hint: 'where HEAD has been, step by step',
+        does: {
+          text: 'Shows the local log of every place `HEAD` has been, newest first: commits, branch switches, `git reset`, `git rebase`. That’s how you find a commit that has vanished from `git log`.',
+          meta: 'The list records every change: there were 10 baubles, now there are 8, and you can see when two went missing.',
+        },
+        tip: 'The reflog is local and temporary: the server doesn’t have it, and git clears old entries over time (by default after 90 days, entries about unreachable commits after 30).',
+        opts: [
+          {
+            cmd: 'git reflog show <branch>',
+            text: '— the log of one branch.',
+            meta: 'Only the line about the small baubles.',
+          },
+          {
+            cmd: 'git branch <name> HEAD@{2}',
+            text: '— brings a lost commit back as a new branch.',
+            meta: 'The list shows you when everything was still in place.',
+          },
+        ],
         art: 'At home, a decorated Christmas tree, and in the corner a bin with a broken bauble in it. A person by the tree reads a list on a green clipboard: each line has a small bauble and tally marks, one line is circled; the person glances at the tree and counts. On the wall, a portrait of a rat on the rim of a bin.',
       },
       rebase: {
+        title: 'A new base',
+        line: 'Let’s stack them nicely so they don’t fall!',
+        move: '$ git rebase main',
+        hint: 'your commits on top of a fresh main',
+        does: {
+          text: 'Moves the commits of the current branch as if it had started from another place (for example, a newer `main`): each commit is applied again and gets a new hash. The history becomes straight, with no merge commits.',
+          meta: 'A new box was slipped under yours, and you stack yours on top again, carefully, so they don’t fall.',
+        },
+        tip: 'A conflict? Fix it, `git add <file>`, then `git rebase --continue`. Changed your mind? `git rebase --abort`.',
+        opts: [
+          {
+            cmd: 'git rebase -i HEAD~3',
+            text: '— opens a list of the last three commits: squash, reword, drop, reorder.',
+            meta: 'You restack the top three boxes.',
+          },
+          {
+            cmd: 'git rebase --abort',
+            text: '— cancels a rebase halfway.',
+            meta: 'You put the boxes back the way they were.',
+          },
+        ],
+        careful: [
+          'A rebase rewrites commits: if they have already been sent (`git push`), your history will part from everyone else’s.',
+          'Rebase only your own commits that haven’t been sent yet. If something goes wrong, the old state is in `git reflog`.',
+        ],
         art: "An attic. A stack of boxes with picture labels: books at the bottom, above them a newer box with a Halloween pumpkin, and on top a person carefully sets two yellow boxes, one with a birthday cake and one with a teddy bear, steadying them so they don't fall. On the wall, a portrait of a grey cat sitting on boxes.",
       },
       blame: {
-        art: 'A shopping list hangs on the fridge under a green magnet: each line starts with a picture of the item, is written in different handwriting and ends with the little face of whoever added it; the same faces hang as photo magnets on the freezer door. A person holds a magnifying glass over the end of the green grapes line, and the glass shows a face with a bow. An empty shopping bag at their feet. On the wall, a portrait of a dog with a green sock in its mouth.',
+        title: 'The list on the fridge',
+        line: 'Who’s bringing the grapes?',
+        move: '$ git blame <file>',
+        hint: 'who changed each line, and when',
+        does: {
+          text: 'For each line of a file, shows in which commit, when and by whom it was last changed. Changes nothing.',
+          meta: 'Next to each line of the dinner list, the little face of whoever added it: you know whom to ask.',
+        },
+        tip: 'Found the commit? Look at it in full: `git show <hash>`. “Blame” here isn’t about fault, it’s about whom to ask about a line.',
+        opts: [
+          {
+            cmd: 'git blame -L 10,20 <file>',
+            text: '— only lines 10 to 20.',
+            meta: 'You look only at the grapes line.',
+          },
+          {
+            cmd: 'git blame -w <file>',
+            text: '— ignores whitespace changes.',
+            meta: 'A line where only the indent was fixed still belongs to its first author.',
+          },
+          {
+            cmd: 'git blame <commit> -- <file>',
+            text: '— the file as it was at the given commit.',
+            meta: 'The list as it was yesterday.',
+          },
+        ],
+        art: 'A list of who brings what to the dinner hangs on the fridge under a green magnet: each line starts with a picture of the item, is written in different handwriting and ends with the little face of whoever added it; the same faces hang as photo magnets on the freezer door. A person holds a magnifying glass over the end of the green grapes line, and the glass shows a face with a bow. An empty shopping bag at their feet. On the wall, a portrait of a dog with a green sock in its mouth.',
       },
       bisect: {
+        title: 'The dead bulb',
+        line: 'Ah, there’s the problem',
+        move: '$ git bisect start',
+        hint: 'start looking for the commit that broke it',
+        does: {
+          text: 'Finds the commit that broke something by halving: you say where it still worked (`git bisect good <commit>`) and where it no longer does (`git bisect bad`), git checks out the commit in the middle, you test it and report. In a few steps the guilty commit is found.',
+          meta: 'The fairy lights are out: you check one half, then half of what’s left, and so on down to that one bulb.',
+        },
+        tip: 'At the end, `git bisect reset` takes you back to the branch where the search began.',
+        opts: [
+          {
+            cmd: 'git bisect run <command>',
+            text: '— git runs the command at every step and reads its exit code: 0 is “good”, 125 is “skip”, 1 to 124 and 126–127 are “bad”, above 127 stops the search.',
+            meta: 'You test the bulbs with a tester, not by eye.',
+          },
+          {
+            cmd: 'git bisect skip',
+            text: '— this commit can’t be tested (for example, it doesn’t build): git takes a neighbouring one.',
+            meta: 'A bulb won’t screw in, so you take the next one.',
+          },
+          {
+            cmd: 'git bisect reset',
+            text: '— ends the search and returns to the starting branch.',
+            meta: 'You hang the lights back up.',
+          },
+        ],
         art: 'A garland hangs across the wall on two nails, and none of it lights up. Under the left half and the next quarter, brackets with ticks: those parts are checked, with green clothes pegs at their borders. A person has taken a bulb out of the remaining part and holds it up to the light: the glass is dark, the filament broken; a spare bulb in the other hand. On the wall, a portrait of a guinea pig chewing the garland wire.',
       },
       tag: {
+        title: 'A label on the jar',
+        line: 'Easier to find',
+        move: '$ git tag v1.0',
+        hint: 'a mark on the current commit',
+        does: {
+          text: 'Puts a permanent mark on a commit, usually a version number (`v1.0`). Unlike a branch, a tag doesn’t move with new commits: it always points at the same commit.',
+          meta: 'Among identical jars of jam, you stick a label on your favourite one, so it’s easier to find later.',
+        },
+        tip: 'A plain `git push` doesn’t send tags: you need `git push origin v1.0` or `git push --tags`.',
+        opts: [
+          {
+            cmd: 'git tag',
+            text: '— lists the tags.',
+            meta: 'You look over all the labelled jars.',
+          },
+          {
+            cmd: 'git tag -a v1.0 -m "…"',
+            text: '— an annotated tag with an author, a date and a message, for releases.',
+            meta: 'A label with the year and who made the jam.',
+          },
+          {
+            cmd: 'git tag -d v1.0',
+            text: '— deletes the tag locally; it stays on the server until you run `git push origin --delete v1.0`.',
+            meta: 'You peel the label off your own jar.',
+          },
+        ],
         art: 'A pantry rack full of identical jars of jam under cloth covers; two jars have light labels, 2024 and 2025. A person on one knee by the rack presses a yellow 2026 label onto the newest jar on the bottom shelf. A roll of yellow labels nearby. On the wall, a portrait of a dog with a yellow address tag on its collar.',
       },
     },

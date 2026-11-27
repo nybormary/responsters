@@ -573,19 +573,13 @@ export default {
       init: {
         title: 'En tom lejlighed',
         line: 'Lad os starte på en frisk.',
-        move: '$ git init -b main',
-        hint: 'et nyt repository med main som første gren',
+        move: '$ git init',
         does: {
           text: 'Opretter et nyt, tomt repository i den aktuelle mappe: den skjulte mappe `.git`, hvor git gemmer hele historikken. Filerne i mappen bliver, som de er; git sporer dem ikke endnu. Der er ingen commits endnu, så `git branch` viser intet: grenen opstår med det første commit.',
           meta: 'En ny lejlighed: væggene er der, møblerne mangler, og katten går ind først.',
         },
         tip: 'Ligger projektet allerede på GitHub eller et andet sted? Så ikke init, men `git clone <url>`: den opretter selv mappen og henter hele historikken.',
         opts: [
-          {
-            cmd: 'git init',
-            text: '— et nyt repository i den aktuelle mappe. Det er sikkert at køre den igen i et eksisterende repository: intet slettes.',
-            meta: 'Du sætter et navneskilt på døren til den lejlighed, du allerede bor i.',
-          },
           {
             cmd: 'git init <mappe>',
             text: '— opretter en mappe med det navn (hvis den ikke findes) og repository’et i den.',
@@ -633,19 +627,13 @@ export default {
       restore: {
         title: 'Som på billedet',
         line: 'Pas på, mor rydder op — vi står ikke til ansvar for følgerne',
-        move: '$ git restore --staged <fil>',
-        hint: 'ud af kurven igen, ændringerne i filen bliver',
+        move: '$ git restore <fil>',
         does: {
           text: 'Sætter en fil i arbejdsmappen tilbage til dens tilstand i indekset, dvs. smider ændringer væk, der ikke er tilføjet endnu. `git restore --staged <fil>` gør det modsatte: tager filen ud af indekset og lader arbejdsmappen være. Ændrer ikke commit-historikken.',
           meta: 'Mor rydder op i værelset, så det ligner billedet: det halvfærdige forsvinder.',
         },
         tip: 'En sti er påkrævet: `git restore .` gendanner hele mappen. Før gjorde man det med `git checkout -- <fil>`.',
         opts: [
-          {
-            cmd: 'git restore <fil>',
-            text: '— smider ændringer i arbejdsmappen væk, som ikke er i indekset endnu.',
-            meta: 'Det, der flød, kommer tilbage på hylden.',
-          },
           {
             cmd: 'git restore --staged <fil>',
             text: '— tager filen ud af indekset (unstage); ændringerne i arbejdsmappen bliver.',
@@ -666,8 +654,7 @@ export default {
       stash: {
         title: 'Gæster ved døren',
         line: 'Lige en hurtig oprydning!',
-        move: '$ git stash -u',
-        hint: 'gem også de nye filer væk',
+        move: '$ git stash',
         does: {
           text: 'Lægger ikke-committede ændringer i sporede filer (både i indekset og i arbejdsmappen) til side i et særskilt lager og sætter arbejdsmappen tilbage til det sidste commit. Senere kan de hentes frem igen, også på en anden gren.',
           meta: 'Det ringer på døren: du stopper det halvfærdige ind i skabet, så værelset ser pænt ud.',
@@ -699,8 +686,7 @@ export default {
       branch: {
         title: 'Et nyt navneskilt',
         line: 'Åh, det her bliver mit værelse.',
-        move: '$ git branch -d <gren>',
-        hint: 'slet en gren, der allerede er flettet',
+        move: '$ git branch',
         does: {
           text: 'Uden argumenter viser den de lokale grene og markerer den aktuelle med `*`. Med et navn opretter den en ny gren på det aktuelle commit, men skifter ikke til den: det gør `git switch`.',
           meta: 'Du sætter et navneskilt på døren til et nyt værelse, men bliver selv stående, hvor du er.',
@@ -728,8 +714,7 @@ export default {
       switch: {
         title: 'Et nyt værelse',
         line: 'Tid til at flytte ind i et andet værelse',
-        move: '$ git switch -c <gren>',
-        hint: 'opret en gren og gå derind med det samme',
+        move: '$ git switch <gren>',
         does: {
           text: 'Skifter til en anden gren: arbejdsmappen og indekset bliver som i dens sidste commit. Ikke-committede ændringer følger med; hvis de støder sammen med filer på den gren, stopper git og beder dig committe dem eller lægge dem til side (`git stash`).',
           meta: 'Du går ad løberen ind i et andet værelse, og det, du har i hænderne, følger med.',
@@ -762,8 +747,7 @@ export default {
         title: 'Møbleret lejlighed',
         art: 'En person med kufferter, den ene med et pæreklistermærke, står ved en vidt åben dør. Inde i lejligheden står de tidligere lejeres lænestol allerede med et ringbind med gamle regninger på, og på væggen hænger et portræt af to ens killinger. Ved døren et nyt navneskilt; det gamle er ved at falde af.',
         line: 'Her har boet nogen, nu er det mig.',
-        move: '$ git clone --depth 1 <url>',
-        hint: 'kun den seneste tilstand, uden gammel historik',
+        move: '$ git clone <url>',
         does: {
           text: 'Kopierer et fjernrepository til en ny mappe: hele historikken og grenene (som `origin/…`), og skifter til hovedgrenen. git husker adressen som `origin`, så `git fetch`, `git pull` og `git push` virker bagefter.',
           meta: 'Du flytter ind i en møbleret lejelejlighed: alt, hvad de tidligere lejere efterlod, er der stadig, selv ringbindet med gamle regninger.',
@@ -791,8 +775,7 @@ export default {
         title: 'Tre bunker',
         art: 'På væggen et portræt af en kat med lup. En person ser roligt på tre bunker tøj: en sok, et ærme og et håndklæde stikker op af kurven på hjul, brugt tøj ligger på gulvet, og ved siden af ligger en sammenfoldet ny skjorte med et stort prismærke.',
         line: 'Hvad har vi her? Lad os tjekke.',
-        move: '$ git status -s',
-        hint: 'samme overblik, én linje pr. ting',
+        move: '$ git status',
         does: {
           text: 'Viser tilstanden i arbejdsmappen og indekset: hvilke ændringer der allerede er klar til commit (staged), hvilke der er ændret, men ikke klargjort endnu, og hvilke filer git ikke følger (untracked). Ændrer ingenting.',
           meta: 'Du sorterer tingene i tre bunker og ser, hvad der er hvor.',
@@ -815,8 +798,7 @@ export default {
         title: 'I kurven',
         art: 'På væggen et portræt af en kat, der sover i en kurv. En person lægger et blåt bundt ting i kurven på hjul, hvor der allerede ligger en sok, et ærme og et håndklæde; en sweater og en sok ligger stadig på gulvet, ikke tilføjet.',
         line: 'Ryd op på dit værelse, tak.',
-        move: '$ git add -p',
-        hint: 'tilføj en del af ændringerne, stykke for stykke',
+        move: '$ git add .',
         does: {
           text: 'Tilføjer filens aktuelle tilstand til indekset (staged): præcis det kommer med i næste commit. En ny fil begynder git at følge efter `git add`.',
           meta: 'Du lægger ting i kurven for senere at pakke dem i en kasse.',
@@ -827,11 +809,6 @@ export default {
             cmd: 'git add <fil>',
             text: '— tilføjer én fil (eller mappe).',
             meta: 'Én ting i kurven.',
-          },
-          {
-            cmd: 'git add .',
-            text: '— alle ændringer i den aktuelle mappe og nedad, også nye og slettede filer.',
-            meta: 'Du fejer alt i rummet ned i kurven.',
           },
           {
             cmd: 'git add -p',
@@ -853,11 +830,6 @@ export default {
         tip: 'Én commit, én tanke; skriv »hvorfor« i beskeden, ikke kun »hvad«.',
         opts: [
           {
-            cmd: 'git commit -m "…"',
-            text: '— beskeden fra kommandolinjen, uden editor.',
-            meta: 'Mærk kassen.',
-          },
-          {
             cmd: 'git commit -a',
             text: '— tilføjer først selv ændringerne i fulgte filer (ændrede og slettede), men ikke nye filer. Skrives som regel sammen med beskeden: `git commit -am "…"`.',
             meta: 'Det kendte op på loftet, det nye bliver.',
@@ -873,8 +845,7 @@ export default {
         title: 'Familiealbum',
         art: 'Et opslået familiealbum med grønt omslag. Fire fotos, ældste først: et lille hus med et træ, en skildpadde, to mennesker side om side, havet og solen; under hvert en ulæselig billedtekst og en dato, fra 09.11.1996 til 15.07.2007.',
         line: 'Vil I se albummet?',
-        move: '$ git log --oneline',
-        hint: 'én linje pr. commit',
+        move: '$ git log',
         does: {
           text: 'Viser commit-historikken for den aktuelle gren, nyeste først: hash, forfatter, dato, besked.',
           meta: 'Du blader albummet igennem fra det sidste foto og bagud.',
@@ -907,8 +878,7 @@ export default {
         title: 'Find forskellene',
         art: 'En person i en stue holder lejlighedens plantegning og sammenligner den med det, vedkommende ser. På tegningen er der et rundt bord, men i stuen er kun omridset tilbage på gulvet; på tegningen står standerlampen ved lænestolen, i stuen i den anden ende; den gamle lænestol er den samme. På væggen et portræt af en kamæleon, der holder et foto af sig selv i en anden farve, med et ikke-lig-med-tegn imellem.',
         line: 'Find tre forskelle',
-        move: '$ git diff --staged',
-        hint: 'præcis det, der kommer med i næste commit',
+        move: '$ git diff',
         does: {
           text: 'Viser linje for linje, hvad der er ændret: `-` en fjernet linje, `+` en tilføjet. Uden tilvalg sammenligner den arbejdsmappen med indekset, altså de ændringer, der endnu ikke er tilføjet med `git add`; nye (untracked) filer vises ikke.',
           meta: 'Du sammenligner »før« og »efter« ned til mindste detalje.',
