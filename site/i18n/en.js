@@ -824,7 +824,7 @@ export default {
         art: 'A portrait of a cat asleep in a basket on the wall. A person puts a blue bundle of things into the basket on wheels, which already holds a sock, a sleeve and a towel; a sweater and a sock still lie on the floor, not added.',
         line: 'Tidy up your room, please.',
         move: '$ git add .',
-        hint: 'all changes in the folder into the basket',
+        hint: 'index all changes in the folder',
         does: {
           text: 'Adds the current state of a file to the index (staged): exactly this goes into the next commit. After `git add`, git starts tracking a new file.',
           meta: 'You put things in the basket to pack them into a box later.',
@@ -906,7 +906,7 @@ export default {
         art: 'A person in a room holds the floor plan of the flat and compares it with what they see. The plan has a round table, but in the room only its outline is left on the floor; on the plan the floor lamp is next to the armchair, in the room it is at the other end; the old armchair is the same. On the wall, a portrait of a chameleon holding a photo of itself in another colour, with a not-equal sign between them.',
         line: 'Spot three differences',
         move: '$ git diff',
-        hint: 'what has changed but isn’t in the basket yet',
+        hint: 'changed, but not indexed yet',
         does: {
           text: "Shows line by line what changed: `-` a removed line, `+` an added one. Without options it compares the working folder with the index, i.e. shows the changes not yet added with `git add`; it doesn't show new (untracked) files.",
           meta: 'You compare “before” and “after” down to the smallest detail.',

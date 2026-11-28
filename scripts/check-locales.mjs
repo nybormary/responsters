@@ -22,36 +22,12 @@ const problems = [];
 // Git cards whose pl/da/lt/et texts wait for Maryna's review of uk/en (RSP-200, decided 2026-11-27): until she
 // approves uk/en locally, those languages show English (i18n/fill.js), and a gap under git.cards.<id> here is a
 // warning, not a problem. The list must be EMPTY before the Git launch release (RSP-146): translate, then delete the id.
-const PENDING = new Set([
-  // days 1–12: the new "$" line is the most common form, its hint not translated yet
-  'init',
-  'clone',
-  'status',
-  'add',
-  'log',
-  'diff',
-  'restore',
-  'stash',
-  'branch',
-  'switch',
-  // days 13–25: all texts but the picture's (blame's picture text also changes: a potluck dinner list)
-  'merge',
-  'fetch',
-  'pull',
-  'push',
-  'tag',
-  'revert',
-  'cherry-pick',
-  'reset',
-  'reflog',
-  'rebase',
-  'blame',
-  'bisect',
-  'show',
-]);
+// Empty since 2026-11-27: the RSP-200 and RSP-226 texts are translated (pl for Maryna's reading; da/lt/et drafts until a
+// native review). Add an id here only while its translations wait for Maryna's approval of uk/en.
+const PENDING = new Set([]);
 const pending = [];
 // new interface texts that wait the same way (RSP-226: the day row under a git card)
-const PENDING_UI = ['git.ui.nav'];
+const PENDING_UI = [];
 const isPending = (path) => {
   if (PENDING_UI.some((p) => path === p || path.startsWith(p + '.'))) return true;
   const m = /^git\.cards\.([^.[]+)/.exec(path);

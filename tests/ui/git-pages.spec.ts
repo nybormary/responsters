@@ -275,6 +275,9 @@ test(
     for (const theme of THEMES) {
       await test.step(`${theme}: ${g.name} card page (chips, code pills, tip, Documentation)`, async () => {
         await axe.theme(theme);
+        // The browser clock on advent day 10 first (it stays for the next pages): the card page marks its door opened
+        // only once its day has come (RSP-226), so without it the result would depend on today's date.
+        await adventWall.openOnDay(lang, 10);
         await gitCardPage.open(lang, g.id);
         await axe.expectNoViolations(`${theme}, git card page ${g.name}`);
       });

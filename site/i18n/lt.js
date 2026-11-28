@@ -548,6 +548,14 @@ export default {
       danger: 'Pavojinga komanda',
       // heading of the outside links on a git card page
       docs: 'Dokumentacija',
+      // the day row under the card (RSP-226): n = advent day, date = the day it opens
+      nav: {
+        label: 'Advento dienos',
+        day: (n) => `Diena ${n}`,
+        from: (date) => `nuo ${date}`,
+        prev: 'Ankstesnė:',
+        next: 'Kita:',
+      },
     },
     // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
     wall: {
@@ -577,6 +585,7 @@ export default {
         title: 'Tuščias butas',
         line: 'Pradėkime nuo švaraus lapo.',
         move: '$ git init',
+        hint: 'nauja saugykla dabartiniame aplanke',
         does: {
           text: 'Dabartiniame aplanke sukuria naują tuščią saugyklą (repository): paslėptą aplanką `.git`, kuriame git laikys visą istoriją. Aplanko failai lieka, kaip buvo; git jų dar neseka. Komitų dar nėra, todėl `git branch` nieko nerodo: šaka atsiras su pirmuoju komitu.',
           meta: 'Naujas butas: sienos yra, baldų dar nėra, o pirmoji įeina katė.',
@@ -631,6 +640,7 @@ export default {
         title: 'Kaip nuotraukoje',
         line: 'Atsargiai, mama tvarkosi — už pasekmes neatsakome',
         move: '$ git restore <failas>',
+        hint: 'išmesti failo pakeitimus',
         does: {
           text: 'Grąžina failą darbiniame aplanke į būseną indekse, t. y. išmeta dar nepridėtus pakeitimus. `git restore --staged <failas>` veikia atvirkščiai: išima failą iš indekso, o darbinį aplanką palieka, kaip yra. Komitų istorijos nekeičia.',
           meta: 'Mama sutvarko kambarį kaip nuotraukoje: kas nebaigta, dingsta.',
@@ -658,6 +668,7 @@ export default {
         title: 'Svečiai prie durų',
         line: 'Greitai susitvarkysiu!',
         move: '$ git stash',
+        hint: 'paslėpti nekomituotus pakeitimus',
         does: {
           text: 'Paslepia nekomituotus sekamų failų pakeitimus (ir indekse, ir darbiniame aplanke) atskiroje saugykloje ir grąžina darbinį aplanką į paskutinio komito būseną. Vėliau juos galima išsitraukti, net kitoje šakoje.',
           meta: 'Skambina į duris: nebaigtus darbus sukiši į spintą, kad kambaryje būtų tvarkinga.',
@@ -690,6 +701,7 @@ export default {
         title: 'Nauja lentelė',
         line: 'O, čia bus mano kambarys.',
         move: '$ git branch',
+        hint: 'šakų sąrašas, dabartinė su *',
         does: {
           text: 'Be argumentų rodo vietines šakas, dabartinę pažymi `*`. Su pavadinimu sukuria naują šaką ant dabartinio komito, bet į ją neperjungia: tam yra `git switch`.',
           meta: 'Pakabini lentelę ant naujo kambario durų, bet lieki ten pat.',
@@ -714,6 +726,7 @@ export default {
         title: 'Naujas kambarys',
         line: 'Laikas persikraustyti į kitą kambarį',
         move: '$ git switch <šaka>',
+        hint: 'pereiti į kitą šaką',
         does: {
           text: 'Perjungia į kitą šaką: darbinis aplankas ir indeksas tampa tokie, kaip jos paskutiniame komite. Nekomituoti pakeitimai keliauja kartu; jei jie kertasi su tos šakos failais, git sustoja ir prašo juos komituoti arba paslėpti (`git stash`).',
           meta: 'Takeliu eini į kitą kambarį, ir tai, ką laikai rankose, keliauja kartu.',
@@ -743,6 +756,7 @@ export default {
         art: 'Žmogus su lagaminais, ant vieno lipdukas su lempute, stovi prie plačiai atvertų durų. Bute jau stovi ankstesnių nuomininkų fotelis, ant jo segtuvas su senomis sąskaitomis, o ant sienos kabo dviejų vienodų kačiukų portretas. Prie durų nauja lentelė su vardu, o senoji krenta.',
         line: 'Čia kažkas gyveno, o dabar gyvensiu aš.',
         move: '$ git clone <url>',
+        hint: 'saugyklos kopija su visa istorija',
         does: {
           text: 'Nukopijuoja nuotolinę saugyklą į naują aplanką: visą istoriją ir šakas (kaip `origin/…`), ir persijungia į pagrindinę šaką. git įsimena adresą vardu `origin`, todėl vėliau veikia `git fetch`, `git pull` ir `git push`.',
           meta: 'Įsikrauštai į nuomojamą butą su baldais: viskas, ką paliko ankstesni nuomininkai, vietoje, net segtuvas su senomis sąskaitomis.',
@@ -771,6 +785,7 @@ export default {
         art: 'Ant sienos katino su didinamuoju stiklu portretas. Žmogus ramiai žiūri į tris drabužių krūveles: iš krepšio su ratukais kyšo kojinė, rankovė ir rankšluostis, ant grindų guli dėvėti drabužiai, o šalia sulankstyti nauji marškiniai su didele parduotuvės etikete.',
         line: 'Ką čia turime? Patikrinkime.',
         move: '$ git status',
+        hint: 'kas pasikeitė ir kas pateks į komitą',
         does: {
           text: 'Rodo darbinio aplanko ir indekso būseną: kurie pakeitimai jau paruošti commit (staged), kurie pakeisti, bet dar neparuošti, ir kurių failų git neseka (untracked). Nieko nekeičia.',
           meta: 'Išdėlioji daiktus į tris krūveles ir žiūri, kas kur.',
@@ -794,6 +809,7 @@ export default {
         art: 'Ant sienos portretas katino, miegančio krepšyje. Žmogus deda mėlyną daiktų gniužulą į krepšį su ratukais, kuriame jau guli kojinė, rankovė ir rankšluostis; ant grindų dar guli megztinis ir kojinė, nepridėti.',
         line: 'Susitvarkyk kambarį, prašau.',
         move: '$ git add .',
+        hint: 'indeksuojame visus aplanko pakeitimus',
         does: {
           text: 'Prideda dabartinę failo būseną į indeksą (staged): būtent tai pateks į kitą commit. Naują failą po `git add` git pradeda sekti.',
           meta: 'Dedi daiktus į krepšį, kad paskui supakuotum į dėžę.',
@@ -841,6 +857,7 @@ export default {
         art: 'Atverstas šeimos albumas žaliu viršeliu. Keturios nuotraukos nuo seniausios: namelis su medžiu, vėžlys, du žmonės greta, jūra ir saulė; po kiekviena neįskaitomas parašas ir data, nuo 09.11.1996 iki 15.07.2007.',
         line: 'Ar norite pažiūrėti albumą?',
         move: '$ git log',
+        hint: 'komitų istorija, nuo naujausio',
         does: {
           text: 'Rodo dabartinės šakos commit istoriją nuo naujausio: hash, autorius, data, aprašas.',
           meta: 'Verti albumą nuo paskutinės nuotraukos atgal.',
@@ -874,6 +891,7 @@ export default {
         art: 'Žmogus kambaryje laiko buto planą ir lygina jį su tuo, ką mato. Plane yra apvalus stalas, o kambaryje iš jo liko tik kontūras ant grindų; plane toršeras stovi prie fotelio, o kambaryje – kitame gale; senas fotelis tas pats. Ant sienos portretas chameleono, kuris laiko savo nuotrauką, kur jis kitos spalvos, o tarp jų ženklas „nelygu“.',
         line: 'Rask tris skirtumus',
         move: '$ git diff',
+        hint: 'pasikeitė, bet dar neindeksuota',
         does: {
           text: 'Rodo eilutė po eilutės, kas pasikeitė: `-` – pašalinta eilutė, `+` – pridėta. Be parinkčių lygina darbinį aplanką su indeksu, t. y. rodo pakeitimus, dar nepridėtus per `git add`; naujų (untracked) failų nerodo.',
           meta: 'Lygini „kaip buvo“ ir „kaip yra“ iki mažiausios smulkmenos.',
@@ -898,42 +916,372 @@ export default {
         ],
       },
       merge: {
+        title: 'Naujas kaimynas',
+        line: 'Pabandykime gyventi kartu',
+        move: '$ git merge <šaka>',
+        hint: 'sulieti šaką į dabartinę',
+        does: {
+          text: 'Prijungia kitos šakos komitus prie dabartinės šakos. Jei dabartinė šaka nuo to laiko neturi naujų komitų, git ją tiesiog pastumia į priekį (fast-forward); kitaip sukuria suliejimo komitą su dviem tėvais. Jei abi šakos pakeitė tas pačias eilutes, git sustoja ties konfliktu ir laukia, kol jis bus išspręstas.',
+          meta: 'Pas tave atsikrausto kažkas su savo dėžėmis; kur du vienodi virduliai nori stovėti toje pačioje vietoje, sprendi tu.',
+        },
+        tip: 'Konfliktas? Pataisyk pažymėtus failus, tada `git add <failas>` ir `git commit`. Persigalvojai? `git merge --abort` grąžina viską, kaip buvo prieš suliejimą.',
+        opts: [
+          {
+            cmd: 'git merge --no-ff <šaka>',
+            text: '— visada suliejimo komitas, net kai užtektų fast-forward: istorijoje matyti, kad šaka buvo atskira.',
+            meta: 'Matai, su kokiais daiktais atsikraustė kaimynas.',
+          },
+          {
+            cmd: 'git merge --squash <šaka>',
+            text: '— perkelia visus šakos pakeitimus į indeksą kaip vieną pakeitimą, be suliejimo komito ir be ryšio su šaka; toliau `git commit`.',
+            meta: 'Išpakuoji visas kaimyno dėžes ir sudedi daiktus į vieną savo.',
+          },
+          {
+            cmd: 'git merge --abort',
+            text: '— konflikto metu grąžina būseną, kokia buvo prieš suliejimą.',
+            meta: 'Kaimynas išsikrausto su savo daiktais.',
+          },
+        ],
         art: 'Kairėje pro atviras lauko duris įeina besišypsantis žmogus su dėže, ant kurios geltonas lipdukas; kelios tokios dėžės jau stovi kambaryje. Dešinėje šeimininkas, ranką prie smakro, žiūri į stalviršį, kur greta stovi du vienodi virduliai: jo šviesus ir atvykėlio geltonas, tarp jų klaustukas. Lentynoje virš stalviršio jo paties dėžės be lipdukų. Ant sienos dviejų katinų, pilko ir šviesaus, uostančių vienas kitą nosimis, portretas.',
       },
       fetch: {
+        title: 'Ką mums padovanojo?',
+        line: 'Gal greitai pažiūrime dovanas po eglute?',
+        move: '$ git fetch',
+        hint: 'kas naujo serveryje, pas tave niekas nesikeičia',
+        does: {
+          text: 'Atsisiunčia iš nuotolinės saugyklos naujus komitus ir šakas ir atnaujina `origin/…`. Tavo šakos ir darbinis aplankas nesikeičia: naujienas pažiūrėsi su `git log origin/main`, o prijungsi su `git merge` arba `git rebase`.',
+          meta: 'Dovanos jau po eglute: jas galima pakratyti ir perskaityti užrašus, bet išpakuoti dar per anksti.',
+        },
+        tip: 'Saugi komanda: ją galima paleisti bet kada, kad sužinotum, kas pasikeitė serveryje.',
+        opts: [
+          {
+            cmd: 'git fetch --prune',
+            text: '— pašalina vietinius `origin/…`, kurių serveryje jau nebėra.',
+            meta: 'Išmeti užrašus nuo dovanų, kurias jau kažkas pasiėmė.',
+          },
+          {
+            cmd: 'git fetch --all',
+            text: '— iš visų nuotolinių saugyklų, ne tik iš `origin`.',
+            meta: 'Patikrini visas vietas, kur gali būti paslėptos dovanos.',
+          },
+          {
+            cmd: 'git fetch origin <šaka>',
+            text: '— tik viena šaka.',
+            meta: 'Pakratai tik vieną dovaną.',
+          },
+        ],
         art: 'Dešinėje eglutė su žvaigžde, po ja supakuotos dovanos oranžiniais kaspinais. Žmogus, priklaupęs ant vieno kelio prie eglutės, laiko vieną dovaną prie ausies ir ją purto, kad atspėtų, kas viduje, bet neišpakuoja. Ant sienos šuns su dovana dantyse portretas.',
       },
       pull: {
+        title: 'Išpakuoti dovaną',
+        line: 'O, tokios dar neturėjau',
+        move: '$ git pull',
+        hint: 'parsisiųsti naujienas iš serverio ir iškart sulieti',
+        does: {
+          text: 'Tai `git fetch` ir iškart gauto turinio suliejimas su dabartine šaka. Jei istorijos išsiskyrė (nauji komitai yra ir serveryje, ir pas tave), git 2.43 sustoja ir prašo pasirinkti: suliejimą arba `git pull --rebase` (nustatymas `pull.rebase`); jei užtenka tiesiog prasukti į priekį, viskas praeina be klausimų.',
+          meta: 'Dovaną ne tik atnešė: tu iškart ją išpakuoji, ir ji užima savo vietą tavo namuose.',
+        },
+        tip: 'Prieš `git pull` komituok arba paslėpk savo pakeitimus (`git stash`): taip bus lengviau susigaudyti, jei kils konfliktas.',
+        opts: [
+          {
+            cmd: 'git pull --rebase',
+            text: '— po fetch perkelia tavo vietinius komitus ant gautųjų; istorija lieka tiesi.',
+            meta: 'Svetimos dovanos į krūvą patenka pirmos, o tavo — viršuje.',
+          },
+          {
+            cmd: 'git pull --ff-only',
+            text: '— atnaujina tik tada, kai užtenka prasukti į priekį; kitaip sustoja ir nieko nekeičia.',
+            meta: 'Išpakuoji, tik jei tikrai turi vietos.',
+          },
+          {
+            cmd: 'git pull origin <šaka>',
+            text: '— iš konkrečios nuotolinės šakos.',
+            meta: 'Išpakuoji tik dovaną nuo artimo žmogaus.',
+          },
+        ],
         art: 'Kairėje savų supakuotų daiktų krūva: bespalvės dėžės, ant kiekvienos lentelė su piešinėliu (namelis, knyga, puodelis). Šalia stovi dovanos oranžiniais kaspinais; ant kelių klūpantis žmogus laiko priešais save megztinį, ką tik ištrauktą iš atidarytos dėžės, per dėžės kraštą kabo kaspinas, šalia suglamžytas popierius. Dešinėje eglutė. Ant sienos kačiuko, traukiančio oranžinį kaspiną nuo dovanos, portretas.',
       },
       push: {
+        title: 'Pilna lentyna',
+        line: 'Laikas siųsti dovanas',
+        move: '$ git push',
+        hint: 'išsiųsti savo komitus į serverį',
+        does: {
+          text: 'Išsiunčia tavo komitus į nuotolinę šaką. Jei ten yra komitų, kurių tu neturi, git atmeta push (rejected): pirma `git pull`, tada vėl `git push`.',
+          meta: 'Neši savo siuntinį į paštą, kur jį visi pamatys.',
+        },
+        tip: 'Po push komitus mato visi: neperrašinėk jų (`git commit --amend`, `git rebase`), nes tada teks siųsti per jėgą.',
+        opts: [
+          {
+            cmd: 'git push -u origin <šaka>',
+            text: '— pirmas naujos šakos push: įsimena, su kuria nuotoline šaka susieta tavoji, ir toliau užtenka `git push`.',
+            meta: 'Paštas įsimena tavo adresą.',
+          },
+          {
+            cmd: 'git push --force-with-lease',
+            text: '— perrašo nuotolinę šaką tik tada, jei ten nėra svetimų naujų komitų.',
+            meta: 'Pakeiti savo siuntinį, kai įsitikini, kad šalia niekas nepadėjo savojo.',
+          },
+          {
+            cmd: 'git push origin --delete <šaka>',
+            text: '— ištrina šaką serveryje.',
+            meta: 'Nuimi savo pavardę nuo pašto dėžutės.',
+          },
+        ],
+        careful: [
+          '`git push --force` perrašo nuotolinę šaką: svetimi komitai, kurių tu neturi, dingsta iš serverio.',
+          'Jei tikrai reikia perrašyti, naudok `git push --force-with-lease` ir niekada nedaryk to bendroje šakoje (`main`).',
+        ],
         art: 'Bendra lentyna pašte pilna svetimų siuntinių su adresais ir pašto ženklais, virš jos lentelė su voku. Žmogus kairėje iš visų jėgų stumia į pilną lentyną savo siuntinį oranžiniu kaspinu, o kitame gale svetimas siuntinys krenta ant grindų. Ant sienos pašto balandžio su laišku portretas.',
       },
       show: {
+        title: 'Viena nuotrauka',
+        line: 'Ta diena, kai',
+        move: '$ git show <komitas>',
+        hint: 'vienas komitas visas',
+        does: {
+          text: 'Rodo vieną objektą: komito autorių, datą, aprašą ir pakeitimus (diff); užtenka pirmųjų 7 hash simbolių. Be argumentų rodo paskutinį komitą (`HEAD`). Nieko nekeičia.',
+          meta: 'Iš šeimos albumo išsiimi vieną nuotrauką ir apžiūri ją iš arti, kartu su data.',
+        },
+        tip: '`git log` — kad rastum komitą, `git show <hash>` — kad jį apžiūrėtum.',
+        opts: [
+          {
+            cmd: 'git show <komitas>:<failas>',
+            text: '— failas toks, koks buvo tame komite.',
+            meta: 'Kaip kambarys atrodė tą dieną.',
+          },
+          {
+            cmd: 'git show --stat <komitas>',
+            text: '— tik pakeistų failų sąrašas ir pakeistų eilučių skaičius.',
+            meta: 'Tik užrašas po nuotrauka.',
+          },
+        ],
         art: 'Ant stalo atverstas šeimos albumas žaliu viršeliu; vienoje vietoje liko tik kampučiai ir data 25.12.2026, nuotraukos nėra. Žmogus stovi šalia ir iš arti apžiūri tą nuotrauką: du žmonės abipus eglutės, apačioje ta pati data. Ant sienos šuns su žalia nugalėtojo rozete, kaip šunų parodoje, portretas.',
       },
       revert: {
+        title: 'Senieji tapetai',
+        line: 'Ankstesni buvo geresni. Grąžinkim juos',
+        move: '$ git revert <komitas>',
+        hint: 'naujas komitas, atšaukiantis seną',
+        does: {
+          text: 'Sukuria naują komitą, kuris atšaukia nurodyto komito pakeitimus; atsidaro redaktorius aprašui. Istorija neperrašoma, todėl tai saugus būdas atšaukti tai, kas jau išsiųsta per `git push`.',
+          meta: 'Naujų tapetų nenuplėši: senąjį raštą užklijuoji ant jų nauju sluoksniu.',
+        },
+        tip: 'Komitą, kurio dar niekas nematė, galima pašalinti ir per `git reset`; tą, kuris jau serveryje, tik per `git revert`. Suliejimo komitą atšaukia `git revert -m 1 <suliejimo-komitas>`, kur 1 — šakos, į kurią grįžti, numeris (paprastai pagrindinės).',
+        opts: [
+          {
+            cmd: 'git revert --no-edit <komitas>',
+            text: '— tas pats, bet su numatytuoju aprašu „Revert "…"“, be redaktoriaus.',
+            meta: 'Klijuoji iškart, nepasimatavęs.',
+          },
+          {
+            cmd: 'git revert HEAD',
+            text: '— atšaukia paskutinį komitą.',
+            meta: 'Perklijuoji tik paskutinę juostą.',
+          },
+          {
+            cmd: 'git revert --no-commit <komitas>',
+            text: '— atšaukia pakeitimus darbiniame aplanke ir indekse be komito, kad keli atšaukimai tilptų į vieną komitą.',
+            meta: 'Nuimi kelias juostas, o perklijuoji iš karto.',
+          },
+        ],
         art: 'Kairėje sienos pusėje seni tapetai banguotomis juostomis, dešinėje nauji taškuoti. Žmogus ant taburetės vėl klijuoja seną banguotą raštą ant naujų tapetų: viena geltona juosta jau priklijuota, kitos apatinis galas dar rankoje; kraštas rodo, kad nauji tapetai liko apačioje. Ant grindų kibiras klijų su teptuku. Ant sienos geltono krabo su rodykle į kairę portretas.',
       },
       'cherry-pick': {
+        title: 'Močiutės receptas',
+        line: 'O, mano mėgstamiausias pyragas. Reikia ir sau nusirašyti',
+        move: '$ git cherry-pick <komitas>',
+        hint: 'vieno komito kopija dabartinėje šakoje',
+        does: {
+          text: 'Paima vieno komito pakeitimus iš kitos šakos ir pritaiko juos dabartinėje kaip naują komitą su nauju hash. Originalas lieka savo šakoje.',
+          meta: 'Nusirašai vieną receptą iš močiutės sąsiuvinio į savo; močiutė jį taip pat turi.',
+        },
+        tip: 'Konfliktas? Pataisyk, `git add <failas>`, tada `git cherry-pick --continue`. Persigalvojai? `git cherry-pick --abort`.',
+        opts: [
+          {
+            cmd: 'git cherry-pick <nuo>..<iki>',
+            text: '— keli komitai iš eilės, be paties `<nuo>`.',
+            meta: 'Keli receptai iš eilės.',
+          },
+          {
+            cmd: 'git cherry-pick -x <komitas>',
+            text: '— prideda prie aprašo eilutę „(cherry picked from commit …)“.',
+            meta: 'Po receptu pasirašai: „iš močiutės“.',
+          },
+          {
+            cmd: 'git cherry-pick -n <komitas>',
+            text: '— perkelia komito pakeitimus į darbinį aplanką ir indeksą be komito, kad galėtum juos pataisyti arba sujungti kelis į vieną komitą.',
+            meta: 'Nusirašai receptą, o savo pakeitimus pridedi prieš perrašant jį švariai.',
+          },
+        ],
         art: 'Ant stalo du atversti receptų sąsiuviniai. Kairėje didelis senas močiutės, nutrintu viršeliu ir kaspinu-žymekliu: viename puslapyje puodas, kitame vyšnių pyragas. Dešinėje mažesnis sąsiuvinis su spirale ir geltonu viršeliu: viename puslapyje dubenėlis su lazdelėmis, kitame tas pats pyragas, dar nebaigtas piešti. Žmogus stovi priešais stalą, pasilenkęs prie savo sąsiuvinio, ir su rašikliu rankoje perpiešia pyragą. Ant sienos strazdo su dviem geltonomis vyšniomis snape portretas.',
       },
       reset: {
+        title: 'Į eglutę ar į šiukšliadėžę',
+        line: 'Šitą — ant eglutės, šitą — į šiukšles. Svarbiausia nesupainioti',
+        move: '$ git reset HEAD~1',
+        hint: 'nuimti paskutinį komitą, pakeitimai lieka failuose',
+        does: {
+          text: 'Perkelia dabartinę šaką į kitą komitą (pvz., `HEAD~1` — vienu atgal). Kas nutiks nuimtų komitų pakeitimams, priklauso nuo režimo: su `git reset --soft` jie lieka indekse, su paprastu `git reset` — tik darbiniame aplanke, su `git reset --hard` dingsta.',
+          meta: 'Išpakuoji dėžę iš palėpės: kažkas keliauja ant eglutės, kažkas į šiukšliadėžę.',
+        },
+        tip: 'Su failu vietoj komito `git reset <failas>` tiesiog išima failą iš indekso, kaip `git restore --staged <failas>`.',
+        opts: [
+          {
+            cmd: 'git reset --soft HEAD~1',
+            text: '— nuima paskutinį komitą; pakeitimai lieka indekse, paruošti naujam komitui.',
+            meta: 'Žaisliukas lieka dėžėje, po ranka.',
+          },
+          {
+            cmd: 'git reset --hard HEAD~1',
+            text: '— nuima komitą ir ištrina pakeitimus indekse ir darbiniame aplanke.',
+            meta: 'Žaisliukas skrenda į šiukšliadėžę.',
+          },
+        ],
+        careful: [
+          '`git reset --hard` ištrina nekomituotus pakeitimus visam laikui.',
+          'Nuimtus komitus dar rasi `git reflog`, kol git jų neišvalė. Komitų, kurie jau serveryje, nenuimk per `git reset`: jiems yra `git revert`.',
+        ],
         art: 'Namuose papuošta eglutė, po ja atvira geltona dėžė iš palėpės. Žmogus stovi tarp šiukšliadėžės ir eglutės: viena ranka kabina sveiką žaisliuką ant eglutės, kita meta į šiukšliadėžę sudužusį. Ant sienos auksinės žuvelės akvariume portretas.',
       },
       reflog: {
+        title: 'Rutuliukų sąrašas',
+        line: 'Mažieji rutuliukai — buvo 10, dabar 8',
+        move: '$ git reflog',
+        hint: 'kur buvo HEAD, žingsnis po žingsnio',
+        does: {
+          text: 'Rodo vietinį žurnalą visų vietų, kur buvo `HEAD`, nuo naujausio įrašo: komitai, šakų perjungimai, `git reset`, `git rebase`. Taip randamas komitas, dingęs iš `git log`.',
+          meta: 'Sąraše užrašytas kiekvienas pokytis: buvo 10 rutuliukų, liko 8, ir matyti, kada du dingo.',
+        },
+        tip: 'reflog yra vietinis ir laikinas: serveryje jo nėra, o senus įrašus git laikui bėgant ištrina (pagal nutylėjimą po 90 dienų, įrašus apie nepasiekiamus komitus — po 30).',
+        opts: [
+          {
+            cmd: 'git reflog show <šaka>',
+            text: '— vienos šakos žurnalas.',
+            meta: 'Tik eilutė apie mažuosius rutuliukus.',
+          },
+          {
+            cmd: 'git branch <pavadinimas> HEAD@{2}',
+            text: '— grąžina pamestą komitą kaip naują šaką.',
+            meta: 'Iš sąrašo sužinai, kada viskas dar buvo savo vietose.',
+          },
+        ],
         art: 'Namuose papuošta eglutė, kampe šiukšliadėžė su sudužusiu žaisliuku. Žmogus prie eglutės skaito sąrašą ant žalios planšetės: kiekvienoje eilutėje mažas eglutės žaisliukas ir skaičiavimo brūkšneliai, viena eilutė apvesta; žmogus žvilgčioja į eglutę ir skaičiuoja. Ant sienos žiurkės ant šiukšliadėžės krašto portretas.',
       },
       rebase: {
+        title: 'Naujas pagrindas',
+        line: 'Sudedam gražiai, kad nenukristų!',
+        move: '$ git rebase main',
+        hint: 'tavo komitai ant šviežio main',
+        does: {
+          text: 'Perkelia dabartinės šakos komitus taip, lyg ji būtų pradėta iš kitos vietos (pvz., nuo naujesnio `main`): kiekvienas komitas pritaikomas iš naujo ir gauna naują hash. Istorija tampa tiesi, be suliejimo komitų.',
+          meta: 'Po tavo dėžėmis pakišo naują, o tu vėl sudedi savąsias viršuje, atsargiai, kad nenukristų.',
+        },
+        tip: 'Konfliktas? Pataisyk, `git add <failas>`, tada `git rebase --continue`. Persigalvojai? `git rebase --abort`.',
+        opts: [
+          {
+            cmd: 'git rebase -i HEAD~3',
+            text: '— atidaro trijų paskutinių komitų sąrašą: sujungti, pervadinti, išmesti, sukeisti tvarką.',
+            meta: 'Perdėlioji tris viršutines dėžes.',
+          },
+          {
+            cmd: 'git rebase --abort',
+            text: '— nutraukia rebase pusiaukelėje.',
+            meta: 'Sustatai dėžes, kaip stovėjo.',
+          },
+        ],
+        careful: [
+          'Rebase perrašo komitus: jei jie jau išsiųsti (`git push`), tavo istorija išsiskirs su kitų istorija.',
+          'Daryk rebase tik savo, dar neišsiųstų komitų. Jei kas nepavyko, senąją būseną rasi `git reflog`.',
+        ],
         art: 'Palėpė. Dėžių su lentelėmis krūva: apačioje dėžė su knygomis, virš jos naujesnė dėžė su Helovino moliūgu, o viršuje žmogus atsargiai stato dvi geltonas dėžes, su gimtadienio tortu ir su meškiuku, ir prilaiko jas, kad nenukristų. Ant sienos pilko katino, sėdinčio ant dėžių, portretas.',
       },
       blame: {
-        art: 'Ant šaldytuvo po žaliu magnetu kabo pirkinių sąrašas: kiekviena eilutė prasideda prekės piešinėliu, parašyta vis kita rašysena ir baigiasi veideliu to, kas ją prirašė; tie patys veideliai kabo kaip nuotraukų magnetai ant šaldiklio durelių. Žmogus laiko didinamąjį stiklą virš žalių vynuogių eilutės galo, o stikle matyti veidelis su kaspinėliu. Prie kojų tuščias pirkinių krepšys. Ant sienos šuns su žalia kojine dantyse portretas.',
+        title: 'Sąrašas ant šaldytuvo',
+        line: 'Kas atneša vynuogių?',
+        move: '$ git blame <failas>',
+        hint: 'kas ir kada pakeitė kiekvieną eilutę',
+        does: {
+          text: 'Kiekvienai failo eilutei rodo, kuriame komite, kada ir kas ją paskutinis pakeitė. Nieko nekeičia.',
+          meta: 'Prie kiekvienos vakarienės sąrašo eilutės — veidelis to, kas ją prirašė: žinai, ko klausti.',
+        },
+        tip: 'Radai komitą? Pažiūrėk jį visą: `git show <hash>`. „Blame“ čia ne apie kaltę, o apie tai, ko paklausti dėl eilutės.',
+        opts: [
+          {
+            cmd: 'git blame -L 10,20 <failas>',
+            text: '— tik eilutės nuo 10-os iki 20-os.',
+            meta: 'Žiūri tik į eilutę su vynuogėmis.',
+          },
+          {
+            cmd: 'git blame -w <failas>',
+            text: '— nekreipia dėmesio į tarpų pakeitimus.',
+            meta: 'Eilutė, kurioje pataisyta tik įtrauka, lieka pirmojo autoriaus.',
+          },
+          {
+            cmd: 'git blame <komitas> -- <failas>',
+            text: '— failas tokios būsenos, kokia buvo nurodytame komite.',
+            meta: 'Sąrašas, koks buvo vakar.',
+          },
+        ],
+        art: 'Ant šaldytuvo po žaliu magnetu kabo sąrašas, kas ką atsineš vakarienei: kiekviena eilutė prasideda prekės piešinėliu, parašyta vis kita rašysena ir baigiasi veideliu to, kas ją prirašė; tie patys veideliai kabo kaip nuotraukų magnetai ant šaldiklio durelių. Žmogus laiko didinamąjį stiklą virš žalių vynuogių eilutės galo, o stikle matyti veidelis su kaspinėliu. Prie kojų tuščias pirkinių krepšys. Ant sienos šuns su žalia kojine dantyse portretas.',
       },
       bisect: {
+        title: 'Perdegusi lemputė',
+        line: 'A, štai kur problema',
+        move: '$ git bisect start',
+        hint: 'pradėti ieškoti komito, kuris sugadino',
+        does: {
+          text: 'Ieško komito, kuris kažką sugadino, dalydamas pusiau: tu pasakai, kur dar veikė (`git bisect good <komitas>`) ir kur jau ne (`git bisect bad`), git persijungia į komitą per vidurį, tu patikrini ir pasakai rezultatą. Po kelių žingsnių kaltas komitas surastas.',
+          meta: 'Girlianda nešviečia: patikrini pusę, tada pusę to, kas liko, ir taip iki tos vienos lemputės.',
+        },
+        tip: 'Pabaigoje `git bisect reset` grąžina į šaką, nuo kurios prasidėjo paieška.',
+        opts: [
+          {
+            cmd: 'git bisect run <komanda>',
+            text: '— git pats paleidžia komandą kiekviename žingsnyje ir skaito jos išėjimo kodą: 0 — „geras“, 125 — „praleisti“, nuo 1 iki 124 ir 126–127 — „blogas“, daugiau nei 127 — nutraukti paiešką.',
+            meta: 'Lemputes tikrini testeriu, o ne iš akies.',
+          },
+          {
+            cmd: 'git bisect skip',
+            text: '— šio komito patikrinti negalima (pvz., nesikompiliuoja): git ima gretimą.',
+            meta: 'Lemputė neįsisuka — imi gretimą.',
+          },
+          {
+            cmd: 'git bisect reset',
+            text: '— baigia paiešką ir grąžina į pradinę šaką.',
+            meta: 'Pakabini girliandą atgal.',
+          },
+        ],
         art: 'Per sieną ant dviejų vinių kabo girlianda, ir visa nešviečia. Po kairiąja puse ir po kitu ketvirčiu skliaustai su varnelėmis: tos dalys patikrintos, ties ribomis žali skalbinių segtukai. Žmogus išsuko lemputę iš likusios dalies ir laiko ją prieš šviesą: stiklas tamsus, siūlelis nutrūkęs; kitoje rankoje atsarginė lemputė. Ant sienos jūrų kiaulytės, graužiančios girliandos laidą, portretas.',
       },
       tag: {
+        title: 'Etiketė ant stiklainio',
+        line: 'Kad būtų lengviau rasti',
+        move: '$ git tag v1.0',
+        hint: 'žymė ant dabartinio komito',
+        does: {
+          text: 'Uždeda ant komito pastovią žymę, dažniausiai versijos numerį (`v1.0`). Kitaip nei šaka, žymė (tag) nejuda su naujais komitais: ji visada rodo į tą patį komitą.',
+          meta: 'Tarp vienodų uogienės stiklainių užklijuoji etiketę ant mėgstamiausios, kad paskui būtų lengviau rasti.',
+        },
+        tip: 'Paprastas `git push` žymių nesiunčia: reikia `git push origin v1.0` arba `git push --tags`.',
+        opts: [
+          {
+            cmd: 'git tag',
+            text: '— žymių sąrašas.',
+            meta: 'Peržiūri visus stiklainius su etiketėmis.',
+          },
+          {
+            cmd: 'git tag -a v1.0 -m "…"',
+            text: '— anotuota žymė su autoriumi, data ir aprašu, leidimams.',
+            meta: 'Etiketė su metais ir parašu, kas virė.',
+          },
+          {
+            cmd: 'git tag -d v1.0',
+            text: '— ištrina žymę vietoje; serveryje ji lieka, kol neįvykdai `git push origin --delete v1.0`.',
+            meta: 'Nuplėši etiketę nuo savo stiklainio.',
+          },
+        ],
         art: 'Sandėliuke lentyna, pilna vienodų uogienės stiklainių po lininiais dangteliais; ant dviejų stiklainių šviesios etiketės 2024 ir 2025. Žmogus, priklaupęs prie lentynos, prispaudžia geltoną etiketę 2026 prie naujausio stiklainio apatinėje lentynoje. Šalia geltonų etikečių ritinėlis. Ant sienos šuns su geltonu adreso medalionu ant antkaklio portretas.',
       },
     },
