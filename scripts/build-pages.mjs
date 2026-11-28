@@ -9,7 +9,9 @@
 //
 // Run locally: npm run build, then npx serve dist (npm test does both by itself).
 // dist/ is generated: never edit it, never commit it.
-import { cp, rm, mkdir, writeFile, readFile } from 'node:fs/promises';
+import { cp, rm, mkdir, writeFile, readFile, readdir } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { D, BY } from '../site/data/http/cards.js';
@@ -319,6 +321,38 @@ function creaturePage(lang, tx, d) {
 `;
 }
 
+/**
+ * The card order by meaning (RSP-226, RSP-197; Maryna 2026-11-27): the advent days in order (a learning path), then
+ * cards added after the season in GIT order. Previous / next on a card page follow it, also after the advent.
+ */
+const ORDER = [...GIT.filter((g) => g.day).sort((a, b) => a.day - b.day), ...GIT.filter((g) => !g.day)];
+
+/**
+ * The day row under the card (RSP-226; layout of 2026-11-28): previous day left, this day centred, next day right.
+ * A neighbour is a 48px circle with its day number and an arrow, filled with the neighbour's group colour (Maryna:
+ * round, no command, big enough for a finger); this day is a filled ink circle; a day that hasn't come is a dashed,
+ * dimmed circle without an arrow and without a link. The words ("Previous: Day 12 git switch", "from 14 December")
+ * are for screen readers only. The build writes the state on its own date (the fallback without JS); js/advent.js
+ * repaints it by the visitor's date, like the wall, so a missed day is open.
+ */
+function gitDays(lang, tx, g) {
+  const n = tx.git.ui.nav;
+  const i = ORDER.indexOf(g);
+  const side = (x, dir) => {
+    if (!x) return `<span class="g-day g-day-${dir}" aria-hidden="true"></span>`;
+    const date = adventDay(x.day);
+    const open = BUILD_DATE >= date;
+    const shown = x.day ? String(x.day) : esc(x.name.replace(/^git /, ''));
+    const words = `${esc(n[dir])} ${x.day ? esc(n.day(x.day)) + ' ' : ''}${esc(x.name)}`;
+    const arrow = `<span class="g-day-arrow" aria-hidden="true">${dir === 'prev' ? '←' : '→'}</span>`;
+    const num = `<span class="g-day-num" aria-hidden="true">${shown}</span>`;
+    return `<a class="g-day g-day-${dir}${open ? '' : ' locked'}"${open ? ` href="${gitUrl(lang, x.id)}"` : ''} style="--day-c: ${GROUPS[x.group].c}" data-testid="git-day-${dir}" data-date="${date}" data-href="${gitUrl(lang, x.id)}"><span class="sr-only">${words}</span><span class="g-day-from sr-only">, ${esc(n.from(dayMonth(lang, date)))}</span>${dir === 'prev' ? arrow + num : num + arrow}</a>`;
+  };
+  const own = g.day ? ` data-id="${g.id}" data-date="${adventDay(g.day)}"` : '';
+  const now = g.day ? `<span class="sr-only">${esc(n.day(g.day))}</span><span aria-hidden="true">${g.day}</span>` : '';
+  return `<nav class="g-days" aria-label="${esc(n.label)}" data-testid="git-days"${own}>${side(ORDER[i - 1], 'prev')} <span class="g-day-now" data-testid="git-day-now">${now}</span> ${side(ORDER[i + 1], 'next')}</nav>`;
+}
+
 /** One git card page in one language (RSP-199): the HTTP card page layout with the git card and its sections. */
 function gitPage(lang, tx, g) {
   const ui = tx.git.ui;
@@ -351,7 +385,7 @@ function gitPage(lang, tx, g) {
         <article class="sheet" style="--cls: ${gitColourVar(g)}">
           <div class="in page-grid">
             <h1 class="sr">${esc(title)}</h1>
-            <div class="page-card"><div class="card cf-static git${g.danger ? ' danger' : ''}" data-testid="git-card">${gitCardBody(g, tx)}</div></div>
+            <div class="page-card"><div class="card cf-static git${g.danger ? ' danger' : ''}" data-testid="git-card">${gitCardBody(g, tx)}</div>${gitDays(lang, tx, g)}</div>
             <div class="page-main">
               ${gitMain(g, tx)}
             </div>
@@ -878,6 +912,72 @@ async function checkBeacons() {
       throw new Error(`build-pages: ${file} has the analytics beacon ${await count(file)} times, not once`);
 }
 
+/**
+ * Picture versions (RSP-228): site/_headers lets browsers keep /img/* for a week without asking, so a changed picture
+ * would show the old file to returning visitors. Every /img/ URL in the built HTML, JS and CSS gets ?v=<the first 7
+ * hex of the commit the site is built from>, one version for all pictures, and dist/js/img-v.js gets the same version
+ * for URLs that JS builds at runtime (util.js imgUrl, art). Production is built only at a release, so the picture cache
+ * starts again after each release; `git show <version>` tells which commit a picture URL comes from. The commit is
+ * Netlify's COMMIT_REF, otherwise `git rev-parse HEAD`; without git (a folder copied without .git) the version is a hash
+ * of all pictures. Stops the build on a reference to a missing picture, and checks afterwards that no /img/ URL is left
+ * without the version.
+ */
+const IMG_REF = /\/img\/[\w\-./]+\.(?:svg|jpe?g|png|webp|gif)(?:\?v=[0-9a-f]+)?/g;
+async function pictureVersion(pictures) {
+  const commit =
+    process.env.COMMIT_REF ||
+    (() => {
+      try {
+        return execFileSync('git', ['rev-parse', 'HEAD'], {
+          cwd: ROOT,
+          encoding: 'utf8',
+          stdio: ['ignore', 'pipe', 'ignore'],
+        });
+      } catch {
+        return '';
+      }
+    })();
+  if (/^[0-9a-f]{7,}/.test(commit.trim())) return commit.trim().slice(0, 7);
+  console.warn('build-pages: no commit found (no COMMIT_REF, no git): picture version is a hash of all pictures');
+  const h = createHash('sha256');
+  for (const f of pictures.sort()) h.update(f).update(await readFile(f));
+  return h.digest('hex').slice(0, 7);
+}
+async function stampPictures() {
+  // every file under a folder, as absolute paths
+  const files = async (dir) =>
+    (await readdir(dir, { recursive: true, withFileTypes: true }))
+      .filter((e) => e.isFile())
+      .map((e) => path.join(e.parentPath ?? e.path, e.name));
+  const pictures = await files(path.join(DIST, 'img'));
+  const exists = new Set(pictures.map((f) => '/' + path.relative(DIST, f).split(path.sep).join('/')));
+  const v = await pictureVersion(pictures);
+  await writeFile(
+    path.join(DIST, 'js', 'img-v.js'),
+    `// Generated by scripts/build-pages.mjs (RSP-228): the picture version, the commit the site is built from.\nexport const IMG_V = '${v}';\n`,
+  );
+  const texts = (await files(DIST)).filter(
+    (f) => /\.(html|js|css)$/.test(f) && !f.endsWith(path.join('js', 'img-v.js')),
+  );
+  let stamped = 0;
+  for (const f of texts) {
+    const before = await readFile(f, 'utf8');
+    const after = before.replace(IMG_REF, (ref) => {
+      const p = ref.split('?')[0];
+      if (!exists.has(p)) throw new Error(`build-pages: ${path.relative(DIST, f)} refers to a missing picture ${p}`);
+      stamped++;
+      return `${p}?v=${v}`;
+    });
+    if (after !== before) await writeFile(f, after);
+  }
+  // The check: every /img/ URL in the output carries this build's version.
+  for (const f of texts)
+    for (const ref of (await readFile(f, 'utf8')).match(IMG_REF) || [])
+      if (ref.split('?v=')[1] !== v)
+        throw new Error(`build-pages: ${path.relative(DIST, f)}: ${ref} doesn't carry the version ${v}`);
+  return { stamped, v };
+}
+
 async function build() {
   await rm(DIST, { recursive: true, force: true });
   await cp(SITE, DIST, { recursive: true });
@@ -931,8 +1031,9 @@ async function build() {
   await writeFile(path.join(DIST, '_redirects'), redirects());
   await writeFile(path.join(DIST, 'sitemap.xml'), sitemap(new Date().toISOString().slice(0, 10)));
   await checkBeacons();
+  const pictures = await stampPictures();
   console.log(
-    `build-pages: ${LANGS.length} home pages + ${LANGS.length} app pages + ${LANGS.length} news pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards) + ${gitPages} git card pages (${GIT.filter(gitOpen).length} of ${GIT.length} cards open on ${BUILD_DATE}, advent start ${ADVENT_START}, ${ADVENT_DAYS} days) + the advent wall, the English pages at the language-less paths, _redirects → dist/`,
+    `build-pages: ${pictures.stamped} picture URLs versioned ?v=${pictures.v} (RSP-228); ${LANGS.length} home pages + ${LANGS.length} app pages + ${LANGS.length} news pages + ${pages} creature pages (${LANGS.length} languages × ${D.length} cards) + ${gitPages} git card pages (${GIT.filter(gitOpen).length} of ${GIT.length} cards open on ${BUILD_DATE}, advent start ${ADVENT_START}, ${ADVENT_DAYS} days) + the advent wall, the English pages at the language-less paths, _redirects → dist/`,
   );
 }
 

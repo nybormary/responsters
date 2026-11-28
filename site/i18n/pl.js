@@ -548,6 +548,14 @@ export default {
       danger: 'Niebezpieczne polecenie',
       // heading of the outside links on a git card page
       docs: 'Dokumentacja',
+      // the day row under the card (RSP-226): n = advent day, date = the day it opens
+      nav: {
+        label: 'Dni adwentu',
+        day: (n) => `Dzień ${n}`,
+        from: (date) => `od ${date}`,
+        prev: 'Poprzedni:',
+        next: 'Następny:',
+      },
     },
     // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
     wall: {
@@ -575,19 +583,14 @@ export default {
       init: {
         title: 'Puste mieszkanie',
         line: 'Zacznijmy od czystej kartki.',
-        move: '$ git init -b main',
-        hint: 'nowe repozytorium z gałęzią main na start',
+        move: '$ git init',
+        hint: 'nowe repozytorium w bieżącym katalogu',
         does: {
           text: 'Tworzy w bieżącym katalogu nowe, puste repozytorium: ukryty katalog `.git`, w którym git trzyma całą historię. Pliki w katalogu zostają, jak były; git ich jeszcze nie śledzi. Nie ma jeszcze commitów, więc `git branch` nic nie pokazuje: gałąź pojawi się z pierwszym commitem.',
           meta: 'Nowe mieszkanie: ściany są, mebli jeszcze nie ma, a pierwszy wchodzi kot.',
         },
         tip: 'Projekt jest już na GitHubie albo gdzie indziej? To nie init, tylko `git clone <url>`: sam utworzy katalog i przyniesie całą historię.',
         opts: [
-          {
-            cmd: 'git init',
-            text: '— nowe repozytorium w bieżącym katalogu. Ponowne uruchomienie w istniejącym repozytorium jest bezpieczne: nic nie kasuje.',
-            meta: 'Wieszasz tabliczkę na drzwiach mieszkania, w którym już mieszkasz.',
-          },
           {
             cmd: 'git init <katalog>',
             text: '— tworzy katalog o tej nazwie (jeśli go jeszcze nie ma) i repozytorium w nim.',
@@ -635,19 +638,14 @@ export default {
       restore: {
         title: 'Jak na zdjęciu',
         line: 'Uwaga, mama sprząta — za skutki nie odpowiadamy',
-        move: '$ git restore --staged <plik>',
-        hint: 'z powrotem z kosza, zmiany w pliku zostają',
+        move: '$ git restore <plik>',
+        hint: 'wyrzucić zmiany w pliku',
         does: {
           text: 'Przywraca plik w katalogu roboczym do stanu z indeksu, czyli wyrzuca zmiany, których jeszcze nie dodano. `git restore --staged <plik>` działa odwrotnie: wyjmuje plik z indeksu, a katalog roboczy zostawia, jak jest. Historii commitów nie zmienia.',
           meta: 'Mama sprząta pokój tak, jak na zdjęciu: co nieskończone, znika.',
         },
         tip: 'Ścieżka jest obowiązkowa: `git restore .` przywraca cały katalog. Dawniej robiło się to przez `git checkout -- <plik>`.',
         opts: [
-          {
-            cmd: 'git restore <plik>',
-            text: '— wyrzuca zmiany w katalogu roboczym, których jeszcze nie ma w indeksie.',
-            meta: 'Porozrzucane wraca na półkę.',
-          },
           {
             cmd: 'git restore --staged <plik>',
             text: '— wyjmuje plik z indeksu (unstage); zmiany w katalogu roboczym zostają.',
@@ -668,8 +666,8 @@ export default {
       stash: {
         title: 'Goście w drzwiach',
         line: 'Szybko posprzątam!',
-        move: '$ git stash -u',
-        hint: 'schować także nowe pliki',
+        move: '$ git stash',
+        hint: 'schować niezacommitowane zmiany',
         does: {
           text: 'Chowa niezacommitowane zmiany w śledzonych plikach (i w indeksie, i w katalogu roboczym) do osobnego schowka i przywraca katalog roboczy do ostatniego commita. Później można je wyjąć, nawet na innej gałęzi.',
           meta: 'Dzwonek do drzwi: upychasz niedokończone w szafie, żeby w pokoju było czysto.',
@@ -701,8 +699,8 @@ export default {
       branch: {
         title: 'Nowa tabliczka',
         line: 'O, to będzie mój pokój.',
-        move: '$ git branch -d <gałąź>',
-        hint: 'usunąć gałąź, która jest już scalona',
+        move: '$ git branch',
+        hint: 'lista gałęzi, bieżąca z *',
         does: {
           text: 'Bez argumentów pokazuje lokalne gałęzie, bieżącą oznacza `*`. Z nazwą tworzy nową gałąź na bieżącym commicie, ale na nią nie przełącza: do tego jest `git switch`.',
           meta: 'Wieszasz tabliczkę na drzwiach nowego pokoju, ale nie ruszasz się z miejsca.',
@@ -730,8 +728,8 @@ export default {
       switch: {
         title: 'Nowy pokój',
         line: 'Czas przeprowadzić się do innego pokoju',
-        move: '$ git switch -c <gałąź>',
-        hint: 'utworzyć gałąź i od razu do niej przejść',
+        move: '$ git switch <gałąź>',
+        hint: 'przejść na inną gałąź',
         does: {
           text: 'Przełącza na inną gałąź: katalog roboczy i indeks stają się takie, jak w jej ostatnim commicie. Niezacommitowane zmiany idą z tobą; jeśli kolidują z plikami tamtej gałęzi, git się zatrzymuje i prosi, żeby je zacommitować albo schować (`git stash`).',
           meta: 'Przechodzisz chodnikiem do innego pokoju, a to, co masz w rękach, idzie z tobą.',
@@ -760,8 +758,8 @@ export default {
         title: 'Mieszkanie z meblami',
         art: 'Osoba z walizkami, na jednej naklejka z żarówką, stoi przed szeroko otwartymi drzwiami. W mieszkaniu stoi już fotel poprzednich lokatorów, na nim segregator ze starymi rachunkami, a na ścianie wisi portret dwóch identycznych kociąt. Przy drzwiach nowa tabliczka z nazwiskiem, a stara odpada.',
         line: 'Ktoś tu mieszkał, a teraz ja.',
-        move: '$ git clone --depth 1 <url>',
-        hint: 'tylko ostatni stan, bez dawnej historii',
+        move: '$ git clone <url>',
+        hint: 'kopia repozytorium z całą historią',
         does: {
           text: 'Kopiuje zdalne repozytorium do nowego katalogu: całą historię i gałęzie (jako `origin/…`), i przełącza na gałąź główną. git zapamiętuje adres pod nazwą `origin`, dlatego potem działają `git fetch`, `git pull` i `git push`.',
           meta: 'Wprowadzasz się do wynajętego mieszkania z meblami: wszystko, co zostawili poprzedni lokatorzy, jest na miejscu, nawet segregator ze starymi rachunkami.',
@@ -789,8 +787,8 @@ export default {
         title: 'Trzy kupki',
         art: 'Na ścianie portret kota z lupą. Osoba spokojnie przygląda się trzem kupkom ubrań: z kosza na kółkach wystają skarpetka, rękaw i ręcznik, na podłodze leżą noszone rzeczy, a obok złożona nowa koszula z dużą metką ze sklepu.',
         line: 'Co tu mamy? Sprawdźmy.',
-        move: '$ git status -s',
-        hint: 'ten sam przegląd, jedna linijka na rzecz',
+        move: '$ git status',
+        hint: 'co się zmieniło i co trafi do commita',
         does: {
           text: 'Pokazuje stan katalogu roboczego i indeksu: które zmiany są już przygotowane do commita (staged), które są zmienione, ale jeszcze nieprzygotowane, i których plików git nie śledzi (untracked). Niczego nie zmienia.',
           meta: 'Rozkładasz rzeczy na trzy kupki i patrzysz, co gdzie jest.',
@@ -813,8 +811,8 @@ export default {
         title: 'Do kosza',
         art: 'Na ścianie portret kota śpiącego w koszyku. Osoba wkłada niebieski kłębek rzeczy do kosza na kółkach, w którym leżą już skarpetka, rękaw i ręcznik; na podłodze wciąż leżą sweter i skarpetka, jeszcze niedodane.',
         line: 'Posprzątaj w pokoju, proszę.',
-        move: '$ git add -p',
-        hint: 'dodać część zmian, kawałek po kawałku',
+        move: '$ git add .',
+        hint: 'indeksujemy wszystkie zmiany w katalogu',
         does: {
           text: 'Dodaje bieżący stan pliku do indeksu (staged): właśnie to trafi do następnego commita. Nowy plik po `git add` git zaczyna śledzić.',
           meta: 'Wkładasz rzeczy do kosza, żeby potem spakować je do pudła.',
@@ -825,11 +823,6 @@ export default {
             cmd: 'git add <plik>',
             text: '— dodaje jeden plik (albo katalog).',
             meta: 'Jedna rzecz do kosza.',
-          },
-          {
-            cmd: 'git add .',
-            text: '— wszystkie zmiany w bieżącym katalogu i niżej, razem z nowymi i usuniętymi plikami.',
-            meta: 'Zgarniasz do kosza wszystko z pokoju.',
           },
           {
             cmd: 'git add -p',
@@ -851,11 +844,6 @@ export default {
         tip: 'Jeden commit — jedna myśl; w opisie pisz „po co”, a nie tylko „co”.',
         opts: [
           {
-            cmd: 'git commit -m "…"',
-            text: '— opis z wiersza poleceń, bez edytora.',
-            meta: 'Podpisz pudło.',
-          },
-          {
             cmd: 'git commit -a',
             text: '— najpierw sam dodaje zmiany w śledzonych plikach (zmienionych i usuniętych); nowych plików nie. Zwykle pisze się razem z opisem: `git commit -am "…"`.',
             meta: 'Znane na strych, nowe zostaje.',
@@ -871,8 +859,8 @@ export default {
         title: 'Album rodzinny',
         art: 'Otwarty album rodzinny w zielonej okładce. Cztery zdjęcia od najstarszego: domek z drzewem, żółw, dwoje ludzi obok siebie, morze i słońce; pod każdym nieczytelny podpis i data, od 09.11.1996 do 15.07.2007.',
         line: 'Chcecie obejrzeć album?',
-        move: '$ git log --oneline',
-        hint: 'jedna linijka na commit',
+        move: '$ git log',
+        hint: 'historia commitów, od najnowszego',
         does: {
           text: 'Pokazuje historię commitów bieżącej gałęzi od najnowszego: hash, autor, data, opis.',
           meta: 'Przeglądasz album od ostatniego zdjęcia wstecz.',
@@ -905,8 +893,8 @@ export default {
         title: 'Znajdź różnice',
         art: 'Osoba w pokoju trzyma plan mieszkania i porównuje go z tym, co widzi. Na planie jest okrągły stół, a w pokoju został po nim tylko kontur na podłodze; na planie lampa stojąca jest przy fotelu, a w pokoju w drugim końcu; stary fotel jest ten sam. Na ścianie portret kameleona, który trzyma swoje zdjęcie w innym kolorze, a między nimi znak „nie równa się”.',
         line: 'Znajdź trzy różnice',
-        move: '$ git diff --staged',
-        hint: 'dokładnie to, co trafi do następnego commita',
+        move: '$ git diff',
+        hint: 'zmieniło się, ale jeszcze nie jest w indeksie',
         does: {
           text: 'Pokazuje linijka po linijce, co się zmieniło: `-` usunięta linijka, `+` dodana. Bez opcji porównuje katalog roboczy z indeksem, czyli pokazuje zmiany jeszcze niedodane przez `git add`; nowych (untracked) plików nie pokazuje.',
           meta: 'Porównujesz „jak było” i „jak jest” do najmniejszego szczegółu.',
@@ -931,42 +919,372 @@ export default {
         ],
       },
       merge: {
+        title: 'Nowy sąsiad',
+        line: 'Spróbujmy zamieszkać razem',
+        move: '$ git merge <gałąź>',
+        hint: 'dołączyć gałąź do bieżącej',
+        does: {
+          text: 'Dołącza do bieżącej gałęzi commity innej gałęzi. Jeśli bieżąca gałąź od tamtej pory nie ma nowych commitów, git po prostu przesuwa ją do przodu (fast-forward); w przeciwnym razie tworzy commit scalający z dwoma rodzicami. Jeśli obie gałęzie zmieniły te same wiersze, git zatrzymuje się na konflikcie i czeka, aż ktoś go rozwiąże.',
+          meta: 'Ktoś wprowadza się do ciebie ze swoimi pudłami; gdzie dwa takie same czajniki chcą stać w jednym miejscu, decydujesz ty.',
+        },
+        tip: 'Konflikt? Popraw oznaczone pliki, potem `git add <plik>` i `git commit`. Zmiana planów? `git merge --abort` przywraca wszystko do stanu sprzed scalania.',
+        opts: [
+          {
+            cmd: 'git merge --no-ff <gałąź>',
+            text: '— zawsze commit scalający, nawet gdy wystarczyłby fast-forward: w historii widać, że gałąź była osobna.',
+            meta: 'Widzisz, z jakimi rzeczami wprowadził się sąsiad.',
+          },
+          {
+            cmd: 'git merge --squash <gałąź>',
+            text: '— przenosi wszystkie zmiany gałęzi do indeksu jako jedną zmianę, bez commita scalającego i bez związku z gałęzią; potem `git commit`.',
+            meta: 'Rozpakowujesz wszystkie pudła sąsiada i składasz rzeczy do jednego swojego.',
+          },
+          {
+            cmd: 'git merge --abort',
+            text: '— w trakcie konfliktu przywraca stan sprzed scalania.',
+            meta: 'Sąsiad wyprowadza się ze swoimi rzeczami.',
+          },
+        ],
         art: 'Po lewej przez otwarte drzwi wejściowe wchodzi uśmiechnięta osoba z pudłem z żółtą naklejką; kilka takich pudeł stoi już w pokoju. Po prawej gospodarz z ręką przy brodzie patrzy na blat, na którym obok siebie stoją dwa jednakowe czajniki, jego jasny i żółty nowego lokatora, a między nimi znak zapytania. Na półce nad blatem jego własne pudła bez naklejek. Na ścianie portret dwóch kotów, szarego i jasnego, obwąchujących się nos w nos.',
       },
       fetch: {
+        title: 'Co nam podarowali?',
+        line: 'Może szybko sprawdzimy prezenty pod choinką?',
+        move: '$ git fetch',
+        hint: 'co nowego na serwerze, u ciebie bez zmian',
+        does: {
+          text: 'Pobiera ze zdalnego repozytorium nowe commity i gałęzie i aktualizuje `origin/…`. Twoje gałęzie i katalog roboczy się nie zmieniają: nowości obejrzysz przez `git log origin/main`, a dołączysz przez `git merge` albo `git rebase`.',
+          meta: 'Prezenty już leżą pod choinką: można nimi potrząsnąć i przeczytać podpisy, ale na rozpakowanie jeszcze za wcześnie.',
+        },
+        tip: 'Bezpieczne polecenie: można je uruchamiać w każdej chwili, żeby sprawdzić, co się zmieniło na serwerze.',
+        opts: [
+          {
+            cmd: 'git fetch --prune',
+            text: '— usuwa lokalne `origin/…`, których na serwerze już nie ma.',
+            meta: 'Wyrzucasz podpisy od prezentów, które już ktoś zabrał.',
+          },
+          {
+            cmd: 'git fetch --all',
+            text: '— ze wszystkich zdalnych repozytoriów, nie tylko z `origin`.',
+            meta: 'Sprawdzasz wszystkie miejsca, gdzie mogą być schowane prezenty.',
+          },
+          {
+            cmd: 'git fetch origin <gałąź>',
+            text: '— tylko jedna gałąź.',
+            meta: 'Potrząsasz tylko jednym prezentem.',
+          },
+        ],
         art: 'Po prawej choinka z gwiazdą, pod nią zapakowane prezenty z pomarańczowymi wstążkami. Osoba klęczy na jednym kolanie przy choince, trzyma jeden prezent przy uchu i potrząsa nim, żeby zgadnąć, co jest w środku, ale go nie rozpakowuje. Na ścianie portret psa z prezentem w pysku.',
       },
       pull: {
+        title: 'Rozpakować prezent',
+        line: 'O, czegoś takiego jeszcze u mnie nie było',
+        move: '$ git pull',
+        hint: 'pobrać nowości z serwera i od razu scalić',
+        does: {
+          text: 'To `git fetch` i od razu scalenie pobranego z bieżącą gałęzią. Jeśli historie się rozeszły (nowe commity są i na serwerze, i u ciebie), git 2.43 zatrzymuje się i prosi o wybór: scalanie albo `git pull --rebase` (ustawienie `pull.rebase`); jeśli wystarczy przewinąć, wszystko przechodzi bez pytań.',
+          meta: 'Prezentu nie tylko przyniesiono: od razu go rozpakowujesz i zajmuje swoje miejsce w twoim domu.',
+        },
+        tip: 'Przed `git pull` zacommituj albo schowaj swoje zmiany (`git stash`): łatwiej będzie się połapać, jeśli wyjdzie konflikt.',
+        opts: [
+          {
+            cmd: 'git pull --rebase',
+            text: '— po fetch przestawia twoje lokalne commity na wierzch pobranych; historia zostaje prosta.',
+            meta: 'Cudze prezenty trafiają na stos pierwsze, a twoje — na wierzch.',
+          },
+          {
+            cmd: 'git pull --ff-only',
+            text: '— aktualizuje tylko wtedy, gdy wystarczy przewinąć; inaczej zatrzymuje się i nic nie zmienia.',
+            meta: 'Rozpakowujesz, tylko jeśli na pewno masz miejsce.',
+          },
+          {
+            cmd: 'git pull origin <gałąź>',
+            text: '— z konkretnej zdalnej gałęzi.',
+            meta: 'Rozpakowujesz tylko prezent od kogoś bliskiego.',
+          },
+        ],
         art: 'Po lewej stos własnych spakowanych rzeczy: pudła bez koloru, na każdym tabliczka z obrazkiem (domek, książka, kubek). Obok stoją prezenty z pomarańczowymi wstążkami; osoba na kolanach trzyma przed sobą sweter wyjęty przed chwilą z otwartego pudła, przez brzeg pudła zwisa wstążka, obok zmięty papier. Po prawej choinka. Na ścianie portret kociaka ciągnącego pomarańczową wstążkę z prezentu.',
       },
       push: {
+        title: 'Pełna półka',
+        line: 'Czas wysyłania prezentów',
+        move: '$ git push',
+        hint: 'wysłać swoje commity na serwer',
+        does: {
+          text: 'Wysyła twoje commity do zdalnej gałęzi. Jeśli są tam commity, których nie masz, git odrzuca push (rejected): najpierw `git pull`, potem znowu `git push`.',
+          meta: 'Zanosisz swoją paczkę na pocztę, gdzie wszyscy ją zobaczą.',
+        },
+        tip: 'Po push commity widzą wszyscy: nie przepisuj ich (`git commit --amend`, `git rebase`), bo potem trzeba będzie wysyłać na siłę.',
+        opts: [
+          {
+            cmd: 'git push -u origin <gałąź>',
+            text: '— pierwszy push nowej gałęzi: zapamiętuje, z którą zdalną gałęzią jest związana twoja, i dalej wystarcza `git push`.',
+            meta: 'Poczta zapamiętuje twój adres.',
+          },
+          {
+            cmd: 'git push --force-with-lease',
+            text: '— nadpisuje zdalną gałąź tylko wtedy, gdy nie ma tam cudzych nowych commitów.',
+            meta: 'Wymieniasz swoją paczkę, sprawdziwszy, że nikt obok nie położył swojej.',
+          },
+          {
+            cmd: 'git push origin --delete <gałąź>',
+            text: '— usuwa gałąź na serwerze.',
+            meta: 'Zdejmujesz swoje nazwisko ze skrzynki pocztowej.',
+          },
+        ],
+        careful: [
+          '`git push --force` nadpisuje zdalną gałąź: cudze commity, których nie masz, znikają z serwera.',
+          'Jeśli naprawdę trzeba przepisać, użyj `git push --force-with-lease` i nigdy nie rób tego na wspólnej gałęzi (`main`).',
+        ],
         art: 'Wspólna półka na poczcie pełna cudzych paczek z adresami i znaczkami, nad nią tabliczka z kopertą. Osoba po lewej z całej siły wpycha na pełną półkę swoją paczkę z pomarańczową wstążką, a z drugiego końca cudza paczka spada na podłogę. Na ścianie portret gołębia pocztowego z listem.',
       },
       show: {
+        title: 'Jedno zdjęcie',
+        line: 'Ten dzień, kiedy',
+        move: '$ git show <commit>',
+        hint: 'jeden commit w całości',
+        does: {
+          text: 'Pokazuje jeden obiekt: dla commita — autora, datę, opis i zmiany (diff); wystarczy pierwszych 7 znaków hasha. Bez argumentów pokazuje ostatni commit (`HEAD`). Niczego nie zmienia.',
+          meta: 'Wyjmujesz z rodzinnego albumu jedno zdjęcie i oglądasz je z bliska, razem z datą.',
+        },
+        tip: '`git log` — żeby znaleźć commit, `git show <hash>` — żeby go obejrzeć.',
+        opts: [
+          {
+            cmd: 'git show <commit>:<plik>',
+            text: '— plik taki, jaki był w tym commicie.',
+            meta: 'Jak wyglądał pokój tamtego dnia.',
+          },
+          {
+            cmd: 'git show --stat <commit>',
+            text: '— tylko lista zmienionych plików i liczba zmienionych wierszy.',
+            meta: 'Tylko podpis pod zdjęciem.',
+          },
+        ],
         art: 'Na stole otwarty rodzinny album w zielonej okładce; w jednym miejscu zostały tylko narożniki i data 25.12.2026, zdjęcia nie ma. Osoba stoi obok i ogląda to zdjęcie z bliska: dwoje ludzi po obu stronach choinki, pod spodem ta sama data. Na ścianie portret psa z zieloną rozetą zwycięzcy, jak na wystawie psów.',
       },
       revert: {
+        title: 'Stare tapety',
+        line: 'Poprzednie były lepsze. Dawaj je',
+        move: '$ git revert <commit>',
+        hint: 'nowy commit, który cofa stary',
+        does: {
+          text: 'Tworzy nowy commit, który cofa zmiany wskazanego commita; otwiera się edytor na opis. Historia nie jest przepisywana, więc to bezpieczny sposób, żeby cofnąć coś, co już wysłano przez `git push`.',
+          meta: 'Nowych tapet nie zdzierasz: stary wzór kleisz na nie nową warstwą.',
+        },
+        tip: 'Commit, którego jeszcze nikt nie widział, można usunąć także przez `git reset`; ten, który już jest na serwerze, tylko przez `git revert`. Commit scalający cofa `git revert -m 1 <commit-scalający>`, gdzie 1 to numer gałęzi, do której wracasz (zwykle głównej).',
+        opts: [
+          {
+            cmd: 'git revert --no-edit <commit>',
+            text: '— to samo, ale z domyślnym opisem „Revert "…"”, bez edytora.',
+            meta: 'Kleisz od razu, bez przymierzania.',
+          },
+          {
+            cmd: 'git revert HEAD',
+            text: '— cofa ostatni commit.',
+            meta: 'Przeklejasz tylko ostatni pas.',
+          },
+          {
+            cmd: 'git revert --no-commit <commit>',
+            text: '— cofa zmiany w katalogu roboczym i indeksie bez commita, żeby zebrać kilka cofnięć w jeden commit.',
+            meta: 'Zdejmujesz kilka pasów, a przeklejasz za jednym zamachem.',
+          },
+        ],
         art: 'Po lewej na ścianie stara tapeta w faliste paski, po prawej nowa w kropki. Osoba na taborecie znowu nakleja stary falisty wzór na nową tapetę: jeden żółty pas już wisi, dolny koniec następnego jest jeszcze w jej ręce; brzeg pokazuje, że nowa tapeta została pod spodem. Na podłodze wiadro z klejem i pędzlem. Na ścianie portret żółtego kraba ze strzałką w lewo.',
       },
       'cherry-pick': {
+        title: 'Przepis babci',
+        line: 'O, moje ulubione ciasto. Muszę sobie przepisać',
+        move: '$ git cherry-pick <commit>',
+        hint: 'kopia jednego commita w bieżącej gałęzi',
+        does: {
+          text: 'Bierze zmiany jednego commita z innej gałęzi i nakłada je na bieżącą jako nowy commit, z nowym hashem. Oryginał zostaje na swojej gałęzi.',
+          meta: 'Przepisujesz jeden przepis z zeszytu babci do swojego; u babci też zostaje.',
+        },
+        tip: 'Konflikt? Popraw, `git add <plik>`, potem `git cherry-pick --continue`. Zmiana planów? `git cherry-pick --abort`.',
+        opts: [
+          {
+            cmd: 'git cherry-pick <od>..<do>',
+            text: '— kilka commitów po kolei, bez samego `<od>`.',
+            meta: 'Kilka przepisów po kolei.',
+          },
+          {
+            cmd: 'git cherry-pick -x <commit>',
+            text: '— dopisuje do opisu wiersz „(cherry picked from commit …)”.',
+            meta: 'Podpisujesz pod przepisem: „od babci”.',
+          },
+          {
+            cmd: 'git cherry-pick -n <commit>',
+            text: '— przenosi zmiany commita do katalogu roboczego i indeksu bez commita, żeby można je było poprawić albo zebrać kilka w jeden commit.',
+            meta: 'Przepisujesz przepis, a swoje zmiany dodajesz, zanim zapiszesz go na czysto.',
+          },
+        ],
         art: 'Na stole dwa otwarte zeszyty z przepisami. Po lewej duży, stary zeszyt babci z wytartą okładką i wstążką-zakładką: na jednej stronie garnek, na drugiej ciasto z wiśniami. Po prawej mniejszy zeszyt na spirali z żółtą okładką: na jednej stronie miska z pałeczkami, na drugiej to samo ciasto, jeszcze nie dorysowane. Osoba stoi przed stołem, pochyla się nad swoim zeszytem i z długopisem w ręce przerysowuje ciasto. Na ścianie portret drozda z dwiema żółtymi wiśniami w dziobie.',
       },
       reset: {
+        title: 'Na choinkę czy do kosza',
+        line: 'To na choinkę, to do śmieci. Byle nie pomylić',
+        move: '$ git reset HEAD~1',
+        hint: 'zdjąć ostatni commit, zmiany zostają w plikach',
+        does: {
+          text: 'Przesuwa bieżącą gałąź na inny commit (np. `HEAD~1` — jeden wstecz). Co się stanie ze zmianami zdjętych commitów, zależy od trybu: z `git reset --soft` zostają w indeksie, ze zwykłym `git reset` — tylko w katalogu roboczym, z `git reset --hard` znikają.',
+          meta: 'Rozpakowujesz pudło ze strychu: coś idzie na choinkę, coś do kosza.',
+        },
+        tip: 'Z plikiem zamiast commita `git reset <plik>` po prostu wyjmuje plik z indeksu, jak `git restore --staged <plik>`.',
+        opts: [
+          {
+            cmd: 'git reset --soft HEAD~1',
+            text: '— zdejmuje ostatni commit; zmiany zostają w indeksie, gotowe do nowego commita.',
+            meta: 'Bombka zostaje w pudle pod ręką.',
+          },
+          {
+            cmd: 'git reset --hard HEAD~1',
+            text: '— zdejmuje commit i kasuje zmiany w indeksie i katalogu roboczym.',
+            meta: 'Bombka leci do kosza.',
+          },
+        ],
+        careful: [
+          '`git reset --hard` kasuje niezacommitowane zmiany na dobre.',
+          'Zdjęte commity jeszcze znajdziesz w `git reflog`, dopóki git ich nie sprzątnie. Commitów, które już są na serwerze, nie zdejmuj przez `git reset`: do nich jest `git revert`.',
+        ],
         art: 'W domu ubrana choinka, pod nią otwarte żółte pudło ze strychu. Osoba stoi między koszem na śmieci a choinką: jedną ręką wiesza całą bombkę na choince, a drugą wrzuca do kosza stłuczoną. Na ścianie portret złotej rybki w akwarium.',
       },
       reflog: {
+        title: 'Lista bombek',
+        line: 'Małe bombki — było 10 sztuk, teraz 8',
+        move: '$ git reflog',
+        hint: 'gdzie bywał HEAD, krok po kroku',
+        does: {
+          text: 'Pokazuje lokalny dziennik wszystkich miejsc, w których był `HEAD`, od najnowszego wpisu: commity, przełączenia gałęzi, `git reset`, `git rebase`. Tak znajduje się commit, który zniknął z `git log`.',
+          meta: 'Na liście zapisano każdą zmianę: było 10 bombek, jest 8, i widać, kiedy dwie zniknęły.',
+        },
+        tip: 'reflog jest lokalny i tymczasowy: na serwerze go nie ma, a stare wpisy git z czasem usuwa (domyślnie po 90 dniach, wpisy o nieosiągalnych commitach — po 30).',
+        opts: [
+          {
+            cmd: 'git reflog show <gałąź>',
+            text: '— dziennik jednej gałęzi.',
+            meta: 'Tylko wiersz o małych bombkach.',
+          },
+          {
+            cmd: 'git branch <nazwa> HEAD@{2}',
+            text: '— przywraca zgubiony commit jako nową gałąź.',
+            meta: 'Z listy dowiadujesz się, kiedy wszystko było jeszcze na miejscu.',
+          },
+        ],
         art: 'W domu ubrana choinka, w kącie kosz ze stłuczoną bombką. Osoba przy choince czyta listę na zielonej podkładce: w każdym wierszu mała bombka i kreski do liczenia, jeden wiersz zakreślony; osoba zerka na choinkę i liczy. Na ścianie portret szczura na brzegu kosza na śmieci.',
       },
       rebase: {
+        title: 'Nowa podstawa',
+        line: 'Układamy ładnie, żeby nie spadło!',
+        move: '$ git rebase main',
+        hint: 'twoje commity na wierzch świeżego main',
+        does: {
+          text: 'Przenosi commity bieżącej gałęzi tak, jakby zaczęła się w innym miejscu (np. od nowszego `main`): każdy commit jest nakładany od nowa i dostaje nowy hash. Historia staje się prosta, bez commitów scalających.',
+          meta: 'Pod twoje pudła podsunięto nowe, a ty znowu stawiasz swoje na wierzchu, ostrożnie, żeby nie spadło.',
+        },
+        tip: 'Konflikt? Popraw, `git add <plik>`, potem `git rebase --continue`. Zmiana planów? `git rebase --abort`.',
+        opts: [
+          {
+            cmd: 'git rebase -i HEAD~3',
+            text: '— otwiera listę trzech ostatnich commitów: połączyć, zmienić opis, wyrzucić, zmienić kolejność.',
+            meta: 'Przekładasz trzy górne pudła.',
+          },
+          {
+            cmd: 'git rebase --abort',
+            text: '— przerywa rebase w połowie.',
+            meta: 'Odstawiasz pudła tak, jak stały.',
+          },
+        ],
+        careful: [
+          'Rebase przepisuje commity: jeśli już je wysłano (`git push`), twoja historia rozejdzie się z historią innych.',
+          'Rób rebase tylko swoich, jeszcze niewysłanych commitów. Jeśli coś pójdzie nie tak, stary stan znajdziesz w `git reflog`.',
+        ],
         art: 'Strych. Stos pudeł z tabliczkami: na dole pudło z książkami, nad nim nowsze pudło z dynią na Halloween, a na górę osoba ostrożnie stawia dwa żółte pudła, z tortem urodzinowym i z misiem, i przytrzymuje je, żeby nie spadły. Na ścianie portret szarego kota siedzącego na pudłach.',
       },
       blame: {
-        art: 'Na lodówce pod zielonym magnesem wisi lista zakupów: każdy wiersz zaczyna się obrazkiem produktu, jest napisany innym charakterem pisma i kończy się buzią osoby, która go dopisała; te same buzie wiszą jako magnesy ze zdjęciami na drzwiczkach zamrażarki. Osoba trzyma lupę nad końcem wiersza z zielonymi winogronami, a w lupie widać buzię z kokardką. Przy nogach pusta torba na zakupy. Na ścianie portret psa z zieloną skarpetką w pysku.',
+        title: 'Lista na lodówce',
+        line: 'Kto przynosi winogrona?',
+        move: '$ git blame <plik>',
+        hint: 'kto i kiedy zmienił każdy wiersz',
+        does: {
+          text: 'Dla każdego wiersza pliku pokazuje, w którym commicie, kiedy i kto ostatnio go zmienił. Niczego nie zmienia.',
+          meta: 'Przy każdym wierszu listy na kolację buzia osoby, która go dopisała: wiadomo, kogo zapytać.',
+        },
+        tip: 'Znalazł się commit? Obejrzyj go w całości: `git show <hash>`. „Blame” nie chodzi tu o winę, tylko o to, kogo zapytać o wiersz.',
+        opts: [
+          {
+            cmd: 'git blame -L 10,20 <plik>',
+            text: '— tylko wiersze od 10. do 20.',
+            meta: 'Patrzysz tylko na wiersz z winogronami.',
+          },
+          {
+            cmd: 'git blame -w <plik>',
+            text: '— nie zwraca uwagi na zmiany w białych znakach.',
+            meta: 'Wiersz, w którym poprawiono tylko wcięcie, zostaje przy pierwszym autorze.',
+          },
+          {
+            cmd: 'git blame <commit> -- <plik>',
+            text: '— plik w stanie ze wskazanego commita.',
+            meta: 'Lista taka, jaka była wczoraj.',
+          },
+        ],
+        art: 'Na lodówce pod zielonym magnesem wisi lista, kto co przynosi na kolację: każdy wiersz zaczyna się obrazkiem produktu, jest napisany innym charakterem pisma i kończy się buzią osoby, która go dopisała; te same buzie wiszą jako magnesy ze zdjęciami na drzwiczkach zamrażarki. Osoba trzyma lupę nad końcem wiersza z zielonymi winogronami, a w lupie widać buzię z kokardką. Przy nogach pusta torba na zakupy. Na ścianie portret psa z zieloną skarpetką w pysku.',
       },
       bisect: {
+        title: 'Przepalona żarówka',
+        line: 'A, tu jest problem',
+        move: '$ git bisect start',
+        hint: 'zacząć szukać commita, który zepsuł',
+        does: {
+          text: 'Szuka commita, który coś zepsuł, dzieląc na pół: mówisz, gdzie jeszcze działało (`git bisect good <commit>`) i gdzie już nie (`git bisect bad`), git przełącza na commit pośrodku, ty sprawdzasz i podajesz wynik. Po kilku krokach winny commit jest znaleziony.',
+          meta: 'Lampki nie świecą: sprawdzasz połowę, potem połowę tego, co zostało, i tak aż do tej jednej żarówki.',
+        },
+        tip: 'Na koniec `git bisect reset` wraca na gałąź, od której zaczęło się szukanie.',
+        opts: [
+          {
+            cmd: 'git bisect run <polecenie>',
+            text: '— git sam uruchamia polecenie na każdym kroku i czyta jego kod wyjścia: 0 — „dobry”, 125 — „pominąć”, od 1 do 124 i 126–127 — „zły”, powyżej 127 — przerwać szukanie.',
+            meta: 'Sprawdzasz żarówki testerem, a nie na oko.',
+          },
+          {
+            cmd: 'git bisect skip',
+            text: '— tego commita nie da się sprawdzić (np. się nie buduje): git bierze sąsiedni.',
+            meta: 'Żarówka nie chce się wkręcić — bierzesz sąsiednią.',
+          },
+          {
+            cmd: 'git bisect reset',
+            text: '— kończy szukanie i wraca na początkową gałąź.',
+            meta: 'Wieszasz lampki z powrotem.',
+          },
+        ],
         art: 'Przez ścianę na dwóch gwoździach wisi girlanda i cała nie świeci. Pod lewą połową i pod następną ćwiartką nawiasy z ptaszkami: te części są sprawdzone, na granicach zielone klamerki. Osoba wyjęła żarówkę z pozostałej części i trzyma ją pod światło: szkło jest ciemne, włókno przerwane; w drugiej ręce zapasowa żarówka. Na ścianie portret świnki morskiej gryzącej kabel girlandy.',
       },
       tag: {
+        title: 'Etykieta na słoiku',
+        line: 'Żeby łatwiej znaleźć',
+        move: '$ git tag v1.0',
+        hint: 'znacznik na bieżącym commicie',
+        does: {
+          text: 'Stawia na commicie stały znacznik, zwykle numer wersji (`v1.0`). W odróżnieniu od gałęzi tag nie przesuwa się z nowymi commitami: zawsze wskazuje ten sam commit.',
+          meta: 'Wśród jednakowych słoików konfitur naklejasz etykietę na ulubiony, żeby potem łatwiej go znaleźć.',
+        },
+        tip: 'Zwykły `git push` nie wysyła tagów: potrzeba `git push origin v1.0` albo `git push --tags`.',
+        opts: [
+          {
+            cmd: 'git tag',
+            text: '— lista tagów.',
+            meta: 'Przeglądasz wszystkie słoiki z etykietami.',
+          },
+          {
+            cmd: 'git tag -a v1.0 -m "…"',
+            text: '— tag z adnotacją: z autorem, datą i opisem, do wydań.',
+            meta: 'Etykieta z rokiem i podpisem, kto gotował.',
+          },
+          {
+            cmd: 'git tag -d v1.0',
+            text: '— usuwa tag lokalnie; na serwerze zostaje, dopóki nie wykonasz `git push origin --delete v1.0`.',
+            meta: 'Odklejasz etykietę ze swojego słoika.',
+          },
+        ],
         art: 'W spiżarni regał pełen jednakowych słoików z konfiturą pod płóciennymi przykrywkami; na dwóch słoikach jasne etykiety 2024 i 2025. Osoba klęczy przy regale i dociska żółtą etykietę 2026 do najnowszego słoika na dolnej półce. Obok rolka żółtych etykiet. Na ścianie portret psa z żółtym adresownikiem na obroży.',
       },
     },

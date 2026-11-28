@@ -5,7 +5,7 @@
   gap: 12px;
   flex-wrap: wrap;
   color: var(--muted);
-  font-size: 14px;
+  font-size: var(--fs-2);
 }
 .bar {
   flex: 1 1 180px;
@@ -34,7 +34,7 @@
   color: var(--ink);
   border-radius: 999px;
   padding: 5px 12px;
-  font: 700 14px var(--body);
+  font: 700 var(--fs-min) var(--body);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -64,7 +64,7 @@
   margin-top: 28px;
 }
 .group h2 {
-  font: 800 22px var(--display);
+  font: 800 var(--fs-h3) var(--display);
   margin: 0 0 2px;
   display: flex;
   align-items: baseline;
@@ -72,11 +72,11 @@
   flex-wrap: wrap;
 }
 .group h2 .official {
-  font: 600 16px var(--body);
+  font: 600 var(--fs-2) var(--body);
   color: var(--muted);
 } /* RSP-110: official RFC 9110 class name */
 .group h2 code {
-  font: 800 15px var(--mono);
+  font: 800 var(--fs-code) var(--mono);
   padding: 2px 8px;
   border-radius: var(--r-s);
   color: var(--card-ink);
@@ -92,12 +92,13 @@
 .group p.lede {
   margin: 0 0 12px;
   color: var(--muted);
-  font-size: 14px;
+  font-size: var(--fs-2);
 }
-/* Collection grid: 2 columns on phones; from 600px the same 3 columns in every class, cards capped at 240px, rows left-aligned with the class headings. */
+/* Collection grid: one column on phones (full-size cards, RSP-220), cards capped at 260px; from 600px the same 3
+   columns in every class, cards capped at 240px, rows left-aligned with the class headings. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 260px);
   gap: 14px;
 }
 @media (min-width: 600px) {

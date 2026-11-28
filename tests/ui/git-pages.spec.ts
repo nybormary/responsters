@@ -44,9 +44,10 @@ test(
         await expect(page).toHaveTitle(new RegExp(`^${g.name.replace('.', '\\.')}(: .+)? · Mnemozoo$`));
         expect(plain(await gitCardPage.command.textContent())).toBe(g.name);
         await expect(gitCardPage.group).toHaveText(texts.git.groups[g.group as keyof typeof texts.git.groups]);
-        if (g.art) await expect(gitCardPage.art).toHaveAttribute('src', g.art);
+        // the picture URL carries its content version (RSP-228): /img/git/init.svg?v=<8 hex>
+        if (g.art) await expect(gitCardPage.art).toHaveAttribute('src', versioned(g.art));
         else {
-          await expect(gitCardPage.art).toHaveAttribute('src', GIT_EGG.src);
+          await expect(gitCardPage.art).toHaveAttribute('src', versioned(GIT_EGG.src));
           await expect(gitCardPage.art).toHaveAttribute('alt', GIT_EGG.alt);
         }
         await expect.poll(() => gitCardPage.artLoaded()).toBe(true);
@@ -58,6 +59,8 @@ test(
 
 // ── b91ec8f5 ────────────────────────────────────────────────────────────────────────────────────
 
+/** A picture URL with its content version (RSP-228), e.g. /img/git/init.svg?v=d2079b29. */
+const versioned = (src: string) => new RegExp(`^${src.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\?v=[0-9a-f]{7}$`);
 test.describe('Builds with a pinned date', () => {
   test.setTimeout(120_000); // four builds of the whole site
 
@@ -275,14 +278,16 @@ test(
     for (const theme of THEMES) {
       await test.step(`${theme}: ${g.name} card page (chips, code pills, tip, Documentation)`, async () => {
         await axe.theme(theme);
+        // The browser clock on advent day 10 first (it stays for the next pages): the card page marks its door opened
+        // only once its day has come (RSP-226), so without it the result would depend on today's date.
+        await adventWall.openOnDay(lang, 10);
         await gitCardPage.open(lang, g.id);
         await axe.expectNoViolations(`${theme}, git card page ${g.name}`);
       });
-      // The first theme opens the door; the wall remembers it (RSP-196), so in the second theme it is already open.
-      const first = theme === THEMES[0];
-      await test.step(`${theme}: the advent wall on day 10, door ${g.day} ${first ? 'opened' : 'still open (remembered)'}`, async () => {
+      // The card page just visited marks its door opened (RSP-226, 2026-11-27), and the wall remembers it (RSP-196):
+      // door g.day is open on the wall without a click, in both themes.
+      await test.step(`${theme}: the advent wall on day 10, door ${g.day} open (its card page was visited)`, async () => {
         await adventWall.openOnDay(lang, 10);
-        if (first) await adventWall.door(g.day).click();
         await expect(adventWall.door(g.day)).toHaveClass(/\bopen\b/);
         await adventWall.settled(g.day);
         await axe.expectNoViolations(`${theme}, advent wall`);

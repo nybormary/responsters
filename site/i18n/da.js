@@ -545,6 +545,14 @@ export default {
       danger: 'Farlig kommando',
       // heading of the outside links on a git card page
       docs: 'Dokumentation',
+      // the day row under the card (RSP-226): n = advent day, date = the day it opens
+      nav: {
+        label: 'Adventsdage',
+        day: (n) => `Dag ${n}`,
+        from: (date) => `fra ${date}`,
+        prev: 'Forrige:',
+        next: 'Næste:',
+      },
     },
     // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
     wall: {
@@ -573,19 +581,14 @@ export default {
       init: {
         title: 'En tom lejlighed',
         line: 'Lad os starte på en frisk.',
-        move: '$ git init -b main',
-        hint: 'et nyt repository med main som første gren',
+        move: '$ git init',
+        hint: 'et nyt repository i den aktuelle mappe',
         does: {
           text: 'Opretter et nyt, tomt repository i den aktuelle mappe: den skjulte mappe `.git`, hvor git gemmer hele historikken. Filerne i mappen bliver, som de er; git sporer dem ikke endnu. Der er ingen commits endnu, så `git branch` viser intet: grenen opstår med det første commit.',
           meta: 'En ny lejlighed: væggene er der, møblerne mangler, og katten går ind først.',
         },
         tip: 'Ligger projektet allerede på GitHub eller et andet sted? Så ikke init, men `git clone <url>`: den opretter selv mappen og henter hele historikken.',
         opts: [
-          {
-            cmd: 'git init',
-            text: '— et nyt repository i den aktuelle mappe. Det er sikkert at køre den igen i et eksisterende repository: intet slettes.',
-            meta: 'Du sætter et navneskilt på døren til den lejlighed, du allerede bor i.',
-          },
           {
             cmd: 'git init <mappe>',
             text: '— opretter en mappe med det navn (hvis den ikke findes) og repository’et i den.',
@@ -633,19 +636,14 @@ export default {
       restore: {
         title: 'Som på billedet',
         line: 'Pas på, mor rydder op — vi står ikke til ansvar for følgerne',
-        move: '$ git restore --staged <fil>',
-        hint: 'ud af kurven igen, ændringerne i filen bliver',
+        move: '$ git restore <fil>',
+        hint: 'smid ændringerne i en fil væk',
         does: {
           text: 'Sætter en fil i arbejdsmappen tilbage til dens tilstand i indekset, dvs. smider ændringer væk, der ikke er tilføjet endnu. `git restore --staged <fil>` gør det modsatte: tager filen ud af indekset og lader arbejdsmappen være. Ændrer ikke commit-historikken.',
           meta: 'Mor rydder op i værelset, så det ligner billedet: det halvfærdige forsvinder.',
         },
         tip: 'En sti er påkrævet: `git restore .` gendanner hele mappen. Før gjorde man det med `git checkout -- <fil>`.',
         opts: [
-          {
-            cmd: 'git restore <fil>',
-            text: '— smider ændringer i arbejdsmappen væk, som ikke er i indekset endnu.',
-            meta: 'Det, der flød, kommer tilbage på hylden.',
-          },
           {
             cmd: 'git restore --staged <fil>',
             text: '— tager filen ud af indekset (unstage); ændringerne i arbejdsmappen bliver.',
@@ -666,8 +664,8 @@ export default {
       stash: {
         title: 'Gæster ved døren',
         line: 'Lige en hurtig oprydning!',
-        move: '$ git stash -u',
-        hint: 'gem også de nye filer væk',
+        move: '$ git stash',
+        hint: 'læg ikke-committede ændringer til side',
         does: {
           text: 'Lægger ikke-committede ændringer i sporede filer (både i indekset og i arbejdsmappen) til side i et særskilt lager og sætter arbejdsmappen tilbage til det sidste commit. Senere kan de hentes frem igen, også på en anden gren.',
           meta: 'Det ringer på døren: du stopper det halvfærdige ind i skabet, så værelset ser pænt ud.',
@@ -699,8 +697,8 @@ export default {
       branch: {
         title: 'Et nyt navneskilt',
         line: 'Åh, det her bliver mit værelse.',
-        move: '$ git branch -d <gren>',
-        hint: 'slet en gren, der allerede er flettet',
+        move: '$ git branch',
+        hint: 'listen over grene, den aktuelle med *',
         does: {
           text: 'Uden argumenter viser den de lokale grene og markerer den aktuelle med `*`. Med et navn opretter den en ny gren på det aktuelle commit, men skifter ikke til den: det gør `git switch`.',
           meta: 'Du sætter et navneskilt på døren til et nyt værelse, men bliver selv stående, hvor du er.',
@@ -728,8 +726,8 @@ export default {
       switch: {
         title: 'Et nyt værelse',
         line: 'Tid til at flytte ind i et andet værelse',
-        move: '$ git switch -c <gren>',
-        hint: 'opret en gren og gå derind med det samme',
+        move: '$ git switch <gren>',
+        hint: 'gå til en anden gren',
         does: {
           text: 'Skifter til en anden gren: arbejdsmappen og indekset bliver som i dens sidste commit. Ikke-committede ændringer følger med; hvis de støder sammen med filer på den gren, stopper git og beder dig committe dem eller lægge dem til side (`git stash`).',
           meta: 'Du går ad løberen ind i et andet værelse, og det, du har i hænderne, følger med.',
@@ -762,8 +760,8 @@ export default {
         title: 'Møbleret lejlighed',
         art: 'En person med kufferter, den ene med et pæreklistermærke, står ved en vidt åben dør. Inde i lejligheden står de tidligere lejeres lænestol allerede med et ringbind med gamle regninger på, og på væggen hænger et portræt af to ens killinger. Ved døren et nyt navneskilt; det gamle er ved at falde af.',
         line: 'Her har boet nogen, nu er det mig.',
-        move: '$ git clone --depth 1 <url>',
-        hint: 'kun den seneste tilstand, uden gammel historik',
+        move: '$ git clone <url>',
+        hint: 'en kopi af et repository med hele historikken',
         does: {
           text: 'Kopierer et fjernrepository til en ny mappe: hele historikken og grenene (som `origin/…`), og skifter til hovedgrenen. git husker adressen som `origin`, så `git fetch`, `git pull` og `git push` virker bagefter.',
           meta: 'Du flytter ind i en møbleret lejelejlighed: alt, hvad de tidligere lejere efterlod, er der stadig, selv ringbindet med gamle regninger.',
@@ -791,8 +789,8 @@ export default {
         title: 'Tre bunker',
         art: 'På væggen et portræt af en kat med lup. En person ser roligt på tre bunker tøj: en sok, et ærme og et håndklæde stikker op af kurven på hjul, brugt tøj ligger på gulvet, og ved siden af ligger en sammenfoldet ny skjorte med et stort prismærke.',
         line: 'Hvad har vi her? Lad os tjekke.',
-        move: '$ git status -s',
-        hint: 'samme overblik, én linje pr. ting',
+        move: '$ git status',
+        hint: 'hvad der er ændret, og hvad der kommer med i committen',
         does: {
           text: 'Viser tilstanden i arbejdsmappen og indekset: hvilke ændringer der allerede er klar til commit (staged), hvilke der er ændret, men ikke klargjort endnu, og hvilke filer git ikke følger (untracked). Ændrer ingenting.',
           meta: 'Du sorterer tingene i tre bunker og ser, hvad der er hvor.',
@@ -815,8 +813,8 @@ export default {
         title: 'I kurven',
         art: 'På væggen et portræt af en kat, der sover i en kurv. En person lægger et blåt bundt ting i kurven på hjul, hvor der allerede ligger en sok, et ærme og et håndklæde; en sweater og en sok ligger stadig på gulvet, ikke tilføjet.',
         line: 'Ryd op på dit værelse, tak.',
-        move: '$ git add -p',
-        hint: 'tilføj en del af ændringerne, stykke for stykke',
+        move: '$ git add .',
+        hint: 'vi indekserer alle ændringer i mappen',
         does: {
           text: 'Tilføjer filens aktuelle tilstand til indekset (staged): præcis det kommer med i næste commit. En ny fil begynder git at følge efter `git add`.',
           meta: 'Du lægger ting i kurven for senere at pakke dem i en kasse.',
@@ -827,11 +825,6 @@ export default {
             cmd: 'git add <fil>',
             text: '— tilføjer én fil (eller mappe).',
             meta: 'Én ting i kurven.',
-          },
-          {
-            cmd: 'git add .',
-            text: '— alle ændringer i den aktuelle mappe og nedad, også nye og slettede filer.',
-            meta: 'Du fejer alt i rummet ned i kurven.',
           },
           {
             cmd: 'git add -p',
@@ -853,11 +846,6 @@ export default {
         tip: 'Én commit, én tanke; skriv »hvorfor« i beskeden, ikke kun »hvad«.',
         opts: [
           {
-            cmd: 'git commit -m "…"',
-            text: '— beskeden fra kommandolinjen, uden editor.',
-            meta: 'Mærk kassen.',
-          },
-          {
             cmd: 'git commit -a',
             text: '— tilføjer først selv ændringerne i fulgte filer (ændrede og slettede), men ikke nye filer. Skrives som regel sammen med beskeden: `git commit -am "…"`.',
             meta: 'Det kendte op på loftet, det nye bliver.',
@@ -873,8 +861,8 @@ export default {
         title: 'Familiealbum',
         art: 'Et opslået familiealbum med grønt omslag. Fire fotos, ældste først: et lille hus med et træ, en skildpadde, to mennesker side om side, havet og solen; under hvert en ulæselig billedtekst og en dato, fra 09.11.1996 til 15.07.2007.',
         line: 'Vil I se albummet?',
-        move: '$ git log --oneline',
-        hint: 'én linje pr. commit',
+        move: '$ git log',
+        hint: 'commit-historikken, nyeste først',
         does: {
           text: 'Viser commit-historikken for den aktuelle gren, nyeste først: hash, forfatter, dato, besked.',
           meta: 'Du blader albummet igennem fra det sidste foto og bagud.',
@@ -907,8 +895,8 @@ export default {
         title: 'Find forskellene',
         art: 'En person i en stue holder lejlighedens plantegning og sammenligner den med det, vedkommende ser. På tegningen er der et rundt bord, men i stuen er kun omridset tilbage på gulvet; på tegningen står standerlampen ved lænestolen, i stuen i den anden ende; den gamle lænestol er den samme. På væggen et portræt af en kamæleon, der holder et foto af sig selv i en anden farve, med et ikke-lig-med-tegn imellem.',
         line: 'Find tre forskelle',
-        move: '$ git diff --staged',
-        hint: 'præcis det, der kommer med i næste commit',
+        move: '$ git diff',
+        hint: 'ændret, men endnu ikke indekseret',
         does: {
           text: 'Viser linje for linje, hvad der er ændret: `-` en fjernet linje, `+` en tilføjet. Uden tilvalg sammenligner den arbejdsmappen med indekset, altså de ændringer, der endnu ikke er tilføjet med `git add`; nye (untracked) filer vises ikke.',
           meta: 'Du sammenligner »før« og »efter« ned til mindste detalje.',
@@ -933,42 +921,372 @@ export default {
         ],
       },
       merge: {
+        title: 'En ny nabo',
+        line: 'Lad os prøve at bo sammen',
+        move: '$ git merge <gren>',
+        hint: 'flet en gren ind i den aktuelle',
+        does: {
+          text: 'Fletter en anden grens commits ind i den aktuelle gren. Hvis den aktuelle gren ikke har fået nye commits siden, flytter git den bare frem (fast-forward); ellers opretter git en merge-commit med to forældre. Hvis begge grene har ændret de samme linjer, stopper git ved en konflikt og venter, til den er løst.',
+          meta: 'Nogen flytter ind hos dig med deres kasser; hvor to ens elkedler vil stå på samme plads, bestemmer du.',
+        },
+        tip: 'En konflikt? Ret de markerede filer, så `git add <fil>` og `git commit`. Fortrudt? `git merge --abort` sætter alt tilbage, som det var før merge.',
+        opts: [
+          {
+            cmd: 'git merge --no-ff <gren>',
+            text: '— altid en merge-commit, også når en fast-forward ville være nok: historikken viser, at grenen var for sig selv.',
+            meta: 'Du kan se, hvad naboen flyttede ind med.',
+          },
+          {
+            cmd: 'git merge --squash <gren>',
+            text: '— lægger alle grenens ændringer i indekset som én ændring, uden merge-commit og uden forbindelse til grenen; derefter `git commit`.',
+            meta: 'Du pakker alle naboens kasser ud og lægger tingene i én af dine egne.',
+          },
+          {
+            cmd: 'git merge --abort',
+            text: '— under en konflikt går tilbage til tilstanden før merge.',
+            meta: 'Naboen flytter ud med sine ting.',
+          },
+        ],
         art: 'Til venstre kommer en smilende person ind ad den åbne hoveddør med en kasse med en gul mærkat; flere kasser af samme slags står allerede i stuen. Til højre står værten med hånden ved hagen og kigger på køkkenbordet, hvor to ens elkedler står side om side, værtens lyse og den nyankomnes gule, med et spørgsmålstegn imellem. På hylden over bordet står værtens egne kasser uden mærkater. På væggen et portræt af to katte, en grå og en lys, der snuser næse mod næse.',
       },
       fetch: {
+        title: 'Hvad fik vi?',
+        line: 'Skal vi lige hurtigt kigge på gaverne under træet?',
+        move: '$ git fetch',
+        hint: 'hvad der er nyt på serveren, uden ændringer hos dig',
+        does: {
+          text: 'Henter nye commits og grene fra fjernrepositoriet og opdaterer `origin/…`. Dine egne grene og din arbejdsmappe ændres ikke: det nye kan du se med `git log origin/main` og hente ind med `git merge` eller `git rebase`.',
+          meta: 'Gaverne ligger allerede under træet: du må ryste dem og læse til- og fra-kortene, men det er for tidligt at pakke dem op.',
+        },
+        tip: 'En sikker kommando: kør den når som helst for at se, hvad der er ændret på serveren.',
+        opts: [
+          {
+            cmd: 'git fetch --prune',
+            text: '— fjerner lokale `origin/…`, som ikke længere findes på serveren.',
+            meta: 'Du smider kortene fra gaver, der allerede er hentet, ud.',
+          },
+          {
+            cmd: 'git fetch --all',
+            text: '— fra alle fjernrepositorier, ikke kun `origin`.',
+            meta: 'Du tjekker alle steder, hvor der kan være gemt gaver.',
+          },
+          {
+            cmd: 'git fetch origin <gren>',
+            text: '— kun én gren.',
+            meta: 'Du ryster kun én gave.',
+          },
+        ],
         art: 'Til højre et juletræ med en stjerne og indpakkede gaver med orange bånd under det. En person på ét knæ ved træet holder en gave op til øret og ryster den for at gætte, hvad der er i, uden at pakke den op. På væggen et portræt af en hund med en gave i munden.',
       },
       pull: {
+        title: 'Pak gaven op',
+        line: 'Åh, sådan en har jeg aldrig haft',
+        move: '$ git pull',
+        hint: 'hent det nye fra serveren og flet det med det samme',
+        does: {
+          text: 'Det er `git fetch` og straks en merge af det hentede ind i den aktuelle gren. Hvis historikkerne er gået hver sin vej (nye commits både på serveren og hos dig), stopper git 2.43 og beder dig vælge: merge eller `git pull --rebase` (indstillingen `pull.rebase`); kan der bare spoles frem, går det igennem uden spørgsmål.',
+          meta: 'Gaven er ikke bare bragt ind: du pakker den op med det samme, og den får sin plads i dit hjem.',
+        },
+        tip: 'Før `git pull`: commit dine ændringer eller læg dem til side (`git stash`), så er en eventuel konflikt nemmere at rede ud.',
+        opts: [
+          {
+            cmd: 'git pull --rebase',
+            text: '— efter fetch lægger dine lokale commits oven på dem, der kom ind; historikken forbliver lige.',
+            meta: 'Andres gaver kommer først i stakken, dine øverst.',
+          },
+          {
+            cmd: 'git pull --ff-only',
+            text: '— opdaterer kun, hvis der bare kan spoles frem; ellers stopper den og ændrer intet.',
+            meta: 'Du pakker kun op, hvis du er sikker på, at der er plads.',
+          },
+          {
+            cmd: 'git pull origin <gren>',
+            text: '— fra én bestemt fjerngren.',
+            meta: 'Du pakker kun gaven fra en, der står dig nær, op.',
+          },
+        ],
         art: 'Til venstre en stak af husets egne pakkede ting: kasser uden farve, hver med et skilt med et billede (et lille hus, en bog, en kop). Ved siden af står gaver med orange bånd; en person på knæ holder en sweater op, lige taget ud af en åben kasse, et bånd hænger ud over kanten og der ligger krøllet papir ved siden af. Til højre et juletræ. På væggen et portræt af en killing, der trækker det orange bånd af en gave.',
       },
       push: {
+        title: 'En fuld hylde',
+        line: 'Tid til at sende gaverne',
+        move: '$ git push',
+        hint: 'send dine commits til serveren',
+        does: {
+          text: 'Sender dine commits til fjerngrenen. Har den commits, du ikke har, afviser git dit push (rejected): først `git pull`, så `git push` igen.',
+          meta: 'Du bringer din pakke til posthuset, hvor alle kan se den.',
+        },
+        tip: 'Efter et push kan alle se dine commits: omskriv dem ikke (`git commit --amend`, `git rebase`), ellers må du sende dem med magt.',
+        opts: [
+          {
+            cmd: 'git push -u origin <gren>',
+            text: '— det første push af en ny gren: husker, hvilken fjerngren din hører sammen med, så derefter er `git push` nok.',
+            meta: 'Posthuset husker din adresse.',
+          },
+          {
+            cmd: 'git push --force-with-lease',
+            text: '— overskriver fjerngrenen kun, hvis ingen andre har lagt nye commits der.',
+            meta: 'Du bytter din pakke efter at have tjekket, at ingen har lagt deres ved siden af.',
+          },
+          {
+            cmd: 'git push origin --delete <gren>',
+            text: '— sletter grenen på serveren.',
+            meta: 'Du tager dit navn af postkassen.',
+          },
+        ],
+        careful: [
+          '`git push --force` overskriver fjerngrenen: andres commits, som du ikke har, forsvinder fra serveren.',
+          'Skal du virkelig omskrive, så brug `git push --force-with-lease`, og gør det aldrig på en fælles gren (`main`).',
+        ],
         art: 'En fælles hylde på posthuset, fuld af andres pakker med adresser og frimærker, med et skilt med en kuvert over. En person til venstre skubber af al kraft sin egen pakke med orange bånd ind på den fulde hylde, og i den anden ende falder en andens pakke på gulvet. På væggen et portræt af en brevdue med et brev.',
       },
       show: {
+        title: 'Ét billede',
+        line: 'Den dag, da',
+        move: '$ git show <commit>',
+        hint: 'én commit i sin helhed',
+        does: {
+          text: 'Viser ét objekt: for en commit forfatter, dato, besked og ændringer (diff); de første 7 tegn af hashen er nok. Uden argumenter viser den den seneste commit (`HEAD`). Ændrer intet.',
+          meta: 'Du tager ét billede ud af familiealbummet og ser nøje på det, dato og det hele.',
+        },
+        tip: '`git log` for at finde en commit, `git show <hash>` for at se på den.',
+        opts: [
+          {
+            cmd: 'git show <commit>:<fil>',
+            text: '— filen, som den var i den commit.',
+            meta: 'Hvordan værelset så ud den dag.',
+          },
+          {
+            cmd: 'git show --stat <commit>',
+            text: '— kun listen over ændrede filer og hvor mange linjer der er ændret.',
+            meta: 'Kun billedteksten.',
+          },
+        ],
         art: 'Et opslået familiealbum med grønt omslag på et bord; ét sted er der kun fotohjørnerne og datoen 25.12.2026 tilbage, billedet er væk. En person står ved siden af og ser tæt på netop det billede: to mennesker på hver sin side af et juletræ, med samme dato nedenunder. På væggen et portræt af en hund med en grøn vinderroset som på en hundeudstilling.',
       },
       revert: {
+        title: 'Det gamle tapet',
+        line: 'De gamle var bedre. Lad os sætte dem op igen',
+        move: '$ git revert <commit>',
+        hint: 'en ny commit, der fortryder en gammel',
+        does: {
+          text: 'Opretter en ny commit, der fortryder ændringerne i den angivne commit; en editor åbner til beskeden. Historikken omskrives ikke, så det er den sikre måde at fortryde noget, der allerede er sendt med `git push`.',
+          meta: 'Du river ikke det nye tapet ned: du klistrer det gamle mønster oven på som et nyt lag.',
+        },
+        tip: 'En commit, som ingen har set endnu, kan også fjernes med `git reset`; en, der allerede ligger på serveren, kun med `git revert`. En merge-commit fortrydes med `git revert -m 1 <merge-commit>`, hvor 1 er nummeret på den gren, du vender tilbage til (som regel hovedgrenen).',
+        opts: [
+          {
+            cmd: 'git revert --no-edit <commit>',
+            text: '— det samme, med standardbeskeden »Revert "…"«, uden editor.',
+            meta: 'Du klistrer med det samme, uden at prøve først.',
+          },
+          {
+            cmd: 'git revert HEAD',
+            text: '— fortryder den seneste commit.',
+            meta: 'Du sætter kun den sidste bane op igen.',
+          },
+          {
+            cmd: 'git revert --no-commit <commit>',
+            text: '— fortryder ændringerne i arbejdsmappen og indekset uden en commit, så flere fortrydelser kan samles i én commit.',
+            meta: 'Du tager flere baner ned og sætter dem op i én omgang.',
+          },
+        ],
         art: 'Til venstre på væggen det gamle tapet med bølgede striber, til højre det nye med prikker. En person på en skammel klistrer det gamle bølgede mønster op igen oven på det nye tapet: én gul bane sidder allerede, den nederste ende af den næste er stadig i hånden; kanten viser, at det nye tapet er tilbage nedenunder. På gulvet en spand klister med en pensel. På væggen et portræt af en gul krabbe med en pil mod venstre.',
       },
       'cherry-pick': {
+        title: 'Mormors opskrift',
+        line: 'Åh, min yndlingstærte. Den må jeg skrive af til mig selv',
+        move: '$ git cherry-pick <commit>',
+        hint: 'en kopi af én commit i den aktuelle gren',
+        does: {
+          text: 'Tager ændringerne fra én commit på en anden gren og lægger dem på den aktuelle som en ny commit med en ny hash. Originalen bliver på sin gren.',
+          meta: 'Du skriver én opskrift af fra mormors hæfte til dit eget; mormor har den stadig.',
+        },
+        tip: 'En konflikt? Ret den, `git add <fil>`, så `git cherry-pick --continue`. Fortrudt? `git cherry-pick --abort`.',
+        opts: [
+          {
+            cmd: 'git cherry-pick <fra>..<til>',
+            text: '— flere commits i træk, uden selve `<fra>`.',
+            meta: 'Flere opskrifter i træk.',
+          },
+          {
+            cmd: 'git cherry-pick -x <commit>',
+            text: '— tilføjer linjen »(cherry picked from commit …)« til beskeden.',
+            meta: 'Du skriver under opskriften: »fra mormor«.',
+          },
+          {
+            cmd: 'git cherry-pick -n <commit>',
+            text: '— lægger commitens ændringer i arbejdsmappen og indekset uden en commit, så du kan rette dem eller samle flere i én commit.',
+            meta: 'Du skriver opskriften af og tilføjer dine egne ændringer, før du skriver den rent.',
+          },
+        ],
         art: 'To opslåede opskriftshæfter på et bord. Til venstre bedstemors: stort og gammelt, med slidt omslag og et bogmærkebånd; en gryde på den ene side, en kirsebærtærte på den anden. Til højre et mindre spiralhæfte med gult omslag: en skål med spisepinde på den ene side og den samme tærte, kun halvt tegnet, på den anden. En person står foran bordet, læner sig over sit eget hæfte og tegner tærten af med en kuglepen. På væggen et portræt af en drossel med to gule kirsebær i næbbet.',
       },
       reset: {
+        title: 'Træet eller skraldespanden',
+        line: 'Den her på træet, den her i skraldespanden. Bare ikke byt om',
+        move: '$ git reset HEAD~1',
+        hint: 'tag den seneste commit af, ændringerne bliver i filerne',
+        does: {
+          text: 'Flytter den aktuelle gren til en anden commit (fx `HEAD~1`, én tilbage). Hvad der sker med ændringerne fra de fjernede commits, afhænger af tilstanden: med `git reset --soft` bliver de i indekset, med det almindelige `git reset` kun i arbejdsmappen, med `git reset --hard` er de væk.',
+          meta: 'Du pakker en kasse fra loftet ud: noget kommer på træet, noget i skraldespanden.',
+        },
+        tip: 'Med en fil i stedet for en commit tager `git reset <fil>` bare filen ud af indekset, ligesom `git restore --staged <fil>`.',
+        opts: [
+          {
+            cmd: 'git reset --soft HEAD~1',
+            text: '— tager den seneste commit af; ændringerne bliver i indekset, klar til en ny commit.',
+            meta: 'Julekuglen bliver i kassen lige ved hånden.',
+          },
+          {
+            cmd: 'git reset --hard HEAD~1',
+            text: '— tager commiten af og sletter ændringerne i indekset og arbejdsmappen.',
+            meta: 'Julekuglen ryger i skraldespanden.',
+          },
+        ],
+        careful: [
+          '`git reset --hard` sletter ikke-committede ændringer for altid.',
+          'Fjernede commits kan stadig findes i `git reflog`, indtil git rydder op. Commits, der allerede ligger på serveren, skal ikke tages af med `git reset`: til dem er der `git revert`.',
+        ],
         art: 'Hjemme et pyntet juletræ med en åben gul kasse fra loftet under. En person står mellem en skraldespand og træet: med den ene hånd hænger personen en hel julekugle på træet og smider med den anden en knust i skraldespanden. På væggen et portræt af en guldfisk i en glasskål.',
       },
       reflog: {
+        title: 'Listen over kugler',
+        line: 'Små kugler: der var 10, nu er der 8',
+        move: '$ git reflog',
+        hint: 'hvor HEAD har været, skridt for skridt',
+        does: {
+          text: 'Viser den lokale log over alle steder, `HEAD` har været, nyeste først: commits, gren-skift, `git reset`, `git rebase`. Sådan finder man en commit, der er forsvundet fra `git log`.',
+          meta: 'Listen noterer hver ændring: der var 10 kugler, nu er der 8, og man kan se, hvornår to forsvandt.',
+        },
+        tip: 'reflog er lokal og midlertidig: serveren har den ikke, og git rydder gamle linjer væk med tiden (som standard efter 90 dage, linjer om commits, der ikke kan nås, efter 30).',
+        opts: [
+          {
+            cmd: 'git reflog show <gren>',
+            text: '— loggen for én gren.',
+            meta: 'Kun linjen om de små kugler.',
+          },
+          {
+            cmd: 'git branch <navn> HEAD@{2}',
+            text: '— henter en tabt commit tilbage som en ny gren.',
+            meta: 'Listen viser dig, hvornår alt stadig var på plads.',
+          },
+        ],
         art: 'Hjemme et pyntet juletræ og i hjørnet en skraldespand med en knust julekugle. En person ved træet læser en liste på et grønt clipboard: hver linje har en lille julekugle og tællestreger, én linje er ringet ind; personen kaster et blik på træet og tæller. På væggen et portræt af en rotte på kanten af en skraldespand.',
       },
       rebase: {
+        title: 'Et nyt fundament',
+        line: 'Vi stabler dem pænt, så de ikke vælter!',
+        move: '$ git rebase main',
+        hint: 'dine commits oven på en frisk main',
+        does: {
+          text: 'Flytter den aktuelle grens commits, som om grenen var startet et andet sted (fx fra en nyere `main`): hver commit lægges på igen og får en ny hash. Historikken bliver lige, uden merge-commits.',
+          meta: 'Der er skubbet en ny kasse ind under dine, og du stabler dine ovenpå igen, forsigtigt, så de ikke vælter.',
+        },
+        tip: 'En konflikt? Ret den, `git add <fil>`, så `git rebase --continue`. Fortrudt? `git rebase --abort`.',
+        opts: [
+          {
+            cmd: 'git rebase -i HEAD~3',
+            text: '— åbner en liste over de tre seneste commits: slå sammen, omdøb, smid væk, byt om.',
+            meta: 'Du stabler de tre øverste kasser om.',
+          },
+          {
+            cmd: 'git rebase --abort',
+            text: '— afbryder en rebase midt i det hele.',
+            meta: 'Du sætter kasserne tilbage, som de stod.',
+          },
+        ],
+        careful: [
+          'En rebase omskriver commits: er de allerede sendt (`git push`), går din historik og de andres hver sin vej.',
+          'Lav kun rebase af dine egne commits, der ikke er sendt endnu. Går noget galt, finder du den gamle tilstand i `git reflog`.',
+        ],
         art: 'Et loft. En stak kasser med billedskilte: bøger nederst, over dem en nyere kasse med et halloweengræskar, og øverst sætter en person forsigtigt to gule kasser, én med en fødselsdagskage og én med en bamse, og holder dem, så de ikke vælter. På væggen et portræt af en grå kat, der sidder på kasser.',
       },
       blame: {
-        art: 'På køleskabet hænger en indkøbsliste under en grøn magnet: hver linje begynder med et billede af varen, er skrevet med en anden håndskrift og slutter med et lille ansigt på den, der skrev den; de samme ansigter hænger som fotomagneter på frysedøren. En person holder et forstørrelsesglas over enden af linjen med grønne vindruer, og i glasset ses et ansigt med en sløjfe. Ved fødderne en tom indkøbspose. På væggen et portræt af en hund med en grøn sok i munden.',
+        title: 'Listen på køleskabet',
+        line: 'Hvem tager vindruerne med?',
+        move: '$ git blame <fil>',
+        hint: 'hvem der ændrede hver linje, og hvornår',
+        does: {
+          text: 'For hver linje i en fil viser den, i hvilken commit, hvornår og af hvem den sidst blev ændret. Ændrer intet.',
+          meta: 'Ved hver linje på listen til middagen et lille ansigt på den, der skrev den: så ved du, hvem du skal spørge.',
+        },
+        tip: 'Fundet commiten? Se den i sin helhed: `git show <hash>`. »Blame« handler her ikke om skyld, men om hvem du skal spørge om en linje.',
+        opts: [
+          {
+            cmd: 'git blame -L 10,20 <fil>',
+            text: '— kun linje 10 til 20.',
+            meta: 'Du kigger kun på linjen med vindruerne.',
+          },
+          {
+            cmd: 'git blame -w <fil>',
+            text: '— ser bort fra ændringer i mellemrum.',
+            meta: 'En linje, hvor kun indrykningen er rettet, tilhører stadig den første forfatter.',
+          },
+          {
+            cmd: 'git blame <commit> -- <fil>',
+            text: '— filen, som den var i den angivne commit.',
+            meta: 'Listen, som den så ud i går.',
+          },
+        ],
+        art: 'På køleskabet hænger en liste over, hvem der tager hvad med til middagen, under en grøn magnet: hver linje begynder med et billede af varen, er skrevet med en anden håndskrift og slutter med et lille ansigt på den, der skrev den; de samme ansigter hænger som fotomagneter på frysedøren. En person holder et forstørrelsesglas over enden af linjen med grønne vindruer, og i glasset ses et ansigt med en sløjfe. Ved fødderne en tom indkøbspose. På væggen et portræt af en hund med en grøn sok i munden.',
       },
       bisect: {
+        title: 'Den sprungne pære',
+        line: 'Ah, der er problemet',
+        move: '$ git bisect start',
+        hint: 'begynd at lede efter den commit, der ødelagde det',
+        does: {
+          text: 'Finder den commit, der ødelagde noget, ved at halvere: du siger, hvor det stadig virkede (`git bisect good <commit>`), og hvor det ikke længere gør (`git bisect bad`), git skifter til commiten i midten, du tester og melder tilbage. Efter få skridt er den skyldige commit fundet.',
+          meta: 'Lyskæden lyser ikke: du tjekker den ene halvdel, så halvdelen af det, der er tilbage, og så videre helt ned til den ene pære.',
+        },
+        tip: 'Til sidst fører `git bisect reset` dig tilbage til den gren, hvor søgningen begyndte.',
+        opts: [
+          {
+            cmd: 'git bisect run <kommando>',
+            text: '— git kører selv kommandoen ved hvert skridt og læser dens exitkode: 0 er »god«, 125 er »spring over«, 1 til 124 og 126–127 er »dårlig«, over 127 stopper søgningen.',
+            meta: 'Du tester pærerne med en tester, ikke med øjnene.',
+          },
+          {
+            cmd: 'git bisect skip',
+            text: '— denne commit kan ikke testes (fx bygger den ikke): git tager en nabo-commit.',
+            meta: 'En pære vil ikke skrues i, så du tager den næste.',
+          },
+          {
+            cmd: 'git bisect reset',
+            text: '— afslutter søgningen og går tilbage til startgrenen.',
+            meta: 'Du hænger lyskæden op igen.',
+          },
+        ],
         art: 'En lyskæde hænger på tværs af væggen på to søm, og ingen af pærerne lyser. Under den venstre halvdel og den næste fjerdedel er der klammer med flueben: de dele er tjekket, med grønne tøjklemmer ved grænserne. En person har taget en pære ud af den resterende del og holder den op mod lyset: glasset er mørkt, glødetråden knækket; en reservepære i den anden hånd. På væggen et portræt af et marsvin, der gnaver i lyskædens ledning.',
       },
       tag: {
+        title: 'Et mærkat på glasset',
+        line: 'Så er den nemmere at finde',
+        move: '$ git tag v1.0',
+        hint: 'et mærke på den aktuelle commit',
+        does: {
+          text: 'Sætter et fast mærke på en commit, som regel et versionsnummer (`v1.0`). I modsætning til en gren flytter et tag sig ikke med nye commits: det peger altid på den samme commit.',
+          meta: 'Blandt ens syltetøjsglas sætter du et mærkat på dit yndlingsglas, så det er nemmere at finde senere.',
+        },
+        tip: 'Et almindeligt `git push` sender ikke tags: du skal bruge `git push origin v1.0` eller `git push --tags`.',
+        opts: [
+          {
+            cmd: 'git tag',
+            text: '— viser listen over tags.',
+            meta: 'Du kigger alle glas med mærkat igennem.',
+          },
+          {
+            cmd: 'git tag -a v1.0 -m "…"',
+            text: '— et annoteret tag med forfatter, dato og besked, til udgivelser.',
+            meta: 'Et mærkat med årstal og navnet på den, der kogte syltetøjet.',
+          },
+          {
+            cmd: 'git tag -d v1.0',
+            text: '— sletter tagget lokalt; på serveren bliver det, til du kører `git push origin --delete v1.0`.',
+            meta: 'Du piller mærkatet af dit eget glas.',
+          },
+        ],
         art: 'Et reol i spisekammeret fuld af ens syltetøjsglas under stofdækkener; to glas har lyse etiketter, 2024 og 2025. En person på ét knæ ved reolen trykker en gul 2026-etiket fast på det nyeste glas på nederste hylde. En rulle gule etiketter ved siden af. På væggen et portræt af en hund med et gult navneskilt på halsbåndet.',
       },
     },

@@ -90,12 +90,27 @@ export const GIT = [
     art: '/img/git/switch.svg',
     conf: ['git branch', 'git checkout'],
   },
-  { id: 'merge', name: 'git merge', group: 'archive', day: 13, art: '/img/git/merge.svg' },
-  { id: 'fetch', name: 'git fetch', group: 'post', day: 14, art: '/img/git/fetch.svg' },
-  { id: 'pull', name: 'git pull', group: 'post', day: 15, art: '/img/git/pull.svg' },
-  { id: 'push', name: 'git push', group: 'post', day: 16, danger: true, art: '/img/git/push.svg' },
+  {
+    id: 'merge',
+    name: 'git merge',
+    group: 'archive',
+    day: 13,
+    art: '/img/git/merge.svg',
+    conf: ['git rebase', 'git pull'],
+  },
+  { id: 'fetch', name: 'git fetch', group: 'post', day: 14, art: '/img/git/fetch.svg', conf: ['git pull'] },
+  { id: 'pull', name: 'git pull', group: 'post', day: 15, art: '/img/git/pull.svg', conf: ['git fetch', 'git merge'] },
+  {
+    id: 'push',
+    name: 'git push',
+    group: 'post',
+    day: 16,
+    danger: true,
+    art: '/img/git/push.svg',
+    conf: ['git commit', 'git pull'],
+  },
   // tag right after push: a label you then push along (git push origin <tag>)
-  { id: 'tag', name: 'git tag', group: 'archive', day: 17, art: '/img/git/tag.svg' },
+  { id: 'tag', name: 'git tag', group: 'archive', day: 17, art: '/img/git/tag.svg', conf: ['git branch'] },
   {
     id: 'revert',
     name: 'git revert',
@@ -103,6 +118,7 @@ export const GIT = [
     day: 18,
     help: { list: '-a', section: 'Main Porcelain Commands' },
     art: '/img/git/revert.svg',
+    conf: ['git reset', 'git restore'],
   },
   {
     id: 'cherry-pick',
@@ -111,8 +127,17 @@ export const GIT = [
     day: 19,
     help: { list: '-a', section: 'Main Porcelain Commands' },
     art: '/img/git/cherry-pick.svg',
+    conf: ['git merge', 'git rebase'],
   },
-  { id: 'reset', name: 'git reset', group: 'archive', day: 20, danger: true, art: '/img/git/reset.svg' },
+  {
+    id: 'reset',
+    name: 'git reset',
+    group: 'archive',
+    day: 20,
+    danger: true,
+    art: '/img/git/reset.svg',
+    conf: ['git revert', 'git restore'],
+  },
   {
     id: 'reflog',
     name: 'git reflog',
@@ -120,10 +145,18 @@ export const GIT = [
     day: 21,
     help: { list: '-a', section: 'Ancillary Commands / Manipulators' },
     art: '/img/git/reflog.svg',
+    conf: ['git log'],
   },
   // no danger mark (Maryna's rule, 2026-11-21): locally a rebase can be undone via `git reflog`; it is irreversible only
   // together with `git push --force`, which is push's danger
-  { id: 'rebase', name: 'git rebase', group: 'archive', day: 22, art: '/img/git/rebase.svg' },
+  {
+    id: 'rebase',
+    name: 'git rebase',
+    group: 'archive',
+    day: 22,
+    art: '/img/git/rebase.svg',
+    conf: ['git merge', 'git cherry-pick'],
+  },
   {
     id: 'blame',
     name: 'git blame',
@@ -131,10 +164,18 @@ export const GIT = [
     day: 23,
     help: { list: '-a', section: 'Ancillary Commands / Interrogators' },
     art: '/img/git/blame.svg',
+    conf: ['git log', 'git show'],
   },
-  { id: 'bisect', name: 'git bisect', group: 'visit', day: 24, art: '/img/git/bisect.svg' },
+  {
+    id: 'bisect',
+    name: 'git bisect',
+    group: 'visit',
+    day: 24,
+    art: '/img/git/bisect.svg',
+    conf: ['git blame', 'git log'],
+  },
   // the last day is the festive one (Maryna, 2026-11-26): show, one photo out of log's album, dated 25.12.2026
-  { id: 'show', name: 'git show', group: 'visit', day: 25, art: '/img/git/show.svg' },
+  { id: 'show', name: 'git show', group: 'visit', day: 25, art: '/img/git/show.svg', conf: ['git log', 'git diff'] },
 ];
 
 // The placeholder picture for a card whose art isn't drawn yet (RSP-199): a big egg with Maryna's handwritten note

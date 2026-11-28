@@ -59,6 +59,10 @@ jobs:
         id: locales
         run: npm run check-locales
 
+      - name: Font size check
+        id: font-sizes
+        run: npm run check-font-sizes
+
       - name: Lint
         id: lint
         run: npm run lint

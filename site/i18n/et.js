@@ -546,6 +546,14 @@ export default {
       danger: 'Ohtlik käsk',
       // heading of the outside links on a git card page
       docs: 'Dokumentatsioon',
+      // the day row under the card (RSP-226): n = advent day, date = the day it opens
+      nav: {
+        label: 'Advendipäevad',
+        day: (n) => `Päev ${n}`,
+        from: (date) => `alates ${date}`,
+        prev: 'Eelmine:',
+        next: 'Järgmine:',
+      },
     },
     // the advent wall /<lang>/git/ (RSP-195): door labels for screen readers, the flags on the paper
     wall: {
@@ -574,19 +582,14 @@ export default {
       init: {
         title: 'Tühi korter',
         line: 'Alustame puhtalt lehelt.',
-        move: '$ git init -b main',
-        hint: 'uus hoidla, esimene haru main',
+        move: '$ git init',
+        hint: 'uus hoidla praeguses kaustas',
         does: {
           text: 'Loob praegusesse kausta uue tühja hoidla (repository): peidetud kausta `.git`, kus git hoiab kogu ajalugu. Kausta failid jäävad, nagu olid; git neid veel ei jälgi. Kommitte veel pole, seega `git branch` ei näita midagi: haru tekib koos esimese kommitiga.',
           meta: 'Uus korter: seinad on olemas, mööblit veel pole, ja esimesena astub sisse kass.',
         },
         tip: 'Projekt on juba GitHubis või mujal? Siis mitte init, vaid `git clone <url>`: see loob ise kausta ja toob kogu ajaloo.',
         opts: [
-          {
-            cmd: 'git init',
-            text: '— uus hoidla praeguses kaustas. Olemasolevas hoidlas uuesti käivitada on ohutu: midagi ei kustutata.',
-            meta: 'Paned nimesildi selle korteri uksele, kus juba elad.',
-          },
           {
             cmd: 'git init <kaust>',
             text: '— loob sellenimelise kausta (kui seda veel pole) ja sinna hoidla.',
@@ -634,19 +637,14 @@ export default {
       restore: {
         title: 'Nagu fotol',
         line: 'Ettevaatust, ema koristab — tagajärgede eest me ei vastuta',
-        move: '$ git restore --staged <fail>',
-        hint: 'korvist tagasi, muudatused failis jäävad',
+        move: '$ git restore <fail>',
+        hint: 'viska faili muudatused ära',
         does: {
           text: 'Viib töökausta faili tagasi indeksi olekusse ehk viskab minema muudatused, mida pole veel lisatud. `git restore --staged <fail>` teeb vastupidi: võtab faili indeksist välja ja jätab töökausta nii, nagu see on. Kommitite ajalugu ei muuda.',
           meta: 'Ema koristab toa nagu fotol: mis pooleli, see kaob.',
         },
         tip: 'Tee on kohustuslik: `git restore .` taastab kogu kausta. Varem tehti seda käsuga `git checkout -- <fail>`.',
         opts: [
-          {
-            cmd: 'git restore <fail>',
-            text: '— viskab minema töökausta muudatused, mida indeksis veel pole.',
-            meta: 'Laiali loobitu läheb tagasi riiulile.',
-          },
           {
             cmd: 'git restore --staged <fail>',
             text: '— võtab faili indeksist välja (unstage); muudatused töökaustas jäävad.',
@@ -667,8 +665,8 @@ export default {
       stash: {
         title: 'Külalised ukse taga',
         line: 'Koristan kiiresti ära!',
-        move: '$ git stash -u',
-        hint: 'peida ka uued failid',
+        move: '$ git stash',
+        hint: 'peida kommitimata muudatused',
         does: {
           text: 'Peidab jälgitavate failide kommitimata muudatused (nii indeksis kui ka töökaustas) eraldi hoidlasse ja viib töökausta tagasi viimase kommiti olekusse. Hiljem saab need välja võtta, ka teises harus.',
           meta: 'Uksekell heliseb: topid pooleli asjad kappi, et tuba näeks korras välja.',
@@ -700,8 +698,8 @@ export default {
       branch: {
         title: 'Uus nimesilt',
         line: 'Oh, sellest saab minu tuba.',
-        move: '$ git branch -d <haru>',
-        hint: 'kustuta juba liidetud haru',
+        move: '$ git branch',
+        hint: 'harude loend, praegune tärniga *',
         does: {
           text: 'Ilma argumentideta näitab kohalikke harusid ja märgib praeguse tärniga `*`. Nimega loob praegusele kommitile uue haru, aga sellele ei lülitu: selleks on `git switch`.',
           meta: 'Paned uue toa uksele nimesildi, aga ise jääd sinna, kus olid.',
@@ -729,8 +727,8 @@ export default {
       switch: {
         title: 'Uus tuba',
         line: 'Aeg kolida teise tuppa',
-        move: '$ git switch -c <haru>',
-        hint: 'loo haru ja mine kohe sinna',
+        move: '$ git switch <haru>',
+        hint: 'mine teisele harule',
         does: {
           text: 'Lülitub teisele harule: töökaust ja indeks muutuvad selliseks nagu selle viimases kommitis. Kommitimata muudatused tulevad kaasa; kui need lähevad selle haru failidega vastuollu, git peatub ja palub need kommitida või peita (`git stash`).',
           meta: 'Kõnnid mööda vaipa teise tuppa ja see, mis sul käes, tuleb kaasa.',
@@ -759,8 +757,8 @@ export default {
         title: 'Möbleeritud korter',
         art: 'Kohvritega inimene, ühel kohvril lambipirni kleebis, seisab pärani avatud ukse ees. Korteris on juba eelmiste üürnike tugitool, sellel vanade arvetega kaust, ja seinal ripub kahe ühesuguse kassipoja portree. Ukse kõrval uus nimesilt, vana kukub maha.',
         line: 'Keegi elas siin, nüüd olen mina.',
-        move: '$ git clone --depth 1 <url>',
-        hint: 'ainult viimane seis, ilma vana ajaloota',
+        move: '$ git clone <url>',
+        hint: 'hoidla koopia kogu ajalooga',
         does: {
           text: 'Kopeerib kaughoidla uude kausta: kogu ajaloo ja harud (kui `origin/…`) ning lülitub põhiharule. git jätab aadressi meelde nimega `origin`, nii et hiljem töötavad `git fetch`, `git pull` ja `git push`.',
           meta: 'Kolid möbleeritud üürikorterisse: kõik, mis eelmised üürnikud maha jätsid, on alles, isegi vanade arvetega kaust.',
@@ -788,8 +786,8 @@ export default {
         title: 'Kolm hunnikut',
         art: 'Seinal luubiga kassi portree. Inimene vaatab rahulikult kolme riidehunnikut: rataste peal korvist paistavad välja sokk, varrukas ja käterätik, põrandal on kantud riided ja nende kõrval kokkuvolditud uus särk suure poesildiga.',
         line: 'Mis meil siin on? Vaatame järele.',
-        move: '$ git status -s',
-        hint: 'sama ülevaade, üks rida asja kohta',
+        move: '$ git status',
+        hint: 'mis on muutunud ja mis läheb kommitisse',
         does: {
           text: 'Näitab töökausta ja indeksi seisu: millised muudatused on juba commitiks ette valmistatud (staged), millised on muudetud, aga veel ette valmistamata, ja milliseid faile git ei jälgi (untracked). Midagi ei muuda.',
           meta: 'Laotad asjad kolme hunnikusse ja vaatad, mis kus on.',
@@ -812,8 +810,8 @@ export default {
         title: 'Korvi',
         art: 'Seinal portree kassist, kes magab korvis. Inimene paneb sinise asjade kimbu rataste peal korvi, kus on juba sokk, varrukas ja käterätik; põrandal on veel kampsun ja sokk, mida pole lisatud.',
         line: 'Korista palun oma tuba ära.',
-        move: '$ git add -p',
-        hint: 'lisa osa muudatustest, tükk tüki haaval',
+        move: '$ git add .',
+        hint: 'indekseerime kõik kausta muudatused',
         does: {
           text: 'Lisab faili praeguse seisu indeksisse (staged): just see läheb järgmisse commiti. Uut faili hakkab git pärast käsku `git add` jälgima.',
           meta: 'Paned asjad korvi, et need hiljem kasti pakkida.',
@@ -824,11 +822,6 @@ export default {
             cmd: 'git add <fail>',
             text: '— lisab ühe faili (või kausta).',
             meta: 'Üks asi korvi.',
-          },
-          {
-            cmd: 'git add .',
-            text: '— kõik muudatused praeguses kaustas ja allpool, ka uued ja kustutatud failid.',
-            meta: 'Pühid kõik toast korvi.',
           },
           {
             cmd: 'git add -p',
@@ -850,11 +843,6 @@ export default {
         tip: 'Üks commit, üks mõte; kirjuta sõnumisse „miks“, mitte ainult „mis“.',
         opts: [
           {
-            cmd: 'git commit -m "…"',
-            text: '— sõnum käsurealt, ilma redaktorita.',
-            meta: 'Pane kastile silt.',
-          },
-          {
             cmd: 'git commit -a',
             text: '— lisab kõigepealt ise jälgitavate failide muudatused (muudetud ja kustutatud), aga mitte uusi faile. Tavaliselt kirjutatakse koos sõnumiga: `git commit -am "…"`.',
             meta: 'Tuttav pööningule, uus jääb.',
@@ -870,8 +858,8 @@ export default {
         title: 'Perealbum',
         art: 'Lahtine rohelises kaanes perealbum. Neli fotot vanimast alates: majake puuga, kilpkonn, kaks inimest kõrvuti, meri ja päike; iga foto all loetamatu allkiri ja kuupäev, 09.11.1996 kuni 15.07.2007.',
         line: 'Kas soovite albumit vaadata?',
-        move: '$ git log --oneline',
-        hint: 'üks rida commiti kohta',
+        move: '$ git log',
+        hint: 'kommitite ajalugu, uusim eespool',
         does: {
           text: 'Näitab praeguse haru commitide ajalugu, uusim eespool: räsi, autor, kuupäev, sõnum.',
           meta: 'Lehitsed albumit viimasest fotost tagasi.',
@@ -904,8 +892,8 @@ export default {
         title: 'Leia erinevused',
         art: 'Inimene toas hoiab korteri plaani ja võrdleb seda sellega, mida näeb. Plaanil on ümmargune laud, aga toas on sellest järel ainult kontuur põrandal; plaanil on põrandalamp tugitooli kõrval, toas aga teises otsas; vana tugitool on sama. Seinal portree kameeleonist, kes hoiab oma fotot, kus ta on teist värvi, ja nende vahel märk „ei võrdu“.',
         line: 'Leia kolm erinevust',
-        move: '$ git diff --staged',
-        hint: 'täpselt see, mis läheb järgmisse commiti',
+        move: '$ git diff',
+        hint: 'muutunud, aga veel indekseerimata',
         does: {
           text: 'Näitab rida-realt, mis muutus: `-` eemaldatud rida, `+` lisatud. Ilma valikuteta võrdleb töökausta indeksiga ehk näitab muudatusi, mida pole veel käsuga `git add` lisatud; uusi (untracked) faile ei näita.',
           meta: 'Võrdled „enne“ ja „pärast“ viimase pisiasjani.',
@@ -930,42 +918,372 @@ export default {
         ],
       },
       merge: {
+        title: 'Uus naaber',
+        line: 'Proovime koos elada',
+        move: '$ git merge <haru>',
+        hint: 'ühenda haru praegusega',
+        does: {
+          text: 'Ühendab teise haru kommitid praegusesse harusse. Kui praegusel harul pole vahepeal uusi kommitte, liigutab git selle lihtsalt edasi (fast-forward); muidu loob kahe vanemaga ühendamiskommiti. Kui mõlemad harud muutsid samu ridu, peatub git konfliktil ja ootab, kuni see lahendatakse.',
+          meta: 'Keegi kolib sinu juurde oma kastidega; kus kaks ühesugust veekeetjat tahavad samale kohale, otsustad sina.',
+        },
+        tip: 'Konflikt? Paranda märgitud failid, siis `git add <fail>` ja `git commit`. Mõtlesid ümber? `git merge --abort` taastab kõik nii, nagu oli enne ühendamist.',
+        opts: [
+          {
+            cmd: 'git merge --no-ff <haru>',
+            text: '— alati ühendamiskommit, isegi kui fast-forward oleks piisanud: ajaloost on näha, et haru oli eraldi.',
+            meta: 'Näed, milliste asjadega naaber sisse kolis.',
+          },
+          {
+            cmd: 'git merge --squash <haru>',
+            text: '— viib kõik haru muudatused indeksisse ühe muudatusena, ilma ühendamiskommiti ja haruga seoseta; edasi `git commit`.',
+            meta: 'Pakid kõik naabri kastid lahti ja paned asjad ühte enda kasti.',
+          },
+          {
+            cmd: 'git merge --abort',
+            text: '— konflikti ajal taastab ühendamiseelse seisu.',
+            meta: 'Naaber kolib oma asjadega välja.',
+          },
+        ],
         art: 'Vasakul astub avatud välisuksest sisse naeratav inimene, kandes kasti kollase kleebisega; mõned samasugused kastid seisavad juba toas. Paremal vaatab pererahvas, käsi lõua juures, tööpinda, kus seisavad kõrvuti kaks ühesugust veekeetjat, tema hele ja uustulnuka kollane, nende vahel küsimärk. Tööpinna kohal riiulil tema enda kastid ilma kleebisteta. Seinal portree kahest kassist, hallist ja heledast, kes nuusutavad teineteist ninapidi.',
       },
       fetch: {
+        title: 'Mis meile kingiti?',
+        line: 'Kas vaatame kiiresti kuuse all olevad kingid üle?',
+        move: '$ git fetch',
+        hint: 'mis on serveris uut, sinu juures ei muutu midagi',
+        does: {
+          text: 'Laadib kaughoidlast alla uued kommitid ja harud ning uuendab `origin/…`. Sinu harud ja töökaust ei muutu: uut näed käsuga `git log origin/main`, liita saad käsuga `git merge` või `git rebase`.',
+          meta: 'Kingid on juba kuuse all: neid võib raputada ja silte lugeda, aga lahti pakkida on veel vara.',
+        },
+        tip: 'Ohutu käsk: seda võib käivitada millal tahes, et teada saada, mis serveris muutus.',
+        opts: [
+          {
+            cmd: 'git fetch --prune',
+            text: '— eemaldab kohalikud `origin/…`, mida serveris enam pole.',
+            meta: 'Viskad ära sildid kingitustelt, mis on juba ära viidud.',
+          },
+          {
+            cmd: 'git fetch --all',
+            text: '— kõigist kaughoidlatest, mitte ainult `origin`-ist.',
+            meta: 'Kontrollid kõiki kohti, kuhu kingid võivad olla peidetud.',
+          },
+          {
+            cmd: 'git fetch origin <haru>',
+            text: '— ainult üks haru.',
+            meta: 'Raputad ainult ühte kinki.',
+          },
+        ],
         art: 'Paremal kuusk tähega ja selle all pakitud kingid oranžide paeltega. Inimene põlvitab ühel põlvel kuuse juures, hoiab üht kinki kõrva ääres ja raputab seda, et ära arvata, mis sees on, kuid lahti ei paki. Seinal portree koerast, kink suus.',
       },
       pull: {
+        title: 'Kingi lahtipakkimine',
+        line: 'Oh, sellist mul veel polnud',
+        move: '$ git pull',
+        hint: 'too serverist uus ja ühenda kohe',
+        does: {
+          text: 'See on `git fetch` ja kohe saadu ühendamine praeguse haruga. Kui ajalood on lahku läinud (uued kommitid on nii serveris kui ka sinu juures), peatub git 2.43 ja palub valida: ühendamine või `git pull --rebase` (seade `pull.rebase`); kui saab lihtsalt edasi kerida, läheb kõik läbi küsimusteta.',
+          meta: 'Kinki ei toodud lihtsalt kohale: pakid selle kohe lahti ja see võtab oma koha sinu kodus.',
+        },
+        tip: 'Enne `git pull` kommiti või peida oma muudatused (`git stash`): nii on konflikti korral lihtsam asjal silma peal hoida.',
+        opts: [
+          {
+            cmd: 'git pull --rebase',
+            text: '— pärast fetch-i tõstab sinu kohalikud kommitid saadute peale; ajalugu jääb sirgeks.',
+            meta: 'Teiste kingid lähevad hunnikusse esimesena, sinu omad peale.',
+          },
+          {
+            cmd: 'git pull --ff-only',
+            text: '— uuendab ainult siis, kui saab lihtsalt edasi kerida; muidu peatub ja ei muuda midagi.',
+            meta: 'Pakid lahti ainult siis, kui sul on kindlasti ruumi.',
+          },
+          {
+            cmd: 'git pull origin <haru>',
+            text: '— kindlast kaugharust.',
+            meta: 'Pakid lahti ainult lähedase inimese kingi.',
+          },
+        ],
         art: 'Vasakul virn majapidamise enda pakitud asju: värvita kastid, igaühel pildiga silt (majake, raamat, tass). Nende kõrval seisavad kingid oranžide paeltega; põlvili inimene hoiab enda ees kampsunit, mille ta just avatud kastist välja võttis, üle kasti ääre ripub pael ja kõrval on kortsus paber. Paremal kuusk. Seinal portree kassipojast, kes tõmbab kingilt oranži paela.',
       },
       push: {
+        title: 'Täis riiul',
+        line: 'Aeg kingid teele saata',
+        move: '$ git push',
+        hint: 'saada oma kommitid serverisse',
+        does: {
+          text: 'Saadab sinu kommitid kaugharusse. Kui seal on kommitte, mida sul pole, lükkab git push-i tagasi (rejected): kõigepealt `git pull`, siis uuesti `git push`.',
+          meta: 'Viid oma paki postkontorisse, kus kõik seda näevad.',
+        },
+        tip: 'Pärast push-i näevad kommitte kõik: ära kirjuta neid ümber (`git commit --amend`, `git rebase`), muidu tuleb need jõuga saata.',
+        opts: [
+          {
+            cmd: 'git push -u origin <haru>',
+            text: '— uue haru esimene push: jätab meelde, millise kaugharuga sinu oma seotud on, ja edaspidi piisab `git push`-ist.',
+            meta: 'Postkontor jätab sinu aadressi meelde.',
+          },
+          {
+            cmd: 'git push --force-with-lease',
+            text: '— kirjutab kaugharu üle ainult siis, kui seal pole teiste uusi kommitte.',
+            meta: 'Vahetad oma paki, olles kontrollinud, et keegi pole enda oma kõrvale pannud.',
+          },
+          {
+            cmd: 'git push origin --delete <haru>',
+            text: '— kustutab haru serverist.',
+            meta: 'Võtad oma nime postkastilt maha.',
+          },
+        ],
+        careful: [
+          '`git push --force` kirjutab kaugharu üle: teiste kommitid, mida sul pole, kaovad serverist.',
+          'Kui on tõesti vaja ümber kirjutada, kasuta `git push --force-with-lease` ja ära tee seda kunagi ühisel harul (`main`).',
+        ],
         art: 'Postkontori ühine riiul on täis teiste inimeste pakke aadresside ja markidega, selle kohal ümbrikuga silt. Vasakul olev inimene surub kogu jõust täis riiulile oma paki oranži paelaga ja teises otsas kukub kellegi teise pakk põrandale. Seinal portree kirjatuvist kirjaga.',
       },
       show: {
+        title: 'Üks foto',
+        line: 'See päev, kui',
+        move: '$ git show <kommit>',
+        hint: 'üks kommit tervikuna',
+        does: {
+          text: 'Näitab ühte objekti: kommiti puhul autorit, kuupäeva, sõnumit ja muudatusi (diff); räsi esimesest 7 märgist piisab. Ilma argumentideta näitab viimast kommitit (`HEAD`). Ei muuda midagi.',
+          meta: 'Võtad pere fotoalbumist ühe foto ja vaatad seda lähedalt, koos kuupäevaga.',
+        },
+        tip: '`git log`, et kommit leida, `git show <räsi>`, et seda vaadata.',
+        opts: [
+          {
+            cmd: 'git show <kommit>:<fail>',
+            text: '— fail sellisena, nagu see oli selles kommitis.',
+            meta: 'Milline tuba sel päeval välja nägi.',
+          },
+          {
+            cmd: 'git show --stat <kommit>',
+            text: '— ainult muudetud failide loend ja muudetud ridade arv.',
+            meta: 'Ainult foto allkiri.',
+          },
+        ],
         art: 'Laual on avatud rohelise kaanega pere fotoalbum; ühest kohast on alles ainult fotonurgad ja kuupäev 25.12.2026, fotot pole. Inimene seisab kõrval ja uurib just seda fotot lähedalt: kaks inimest kummalgi pool kuuske, all sama kuupäev. Seinal portree koerast rohelise võitjarosetiga nagu koertenäitusel.',
       },
       revert: {
+        title: 'Vanad tapeedid',
+        line: 'Eelmised olid paremad. Paneme need tagasi',
+        move: '$ git revert <kommit>',
+        hint: 'uus kommit, mis tühistab vana',
+        does: {
+          text: 'Loob uue kommiti, mis tühistab antud kommiti muudatused; sõnumi jaoks avaneb redaktor. Ajalugu ümber ei kirjutata, seega on see ohutu viis tühistada midagi, mis on juba käsuga `git push` saadetud.',
+          meta: 'Uusi tapeete maha ei kisu: kleebid vana mustri nende peale uue kihina.',
+        },
+        tip: 'Kommiti, mida keegi pole veel näinud, saab eemaldada ka käsuga `git reset`; serveris olevat ainult käsuga `git revert`. Ühendamiskommiti tühistab `git revert -m 1 <ühendamiskommit>`, kus 1 on selle haru number, kuhu naased (tavaliselt põhiharu).',
+        opts: [
+          {
+            cmd: 'git revert --no-edit <kommit>',
+            text: '— sama, aga vaikesõnumiga „Revert "…"“, ilma redaktorita.',
+            meta: 'Kleebid kohe, ilma proovimata.',
+          },
+          {
+            cmd: 'git revert HEAD',
+            text: '— tühistab viimase kommiti.',
+            meta: 'Kleebid uuesti ainult viimase riba.',
+          },
+          {
+            cmd: 'git revert --no-commit <kommit>',
+            text: '— tühistab muudatused töökaustas ja indeksis ilma kommitita, et koguda mitu tühistust ühte kommitisse.',
+            meta: 'Võtad maha mitu riba ja kleebid ühe korraga.',
+          },
+        ],
         art: 'Seina vasakul pool on vana lainelise triibuga tapeet, paremal uus täpiline. Inimene taburetil kleebib vana lainelist mustrit uuesti uue tapeedi peale: üks kollane riba on juba üleval, järgmise alumine ots on veel tal käes; serv näitab, et uus tapeet jäi alla. Põrandal liimiämber pintsliga. Seinal portree kollasest krabist, nool vasakule.',
       },
       'cherry-pick': {
+        title: 'Vanaema retsept',
+        line: 'Oh, minu lemmikpirukas. Pean endale ümber kirjutama',
+        move: '$ git cherry-pick <kommit>',
+        hint: 'ühe kommiti koopia praegusesse harusse',
+        does: {
+          text: 'Võtab ühe kommiti muudatused teisest harust ja rakendab need praeguses harus uue kommitina, uue räsiga. Originaal jääb oma harule.',
+          meta: 'Kirjutad ühe retsepti vanaema vihikust oma vihikusse; vanaemal jääb see ka alles.',
+        },
+        tip: 'Konflikt? Paranda, `git add <fail>`, siis `git cherry-pick --continue`. Mõtlesid ümber? `git cherry-pick --abort`.',
+        opts: [
+          {
+            cmd: 'git cherry-pick <alates>..<kuni>',
+            text: '— mitu kommitit järjest, ilma `<alates>`-ita endata.',
+            meta: 'Mitu retsepti järjest.',
+          },
+          {
+            cmd: 'git cherry-pick -x <kommit>',
+            text: '— lisab sõnumisse rea „(cherry picked from commit …)“.',
+            meta: 'Kirjutad retsepti alla: „vanaemalt“.',
+          },
+          {
+            cmd: 'git cherry-pick -n <kommit>',
+            text: '— toob kommiti muudatused töökausta ja indeksisse ilma kommitita, et saaksid neid parandada või mitu ühte kommitisse koguda.',
+            meta: 'Kirjutad retsepti ümber ja lisad oma muudatused, enne kui puhtalt kirja paned.',
+          },
+        ],
         art: 'Laual on kaks avatud retseptivihikut. Vasakul vanaema oma: suur ja vana, kulunud kaane ja paelast järjehoidjaga; ühel lehel pott, teisel kirsipirukas. Paremal väiksem spiraalvihik kollase kaanega: ühel lehel kauss söögipulkadega, teisel sama pirukas, alles poolenisti joonistatud. Inimene seisab laua ees, kummardub oma vihiku kohale ja joonistab pastakaga pirukat ümber. Seinal portree rästast, kahe kollase kirsiga nokas.',
       },
       reset: {
+        title: 'Kuusele või prügikasti',
+        line: 'See kuusele, see prügisse. Peaasi, et segi ei aja',
+        move: '$ git reset HEAD~1',
+        hint: 'võta viimane kommit maha, muudatused jäävad failidesse',
+        does: {
+          text: 'Liigutab praeguse haru teisele kommitile (nt `HEAD~1` – üks tagasi). Mis juhtub mahavõetud kommitite muudatustega, sõltub režiimist: `git reset --soft` korral jäävad need indeksisse, tavalise `git reset` korral ainult töökausta, `git reset --hard` korral kaovad.',
+          meta: 'Pakid lahti kasti pööningult: midagi läheb kuusele, midagi prügikasti.',
+        },
+        tip: 'Kui kommiti asemel on fail, võtab `git reset <fail>` faili lihtsalt indeksist välja, nagu `git restore --staged <fail>`.',
+        opts: [
+          {
+            cmd: 'git reset --soft HEAD~1',
+            text: '— võtab viimase kommiti maha; muudatused jäävad indeksisse, valmis uueks kommitiks.',
+            meta: 'Ehe jääb kasti, käepärast.',
+          },
+          {
+            cmd: 'git reset --hard HEAD~1',
+            text: '— võtab kommiti maha ja kustutab muudatused indeksis ja töökaustas.',
+            meta: 'Ehe lendab prügikasti.',
+          },
+        ],
+        careful: [
+          '`git reset --hard` kustutab kommitimata muudatused jäädavalt.',
+          'Mahavõetud kommitid leiab veel `git reflog`-ist, kuni git need ära koristab. Serveris olevaid kommitte ära võta maha käsuga `git reset`: nende jaoks on `git revert`.',
+        ],
         art: 'Kodus on ehitud kuusk, selle all avatud kollane kast pööningult. Inimene seisab prügikasti ja kuuse vahel: ühe käega riputab ta terve kuuseehte kuusele, teisega viskab katkise prügikasti. Seinal portree kuldkalast akvaariumis.',
       },
       reflog: {
+        title: 'Kuulide nimekiri',
+        line: 'Väikesed kuulid — oli 10, nüüd 8',
+        move: '$ git reflog',
+        hint: 'kus HEAD on käinud, samm-sammult',
+        does: {
+          text: 'Näitab kohalikku logi kõigist kohtadest, kus `HEAD` on olnud, uusim eespool: kommitid, haruvahetused, `git reset`, `git rebase`. Nii leitakse kommit, mis on `git log`-ist kadunud.',
+          meta: 'Nimekirja on kirja pandud iga muutus: oli 10 kuuli, nüüd on 8, ja on näha, millal kaks kadusid.',
+        },
+        tip: 'reflog on kohalik ja ajutine: serveris seda pole ja vanad kirjed koristab git aja jooksul ära (vaikimisi 90 päeva pärast, kättesaamatute kommitite kirjed 30 päeva pärast).',
+        opts: [
+          {
+            cmd: 'git reflog show <haru>',
+            text: '— ühe haru logi.',
+            meta: 'Ainult rida väikeste kuulide kohta.',
+          },
+          {
+            cmd: 'git branch <nimi> HEAD@{2}',
+            text: '— toob kadunud kommiti tagasi uue haruna.',
+            meta: 'Nimekirjast näed, millal kõik oli veel paigas.',
+          },
+        ],
         art: 'Kodus on ehitud kuusk ja nurgas prügikast katkise kuuseehtega. Inimene kuuse juures loeb rohelisel kirjutusalusel olevat nimekirja: igal real on väike kuusekuul ja loendusjooned, üks rida on ringiga ümbritsetud; inimene heidab pilgu kuusele ja loeb. Seinal portree rotist prügikasti serval.',
       },
       rebase: {
+        title: 'Uus alus',
+        line: 'Laome ilusti, et ei kukuks!',
+        move: '$ git rebase main',
+        hint: 'sinu kommitid värske main-i peale',
+        does: {
+          text: 'Tõstab praeguse haru kommitid nii, nagu oleks haru alustatud mujalt (nt uuemast `main`-ist): iga kommit rakendatakse uuesti ja saab uue räsi. Ajalugu muutub sirgeks, ilma ühendamiskommitideta.',
+          meta: 'Sinu kastide alla lükati uus kast ja sina laod enda omad jälle peale, ettevaatlikult, et need ei kukuks.',
+        },
+        tip: 'Konflikt? Paranda, `git add <fail>`, siis `git rebase --continue`. Mõtlesid ümber? `git rebase --abort`.',
+        opts: [
+          {
+            cmd: 'git rebase -i HEAD~3',
+            text: '— avab kolme viimase kommiti loendi: ühenda, nimeta ümber, viska välja, muuda järjekorda.',
+            meta: 'Laod kolm pealmist kasti ümber.',
+          },
+          {
+            cmd: 'git rebase --abort',
+            text: '— katkestab rebase-i poole pealt.',
+            meta: 'Paned kastid tagasi nii, nagu need olid.',
+          },
+        ],
+        careful: [
+          'Rebase kirjutab kommitid ümber: kui need on juba saadetud (`git push`), läheb sinu ajalugu teiste omast lahku.',
+          'Tee rebase-i ainult oma veel saatmata kommititega. Kui midagi läheb valesti, leiad vana seisu `git reflog`-ist.',
+        ],
         art: 'Pööning. Pildisiltidega kastide virn: all kast raamatutega, selle peal uuem kast halloweeni kõrvitsaga ja peale asetab inimene ettevaatlikult kaks kollast kasti, ühe sünnipäevatordi ja teise mängukaruga, ning hoiab neid, et need ümber ei kukuks. Seinal portree hallist kassist, kes istub kastidel.',
       },
       blame: {
-        art: 'Külmkapil rohelise magneti all ripub ostunimekiri: iga rida algab kauba pildiga, on kirjutatud erineva käekirjaga ja lõpeb selle näokesega, kes rea lisas; samad näokesed ripuvad fotomagnetitena sügavkülmiku uksel. Inimene hoiab suurendusklaasi rohelise viinamarja rea lõpu kohal ja klaasis on näha lipsuga näoke. Jalgade juures tühi ostukott. Seinal portree koerast, roheline sokk suus.',
+        title: 'Nimekiri külmkapil',
+        line: 'Kes viinamarjad toob?',
+        move: '$ git blame <fail>',
+        hint: 'kes ja millal iga rida muutis',
+        does: {
+          text: 'Näitab faili iga rea kohta, millises kommitis, millal ja kes seda viimati muutis. Ei muuda midagi.',
+          meta: 'Õhtusöögi nimekirja iga rea juures on selle näoke, kes rea lisas: tead, keda küsida.',
+        },
+        tip: 'Kommit leitud? Vaata seda tervikuna: `git show <räsi>`. „Blame“ ei tähenda siin süüd, vaid seda, keda rea kohta küsida.',
+        opts: [
+          {
+            cmd: 'git blame -L 10,20 <fail>',
+            text: '— ainult read 10 kuni 20.',
+            meta: 'Vaatad ainult viinamarjade rida.',
+          },
+          {
+            cmd: 'git blame -w <fail>',
+            text: '— ei arvesta tühikute muudatusi.',
+            meta: 'Rida, kus parandati ainult taanet, jääb esimese autori omaks.',
+          },
+          {
+            cmd: 'git blame <kommit> -- <fail>',
+            text: '— fail sellisena, nagu see oli antud kommitis.',
+            meta: 'Nimekiri sellisena, nagu see oli eile.',
+          },
+        ],
+        art: 'Külmkapil rohelise magneti all ripub nimekiri, kes mida õhtusöögile toob: iga rida algab kauba pildiga, on kirjutatud erineva käekirjaga ja lõpeb selle näokesega, kes rea lisas; samad näokesed ripuvad fotomagnetitena sügavkülmiku uksel. Inimene hoiab suurendusklaasi rohelise viinamarja rea lõpu kohal ja klaasis on näha lipsuga näoke. Jalgade juures tühi ostukott. Seinal portree koerast, roheline sokk suus.',
       },
       bisect: {
+        title: 'Läbipõlenud pirn',
+        line: 'Ahaa, seal see probleem ongi',
+        move: '$ git bisect start',
+        hint: 'alusta selle kommiti otsimist, mis asja katki tegi',
+        does: {
+          text: 'Otsib kommitit, mis midagi katki tegi, poolitades: ütled, kus see veel töötas (`git bisect good <kommit>`) ja kus enam mitte (`git bisect bad`), git lülitub keskmisele kommitile, sina kontrollid ja teatad tulemuse. Mõne sammuga on süüdlane kommit leitud.',
+          meta: 'Tulede vanik ei põle: kontrollid ühte poolt, siis poolt sellest, mis jäi, ja nii kuni selle ühe pirnini.',
+        },
+        tip: 'Lõpus viib `git bisect reset` tagasi harule, kust otsimine algas.',
+        opts: [
+          {
+            cmd: 'git bisect run <käsk>',
+            text: '— git käivitab käsu igal sammul ise ja loeb selle väljumiskoodi: 0 on „hea“, 125 on „jäta vahele“, 1 kuni 124 ja 126–127 on „halb“, üle 127 lõpetab otsimise.',
+            meta: 'Kontrollid pirne testriga, mitte silma järgi.',
+          },
+          {
+            cmd: 'git bisect skip',
+            text: '— seda kommitit ei saa kontrollida (nt see ei kompileeru): git võtab naaberkommiti.',
+            meta: 'Pirn ei lähe pessa — võtad kõrvaloleva.',
+          },
+          {
+            cmd: 'git bisect reset',
+            text: '— lõpetab otsimise ja viib tagasi algsele harule.',
+            meta: 'Riputad vaniku tagasi.',
+          },
+        ],
         art: 'Üle seina ripub kahe naela küljes jõuluvalgusti ja ükski pirn ei põle. Vasaku poole ja järgmise veerandi all on linnukestega sulud: need osad on kontrollitud, piiridel rohelised pesulõksud. Inimene on ülejäänud osast pirni välja võtnud ja hoiab seda valguse poole: klaas on tume, hõõgniit katki; teises käes varupirn. Seinal portree meriseast, kes närib valguskette juhet.',
       },
       tag: {
+        title: 'Silt purgil',
+        line: 'Et oleks kergem leida',
+        move: '$ git tag v1.0',
+        hint: 'märk praegusel kommitil',
+        does: {
+          text: 'Paneb kommitile püsiva märgi, tavaliselt versiooninumbri (`v1.0`). Erinevalt harust ei liigu silt (tag) uute kommitidega kaasa: see näitab alati samale kommitile.',
+          meta: 'Ühesuguste moosipurkide seas kleebid sildi oma lemmikule, et see hiljem kergemini üles leida.',
+        },
+        tip: 'Tavaline `git push` silte ei saada: vaja on `git push origin v1.0` või `git push --tags`.',
+        opts: [
+          {
+            cmd: 'git tag',
+            text: '— siltide loend.',
+            meta: 'Vaatad üle kõik sildiga purgid.',
+          },
+          {
+            cmd: 'git tag -a v1.0 -m "…"',
+            text: '— annoteeritud silt autori, kuupäeva ja sõnumiga, väljalasete jaoks.',
+            meta: 'Silt aastaarvu ja allkirjaga, kes keetis.',
+          },
+          {
+            cmd: 'git tag -d v1.0',
+            text: '— kustutab sildi kohalikult; serveris jääb see alles, kuni käivitad `git push origin --delete v1.0`.',
+            meta: 'Kraabid sildi oma purgilt maha.',
+          },
+        ],
         art: 'Sahvris on riiul täis ühesuguseid moosipurke riidest kaantega; kahel purgil on heledad sildid 2024 ja 2025. Inimene põlvitab riiuli juures ja surub kollase sildi 2026 alumisel riiulil kõige uuema purgi külge. Kõrval kollaste siltide rull. Seinal portree koerast, kaelarihmas kollane nimesilt.',
       },
     },

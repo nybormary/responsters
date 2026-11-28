@@ -8,7 +8,7 @@
   align-items: baseline;
 }
 .pbar-title {
-  font: 800 20px var(--display);
+  font: 800 var(--fs-h4) var(--display);
   margin: 0;
 }
 .modes {
@@ -46,14 +46,14 @@
   color: var(--accent);
 }
 .mode-name {
-  font: 800 17px/1.15 var(--display);
+  font: 800 var(--fs-body)/1.15 var(--display);
   padding-right: 22px;
   max-width: 100%;
   overflow-wrap: break-word;
   hyphens: auto;
 }
 .mode-hint {
-  font-size: 13px;
+  font-size: var(--fs-min);
   line-height: 1.35;
   color: var(--muted);
 }
@@ -106,7 +106,7 @@
   color: var(--card-ink);
 }
 .score {
-  font: 600 14px var(--mono);
+  font: 600 var(--fs-min) var(--mono);
   color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
@@ -197,7 +197,7 @@
   outline-offset: 2px;
 } /* RSP-108: "Next" scrolls here and focuses it */
 .prompt .q {
-  font: 700 15px var(--body);
+  font: 700 var(--fs-2) var(--body);
   color: var(--muted);
 }
 .prompt img.art {
@@ -243,18 +243,18 @@
   height: 28px;
 }
 .bigcode {
-  font: 800 clamp(56px, 12vw, 96px)/1 var(--mono);
+  font: 800 clamp(56px, 12vw, 96px)/1 var(--mono); /* fs-exempt: the big status code, decoration */
   letter-spacing: -0.03em;
   color: var(--ink);
 }
 .bigstatus {
-  font: 700 20px var(--display);
+  font: 700 var(--fs-h4) var(--display);
 }
 /* Nerd mode (RSP-100): the meaning is the question, set as a readable paragraph; the example sits under the reveal. */
 .nerdq {
   margin: 0;
   max-width: 40ch;
-  font: 600 clamp(18px, 2.4vw, 22px)/1.45 var(--body);
+  font: 600 clamp(18px, 2.4vw, 22px)/1.45 var(--body); /* fs-exempt: fluid question, never below 18px */
   color: var(--ink);
   text-wrap: pretty;
 }
@@ -267,7 +267,7 @@
   min-height: 64px;
 }
 .opt.hardopt b {
-  font: 800 18px/1.2 var(--display);
+  font: 800 var(--fs-body)/1.2 var(--display);
   overflow-wrap: break-word;
 }
 .hintbtn {
@@ -277,7 +277,7 @@
   color: var(--ink);
   border-radius: 999px;
   padding: 8px 18px;
-  font: 700 15px var(--body);
+  font: 700 var(--fs-min) var(--body);
   cursor: pointer;
 }
 .hintbtn:hover {
@@ -289,7 +289,7 @@
 }
 .hint-out {
   margin: 0;
-  font: 800 18px var(--display);
+  font: 800 var(--fs-body) var(--display);
   color: var(--accent);
   min-height: 1.2em;
 }
@@ -309,19 +309,19 @@
   padding: 12px;
   cursor: pointer;
   text-align: left;
-  font: 700 15px var(--body);
+  font: 700 var(--fs-min) var(--body);
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
 }
 .opt b {
-  font: 800 22px var(--mono);
+  font: 800 var(--fs-h3) var(--mono);
 }
 .opt span {
   color: var(--muted);
   font-weight: 400;
-  font-size: 13px;
+  font-size: var(--fs-min);
 }
 .opt img {
   width: 100%;
@@ -334,7 +334,7 @@
   gap: 6px;
 }
 .opt .nm {
-  font: 800 16px var(--display);
+  font: 800 var(--fs-2) var(--display);
   color: var(--ink);
   text-align: center;
   padding-bottom: 2px;
@@ -370,7 +370,7 @@
   color: var(--surface);
   font:
     700 15px/1 system-ui,
-    sans-serif;
+    sans-serif; /* fs-exempt: a mark drawn as text */
 }
 .opt:disabled {
   cursor: default;
@@ -388,7 +388,7 @@
   min-width: 0;
 }
 .reveal .verdict {
-  font: 800 22px/1.2 var(--display);
+  font: 800 var(--fs-h3)/1.2 var(--display);
   margin: 0;
 } /* .reveal p (15px) used to win over .verdict; now 22px bold = large text, AA needs 3:1 (RSP-17) */
 .reveal .verdict.ok {
@@ -399,14 +399,14 @@
 }
 .reveal p {
   margin: 4px 0 0;
-  font-size: 15px;
+  font-size: var(--fs-2);
 }
 .next {
   margin-top: 12px;
   border: 0;
   background: var(--accent);
   color: var(--bg);
-  font: 700 16px var(--body);
+  font: 700 var(--fs-2) var(--body);
   padding: 10px 18px;
   border-radius: var(--r-s);
   cursor: pointer;

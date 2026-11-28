@@ -25,7 +25,7 @@ language is a text in `i18n/<lang>.js`.
 | group (badge colour) | status class 1xx–5xx: `classes.js` | `git help` section: `groups.js` (start, home, visit, archive, post) |
 | line under the badge | status name (`s`) | group's household name (text: `git.groups.<key>`) |
 | title | creature name (`n`) | scene title (text) |
-| front line | kind `move`: the move as a pill, **no `$`** (`m`) | kind `command`: `$ …` + short explanation (texts; may differ from the name, e.g. `$ git status -s`) |
+| front line | kind `move`: the move as a pill, **no `$`** (`m`) | kind `command`: `$ …` + short explanation (texts; may differ from the name, e.g. `$ git add .`) |
 | card line | `cards.<code>.line` | household caption, written by Maryna (text) |
 | picture description (alt) | `cards.<code>.art` | text |
 | card page sections | meaning, where you meet it, what to test, tools and read more | what it does, options, careful, often confused with, "у git help: …", tip, read more |

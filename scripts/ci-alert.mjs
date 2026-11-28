@@ -28,6 +28,7 @@ const STEP_NAMES = {
   changes: 'checking what the PR changes',
   typecheck: 'type check',
   locales: 'locale check',
+  'font-sizes': 'font size check',
   lint: 'lint',
   format: 'format check',
   preview: 'waiting for the Netlify deploy preview',

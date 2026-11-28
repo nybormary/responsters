@@ -1,12 +1,12 @@
 /* Git card and its page (RSP-199; approved prototype: Design canvas "Git cards — pilot", 2026-11-15).
-   The frame is the shared one (card.css); git changes the skin: warm paper, brown ink, teal shadow, and the badge is
+   The frame is the shared one (card.css); git changes the skin: warm paper, brown ink, cocoa shadow, and the badge is
    the command on one line, coloured by its git help group. Danger cards (restore, reset, rebase, push) get a
    brick-red frame and a "!" on the picture. The page reuses the HTTP card page layout (detail.css). */
 .card.git {
   --card-paper: #fbf3e2;
   --cf-ink: #2b211a;
   --cf-pill: #eadbbe;
-  box-shadow: 3px 3px 0 #3e9c93;
+  box-shadow: 3px 3px 0 #562400; /* Hot Cacao, was teal (RSP-227) */
   container-type: inline-size;
   cursor: default;
 }
@@ -48,7 +48,7 @@
   display: block;
   text-align: center;
   white-space: nowrap;
-  font-size: min(19px, calc((100cqi - 34px) / 9.4));
+  font-size: min(19px, calc((100cqi - 34px) / 9.4)); /* fs-exempt: the command scales down to fit the card */
 }
 /* "git" is lighter than the command by weight only. It was also dimmed (opacity 0.75), which left it at 3.7:1 on
    the blue group colour, below WCAG AA 4.5:1 (RSP-199, found by the automated case 4354a333). */
@@ -72,10 +72,10 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  font: 700 14px/1.3 var(--mono);
+  font: 700 var(--fs-min)/1.3 var(--mono);
 }
 .card.git .g-hint {
-  font: 400 12px/1.3 var(--body);
+  font: 400 var(--fs-min)/1.3 var(--body);
 }
 .card.git.danger {
   border-color: #b5402f;
@@ -92,14 +92,14 @@
   color: #fff;
   display: grid;
   place-items: center;
-  font: 800 22px/1 var(--display);
+  font: 800 var(--fs-h3)/1 var(--display);
   border: 2.5px solid #2b211a;
 }
 
 /* Page sections */
 .git-page .page-main code,
 .git-page .page-side code {
-  font: 800 15px var(--mono);
+  font: 800 var(--fs-code) var(--mono);
   background: #eadbbe;
   color: #2b211a;
   padding: 1px 7px;
@@ -134,7 +134,7 @@
 /* One sentence with the household metaphor after the technical explanation (RSP-200). */
 .g-meta {
   margin-top: 4px;
-  font-size: 14px;
+  font-size: var(--fs-2);
   color: var(--muted);
 }
 .g-opts img {
@@ -195,7 +195,7 @@
 .git-page .g-file .g-file-line {
   display: block;
   font-weight: 700;
-  font-size: 16px;
+  font-size: var(--fs-2);
   color: #2b211a;
 }
 /* Spacing standard of the git card page (RSP-221, Maryna 2026-11-22): 18px between sections (a heading or a box), 4px
@@ -233,7 +233,7 @@
 }
 .sheet .g-help-from {
   margin: 4px 0 0;
-  font-size: 14px;
+  font-size: var(--fs-2);
   color: var(--muted);
 }
 /* "Read more" (2026-11-20, 21): "Section in git help: <section>", the command and its git help line are items like
@@ -244,7 +244,7 @@
   padding: 6px 0;
 }
 .git-page .links .g-help {
-  font: 700 15px/1.35 var(--mono);
+  font: 700 var(--fs-code)/1.35 var(--mono);
 }
 /* The prompt before a command: shown, but not copied with it. */
 .g-ps {
@@ -326,6 +326,70 @@
 /* An outside link at the end of the tip (clone: GitHub Docs on fork, RSP-221). The tip box is light paper in both
    themes, so the link keeps the light theme's link colour and the black GitHub mark (gitSide). */
 .git-page .g-tip a {
-  color: #1e5a45;
+  color: #562400;
   text-underline-offset: 3px;
+}
+
+/* The day row under the card (RSP-226, layout of 2026-11-28): previous left, this day centred, next right. A neighbour
+   is a 48px circle (a finger-sized target) with its day number, filled with its group colour (--day-c, set by the
+   build), and an arrow; this day is a filled ink circle; a day that hasn't come is a dashed, dimmed circle without
+   an arrow. Ink on the group colours is ≥ 6:1 (RSP-227). */
+.git-page .g-days {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+.git-page .g-day {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.git-page .g-day-prev {
+  justify-content: flex-start;
+}
+.git-page .g-day-next {
+  justify-content: flex-end;
+}
+.git-page .g-day-num,
+.git-page .g-day-now {
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font: 700 var(--fs-body) / 1 var(--body);
+}
+.git-page .g-day-num {
+  background: var(--day-c);
+  color: #2b211a;
+  border: 2px solid var(--ink);
+}
+.git-page .g-day-arrow {
+  font-size: var(--fs-h4);
+}
+.git-page a.g-day[href]:hover .g-day-num {
+  box-shadow: 0 0 0 3px var(--day-c);
+}
+.git-page .g-day.locked {
+  opacity: 0.55;
+}
+.git-page .g-day.locked .g-day-num {
+  background: none;
+  color: var(--ink);
+  border-style: dashed;
+}
+.git-page .g-day.locked .g-day-arrow,
+.git-page .g-day:not(.locked) .g-day-from {
+  display: none;
+}
+.git-page .g-day-now {
+  justify-self: center;
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 800;
 }

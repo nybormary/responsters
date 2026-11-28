@@ -19,7 +19,25 @@ const { GROUPS } = await load('data/git/groups.js');
 const { NEWS, KINDS } = await load('data/news.js');
 
 const problems = [];
+// Git cards whose pl/da/lt/et texts wait for Maryna's review of uk/en (RSP-200, decided 2026-11-27): until she
+// approves uk/en locally, those languages show English (i18n/fill.js), and a gap under git.cards.<id> here is a
+// warning, not a problem. The list must be EMPTY before the Git launch release (RSP-146): translate, then delete the id.
+// Empty since 2026-11-27: the RSP-200 and RSP-226 texts are translated (pl for Maryna's reading; da/lt/et drafts until a
+// native review). Add an id here only while its translations wait for Maryna's approval of uk/en.
+const PENDING = new Set([]);
+const pending = [];
+// new interface texts that wait the same way (RSP-226: the day row under a git card)
+const PENDING_UI = [];
+const isPending = (path) => {
+  if (PENDING_UI.some((p) => path === p || path.startsWith(p + '.'))) return true;
+  const m = /^git\.cards\.([^.[]+)/.exec(path);
+  return !!m && PENDING.has(m[1]);
+};
 function compare(base, loc, path, lang) {
+  if (loc === undefined && isPending(path)) {
+    pending.push(`${lang}: ${path}`);
+    return;
+  }
   if (loc === undefined) {
     problems.push(`${lang}: missing ${path}`);
     return;
@@ -101,6 +119,10 @@ for (const f of files) {
 for (const l of Object.keys(LOCALES))
   if (!files.includes(l + '.js')) problems.push(`index.js lists ${l}, but i18n/${l}.js doesn't exist`);
 
+if (pending.length)
+  console.warn(
+    `⚠ ${pending.length} text(s) wait for translation (RSP-200, RSP-226; English for now; empty PENDING and PENDING_UI before the Git launch): ${[...PENDING, ...PENDING_UI].join(', ')}`,
+  );
 if (problems.length) {
   console.error(`✗ ${problems.length} problem(s):\n  ` + problems.join('\n  '));
   process.exit(1);
