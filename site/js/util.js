@@ -1,10 +1,14 @@
+import { IMG_V } from './img-v.js';
+
 // Small helpers used everywhere.
 export const $ = (id) => document.getElementById(id); // element by id
 export const cls = (c) => Math.floor(c / 100); // 404 → 4 (status class)
 // Text for HTML: & < > " become entities.
 export const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-export const art = (c) => `/img/${c}-art.jpg`; // creature art without the card text (absolute: pages live at /<lang>/http/…)
+// A picture URL with the build's version (RSP-228): imgUrl('/img/404-art.jpg') → '/img/404-art.jpg?v=500f081'.
+export const imgUrl = (p) => (IMG_V ? `${p}?v=${IMG_V}` : p);
+export const art = (c) => imgUrl(`/img/${c}-art.jpg`); // creature art without the card text (absolute: pages live at /<lang>/http/…)
 
 // Calendar days as YYYY-MM-DD strings (RSP-195, RSP-196): the advent start, a door's day, the visitor's today. Strings
 // compare in date order, and there is no time of day to go wrong with time zones.

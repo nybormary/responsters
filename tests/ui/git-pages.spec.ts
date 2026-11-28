@@ -44,9 +44,10 @@ test(
         await expect(page).toHaveTitle(new RegExp(`^${g.name.replace('.', '\\.')}(: .+)? · Mnemozoo$`));
         expect(plain(await gitCardPage.command.textContent())).toBe(g.name);
         await expect(gitCardPage.group).toHaveText(texts.git.groups[g.group as keyof typeof texts.git.groups]);
-        if (g.art) await expect(gitCardPage.art).toHaveAttribute('src', g.art);
+        // the picture URL carries its content version (RSP-228): /img/git/init.svg?v=<8 hex>
+        if (g.art) await expect(gitCardPage.art).toHaveAttribute('src', versioned(g.art));
         else {
-          await expect(gitCardPage.art).toHaveAttribute('src', GIT_EGG.src);
+          await expect(gitCardPage.art).toHaveAttribute('src', versioned(GIT_EGG.src));
           await expect(gitCardPage.art).toHaveAttribute('alt', GIT_EGG.alt);
         }
         await expect.poll(() => gitCardPage.artLoaded()).toBe(true);
@@ -58,6 +59,8 @@ test(
 
 // ── b91ec8f5 ────────────────────────────────────────────────────────────────────────────────────
 
+/** A picture URL with its content version (RSP-228), e.g. /img/git/init.svg?v=d2079b29. */
+const versioned = (src: string) => new RegExp(`^${src.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\?v=[0-9a-f]{7}$`);
 test.describe('Builds with a pinned date', () => {
   test.setTimeout(120_000); // four builds of the whole site
 

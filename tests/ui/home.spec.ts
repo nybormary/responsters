@@ -65,9 +65,9 @@ test(
     });
 
     await test.step('step art: creature 418; 304 → "304 ✓"; "502 ≠ 504"', async () => {
-      await expect(steps.pictures(0)).toHaveAttribute('src', /\/418-art\.jpg$/);
+      await expect(steps.pictures(0)).toHaveAttribute('src', /\/418-art\.jpg\?v=[0-9a-f]{7}$/);
       await expect(steps.chips(0)).toHaveCount(0);
-      await expect(steps.pictures(1)).toHaveAttribute('src', /\/304-art\.jpg$/);
+      await expect(steps.pictures(1)).toHaveAttribute('src', /\/304-art\.jpg\?v=[0-9a-f]{7}$/);
       await expect(steps.chips(1)).toHaveText(['304 ✓']);
       await expect(steps.pictures(2)).toHaveCount(0);
       await expect(steps.chips(2)).toHaveText(['502', '504']);
