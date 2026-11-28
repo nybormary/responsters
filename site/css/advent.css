@@ -9,12 +9,12 @@
 }
 .advent-page h1 {
   margin: 0;
-  font: 800 clamp(30px, 6vw, 44px) / 1.1 var(--display);
+  font: 800 clamp(30px, 6vw, 44px) / 1.1 var(--display); /* fs-exempt: fluid page title */
 }
 .advent-lead {
   margin: 0;
   max-width: 62ch;
-  font-size: 17px;
+  font-size: var(--fs-lead);
   line-height: 1.45;
 }
 /* Why the cards are household (RSP-219, Maryna 2026-11-21): a dashed note like the tip on the card pages, as wide as
@@ -23,7 +23,7 @@
 .advent-intro {
   margin: 12px 0 16px;
   padding: 10px 14px;
-  font-size: 16px;
+  font-size: var(--fs-body);
   line-height: 1.5;
   background: #fbf3e2;
   color: #2b211a;
@@ -31,7 +31,7 @@
   border-radius: 10px;
 }
 .advent-intro code {
-  font: 800 15px var(--mono);
+  font: 800 var(--fs-code) var(--mono);
   background: #eadbbe;
   padding: 0 6px;
   border-radius: 6px;
@@ -110,7 +110,7 @@
   background: var(--paper) repeating-linear-gradient(135deg, rgb(43 33 26 / 6%) 0 2px, transparent 2px 9px);
 }
 .door-num {
-  font: 800 clamp(36px, 7vw, 54px) / 1 var(--display);
+  font: 800 clamp(36px, 7vw, 54px) / 1 var(--display); /* fs-exempt: door number, decoration */
 }
 .door-lock {
   display: none;
@@ -130,9 +130,9 @@
   white-space: nowrap;
   padding: 3px 6px;
   border-radius: 4px;
-  font: 700 11px/1 var(--mono);
+  font: 700 11px/1 var(--mono); /* fs-exempt: door flag, scaled with the door */
   letter-spacing: 0.04em;
-  background: #2e7a72;
+  background: #562400; /* Hot Cacao, was teal (RSP-227); white on it 13.6:1 */
   color: #fff;
 }
 .door.missed .door-flag {
@@ -141,11 +141,11 @@
   border: 1.5px dashed var(--door-ink);
 }
 .door.today {
-  outline: 4px solid #3e9c93;
+  outline: 4px solid #562400; /* Hot Cacao, was teal (RSP-227) */
   outline-offset: 4px;
 }
 /* Keyboard focus (RSP-198, variant A chosen by Maryna 2026-11-19): a double ring, a white band and a dark line
-   outside it, so it looks like neither the teal "today" ring nor the door's frame. The white band is a box-shadow
+   outside it, so it looks like neither the cocoa "today" ring nor the door's frame. The white band is a box-shadow
    (kept together with the door's own shadow); the line is the outline. After .door.today, so it wins on today's
    door (its "today" flag still says it). The wall keeps its light background in both themes; the big copy sits on
    the page, so its line takes the site's focus colour, which follows the theme. */
@@ -213,7 +213,7 @@
   min-width: 0;
 }
 .door-dn {
-  font: 800 16px/1 var(--display);
+  font: 800 16px/1 var(--display); /* fs-exempt: door day number, scaled with the door */
 }
 .door-gi {
   flex: none;
@@ -226,7 +226,7 @@
   flex-basis: 100%;
   min-width: 0;
   text-align: center;
-  font: 700 12px/1.2 var(--mono);
+  font: 700 12px/1.2 var(--mono); /* fs-exempt: label on the door, scaled with the door */
   overflow-wrap: normal;
 }
 .door-warn {
@@ -234,7 +234,7 @@
   position: absolute;
   top: 2px;
   right: 8px;
-  font: 800 30px/1 var(--display);
+  font: 800 30px/1 var(--display); /* fs-exempt: danger mark */
   color: var(--danger);
   transform: rotate(8deg);
   text-shadow: 0 0 3px var(--paper);
@@ -279,13 +279,13 @@
     border-width: 4px;
   }
   .wall .door-num {
-    font-size: 28px;
+    font-size: 28px; /* fs-exempt: door number on the wall */
   }
   .wall .door-flag {
     top: 3px;
     left: 3px;
     padding: 2px 3px;
-    font-size: 8px;
+    font-size: 8px; /* fs-exempt: door flag on the wall */
   }
   .wall .door-lock {
     width: 14px;
@@ -295,15 +295,15 @@
     padding: 2px 4px;
   }
   .wall .door-dn {
-    font-size: 12px;
+    font-size: 12px; /* fs-exempt: door day number on the wall */
   }
   .wall .door-gi {
     height: 0.75em; /* the number's capital height; em, so it grows with enlarged text */
-    font-size: 12px;
+    font-size: 12px; /* fs-exempt: group icon on the wall */
   }
   /* The command without "git " on a phone (RSP-208): every name fits a third of a 360px wall, even with enlarged text. */
   .wall .door-cmd {
-    font-size: 9px;
+    font-size: 9px; /* fs-exempt: label on a wall door (the card page has the full text) */
   }
   .wall .door-warn {
     display: none;
@@ -337,21 +337,21 @@
   inset: 0;
 }
 .door-big .door-num {
-  font-size: 84px;
+  font-size: 84px; /* fs-exempt: big door number, decoration */
 }
 .door-big .door-hint {
   display: block;
   margin-top: 4px;
-  font: 700 14px var(--body, inherit);
+  font: 700 var(--fs-min) var(--body, inherit);
 }
 .door-big .door-cap {
   padding: 6px 10px;
 }
 .door-big .door-dn {
-  font-size: 20px;
+  font-size: 20px; /* fs-exempt: big door day number */
 }
 .door-big .door-cmd {
-  font-size: 15px;
+  font-size: var(--fs-min);
 }
 .door-big .door-gi {
   height: 15px;
@@ -359,7 +359,7 @@
 @media (max-width: 759px) {
   .wall .door.open.danger .door-warn {
     display: block;
-    font-size: 18px;
+    font-size: 18px; /* fs-exempt: danger mark on the wall */
     right: 4px;
   }
 }
@@ -372,7 +372,7 @@
   margin: 4px 0 16px;
   padding: 0;
   list-style: none;
-  font: 600 15px/1.2 var(--body, inherit);
+  font: 600 var(--fs-2)/1.2 var(--body, inherit);
 }
 .wall-legend li {
   display: flex;

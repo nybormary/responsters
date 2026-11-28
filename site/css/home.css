@@ -4,11 +4,11 @@
   flex-direction: column;
   gap: 56px;
   margin-top: 40px;
-  font-size: 17px;
+  font-size: var(--fs-body);
 }
 .home h2 {
   margin: 0;
-  font: 800 clamp(26px, 5vw, 34px) / 1.15 var(--display);
+  font: 800 clamp(26px, 5vw, 34px) / 1.15 var(--display); /* fs-exempt: fluid section title */
 }
 .home h3 {
   margin: 0;
@@ -43,12 +43,12 @@
 }
 .home-hero h1 {
   margin: 0;
-  font: 800 clamp(36px, 7vw, 56px) / 1.05 var(--display);
+  font: 800 clamp(36px, 7vw, 56px) / 1.05 var(--display); /* fs-exempt: fluid page title */
   letter-spacing: -0.015em;
   overflow-wrap: break-word;
 }
 .home-lead {
-  font-size: 19px;
+  font-size: var(--fs-lead);
   max-width: 34em;
 }
 .home-hero-cards {
@@ -95,7 +95,7 @@
   transform: rotate(-1.5deg);
 }
 .hero-card figcaption {
-  font: 800 15px var(--mono);
+  font: 800 var(--fs-code) var(--mono);
   text-align: center;
 }
 
@@ -156,7 +156,7 @@
   padding-top: 12px;
 }
 .enclosure-name {
-  font: 800 28px/1.15 var(--display);
+  font: 800 var(--fs-h2)/1.15 var(--display);
 }
 .enclosure-go {
   margin-top: auto;
@@ -185,7 +185,7 @@
   color: var(--ink);
 }
 .pavilion-name {
-  font: 800 22px var(--display);
+  font: 800 var(--fs-h3) var(--display);
 }
 
 /* How it works */
@@ -202,7 +202,7 @@
 }
 .home-step h3 {
   margin: 0;
-  font: 800 22px var(--display);
+  font: 800 var(--fs-h3) var(--display);
 }
 .home-step p {
   margin: 0;
@@ -227,11 +227,11 @@
   border-radius: var(--r-s);
   background: var(--surface);
   color: var(--ink);
-  font: 800 17px var(--mono);
+  font: 800 var(--fs-body) var(--mono);
   white-space: nowrap;
 }
 .step-sign {
-  font: 800 20px var(--mono);
+  font: 800 var(--fs-h4) var(--mono);
   color: var(--muted);
 }
 
@@ -261,11 +261,11 @@
   gap: 12px;
 }
 .home-author h2 {
-  font: 800 22px/1.2 var(--display);
+  font: 800 var(--fs-h3)/1.2 var(--display);
 }
 /* Credits the licences ask for (the Git logomark, CC BY 3.0, 2026-11-20): small, under the author line. */
 .home-credits {
-  font-size: 14px;
+  font-size: var(--fs-min);
   color: var(--muted);
 }
 .home-credits a {

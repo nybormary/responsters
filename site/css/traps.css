@@ -7,7 +7,7 @@
   margin-bottom: 18px;
 }
 .pair h3 {
-  font: 800 20px var(--display);
+  font: 800 var(--fs-h4) var(--display);
   margin: 0 0 4px;
 }
 .pair .rule {
@@ -55,7 +55,7 @@
   border: var(--outline);
   background: var(--surface);
   color: var(--ink);
-  font: 800 14px var(--mono);
+  font: 800 var(--fs-min) var(--mono);
   border-radius: var(--r-s);
   padding: 5px 10px;
   cursor: pointer;
@@ -85,10 +85,10 @@
   color: var(--surface);
   font:
     700 12px/1 system-ui,
-    sans-serif;
+    sans-serif; /* fs-exempt: a mark drawn as text */
 }
 .sc .why {
   flex-basis: 100%;
-  font-size: 14px;
+  font-size: var(--fs-2);
   color: var(--muted);
 }
